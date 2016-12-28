@@ -1,0 +1,620 @@
+"""
+Page class that all page models can inherit from
+There are useful wrappers for common Selenium operations
+"""
+
+from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains 
+import unittest,time,logging,os,inspect,utils.Test_Rail
+from utils.Base_Logging import Base_Logging
+from inspect import getargspec
+from utils.BrowserStack_Library import BrowserStack_Library
+from DriverFactory import DriverFactory
+import PageFactory
+from utils.Test_Rail import Test_Rail
+
+
+class Borg:
+    #The borg design pattern is to share state
+    #Src: http://code.activestate.com/recipes/66531/
+    __shared_state = {}
+    def __init__(self):
+        self.__dict__ = self.__shared_state
+
+    def is_first_time(self):
+        "Has the child class been invoked before?"
+        result_flag = False
+        if len(self.__dict__)==0:
+            result_flag = True
+
+        return result_flag
+
+
+class Base_Page(Borg,unittest.TestCase):
+    "Page class that all page models can inherit from"
+
+    def __init__(self,base_url='http://qxf2.com/',trailing_slash_flag=True):
+        "Constructor"
+        Borg.__init__(self)
+        if self.is_first_time():
+            #Do these actions if this the first time this class is initialized
+            self.set_directory_structure()
+            self.image_url_list = []
+            self.msg_list = []
+            self.current_console_log_errors = []
+            self.window_structure = {}
+            self.testrail_flag = False
+            self.browserstack_flag = False
+
+            self.reset()
+
+        #We assume relative URLs start without a / in the beginning
+        if base_url[-1] != '/' and trailing_slash_flag is True: 
+            base_url += '/' 
+        self.base_url = base_url
+        self.driver_obj = DriverFactory()
+        if self.driver is not None: 
+            self.start() #Visit and initialize xpaths for the appropriate page
+
+
+    def reset(self):
+        "Reset the base page object"
+        self.driver = None
+        self.result_counter = 0 #Increment whenever success or failure are called
+        self.pass_counter = 0 #Increment everytime success is called
+        self.mini_check_counter = 0 #Increment when conditional_write is called
+        self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
+        self.failure_message_list = []
+        self.screenshot_counter = 1
+
+
+    def get_failure_message_list(self):
+        "Return the failure message list"
+        return self.failure_message_list
+
+
+    def switch_page(self,page_name):
+        "Switch the underlying class to the required Page"
+        self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
+
+
+    def register_driver(self,browserstack_flag,os_name,os_version,browser,browser_version):
+        "Register the driver with Page"
+        self.driver = self.driver_obj.get_web_driver(browserstack_flag,os_name,os_version,browser,browser_version)
+        self.set_screenshot_dir() # Create screenshot directory        
+        self.log_obj = Base_Logging(level=logging.DEBUG)
+        self.log_obj.set_stream_handler_level(self.log_obj.getStreamHandler(),level=logging.DEBUG)
+        self.driver.implicitly_wait(5) 
+        self.driver.maximize_window()
+        if (browserstack_flag.lower() == 'y'):
+            print "Before registering bs"
+            self.register_browserstack()
+            self.session_url = self.browserstack_obj.get_session_url()
+            self.browserstack_msg = 'BrowserStack session URL:'
+            self.write( self.browserstack_msg + '\n' + str(self.session_url))
+        self.start()
+
+
+    def get_current_driver(self):
+        "Return current driver"
+        
+        return self.driver
+        
+
+    def register_testrail(self):
+        "Register TestRail with Page"
+        self.testrail_flag = True
+        self.tr_obj = Test_Rail()
+
+        
+    def register_browserstack(self):
+        "Register Browser Stack with Page"
+        self.browserstack_flag = True
+        self.browserstack_obj = BrowserStack_Library()
+        
+
+    def get_calling_module(self):
+        "Get the name of the calling module"
+        calling_file = inspect.stack()[-1][1]
+        if 'runpy' in calling_file:
+            calling_file = inspect.stack()[5][1]
+        calling_filename = calling_file.split(os.sep)
+
+        #This logic bought to you by windows + cygwin + git bash 
+        if len(calling_filename) == 1: #Needed for 
+            calling_filename = calling_file.split('/')
+        
+        self.calling_module = calling_filename[-1].split('.')[0]
+
+        return self.calling_module
+    
+
+    def set_directory_structure(self):
+        "Setup the required directory structure if it is not already present"
+        try:
+            screenshots_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','screenshots'))
+            if not os.path.exists(screenshots_parent_dir):
+                os.makedirs(screenshots_parent_dir)
+        except Exception,e:
+            self.write("Exception when trying to set directory structure")
+            self.write(str(e))
+
+
+    def set_screenshot_dir(self):
+        "Set the screenshot directory"
+        try:
+            self.screenshot_dir = self.get_screenshot_dir()
+            if not os.path.exists(self.screenshot_dir):
+                os.makedirs(self.screenshot_dir)
+        except Exception,e:
+            self.write("Exception when trying to set screenshot directory")
+            self.write(str(e))
+
+
+    def get_screenshot_dir(self):
+        "Get the name of the test"
+        testname = self.get_calling_module()
+        screenshot_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','screenshots')) + os.sep  + testname
+        if os.path.exists(screenshot_dir):
+            for i in range(1,100):
+                if os.path.exists(screenshot_dir + '_'+str(i)):
+                    continue
+                else:
+                    os.rename(screenshot_dir,screenshot_dir +'_'+str(i))
+                    break
+
+        return screenshot_dir
+            
+
+    def append_latest_image(self,screenshot_name):
+        "Get image url list from Browser Stack"
+        screenshot_url = self.browserstack_obj.get_latest_screenshot_url()
+        image_dict = {}
+        image_dict['name'] = screenshot_name
+        image_dict['url'] = screenshot_url
+        self.image_url_list.append(image_dict)
+        
+
+    def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
+        "Take a screenshot"
+        if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.jpg'):
+            for i in range(1,100): 
+                if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.jpg'):
+                    continue
+                else:
+                    os.rename(self.screenshot_dir + os.sep +screenshot_name+'.jpg',self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.jpg')
+                    break
+        self.driver.get_screenshot_as_file(self.screenshot_dir + os.sep+ screenshot_name+'.jpg')
+	#self.conditional_write(flag=True,positive= screenshot_name + '.jpg',negative='', pre_format=pre_format)
+        if self.browserstack_flag is True:
+            self.append_latest_image(screenshot_name)
+            
+
+    def open(self,url,wait_time=2):
+        "Visit the page base_url + url"
+        url = self.base_url + url
+        if self.driver.current_url != url:
+            self.driver.get(url)
+        self.wait(wait_time)
+
+
+    def get_current_url(self):
+        "Get the current URL"
+        return self.driver.current_url
+
+
+    def get_page_paths(self,section):
+        "Open configurations file,go to right sections,return section obj"
+        pass
+        
+
+    def get_current_window_handle(self):
+        "Return the latest window handle"
+        return self.driver.current_window_handle
+
+
+    def set_window_name(self,name):
+        "Set the name of the current window name"
+        try:
+            window_handle = self.get_current_window_handle()
+            self.window_structure[window_handle] = name
+        except Exception,e:
+            self.write("Exception when trying to set windows name")
+            self.write(str(e))
+
+
+    def get_window_by_name(self,window_name):
+        "Return window handle id based on name"
+        window_handle_id = None
+        for id,name in self.window_structure.iteritems():
+            if name == window_name:
+                window_handle_id = id
+                break
+
+        return window_handle_id
+
+
+    def switch_window(self,name=None):
+        "Make the driver switch to the last window or a window with a name"
+        result_flag = False
+        try:
+            if name is not None:
+                window_handle_id = self.get_window_by_name(name)
+            else:
+                window_handle_id = self.driver.window_handles[-1]
+
+            if window_handle_id is not None:
+                self.driver.switch_to_window(window_handle_id)
+                result_flag = True
+
+            self.conditional_write(result_flag,
+                                'Automation switched to the browser window: %s'%name,
+                                'Unable to locate and switch to the window with name: %s'%name,
+                                level='debug')
+        except Exception,e:
+            self.write("Exception when trying to switch window")
+            self.write(str(e))
+
+        return result_flag
+
+
+    def close_current_window(self):
+        "Close the current window"
+        result_flag = False
+        try:
+            before_window_count = len(self.get_window_handles())
+            self.driver.close()
+            after_window_count = len(self.get_window_handles())
+            if (before_window_count - after_window_count) == 1:
+                result_flag = True
+        except Exception,e:
+            self.write('Could not close the current window')
+            self.write(str(e))
+
+        return result_flag
+
+
+    def get_window_handles(self):
+        "Get the window handles"
+        return self.driver.window_handles
+
+
+    def get_current_window_handle(self):
+        "Get the current window handle"
+        pass
+
+
+    def _get_locator(key):
+        "fetches locator from the locator conf"
+        value = None
+        try:
+            path_conf_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'conf', 'locators.conf'))
+            if path_conf_file is not None:
+                value = Conf_Reader.get_value(path_conf_file, key)
+        except Exception,e:
+            print str(e)
+
+        return value
+
+
+    def get_element(self,locator,verbose_flag=True):
+        "Return the DOM element of the path or 'None' if the element is not found "
+        dom_element = None
+        try:
+            locator = self.split_locator(locator)
+            dom_element = self.driver.find_element(*locator)
+        except Exception,e:
+            if verbose_flag is True:
+                self.write(str(e),'debug')
+                self.write("Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
+
+        return dom_element
+
+
+    def split_locator(self,locator):
+        "Split the locator type and locator"
+        result = ()
+        try:
+            result = tuple(locator.split(',',1))
+        except Exception,e:
+            self.write("Error while parsing locator")
+  
+        return result
+
+
+    def get_elements(self,locator,msg_flag=True):
+        "Return a list of DOM elements that match the locator"
+        dom_elements = []
+        try:
+            locator = self.split_locator(locator)
+            dom_elements = self.driver.find_elements(*locator)
+        except Exception,e:
+            if msg_flag==True:
+                self.write(e,'debug')
+                self.write("Check your locator-'%s' in the conf/locators.conf file"%locator)
+        
+        return dom_elements
+
+
+    def click_element(self,locator,wait_time=3):
+        "Click the button supplied"
+        link = self.get_element(locator)
+        if link is not None:
+            try:
+                link.click()
+                self.wait(wait_time)
+            except Exception,e:
+                self.write('Exception when clicking link with path: %s'%locator)
+                self.write(e)
+            else:
+                return True
+
+        return False
+    
+
+    def set_text(self,locator,value,clear_flag=True):
+        "Set the value of the text field"
+        text_field = self.get_element(locator)
+        try:
+            if clear_flag is True:
+                text_field.clear()
+        except Exception, e:
+            self.write('ERROR: Could not clear the text field: %s'%locator,'debug')
+
+        result_flag = False
+        try:
+            text_field.send_keys(value)
+            result_flag = True
+        except Exception,e:
+            self.write('Unable to write to text field: %s'%locator,'debug')
+            self.write(str(e),'debug')
+
+        return result_flag
+          
+          
+    def get_text(self,locator):
+        "Return the text for a given path or the 'None' object if the element is not found"
+        text = ''
+        try:
+            text = self.get_element(locator).text
+        except Exception,e:
+            self.write(e)
+            return None
+        else:
+            return text.encode('utf-8')
+        
+
+    def get_dom_text(self,dom_element):
+        "Return the text of a given DOM element or the 'None' object if the element has no attribute called text"
+        text = None
+        try:
+            text = dom_element.text
+            text = text.encode('utf-8')
+        except Exception, e:
+            self.write(e)
+        
+        return text
+
+
+    def select_checkbox(self,locator):
+        "Select a checkbox if not already selected"
+        checkbox = self.get_element(locator)
+        if checkbox.is_selected() is False:
+            result_flag = self.toggle_checkbox(locator)
+        else:
+            result_flag = True
+
+        return result_flag
+
+
+    def deselect_checkbox(self,locator):
+        "Deselect a checkbox if it is not already deselected"
+        checkbox = self.get_element(locator)
+        if checkbox.is_selected() is True:
+            result_flag = self.toggle_checkbox(locator)
+        else:
+            result_flag = True
+
+        return result_flag
+    unselect_checkbox = deselect_checkbox #alias the method
+
+
+    def toggle_checkbox(self,locator):
+        "Toggle a checkbox"
+        return self.click_element(locator)
+
+
+    def select_dropdown_option(self, locator, option_text):
+        "Selects the option in the drop-down"
+        dropdown = self.get_element(locator)  
+        for option in dropdown.find_elements_by_tag_name('option'):
+            if option.text == option_text:
+                option.click()
+                break
+
+
+    def check_element_present(self,locator):
+        "This method checks if the web element is present in page or not and returns True or False accordingly"
+        result_flag = False
+        if self.get_element(locator) is not None:
+            result_flag = True
+
+        return result_flag
+
+
+    def check_element_display(self,locator):
+        "This method checks if the web element is present in page or not and returns True or False accordingly"
+        result_flag = False
+        if self.get_element(locator) is not None:
+            element = self.get_element(locator)
+            if element.is_displayed() is True:
+                result_flag = True
+
+        return result_flag
+
+
+    def hit_enter(self,locator,wait_time=2):
+        "Hit enter"
+        element = self.get_element(locator)
+        try:
+            element.send_keys(Keys.ENTER)
+            self.wait(wait_time)
+        except Exception,e:
+            self.write(str(e),'debug')
+            return None
+
+
+    def scroll_down(self,locator,wait_time=2):
+        "Scroll down"
+        element = self.get_element(locator)
+        try:
+            element.send_keys(Keys.PAGE_DOWN)
+            self.wait(wait_time)
+        except Exception,e:
+            self.write(str(e),'debug')
+            return None
+
+
+    def hover(self,locator,wait_seconds=2):
+        "Hover over the element"
+        #Note: perform() of ActionChains does not return a bool 
+        #So we have no way of returning a bool when hover is called
+        element = self.get_element(locator)
+        action_obj = ActionChains(self.driver)
+        action_obj.move_to_element(element)
+        action_obj.perform()
+        self.wait(wait_seconds)
+        
+
+    def teardown(self):
+        "Tears down the driver"
+        self.driver.quit()
+        self.reset()
+
+
+    def write(self,msg,level='info'):
+        "Log the message"
+        msg = str(msg)
+        self.msg_list.append('%-8s:  '%level.upper() + msg)
+        if self.browserstack_flag is True:
+            if self.browserstack_msg not in msg:
+                self.msg_list.pop(-1) #Remove the redundant BrowserStack message
+        self.log_obj.write(msg,level)
+
+
+    def report_to_testrail(self,case_id,test_run_id,result_flag,msg=''):
+        "Update Test Rail"
+        if self.testrail_flag is True:
+            msg += '\n'.join(self.msg_list)
+            msg = msg + "\n"
+            if self.browserstack_flag is True:
+                for image in self.image_url_list:
+                    msg += '\n' + '[' + image['name'] + ']('+ image['url']+')'
+                msg += '\n\n' + '[' + 'Watch Replay On BrowserStack' + ']('+ self.session_url+')'
+            self.tr_obj.update_testrail(case_id,test_run_id,result_flag,msg=msg)
+        self.image_url_list = []
+        self.msg_list = []
+        
+
+    def wait(self,wait_seconds=5,locator=None):
+        "Performs wait for time provided"
+        if locator is not None:
+            self.smart_wait(wait_seconds,locator)
+        else:
+            time.sleep(wait_seconds)
+
+
+    def smart_wait(self,wait_seconds,locator):
+        "Performs an explicit wait for a particular element"
+        result_flag = False
+        try:
+            path = self.split_locator(locator)
+            WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
+            result_flag =True
+        except Exception,e:
+			self.conditional_write(result_flag,
+                               positive='Located the element: %s'%locator,
+                               negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_time))
+            
+        return result_flag
+
+
+    def success(self,msg,level='info',pre_format='PASS: '):
+        "Write out a success message"
+        self.log_obj.write(pre_format + msg,level)
+        self.result_counter += 1
+        self.pass_counter += 1
+
+
+    def failure(self,msg,level='info',pre_format='FAIL: '):
+        "Write out a failure message"
+        self.log_obj.write(pre_format + msg,level)
+        self.result_counter += 1
+        self.failure_message_list.append(pre_format + msg)
+        
+
+    def log_result(self,flag,positive,negative,level='info'):
+        "Write out the result of the test"
+        if flag is True:
+            self.success(positive,level=level)
+        if flag is False:
+            self.failure(negative,level=level)
+
+
+    def read_browser_console_log(self):
+        "Read Browser Console log"
+        log = None
+        try:
+            log = self.driver.get_log('browser')
+            return log
+        except Exception,e:
+            self.write("Exception when reading Browser Console log")
+            self.write(str(e))
+            return log
+
+
+    def conditional_write(self,flag,positive,negative,level='info',pre_format="  - "):
+        "Write out either the positive or the negative message based on flag"
+        if flag is True:
+            self.write(pre_format + positive,level)
+            self.mini_check_pass_counter += 1
+        if flag is False:
+            self.write(pre_format + negative,level)
+        self.mini_check_counter += 1
+
+
+    def execute_javascript(self,js_script,*args):
+        "Execute javascipt"
+        try:
+            self.driver.execute_script(js_script)
+            result_flag = True
+        except Exception,e:
+            result_flag = False
+
+        return result_flag
+
+
+    def write_test_summary(self):
+        "Print out a useful, human readable summary"
+        self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
+        self.write('Total number of checks passed=%d\n----------------------\n************************\n\n'%self.pass_counter)
+        self.write('Total number of mini-checks=%d'%self.mini_check_counter)
+        self.write('Total number of mini-checks passed=%d'%self.mini_check_pass_counter)
+        failure_message_list = self.get_failure_message_list()
+        if len(failure_message_list) > 0:
+            self.write('\n--------FAILURE SUMMARY--------\n')
+            for msg in failure_message_list:
+                self.write(msg)      
+
+
+    def start(self):
+        "Overwrite this method in your Page module if you want to visit a specific URL"
+        pass
+
+
+    _get_locator = staticmethod(_get_locator)

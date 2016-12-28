@@ -1,0 +1,7 @@
+logging==0.4.9.6
+selenium==2.48.0
+requests[security]==2.8.1
+mechanize==0.2.5
+pytest==2.9.2
+pytest-xdist==1.14
+pytest-rerunfailures==2.0.0
