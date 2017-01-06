@@ -41,7 +41,7 @@ a)py.test [options]
 
 	-s	used to display the output on the screen			E.g: py.test -s (This will run all the tests in the directory and subdirectories)
 	-U  	used to run against specific URL				E.g: py.test -U http://YOUR_localhost_URL (This will run against your local instance)
-	-M  	used to run tests on Browserstack				E.g: py.test -s -M Y -U https://qxf2.com	
+	-M  	used to run tests on Browserstack/Sauce Lab		E.g: py.test -s -M Y -U https://qxf2.com	
 	-B all	used to run the test against multiple browser 			E.g: py.test -B all(This will run each test against the list of browsers specified in the conftest.py file,firefox and chrome in our case)
 	-V/-O	used to run against different browser versions/os versions	E.g: py.test -V 44 -O 8 (This will run each test 4 times in different browser version(default=45 & 44) and OS(default=7 & 8) combination)
 	-h	help for more options 						E.g: py.test -h

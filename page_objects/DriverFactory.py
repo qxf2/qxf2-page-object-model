@@ -15,20 +15,19 @@ import conf.sauce_credentials as sauce_credentials
 
 class DriverFactory():
     
-    def __init__(self,browser='ff',sauce_flag='N',browser_version=None,os_name=None):
+    def __init__(self,browser='ff',browser_version=None,os_name=None):
         "Constructor for the Driver factory"
         self.browser=browser
-        self.sauce_flag=sauce_flag
         self.browser_version=browser_version
         self.os_name=os_name
 
         
-    def get_web_driver(self,browserstack_flag,os_name,os_version,browser,browser_version):
+    def get_web_driver(self,remote_flag,os_name,os_version,browser,browser_version,test_name):
         "Return the appropriate driver"
-        if (browserstack_flag.lower() == 'y'):
-            web_driver = self.run_browserstack(os_name,os_version,browser,browser_version)                                    
-        elif (browserstack_flag.lower() == 'n'):
-            web_driver = self.run_local(os_name,os_version,browser,browser_version)       
+        if (remote_flag.lower() == 'y'):
+            web_driver = self.run_browserstack(os_name,os_version,browser,browser_version)#Change the method as per client                                    
+        elif (remote_flag.lower() == 'n'):
+                web_driver = self.run_local(os_name,os_version,browser,browser_version)       
         else:
             print "DriverFactory does not know the browser: ",browser
             web_driver = None
@@ -37,7 +36,7 @@ class DriverFactory():
     
 
     def run_browserstack(self,os_name,os_version,browser,browser_version):
-        "Run the test in browser stack browser stack flag is 'Y'"
+        "Run the test in browser stack when remote flag is 'Y'"
         #Get the browser stack credentials from browser stack credentials file
         USERNAME = browserstack_credentials.username
         PASSWORD = browserstack_credentials.accesskey
@@ -58,6 +57,28 @@ class DriverFactory():
         
         return webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"%(USERNAME,PASSWORD),resolve_ip= False),
             desired_capabilities=desired_capabilities)
+
+    def run_sauce_lab(self,os_name,os_version,browser,browser_version):
+        "Run the test in sauce labs when remote flag is 'Y'"
+        #Get the sauce labs credentials from sauce.credentials file
+        USERNAME = sauce_credentials.username
+        PASSWORD = sauce_credentials.key
+        if browser.lower() == 'ff' or browser.lower() == 'firefox':
+            desired_capabilities = DesiredCapabilities.FIREFOX            
+        elif browser.lower() == 'ie':
+            desired_capabilities = DesiredCapabilities.INTERNETEXPLORER
+        elif browser.lower() == 'chrome':
+            desired_capabilities = DesiredCapabilities.CHROME            
+        elif browser.lower() == 'opera':
+            desired_capabilities = DesiredCapabilities.OPERA        
+        elif browser.lower() == 'safari':
+            desired_capabilities = DesiredCapabilities.SAFARI
+        desired_capabilities['version'] = browser_version
+        desired_capabilities['platform'] = os_name + ' '+os_version
+        
+        
+        return webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
+                desired_capabilities= desired_capabilities)
 
 
     def run_local(self,os_name,os_version,browser,browser_version):
@@ -81,7 +102,7 @@ class DriverFactory():
         "Setup mobile device"
         #Get the sauce labs credentials from sauce.credentials file
         USERNAME = sauce_credentials.username
-        PASSWORD = sauce_credentials.accesskey
+        PASSWORD = sauce_credentials.key
         desired_capabilities = {}
         desired_capabilities['osName'] = mobile_os_name
         desired_capabilities['osVersion'] = mobile_os_version
@@ -109,7 +130,7 @@ class DriverFactory():
     def sauce_upload(self):  
         "Upload the apk to the sauce temperory storage"
         USERNAME = sauce_credentials.username
-        PASSWORD = sauce_credentials.accesskey
+        PASSWORD = sauce_credentials.key
         headers = {'Content-Type':'application/octet-stream'}
         params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','app-name')) #replace app-name with the application name
         fp = open(params,'rb')
