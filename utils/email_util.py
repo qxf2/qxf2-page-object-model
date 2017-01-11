@@ -59,7 +59,7 @@ class Email_Util:
         return result_flag
 
 
-    def get_latest_email_uid(self,subject=None,sender=None,time_delta= 10,wait_time = 300):
+    def get_latest_email_uid(self,subject=None,sender=None,time_delta=10,wait_time=300):
         "Search for a subject and return the latest unique ids of the emails"
         uid = None
         time_elapsed = 0
@@ -76,7 +76,7 @@ class Email_Util:
         if subject is not None and sender is not None:
             search_string = '(FROM "{sender}" SUBJECT "{subject}")'.format(sender=sender,subject=subject)
 
-        print '  - Automation will be in search/wait mode for max %s seconds'%wait_time 
+        print "  - Automation will be in search/wait mode for max %s seconds"%wait_time 
         while (time_elapsed < wait_time and uid is None):
             time.sleep(time_delta)
             result,data = self.mail.uid('search',None,str(search_string))
@@ -179,13 +179,13 @@ if __name__=='__main__':
             line = line.replace('<','')
             line = line.replace('>','')
             
-            if 'Hi Email_Util' and 'This email was sent to you' in line:
+            if "Hi Email_Util" and "This email was sent to you" in line:
                 data_flag = True
                 break
         if data_flag == True:
             print "PASS: Automation provided correct Email details. Email contents matched with provided data."
         else:
-            print "FAIL: Provided data not matched with Email contents. Looks like automation provided in correct Email details"
+            print "FAIL: Provided data not matched with Email contents. Looks like automation provided incorrect Email details"
             
     else:
         print "FAIL: After wait of 5 mins, looks like there is no email present with given sender"
@@ -193,15 +193,15 @@ if __name__=='__main__':
     #B. Look for an Email with provided subject, print uid, find Qxf2 POM address and compare with expected address
     uid = email_obj.get_latest_email_uid(subject="Qxf2 Services: Public POM Link",wait_time=300)
     if uid != None:
-        print 'PASS: Unique id of the latest email with given subject is: ',uid
+        print "PASS: Unique id of the latest email with given subject is: ",uid
         #Get pom url from email body
         email_body = email_obj.fetch_email_body(uid)
-        expected_pom_url = 'https://github.com/qxf2/qxf2-page-object-model'
+        expected_pom_url = "https://github.com/qxf2/qxf2-page-object-model"
         pom_url = None
         data_flag = False
         print "  - Automation checking mail contents"
         for body in email_body:
-            search_str = '/qxf2/'
+            search_str = "/qxf2/"
             body = body.split()
             for element in body:
                 if search_str in element:
@@ -223,14 +223,14 @@ if __name__=='__main__':
     #C. Look for an Email with provided sender and subject and print uid
     uid = email_obj.get_latest_email_uid(subject="get more out of your new Google Account",sender="andy-noreply@google.com",wait_time=300)
     if uid != None:
-        print 'PASS: Unique id of the latest email with given subject and sender is: ',uid
+        print "PASS: Unique id of the latest email with given subject and sender is: ",uid
     else:
         print "FAIL: After wait of 5 mins, looks like there is no email present with given subject and sender"
 
-    #D. Look for an Email with non-existant sender and subject details
+    #D. Look for an Email with non-existant sender and non-existant subject details
     uid = email_obj.get_latest_email_uid(subject="Activate your account",sender="support@qxf2.com",wait_time=120) #you can change wait time by setting wait_time variable
     if uid != None:
-        print 'FAIL: Unique id of the latest email with non-existant subject and sender is: ',uid
+        print "FAIL: Unique id of the latest email with non-existant subject and non-existant sender is: ",uid
     else:
-        print "PASS: After wait of 2 mins, looks like there is no email present with given non-existant subject and sender"
+        print "PASS: After wait of 2 mins, looks like there is no email present with given non-existant subject and non-existant sender"
     
