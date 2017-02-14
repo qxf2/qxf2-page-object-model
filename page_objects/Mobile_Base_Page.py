@@ -496,7 +496,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return result_flag
 
 
-    def check_element_display(self,xpath):
+    def check_element_displayed(self,xpath):
         "This method checks if the web element is visible on the page or not and returns True or False accordingly"
         result_flag = False
         if self.get_xpath(xpath,verbose_flag=False) is not None:

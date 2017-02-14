@@ -17,6 +17,7 @@ from utils.BrowserStack_Library import BrowserStack_Library
 from DriverFactory import DriverFactory
 import PageFactory
 from utils.Test_Rail import Test_Rail
+from conf import remote_credentials as Conf
 
 
 class Borg:
@@ -83,20 +84,23 @@ class Base_Page(Borg,unittest.TestCase):
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
 
 
-    def register_driver(self,browserstack_flag,os_name,os_version,browser,browser_version):
+    def register_driver(self,remote_flag,os_name,os_version,browser,browser_version):
         "Register the driver with Page"
-        self.driver = self.driver_obj.get_web_driver(browserstack_flag,os_name,os_version,browser,browser_version)
+        test_name  = self.get_calling_module()#To be used when running in sauce labs
+        self.driver = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version,test_name)
         self.set_screenshot_dir() # Create screenshot directory        
         self.log_obj = Base_Logging(level=logging.DEBUG)
         self.log_obj.set_stream_handler_level(self.log_obj.getStreamHandler(),level=logging.DEBUG)
         self.driver.implicitly_wait(5) 
         self.driver.maximize_window()
-        if (browserstack_flag.lower() == 'y'):
+        
+        if Conf.REMOTE_BROWSER_PLATFORM == 'BS' and remote_flag.lower() == 'y':
             print "Before registering bs"
             self.register_browserstack()
             self.session_url = self.browserstack_obj.get_session_url()
             self.browserstack_msg = 'BrowserStack session URL:'
             self.write( self.browserstack_msg + '\n' + str(self.session_url))
+    
         self.start()
 
 
@@ -441,17 +445,17 @@ class Base_Page(Borg,unittest.TestCase):
     def check_element_present(self,locator):
         "This method checks if the web element is present in page or not and returns True or False accordingly"
         result_flag = False
-        if self.get_element(locator) is not None:
+        if self.get_element(locator,verbose_flag=False) is not None:
             result_flag = True
 
         return result_flag
 
 
-    def check_element_display(self,locator):
+    def check_element_displayed(self,locator):
         "This method checks if the web element is present in page or not and returns True or False accordingly"
         result_flag = False
         if self.get_element(locator) is not None:
-            element = self.get_element(locator)
+            element = self.get_element(locator,verbose_flag=False)
             if element.is_displayed() is True:
                 result_flag = True
 
