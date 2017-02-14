@@ -12,6 +12,7 @@ from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 import conf.browserstack_credentials as browserstack_credentials
 import conf.sauce_credentials as sauce_credentials
+from conf import remote_credentials
 
 class DriverFactory():
     
@@ -25,7 +26,10 @@ class DriverFactory():
     def get_web_driver(self,remote_flag,os_name,os_version,browser,browser_version,test_name):
         "Return the appropriate driver"
         if (remote_flag.lower() == 'y'):
-            web_driver = self.run_browserstack(os_name,os_version,browser,browser_version)#Change the method as per client                                    
+            if remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS':
+                web_driver = self.run_browserstack(os_name,os_version,browser,browser_version)
+            else:
+                web_driver = self.run_sauce_lab(os_name,os_version,browser,browser_version)                                    
         elif (remote_flag.lower() == 'n'):
                 web_driver = self.run_local(os_name,os_version,browser,browser_version)       
         else:
@@ -38,8 +42,8 @@ class DriverFactory():
     def run_browserstack(self,os_name,os_version,browser,browser_version):
         "Run the test in browser stack when remote flag is 'Y'"
         #Get the browser stack credentials from browser stack credentials file
-        USERNAME = browserstack_credentials.username
-        PASSWORD = browserstack_credentials.accesskey
+        USERNAME = remote_credentials.USERNAME
+        PASSWORD = remote_credentials.ACCESS_KEY
         if browser.lower() == 'ff' or browser.lower() == 'firefox':
             desired_capabilities = DesiredCapabilities.FIREFOX            
         elif browser.lower() == 'ie':
@@ -61,8 +65,8 @@ class DriverFactory():
     def run_sauce_lab(self,os_name,os_version,browser,browser_version):
         "Run the test in sauce labs when remote flag is 'Y'"
         #Get the sauce labs credentials from sauce.credentials file
-        USERNAME = sauce_credentials.username
-        PASSWORD = sauce_credentials.key
+        USERNAME = remote_credentials.USERNAME
+        PASSWORD = remote_credentials.ACCESS_KEY
         if browser.lower() == 'ff' or browser.lower() == 'firefox':
             desired_capabilities = DesiredCapabilities.FIREFOX            
         elif browser.lower() == 'ie':

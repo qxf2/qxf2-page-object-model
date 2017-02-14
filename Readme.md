@@ -17,7 +17,7 @@ f) 'pip install Appium-Python-Client' -installs Appium-Python-Client
 g) 'pip install pytest' -installs pytest: test runner
 h) 'pip install pytest-xdist' -installs pytest x-dist module to run tests in parallel
 i) 'pip install mechanize' -installs mechanize module
-j) Update 'browserstack.credentials' if you want to run on BrowserStack
+j) Update 'remote_credentials' if you want to run on BrowserStack/Sauce Labs
 k) In case you have TestRail Integration update the testrail.conf with proper case ids. Also update the testrail.env with url,user,password.
 
 -------------------

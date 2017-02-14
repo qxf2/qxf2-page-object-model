@@ -17,6 +17,7 @@ from utils.BrowserStack_Library import BrowserStack_Library
 from DriverFactory import DriverFactory
 import PageFactory
 from utils.Test_Rail import Test_Rail
+from conf import remote_credentials as Conf
 
 
 class Borg:
@@ -92,14 +93,14 @@ class Base_Page(Borg,unittest.TestCase):
         self.log_obj.set_stream_handler_level(self.log_obj.getStreamHandler(),level=logging.DEBUG)
         self.driver.implicitly_wait(5) 
         self.driver.maximize_window()
-        #Comment out below code when using sauce labs
-        if (remote_flag.lower() == 'y'):
+        
+        if Conf.REMOTE_BROWSER_PLATFORM == 'BS' and remote_flag.lower() == 'y':
             print "Before registering bs"
             self.register_browserstack()
             self.session_url = self.browserstack_obj.get_session_url()
             self.browserstack_msg = 'BrowserStack session URL:'
             self.write( self.browserstack_msg + '\n' + str(self.session_url))
-        ##
+    
         self.start()
 
 
