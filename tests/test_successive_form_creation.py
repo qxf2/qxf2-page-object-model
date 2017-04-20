@@ -13,7 +13,7 @@ from page_objects.PageFactory import PageFactory
 from utils.Option_Parser import Option_Parser
 import conf.successive_form_creation_conf as conf
 
-def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_name,browserstack_flag,testrail_flag,test_run_id):
+def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,test_run_id):
     "Run the test"
     try:
 	#Initalize flags for tests summary
@@ -25,7 +25,7 @@ def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_
 
         #2. Setup and register a driver
         start_time = int(time.time())	#Set start_time with current time
-        test_obj.register_driver(browserstack_flag,os_name,os_version,browser,browser_version)
+        test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version)
 
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -107,7 +107,7 @@ if __name__=='__main__':
                                     browser_version=options.browser_version,
                                     os_version=options.os_version,
                                     os_name=options.os_name,
-                                    browserstack_flag=options.browserstack_flag,
+                                    remote_flag=options.remote_flag,
                                     testrail_flag=options.testrail_flag,
                                     test_run_id=options.test_run_id)                                    
     else:

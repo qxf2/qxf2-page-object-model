@@ -20,7 +20,7 @@ src_files_list = [src_file1,src_file2,src_file3,src_file4,src_file5]
 #CONF
 #files from src conf:
 src_conf_file1 = os.path.abspath(os.path.join(os.path.dirname(__file__),'testrailenv_conf.py'))
-src_conf_file2 = os.path.abspath(os.path.join(os.path.dirname(__file__),'browserstack_credentials.py'))
+src_conf_file2 = os.path.abspath(os.path.join(os.path.dirname(__file__),'remote_credentials.py'))
 src_conf_file3 = os.path.abspath(os.path.join(os.path.dirname(__file__),'browser_os_name_conf.py'))
 src_conf_file4 = os.path.abspath(os.path.join(os.path.dirname(__file__),'__init__.py'))
 

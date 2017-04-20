@@ -16,12 +16,6 @@ def base_url():
 
 
 @pytest.fixture
-def sauce_flag():
-    "pytest fixture for sauce flag"
-    return pytest.config.getoption("-S")
-
-
-@pytest.fixture
 def test_run_id():
     "pytest fixture for test run id"
     return pytest.config.getoption("-R")
@@ -34,8 +28,8 @@ def testrail_flag():
 
 
 @pytest.fixture
-def browserstack_flag():
-    "pytest fixture for browserstack flag"
+def remote_flag():
+    "pytest fixture for browserstack/sauce flag"
     return pytest.config.getoption("-M")
 
 
@@ -65,7 +59,7 @@ def pytest_generate_tests(metafunc):
         if metafunc.config.getoption("-M").lower() == 'y':
             if metafunc.config.getoption("-B") == ["all"]:
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
-                                    browser_os_name_conf.cross_browser_cross_os_name_config)
+                                    browser_os_name_conf.cross_browser_cross_platform_config)
             else:
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
                                     browser_os_name_conf.default_config_list)
@@ -94,14 +88,10 @@ def pytest_addoption(parser):
                       dest="test_run_id",
                       default=None,
                       help="The test run id in TestRail")
-    parser.addoption("-M","--browserstack_flag",
-                      dest="browserstack_flag",
+    parser.addoption("-M","--remote_flag",
+                      dest="remote_flag",
                       default="N",
-                      help="Run the test in Browserstack: Y or N")
-    parser.addoption("-S","--sauce_flag",
-                      dest="sauce_flag",
-                      default="N",
-                      help="Run the test in Sauce labs: Y or N")
+                      help="Run the test in Browserstack/Sauce Lab: Y or N")
     parser.addoption("-O","--os_version",
                       dest="os_version",
                       action="append",
