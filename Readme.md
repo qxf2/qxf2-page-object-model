@@ -25,9 +25,9 @@ e) Get setup with your browser driver. If you don't know how to, please try:
 
    > For Firefox: https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver
 
-f) [ADVANCED and OPTIONAL] Update 'remote_credentials' if you want to run on BrowserStack/Sauce Labs
+f) [ADVANCED and OPTIONAL] Update 'conf/remote_credentials.py' if you want to run on BrowserStack/Sauce Labs
 
-g) [ADVANCED and OPTIONAL] In case you have TestRail Integration update the testrail.conf with proper case ids. Also update the testrail.env with url,user,password.
+g) [ADVANCED and OPTIONAL] In case you have TestRail Integration update the 'conf/testrail.conf' with proper case ids. Also update the 'conf/testrail.env' with url,user,password.
 
 
 __If your setup goes well__, you should be to run a simple test with this command:
