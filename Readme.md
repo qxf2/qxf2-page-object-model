@@ -87,6 +87,8 @@ b) If you are not setup with the drivers for the web browsers, you will see a he
 
 c) If your are using firefox 47 and above, you need to setup with Geckodriver. Refer following link for setup: https://qxf2.com/blog/selenium-geckodriver-issue/
 
+d) On Ubuntu, you may run into an issue installing the cryptography module. You need to `sudo apt-get install libssl-dev` and then run `sudo pip install -r requirements.txt`
+
 -----------
 NEED HELP?
 -----------
