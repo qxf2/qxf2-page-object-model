@@ -10,8 +10,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
-import conf.browserstack_credentials as browserstack_credentials
-import conf.sauce_credentials as sauce_credentials
 from conf import remote_credentials
 
 class DriverFactory():

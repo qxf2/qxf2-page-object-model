@@ -10,7 +10,7 @@ a) Handle expired sessions better
 """
 
 import os,requests
-import conf.browserstack_credentials as browserstack_credentials
+import conf.remote_credentials as browserstack_credentials
 
 
 class BrowserStack_Library():
