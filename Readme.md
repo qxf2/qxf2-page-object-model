@@ -23,7 +23,7 @@ e) Get setup with your browser driver. If you don't know how to, please try:
 
    > For Chrome: https://sites.google.com/a/chromium.org/chromedriver/getting-started
 
-   > For Firefox: https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver
+   > For Firefox: https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver #Note: Check firefox version & selenium version compatibility before downloading geckodriver.
 
 f) [ADVANCED and OPTIONAL] Update 'conf/remote_credentials.py' if you want to run on BrowserStack/Sauce Labs
 
