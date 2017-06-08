@@ -3,7 +3,7 @@ Conf file to generate the cross browser cross platform test run configuration
 """
 import remote_credentials as conf
 #Conf list for local
-default_browser = ["firefox"]  #default browser for the tests to run against when -B option is not used
+default_browser = ["chrome"]  #default browser for the tests to run against when -B option is not used
 local_browsers = ["firefox","chrome"]  #local browser list against which tests would run if no -M y option is used
 
 
@@ -17,7 +17,7 @@ os_list = ["windows","OS X"]   #list of os for the tests to run against on Brows
 windows_versions = ["7","8.1"] #list of windows versions for the tests to run against on Browserstack/Sauce Labs
 os_x_versions = ["yosemite"]   #list of os x versions for the tests to run against on Browserstack/Sauce Labs
 sauce_labs_os_x_versions = ["10.10"] #Set if running on sauce_labs instead of "yosemite"
-default_config_list = [("firefox","45","windows","7")] #default configuration against which the test would run if no -B all option is used
+default_config_list = [("chrome","45","windows","7")] #default configuration against which the test would run if no -B all option is used
 
 
 def generate_configuration(browsers=browsers,firefox_versions=firefox_versions,chrome_versions=chrome_versions,
