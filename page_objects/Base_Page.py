@@ -86,11 +86,9 @@ class Base_Page(Borg,unittest.TestCase):
 
     def register_driver(self,remote_flag,os_name,os_version,browser,browser_version):
         "Register the driver with Page"
-        test_name  = self.get_calling_module()#To be used when running in sauce labs
-        self.driver = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version,test_name)
-        self.set_screenshot_dir() # Create screenshot directory        
-        self.log_obj = Base_Logging(level=logging.DEBUG)
-        self.log_obj.set_stream_handler_level(self.log_obj.getStreamHandler(),level=logging.DEBUG)
+        self.driver = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version)      
+        self.set_screenshot_dir(os_name,os_version,browser,browser_version) # Create screenshot directory
+        self.set_log_file()       
         self.driver.implicitly_wait(5) 
         self.driver.maximize_window()
         
@@ -125,8 +123,9 @@ class Base_Page(Borg,unittest.TestCase):
     def get_calling_module(self):
         "Get the name of the calling module"
         calling_file = inspect.stack()[-1][1]
-        if 'runpy' in calling_file:
-            calling_file = inspect.stack()[5][1]
+        
+        if 'runpy' or 'string' in calling_file:
+            calling_file = inspect.stack()[4][3]
         calling_filename = calling_file.split(os.sep)
 
         #This logic bought to you by windows + cygwin + git bash 
@@ -141,18 +140,21 @@ class Base_Page(Borg,unittest.TestCase):
     def set_directory_structure(self):
         "Setup the required directory structure if it is not already present"
         try:
-            screenshots_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','screenshots'))
-            if not os.path.exists(screenshots_parent_dir):
-                os.makedirs(screenshots_parent_dir)
+            self.screenshots_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','screenshots'))
+            if not os.path.exists(self.screenshots_parent_dir):
+                os.makedirs(self.screenshots_parent_dir)
+            self.logs_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
+            if not os.path.exists(self.logs_parent_dir):
+                os.makedirs(self.logs_parent_dir)
         except Exception,e:
             self.write("Exception when trying to set directory structure")
             self.write(str(e))
 
 
-    def set_screenshot_dir(self):
+    def set_screenshot_dir(self,os_name,os_version,browser,browser_version):
         "Set the screenshot directory"
         try:
-            self.screenshot_dir = self.get_screenshot_dir()
+            self.screenshot_dir = self.get_screenshot_dir(os_name,os_version,browser,browser_version,overwrite_flag=True)
             if not os.path.exists(self.screenshot_dir):
                 os.makedirs(self.screenshot_dir)
         except Exception,e:
@@ -160,21 +162,38 @@ class Base_Page(Borg,unittest.TestCase):
             self.write(str(e))
 
 
-    def get_screenshot_dir(self):
+    def get_screenshot_dir(self,os_name,os_version,browser,browser_version,overwrite_flag=False):
         "Get the name of the test"
-        testname = self.get_calling_module()
-        screenshot_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','screenshots')) + os.sep  + testname
-        if os.path.exists(screenshot_dir):
-            for i in range(1,100):
-                if os.path.exists(screenshot_dir + '_'+str(i)):
+        if os_name == 'OS X':
+            os_name = 'OS_X'
+        if isinstance(os_name,list):
+            windows_browser_combination = browser.lower() 
+        else:
+            windows_browser_combination = os_name.lower() + '_' + str(os_version).lower() + '_' + browser.lower()+ '_' + str(browser_version)
+            
+        self.testname = self.get_calling_module()
+        self.testname =self.testname.replace('<','')
+        self.testname =self.testname.replace('>','')
+        self.testname = self.testname + '[' + str(windows_browser_combination)+ ']'
+        self.screenshot_dir = self.screenshots_parent_dir + os.sep + self.testname
+        if os.path.exists(self.screenshot_dir) and overwrite_flag is True:
+            for i in range(1,4096):
+                if os.path.exists(self.screenshot_dir + '_'+str(i)):
                     continue
                 else:
-                    os.rename(screenshot_dir,screenshot_dir +'_'+str(i))
+                    os.rename(self.screenshot_dir,self.screenshot_dir +'_'+str(i))
                     break
 
-        return screenshot_dir
-            
+        return self.screenshot_dir
+    
 
+    def set_log_file(self):
+        'set the log file'
+        self.log_name = self.testname + '.log'
+        self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
+
+        
+            
     def append_latest_image(self,screenshot_name):
         "Get image url list from Browser Stack"
         screenshot_url = self.browserstack_obj.get_latest_screenshot_url()
