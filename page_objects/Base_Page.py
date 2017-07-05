@@ -123,15 +123,12 @@ class Base_Page(Borg,unittest.TestCase):
     def get_calling_module(self):
         "Get the name of the calling module"
         calling_file = inspect.stack()[-1][1]
-        
         if 'runpy' or 'string' in calling_file:
             calling_file = inspect.stack()[4][3]
         calling_filename = calling_file.split(os.sep)
-
         #This logic bought to you by windows + cygwin + git bash 
         if len(calling_filename) == 1: #Needed for 
             calling_filename = calling_file.split('/')
-        
         self.calling_module = calling_filename[-1].split('.')[0]
 
         return self.calling_module
@@ -169,8 +166,7 @@ class Base_Page(Borg,unittest.TestCase):
         if isinstance(os_name,list):
             windows_browser_combination = browser.lower() 
         else:
-            windows_browser_combination = os_name.lower() + '_' + str(os_version).lower() + '_' + browser.lower()+ '_' + str(browser_version)
-            
+            windows_browser_combination = os_name.lower() + '_' + str(os_version).lower() + '_' + browser.lower()+ '_' + str(browser_version)   
         self.testname = self.get_calling_module()
         self.testname =self.testname.replace('<','')
         self.testname =self.testname.replace('>','')
@@ -191,8 +187,7 @@ class Base_Page(Borg,unittest.TestCase):
         'set the log file'
         self.log_name = self.testname + '.log'
         self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
-
-        
+	
             
     def append_latest_image(self,screenshot_name):
         "Get image url list from Browser Stack"
