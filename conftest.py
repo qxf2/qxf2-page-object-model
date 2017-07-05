@@ -1,6 +1,7 @@
 import pytest
 import os
 from conf import browser_os_name_conf
+from utils import post_test_reports_to_slack
 
 
 @pytest.fixture
