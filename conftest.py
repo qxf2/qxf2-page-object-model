@@ -1,6 +1,7 @@
 import pytest
 import os
 from conf import browser_os_name_conf
+from utils import post_test_reports_to_slack
 
 
 @pytest.fixture
@@ -48,7 +49,19 @@ def os_name():
 @pytest.fixture
 def os_version():
     "pytest fixture for os version"
-    return pytest.config.getoption("-O") 
+    return pytest.config.getoption("-O")
+
+
+@pytest.fixture
+def slack_flag():
+    "pytest fixture for os version"
+    return pytest.config.getoption("-I")
+
+
+def pytest_terminal_summary(terminalreporter, exitstatus):
+    "add additional section in terminal summary reporting."
+    if pytest.config.getoption("-I").lower() == 'y':
+        post_test_reports_to_slack.post_reports_to_slack()
 
 
 def pytest_generate_tests(metafunc):
@@ -107,5 +120,9 @@ def pytest_addoption(parser):
                       action="append",
                       help="The operating system: Windows 7, Linux",
                       default=[])
+    parser.addoption("-I","--slack_flag",
+                      dest="slack_flag",
+                      default="N",
+                      help="Post the test report on slack channel: Y or N")
 
 
