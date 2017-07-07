@@ -4,7 +4,7 @@ NOTE: Change this class as you add support for:
 1. SauceLabs/BrowserStack
 2. More browsers like Opera
 """
-import dotenv,os
+import dotenv,os,sys
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -24,10 +24,17 @@ class DriverFactory():
     def get_web_driver(self,remote_flag,os_name,os_version,browser,browser_version):
         "Return the appropriate driver"
         if (remote_flag.lower() == 'y'):
-            if remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS':
-                web_driver = self.run_browserstack(os_name,os_version,browser,browser_version)
-            else:
-                web_driver = self.run_sauce_lab(os_name,os_version,browser,browser_version)                                    
+            try:
+                if remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS':
+                    web_driver = self.run_browserstack(os_name,os_version,browser,browser_version)
+                else:
+                    web_driver = self.run_sauce_lab(os_name,os_version,browser,browser_version)
+                    
+            except Exception,e:
+                print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
+                print "Python says:%s"%str(e)
+                print "SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"
+                
         elif (remote_flag.lower() == 'n'):
                 web_driver = self.run_local(os_name,os_version,browser,browser_version)       
         else:
@@ -59,6 +66,7 @@ class DriverFactory():
         
         return webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"%(USERNAME,PASSWORD),resolve_ip= False),
             desired_capabilities=desired_capabilities)
+    
 
     def run_sauce_lab(self,os_name,os_version,browser,browser_version):
         "Run the test in sauce labs when remote flag is 'Y'"
