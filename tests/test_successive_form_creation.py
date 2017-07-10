@@ -30,8 +30,8 @@ def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                default_test_run_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','conf','latest_test_run.txt'))
-                test_run_id = Conf_Reader.get_value(default_test_run_file,'TEST_RUN_ID')
+                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks link you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+                testrail_flag = 'N'   
             if test_run_id is not None:
                 test_obj.register_testrail()
         
