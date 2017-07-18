@@ -1,0 +1,16 @@
+# Simple circle.yml to get started.
+# Add more as we grow
+
+general:
+  artifacts:
+    - "./screenshots" #Save the screenshots for all the tests
+    - "./log" #Save the logs for all the tests
+
+test:
+  override:
+    - py.test --junit-xml=$CIRCLE_TEST_REPORTS/result_smoke.xml --tb=native
+  post:
+    - > 
+      if [ -n "${NIGHTLY_BUILD}" ]; then
+         py.test --junit-xml=$CIRCLE_TEST_REPORTS/result_nightly.xml --tb=native
+      fi
