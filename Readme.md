@@ -95,4 +95,4 @@ d) On Ubuntu, you may run into an issue installing the cryptography module. You 
 -----------
 NEED HELP?
 -----------
-Are you struggling to get your GUI automation going? You can hire Qxf2 Services to help. Contact us at mak@qxf2.com
+Struggling to get your GUI automation going? You can hire Qxf2 Services to help. Contact us at mak@qxf2.com
