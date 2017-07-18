@@ -8,7 +8,7 @@ general:
 
 test:
   override:
-    - py.test --junit-xml=$CIRCLE_TEST_REPORTS/result_smoke.xml --tb=native
+    - py.test -s -v --junit-xml=$CIRCLE_TEST_REPORTS/result_smoke.xml --tb=native
   post:
     - > 
       if [ -n "${NIGHTLY_BUILD}" ]; then
