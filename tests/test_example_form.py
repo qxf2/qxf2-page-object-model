@@ -32,7 +32,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks link you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
                 testrail_flag = 'N'   
             if test_run_id is not None:
                 test_obj.register_testrail()
