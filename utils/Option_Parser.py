@@ -8,13 +8,12 @@ import optparse
 class Option_Parser:
     "The option parser class"
     
-    def __init__(self,usage="\n----\n%prog -b <OPTIONAL: Browser> -c <OPTIONAL: configuration_file> -u <OPTIONAL: APP URL> -r <Test Run Id> -t <OPTIONAL: testrail_configuration_file> -s <OPTIONAL: sauce flag>\n----\nE.g.: %prog -b FF -c .conf -u http://qxf2.com -r 2 -t testrail.conf -s Y\n---"
+    def __init__(self,usage="\n----\n%prog -b <OPTIONAL: Browser> -c <OPTIONAL: configuration_file> -u <OPTIONAL: APP URL> -a <OPTIONAL: API URL> -r <Test Run Id> -t <OPTIONAL: testrail_configuration_file> -s <OPTIONAL: sauce flag>\n----\nE.g.: %prog -b FF -c .conf -u http://qxf2.com -r 2 -t testrail.conf -s Y\n---"
 ):
         "Class initializer"
         self.usage=usage
         self.parser=optparse.OptionParser()
         self.set_standard_options()
-
 
     def set_standard_options(self):
         "Set options shared by all tests over here"
@@ -26,6 +25,10 @@ class Option_Parser:
                             dest="url",
                             default="https://qxf2.com",
                             help="The url of the application")
+        self.parser.add_option("-A","--api_url",
+                            dest="api_url",
+                            default="http://127.0.0.1:5000",
+                            help="The url of the api")
         self.parser.add_option("-X","--testrail_flag",
                             dest="testrail_flag",
                             default='N',
@@ -34,10 +37,14 @@ class Option_Parser:
                             dest="test_run_id",
                             default=None,
                             help="The test run id in TestRail")
-        self.parser.add_option("-M","--remote_flag",
-                            dest="remote_flag",
+        self.parser.add_option("-M","--browserstack_flag",
+                            dest="browserstack_flag",
                             default="N",
-                            help="Run the test in Browserstack or Sauce: Y or N")
+                            help="Run the test in Browserstack: Y or N")
+        self.parser.add_option("-S","--sauce_flag",
+                            dest="sauce_flag",
+                            default="N",
+                            help="Run the test in Sauce labs: Y or N")
         self.parser.add_option("-O","--os_version",
                             dest="os_version",
                             help="The operating system: xp, 7",
@@ -100,7 +107,12 @@ class Option_Parser:
         else:
             result_flag = False
             print "Url cannot be None. Use -U to specify a url"
-        if options.remote_flag.lower() == 'y':
+        if options.api_url is not None:
+            result_flag &= True
+        else:
+            result_flag = False
+            print "API URL cannot be None. Use -A to specify a api url"
+        if options.browserstack_flag.lower() == 'y':
             if options.browser_version is not None:
                 result_flag &= True
             else:

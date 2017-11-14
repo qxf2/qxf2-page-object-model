@@ -15,6 +15,10 @@ def base_url():
     "pytest fixture for base url"
     return pytest.config.getoption("-U")
 
+@pytest.fixture
+def api_url():
+    "pytest fixture for base url"
+    return pytest.config.getoption("-A")
 
 @pytest.fixture
 def test_run_id():
