@@ -6,6 +6,7 @@ This repository contains Qxf2 Services's test automation framework. You can use 
 
 We've implemented some version of this framework at several clients (https://qxf2.com/clients). In all cases, the framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too!
 
+We have also included API test automation framework based on the player interface pattern in our repository. You can now write your api tests included with Selenium and Appium tests , please note api tests written here are based out of sample api available at qxf2/cars-api repository. 
 
 ---------
 SETUP
@@ -52,13 +53,15 @@ a) Directory structure of our current Templates
 	|__log: Log files for all tests
 
 	|__page_objects: Contains our Base Page, different Page Objects, DriverFactory, PageFactory
+	
+	|__endpoints: Contains our Base Mechanize, different End Points, API Player, API Interface
 
 	|__screenshots: For screen shots
 
 	|__tests: Put your tests in here
 
 	|__utils: All utility modules (email_util,TestRail, BrowserStack, Base Logger, post_test_reports_to_slack) are kept in this folder
-	
+
 
 ---------------------------
 COMMANDS FOR RUNNING TESTS
@@ -80,6 +83,7 @@ b)python tests/test_example_form.py (can also be used to run standalone test)
 
 c)python tests/test_example_form.py -B Chrome (to run against chrome)
 
+d)python tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
 --------
 ISSUES?
 --------
