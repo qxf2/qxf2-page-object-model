@@ -5,7 +5,6 @@ A wrapper around Mechanize to make Restful API calls
 import json
 import mechanize
 
-
 class Base_Mechanize:
     "Main base class for Mechanize based scripts"
 
