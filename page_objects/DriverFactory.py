@@ -4,39 +4,31 @@ NOTE: Change this class as you add support for:
 1. SauceLabs/BrowserStack
 2. More browsers like Opera
 """
-import dotenv,os,sys
+import dotenv,os
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
-from conf import remote_credentials
+import conf.browserstack_credentials as browserstack_credentials
+import conf.sauce_credentials as sauce_credentials
 
 class DriverFactory():
     
-    def __init__(self,browser='ff',browser_version=None,os_name=None):
+    def __init__(self,browser='ff',sauce_flag='N',browser_version=None,os_name=None):
         "Constructor for the Driver factory"
         self.browser=browser
+        self.sauce_flag=sauce_flag
         self.browser_version=browser_version
         self.os_name=os_name
 
         
-    def get_web_driver(self,remote_flag,os_name,os_version,browser,browser_version):
+    def get_web_driver(self,browserstack_flag,os_name,os_version,browser,browser_version):
         "Return the appropriate driver"
-        if (remote_flag.lower() == 'y'):
-            try:
-                if remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS':
-                    web_driver = self.run_browserstack(os_name,os_version,browser,browser_version)
-                else:
-                    web_driver = self.run_sauce_lab(os_name,os_version,browser,browser_version)
-                    
-            except Exception,e:
-                print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
-                print "Python says:%s"%str(e)
-                print "SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"
-                
-        elif (remote_flag.lower() == 'n'):
-                web_driver = self.run_local(os_name,os_version,browser,browser_version)       
+        if (browserstack_flag.lower() == 'y'):
+            web_driver = self.run_browserstack(os_name,os_version,browser,browser_version)                                    
+        elif (browserstack_flag.lower() == 'n'):
+            web_driver = self.run_local(os_name,os_version,browser,browser_version)       
         else:
             print "DriverFactory does not know the browser: ",browser
             web_driver = None
@@ -45,10 +37,10 @@ class DriverFactory():
     
 
     def run_browserstack(self,os_name,os_version,browser,browser_version):
-        "Run the test in browser stack when remote flag is 'Y'"
+        "Run the test in browser stack browser stack flag is 'Y'"
         #Get the browser stack credentials from browser stack credentials file
-        USERNAME = remote_credentials.USERNAME
-        PASSWORD = remote_credentials.ACCESS_KEY
+        USERNAME = browserstack_credentials.username
+        PASSWORD = browserstack_credentials.accesskey
         if browser.lower() == 'ff' or browser.lower() == 'firefox':
             desired_capabilities = DesiredCapabilities.FIREFOX            
         elif browser.lower() == 'ie':
@@ -66,29 +58,6 @@ class DriverFactory():
         
         return webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"%(USERNAME,PASSWORD),resolve_ip= False),
             desired_capabilities=desired_capabilities)
-    
-
-    def run_sauce_lab(self,os_name,os_version,browser,browser_version):
-        "Run the test in sauce labs when remote flag is 'Y'"
-        #Get the sauce labs credentials from sauce.credentials file
-        USERNAME = remote_credentials.USERNAME
-        PASSWORD = remote_credentials.ACCESS_KEY
-        if browser.lower() == 'ff' or browser.lower() == 'firefox':
-            desired_capabilities = DesiredCapabilities.FIREFOX            
-        elif browser.lower() == 'ie':
-            desired_capabilities = DesiredCapabilities.INTERNETEXPLORER
-        elif browser.lower() == 'chrome':
-            desired_capabilities = DesiredCapabilities.CHROME            
-        elif browser.lower() == 'opera':
-            desired_capabilities = DesiredCapabilities.OPERA        
-        elif browser.lower() == 'safari':
-            desired_capabilities = DesiredCapabilities.SAFARI
-        desired_capabilities['version'] = browser_version
-        desired_capabilities['platform'] = os_name + ' '+os_version
-        
-        
-        return webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
-                desired_capabilities= desired_capabilities)
 
 
     def run_local(self,os_name,os_version,browser,browser_version):
@@ -108,22 +77,20 @@ class DriverFactory():
         return local_driver
 
 
-    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag,emulator_flag):
+    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag):
         "Setup mobile device"
-        #Get the sauce labs credentials from sauce.credentials file
-        USERNAME = sauce_credentials.username
-        PASSWORD = sauce_credentials.key
         desired_capabilities = {}
-        desired_capabilities['osName'] = mobile_os_name
-        desired_capabilities['osVersion'] = mobile_os_version
+        desired_capabilities['platformName'] = mobile_os_name
+        desired_capabilities['platformVersion'] = mobile_os_version
         desired_capabilities['deviceName'] = device_name
         desired_capabilities['appPackage'] = app_package
         desired_capabilities['appActivity'] = app_activity
         
         if device_flag.lower() == 'y':
             driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-        if emulator_flag.lower() == 'y':
-            desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','app-name')) #replace app-name with the application name
+        # if emulator_flag.lower() == 'y':
+        if device_flag.lower() == 'n':
+            desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','apps/Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
             driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
         if mobile_sauce_flag.lower() == 'y':
             desired_capabilities['idleTimeout'] = 300
@@ -140,7 +107,7 @@ class DriverFactory():
     def sauce_upload(self):  
         "Upload the apk to the sauce temperory storage"
         USERNAME = sauce_credentials.username
-        PASSWORD = sauce_credentials.key
+        PASSWORD = sauce_credentials.accesskey
         headers = {'Content-Type':'application/octet-stream'}
         params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','app-name')) #replace app-name with the application name
         fp = open(params,'rb')

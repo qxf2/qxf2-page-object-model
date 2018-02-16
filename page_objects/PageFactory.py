@@ -6,11 +6,14 @@ Pages implemented so far:
 1. Tutorial main page
 2. Tutorial redirect page
 3. Contact Page
+4. Bitcoin price page
 """
 
 from tutorial_main_page import Tutorial_Main_Page
 from tutorial_redirect_page import Tutorial_Redirect_Page
 from contact_page import Contact_Page
+from bitcoin_price_page import Bitcoin_Price_Page
+
 
 class PageFactory():
     "PageFactory uses the factory design pattern."
@@ -24,6 +27,9 @@ class PageFactory():
             test_obj = Tutorial_Redirect_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
         elif page_name == "contact page":
             test_obj = Contact_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
+        elif page_name == "bitcoin price page":
+            test_obj = Bitcoin_Price_Page() 
+        
         return test_obj
 
     get_page_object = staticmethod(get_page_object)

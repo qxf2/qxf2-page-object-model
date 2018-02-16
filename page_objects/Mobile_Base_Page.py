@@ -11,11 +11,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains 
 import sys,unittest,time,logging,os,inspect
-from Base_Logging import Base_Logging
+from utils.Base_Logging import Base_Logging
 from inspect import getargspec
-from BrowserStack_Library import BrowserStack_Library
+from utils.BrowserStack_Library import BrowserStack_Library
 from DriverFactory import DriverFactory
-from Test_Rail import Test_Rail
+from utils.Test_Rail import Test_Rail
 import PageFactory
 
 
@@ -72,7 +72,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
-        self.__class__ = PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
+        self.__class__ = PageFactory.get_page_object(page_name).__class__
 
 
     def register_driver(self,sauce_flag,os_name,os_version,browser,browser_version):
@@ -83,20 +83,21 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.start()
 
 
-    def register_mobile_driver(self):
+    def register_mobile_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag):
         "Register the mobile driver"
-        self.driver = self.driver_obj.run_mobile()
+        self.driver = self.driver_obj.run_mobile(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag)
         self.start()
-
 
 
     def get_current_driver(self):
         "Return current driver"        
         return self.driver
+
         
     def get_console_log(self):
         "Return current browser's console logs from driver"
         return self.driver.get_log('browser')
+
 
     def get_driver_title(self):
         "Return the title of the current page"
@@ -341,20 +342,46 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return dom_elements
 
 
-    def click_element(self,xpath,wait_seconds=3):
+    def click_element(self,locator,wait_time=3):
         "Click the button supplied"
-        link = self.get_xpath(xpath)
+        link = self.get_element(locator)
         if link is not None:
             try:
                 link.click()
-                self.wait(wait_seconds)
+                self.wait(wait_time)
             except Exception,e:
-                self.write('Exception when clicking link with xpath: %s'%xpath)
-                self.write(str(e))
+                self.write('Exception when clicking link with path: %s'%locator)
+                self.write(e)
             else:
                 return True
 
         return False
+
+
+    def get_element(self,locator,verbose_flag=True):
+        "Return the DOM element of the path or 'None' if the element is not found "
+        dom_element = None
+        try:
+            locator = self.split_locator(locator)
+            dom_element = self.driver.find_element(*locator)
+        except Exception,e:
+            if verbose_flag is True:
+                self.write(str(e),'debug')
+                self.write("Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
+                self.get_session_details()
+
+        return dom_element
+
+
+    def split_locator(self,locator):
+        "Split the locator type and locator"
+        result = ()
+        try:
+            result = tuple(locator.split(',',1))
+        except Exception,e:
+            self.write("Error while parsing locator")
+
+        return result
 
 
     def click_mobile_element(self,xpath=None,id=None,wait_seconds=3):
@@ -432,6 +459,18 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             return None
         else:
             return text.encode('utf-8')
+
+
+    def get_text_by_locator(self,locator):
+        "Return the text for a given path or the 'None' object if the element is not found"
+        text = ''
+        try:
+            text = self.get_element(locator).text
+        except Exception,e:
+            self.write(e)
+            return None
+        else:
+            return text.encode('utf-8')
         
 
     def get_dom_text(self,dom_element):
@@ -496,7 +535,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return result_flag
 
 
-    def check_element_displayed(self,xpath):
+    def check_element_display(self,xpath):
         "This method checks if the web element is visible on the page or not and returns True or False accordingly"
         result_flag = False
         if self.get_xpath(xpath,verbose_flag=False) is not None:
@@ -644,3 +683,17 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
     _screenshot = staticmethod(_screenshot)
     _exceptionHandler = staticmethod(_exceptionHandler)
     _get_xpath_string = staticmethod(_get_xpath_string)
+
+
+    def write_test_summary(self):
+        "Print out a useful, human readable summary"
+        self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
+        self.write('Total number of checks passed=%d\n----------------------\n************************\n\n'%self.pass_counter)
+        self.write('Total number of mini-checks=%d'%self.mini_check_counter)
+        self.write('Total number of mini-checks passed=%d'%self.mini_check_pass_counter)
+        failure_message_list = self.get_failure_message_list()
+        if len(failure_message_list) > 0:
+            self.write('\n--------FAILURE SUMMARY--------\n')
+            for msg in failure_message_list:
+                self.write(msg)
+
