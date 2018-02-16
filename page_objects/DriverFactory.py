@@ -4,12 +4,13 @@ NOTE: Change this class as you add support for:
 1. SauceLabs/BrowserStack
 2. More browsers like Opera
 """
-import dotenv,os
+import dotenv,os,sys
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
+from conf import remote_credentials
 import conf.browserstack_credentials as browserstack_credentials
 import conf.sauce_credentials as sauce_credentials
 
