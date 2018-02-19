@@ -5,6 +5,7 @@ Class to wrap around parsing command line options
 import os, sys
 import optparse
 
+
 class Option_Parser:
     "The option parser class"
     
@@ -37,10 +38,10 @@ class Option_Parser:
                             dest="test_run_id",
                             default=None,
                             help="The test run id in TestRail")
-        self.parser.add_option("-M","--browserstack_flag",
-                            dest="browserstack_flag",
+        self.parser.add_option("-M","--remote_flag",
+                            dest="remote_flag",
                             default="N",
-                            help="Run the test in Browserstack: Y or N")
+                            help="Run the test in remote flag: Y or N")
         self.parser.add_option("-S","--sauce_flag",
                             dest="sauce_flag",
                             default="N",
@@ -57,6 +58,34 @@ class Option_Parser:
                             dest="os_name",
                             help="The operating system: Windows , Linux",
                             default="Windows")
+        self.parser.add_option("-G","--mobile_os_name",
+                            dest="mobile_os_name",
+                            help="Enter operating system of mobile. Ex: Android, iOS",
+                            default="Android")
+        self.parser.add_option("-H","--mobile_os_version",
+                            dest="mobile_os_version",
+                            help="Enter version of operating system of mobile: 8.1.0",
+                            default="8.1.0")
+        self.parser.add_option("-I","--device_name",
+                            dest="device_name",
+                            help="Enter device name. Ex: Emulator, physical device name",
+                            default="Android Emulator")
+        self.parser.add_option("-J","--app_package",
+                            dest="app_package",
+                            help="Enter name of app package. Ex: bitcoininfo",
+                            default="com.dudam.rohan.bitcoininfo")
+        self.parser.add_option("-K","--app_activity",
+                            dest="app_activity",
+                            help="Enter name of app activity. Ex: .MainActivity",
+                            default=".MainActivity")
+        self.parser.add_option("-L","--mobile_sauce_flag",
+                            dest="mobile_sauce_flag",
+                            help="Enter Y or N. 'Y' if you want to run the test in Sauce labs.",
+                            default="N")
+        self.parser.add_option("-Q","--device_flag",
+                            dest="device_flag",
+                            help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
+                            default="N")
 
         
     def add_option(self,option_letter,option_word,dest,help_text):
@@ -112,7 +141,7 @@ class Option_Parser:
         else:
             result_flag = False
             print "API URL cannot be None. Use -A to specify a api url"
-        if options.browserstack_flag.lower() == 'y':
+        if options.remote_flag.lower() == 'y':
             if options.browser_version is not None:
                 result_flag &= True
             else:
@@ -128,6 +157,49 @@ class Option_Parser:
             else:
                 result_flag = False
                 print "The OS version cannot be None. Use -O to specify an OS version"
+
+        # Options for appium mobile tests.
+        if options.mobile_os_name is not None:
+            result_flag &= True
+        else:
+            result_flag = False
+            print "The mobile operating system cannot be None. Use -G to specify an OS."
+
+        if options.mobile_os_version is not None:
+            result_flag &= True
+        else:
+            result_flag = False
+            print "The mobile operating system version cannot be None. Use -H to specify an OS version."
+
+        if options.device_name is not None:
+            result_flag &= True
+        else:
+            result_flag = False
+            print "The device name cannot be None. Use -I to specify device name."
+
+        if options.app_package is not None:
+            result_flag &= True
+        else:
+            result_flag = False
+            print "The application package name cannot be None. Use -J to specify application package name."
+
+        if options.app_activity is not None:
+            result_flag &= True
+        else:
+            result_flag = False
+            print "The application activity name cannot be None. Use -K to specify application activity name."
+
+        if options.device_flag.lower() == 'n':
+            result_flag &= True
+        else:
+            result_flag = False
+            print "The device flag cannot be None. Use -Q to specify device flag."
+
+        if options.mobile_sauce_flag.lower() == 'n':
+            result_flag &= True
+        else:
+            result_flag = False
+            print "The sauce flag cannot be None. Use -L to specify sauce flag."
 
         return  result_flag
 

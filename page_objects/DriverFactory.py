@@ -11,6 +11,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from conf import remote_credentials
+import conf.sauce_credentials as sauce_credentials
 
 class DriverFactory():
     
@@ -108,22 +109,23 @@ class DriverFactory():
         return local_driver
 
 
-    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag,emulator_flag):
+    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag):
         "Setup mobile device"
         #Get the sauce labs credentials from sauce.credentials file
         USERNAME = sauce_credentials.username
         PASSWORD = sauce_credentials.key
         desired_capabilities = {}
-        desired_capabilities['osName'] = mobile_os_name
-        desired_capabilities['osVersion'] = mobile_os_version
+        desired_capabilities['platformName'] = mobile_os_name
+        desired_capabilities['platformVersion'] = mobile_os_version
         desired_capabilities['deviceName'] = device_name
         desired_capabilities['appPackage'] = app_package
         desired_capabilities['appActivity'] = app_activity
         
         if device_flag.lower() == 'y':
             driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-        if emulator_flag.lower() == 'y':
-            desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','app-name')) #replace app-name with the application name
+        # if emulator_flag.lower() == 'y':
+        if device_flag.lower() == 'n':
+            desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
             driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
         if mobile_sauce_flag.lower() == 'y':
             desired_capabilities['idleTimeout'] = 300
@@ -184,5 +186,4 @@ class DriverFactory():
         set_pref('pdfjs.disabled',True)
 
         return profile
-
 
