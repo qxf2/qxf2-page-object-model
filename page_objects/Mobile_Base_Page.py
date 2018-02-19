@@ -72,7 +72,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
-        # self.__class__ = PageFactory.get_page_object(page_name).__class__
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name).__class__
 
 
