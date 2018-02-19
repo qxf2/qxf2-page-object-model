@@ -72,7 +72,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
-        self.__class__ = PageFactory.get_page_object(page_name).__class__
+        # self.__class__ = PageFactory.get_page_object(page_name).__class__
+        self.__class__ = PageFactory.PageFactory.get_page_object(page_name).__class__
 
 
     def register_driver(self,sauce_flag,os_name,os_version,browser,browser_version):

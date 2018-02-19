@@ -61,6 +61,29 @@ class DriverFactory():
             desired_capabilities=desired_capabilities)
 
 
+    def run_sauce_lab(self,os_name,os_version,browser,browser_version):
+            "Run the test in sauce labs when remote flag is 'Y'"
+            #Get the sauce labs credentials from sauce.credentials file
+            USERNAME = remote_credentials.USERNAME
+            PASSWORD = remote_credentials.ACCESS_KEY
+            if browser.lower() == 'ff' or browser.lower() == 'firefox':
+                desired_capabilities = DesiredCapabilities.FIREFOX            
+            elif browser.lower() == 'ie':
+                desired_capabilities = DesiredCapabilities.INTERNETEXPLORER
+            elif browser.lower() == 'chrome':
+                desired_capabilities = DesiredCapabilities.CHROME            
+            elif browser.lower() == 'opera':
+                desired_capabilities = DesiredCapabilities.OPERA        
+            elif browser.lower() == 'safari':
+                desired_capabilities = DesiredCapabilities.SAFARI
+            desired_capabilities['version'] = browser_version
+            desired_capabilities['platform'] = os_name + ' '+os_version
+            
+            
+            return webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
+                    desired_capabilities= desired_capabilities)
+
+
     def run_local(self,os_name,os_version,browser,browser_version):
         "Return the local driver"
         local_driver = None
@@ -91,7 +114,7 @@ class DriverFactory():
             driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
         # if emulator_flag.lower() == 'y':
         if device_flag.lower() == 'n':
-            desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','apps/Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
+            desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
             driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
         if mobile_sauce_flag.lower() == 'y':
             desired_capabilities['idleTimeout'] = 300
