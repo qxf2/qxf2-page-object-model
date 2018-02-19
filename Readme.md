@@ -1,12 +1,12 @@
 --------
-Welcome
+Pythonic Selenium and Appium automation framework
 --------
 This repository contains Qxf2 Services's test automation framework. You can use this to write your Selenium and Appium tests. We love Python - so this framework is written completely in Python. Our framework is based on the Page Object pattern - a design pattern that makes maintaining and developing robust tests easy. 
 
 
 We've implemented some version of this framework at several clients (https://qxf2.com/clients). In all cases, the framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too!
 
-We have also included API test automation framework based on the player interface pattern in our repository. You can now write your api tests included with Selenium and Appium tests , please note api tests written here are based out of sample api available at qxf2/cars-api repository. 
+We have also included our API test automation framework based on the player interface pattern in this repository. You can now write your API tests along with your Selenium and Appium tests. Please note: the API test examples in this repository are written for the sample API available at [Cars API](https://github.com/qxf2/cars-api) repository. 
 
 ---------
 SETUP
