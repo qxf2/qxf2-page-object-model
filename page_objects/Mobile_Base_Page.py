@@ -89,15 +89,14 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.start()
 
 
+
     def get_current_driver(self):
         "Return current driver"        
         return self.driver
-
         
     def get_console_log(self):
         "Return current browser's console logs from driver"
         return self.driver.get_log('browser')
-
 
     def get_driver_title(self):
         "Return the title of the current page"
@@ -358,32 +357,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return False
 
 
-    def get_element(self,locator,verbose_flag=True):
-        "Return the DOM element of the path or 'None' if the element is not found "
-        dom_element = None
-        try:
-            locator = self.split_locator(locator)
-            dom_element = self.driver.find_element(*locator)
-        except Exception,e:
-            if verbose_flag is True:
-                self.write(str(e),'debug')
-                self.write("Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
-                self.get_session_details()
-
-        return dom_element
-
-
-    def split_locator(self,locator):
-        "Split the locator type and locator"
-        result = ()
-        try:
-            result = tuple(locator.split(',',1))
-        except Exception,e:
-            self.write("Error while parsing locator")
-
-        return result
-
-
     def click_mobile_element(self,xpath=None,id=None,wait_seconds=3):
         "Click the mobile element"
         if xpath is not None:
@@ -459,18 +432,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             return None
         else:
             return text.encode('utf-8')
-
-
-    def get_text_by_locator(self,locator):
-        "Return the text for a given path or the 'None' object if the element is not found"
-        text = ''
-        try:
-            text = self.get_element(locator).text
-        except Exception,e:
-            self.write(e)
-            return None
-        else:
-            return text.encode('utf-8')
         
 
     def get_dom_text(self,dom_element):
@@ -535,7 +496,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return result_flag
 
 
-    def check_element_display(self,xpath):
+    def check_element_displayed(self,xpath):
         "This method checks if the web element is visible on the page or not and returns True or False accordingly"
         result_flag = False
         if self.get_xpath(xpath,verbose_flag=False) is not None:
@@ -685,6 +646,44 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
     _get_xpath_string = staticmethod(_get_xpath_string)
 
 
+    def get_text_by_locator(self,locator):
+        "Return the text for a given path or the 'None' object if the element is not found"
+        text = ''
+        try:
+            text = self.get_element(locator).text
+        except Exception,e:
+            self.write(e)
+            return None
+        else:
+            return text.encode('utf-8')
+
+
+    def get_element(self,locator,verbose_flag=True):
+        "Return the DOM element of the path or 'None' if the element is not found "
+        dom_element = None
+        try:
+            locator = self.split_locator(locator)
+            dom_element = self.driver.find_element(*locator)
+        except Exception,e:
+            if verbose_flag is True:
+                self.write(str(e),'debug')
+                self.write("Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
+                self.get_session_details()
+
+        return dom_element
+
+
+    def split_locator(self,locator):
+        "Split the locator type and locator"
+        result = ()
+        try:
+            result = tuple(locator.split(',',1))
+        except Exception,e:
+            self.write("Error while parsing locator")
+
+        return result
+
+
     def write_test_summary(self):
         "Print out a useful, human readable summary"
         self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
@@ -696,4 +695,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             self.write('\n--------FAILURE SUMMARY--------\n')
             for msg in failure_message_list:
                 self.write(msg)
+
+
 

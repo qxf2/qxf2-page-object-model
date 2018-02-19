@@ -32,8 +32,7 @@ class PageFactory():
         elif page_name == "bitcoin main page":
             test_obj = Bitcoin_Main_Page()    
         elif page_name == "bitcoin price page":
-            test_obj = Bitcoin_Price_Page() 
-        
+            test_obj = Bitcoin_Price_Page()
         return test_obj
 
     get_page_object = staticmethod(get_page_object)

@@ -38,10 +38,10 @@ class Option_Parser:
                             dest="test_run_id",
                             default=None,
                             help="The test run id in TestRail")
-        self.parser.add_option("-M","--browserstack_flag",
-                            dest="browserstack_flag",
+        self.parser.add_option("-M","--remote_flag",
+                            dest="remote_flag",
                             default="N",
-                            help="Run the test in Browserstack: Y or N")
+                            help="Run the test in remote flag: Y or N")
         self.parser.add_option("-S","--sauce_flag",
                             dest="sauce_flag",
                             default="N",
@@ -141,7 +141,7 @@ class Option_Parser:
         else:
             result_flag = False
             print "API URL cannot be None. Use -A to specify a api url"
-        if options.browserstack_flag.lower() == 'y':
+        if options.remote_flag.lower() == 'y':
             if options.browser_version is not None:
                 result_flag &= True
             else:
