@@ -103,6 +103,9 @@ class DriverFactory():
 
     def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag):
         "Setup mobile device"
+        #Get the sauce labs credentials from sauce.credentials file
+        USERNAME = sauce_credentials.username
+        PASSWORD = sauce_credentials.key
         desired_capabilities = {}
         desired_capabilities['platformName'] = mobile_os_name
         desired_capabilities['platformVersion'] = mobile_os_version
