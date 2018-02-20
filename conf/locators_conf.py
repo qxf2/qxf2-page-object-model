@@ -52,3 +52,8 @@ heading = "xpath,//h2[contains(@class,'grey_text') and text()='Selenium for begi
 
 #Locators for Contact Object(contact_object.py)
 contact_name_field = "id,name"
+
+#Locators for mobile application - Bitcoin Info(bitcoin_price_page.py)
+bitcoin_real_time_price_button = "xpath,//android.widget.TextView[@resource-id='com.dudam.rohan.bitcoininfo:id/current_price']"
+bitcoin_price_page_heading = "xpath,//android.widget.TextView[@text='Real Time Price of Bitcoin']"
+bitcoin_price_in_usd = "xpath,//android.widget.TextView[@resource-id='com.dudam.rohan.bitcoininfo:id/doller_value']"
