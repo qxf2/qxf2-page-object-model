@@ -11,7 +11,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from conf import remote_credentials
-import conf.sauce_credentials as sauce_credentials
 
 class DriverFactory():
     
@@ -112,8 +111,8 @@ class DriverFactory():
     def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag):
         "Setup mobile device"
         #Get the sauce labs credentials from sauce.credentials file
-        USERNAME = sauce_credentials.username
-        PASSWORD = sauce_credentials.key
+        USERNAME = remote_credentials.USERNAME
+        PASSWORD = remote_credentials.ACCESS_KEY
         desired_capabilities = {}
         desired_capabilities['platformName'] = mobile_os_name
         desired_capabilities['platformVersion'] = mobile_os_version
@@ -141,8 +140,8 @@ class DriverFactory():
 
     def sauce_upload(self):  
         "Upload the apk to the sauce temperory storage"
-        USERNAME = sauce_credentials.username
-        PASSWORD = sauce_credentials.key
+        USERNAME = remote_credentials.USERNAME
+        PASSWORD = remote_credentials.ACCESS_KEY
         headers = {'Content-Type':'application/octet-stream'}
         params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','app-name')) #replace app-name with the application name
         fp = open(params,'rb')
