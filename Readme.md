@@ -1,12 +1,17 @@
 --------
-Pythonic Selenium and Appium automation framework
+A Pythonic Selenium and Appium test automation framework
 --------
-This repository contains Qxf2 Services's test automation framework. You can use this to write your Selenium and Appium tests. We love Python - so this framework is written completely in Python. Our framework is based on the Page Object pattern - a design pattern that makes maintaining and developing robust tests easy. 
+You can use this test automation framework to write:
 
+1. __Selenium__ and Python automation scripts to test web applications
 
-We've implemented some version of this framework at several clients (https://qxf2.com/clients). In all cases, the framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too!
+2. __Appium__ and Python scripts for __mobile automation__ (Android and iOS) 
 
-We have also included our API test automation framework based on the player interface pattern in this repository. You can now write your API tests along with your Selenium and Appium tests. Please note: the API test examples in this repository are written for the sample API available at [Cars API](https://github.com/qxf2/cars-api) repository. 
+3. API automation scripts to test endpoints of your web/mobile applications
+
+This GUI and API test automation framework is developed and maintained by [Qxf2 Services](https://qxf2.com). This framework is written in __Python__ and is based on the __Page Object Model__ - a design pattern that makes maintaining and developing robust tests easy. We have also included our __API test automation framework__ based on the player-interface pattern in this repository. You can now write your API tests along with your Selenium and Appium tests. Please note: the API test examples are written for the sample API available at [Cars API](https://github.com/qxf2/cars-api) repository.
+
+We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too! 
 
 ---------
 SETUP
