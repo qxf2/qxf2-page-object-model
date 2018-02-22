@@ -39,7 +39,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
     "Page class that all page models can inherit from"
 
 
-    def __init__(self,base_url='https://tn-devel.appspot.com/tap',trailing_slash_flag=True):
+    def __init__(self):
         "Constructor"
         Borg.__init__(self)
         if self.is_first_time():
@@ -59,10 +59,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
             self.failure_message_list = []
 
-        #We assume relative URLs start without a / in the beginning
-        if base_url[-1] != '/' and trailing_slash_flag is True: 
-            base_url += '/' 
-        self.base_url = base_url
         self.driver_obj = DriverFactory()
         self.log_obj = Base_Logging(level=logging.DEBUG)
         self.log_obj.set_stream_handler_level(self.log_obj.getStreamHandler(),level=logging.DEBUG)
@@ -233,11 +229,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             self.append_latest_image(screenshot_name)
             
 
-    def open(self,url,wait_time=2):
+    def open(self,wait_time=2):
         "Visit the page base_url + url"
-        url = self.base_url + url
-        if self.driver.current_url != url:
-            self.driver.get(url)
         self.wait(wait_time)
 
 
