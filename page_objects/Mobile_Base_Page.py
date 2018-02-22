@@ -38,32 +38,37 @@ class Borg:
 class Mobile_Base_Page(Borg,unittest.TestCase):
     "Page class that all page models can inherit from"
 
-
     def __init__(self):
         "Constructor"
         Borg.__init__(self)
         if self.is_first_time():
             #Do these actions if this the first time this class is initialized
-            self.screenshot_counter = 1
             self.set_directory_structure()
-            self.set_screenshot_dir() # Create screenshot directory
             self.image_url_list = []
             self.msg_list = []
             self.window_structure = {}
             self.testrail_flag = False
             self.browserstack_flag = False
-            self.driver = None
-            self.result_counter = 0 #Increment whenever success or failure are called
-            self.pass_counter = 0 #Increment everytime success is called
-            self.mini_check_counter = 0 #Increment when conditional_write is called
-            self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
-            self.failure_message_list = []
+
+            self.reset()
 
         self.driver_obj = DriverFactory()
         self.log_obj = Base_Logging(level=logging.DEBUG)
         self.log_obj.set_stream_handler_level(self.log_obj.getStreamHandler(),level=logging.DEBUG)
         if self.driver is not None: 
             self.start() #Visit and initialize xpaths for the appropriate page
+            
+
+    def reset(self):
+        "Reset the base page object"
+        self.driver = None
+        self.result_counter = 0 #Increment whenever success or failure are called
+        self.pass_counter = 0 #Increment everytime success is called
+        self.mini_check_counter = 0 #Increment when conditional_write is called
+        self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
+        self.failure_message_list = []
+        self.screenshot_counter = 1
+    
 
 
     def switch_page(self,page_name):
@@ -82,8 +87,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
     def register_mobile_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag):
         "Register the mobile driver"
         self.driver = self.driver_obj.run_mobile(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag)
+        self.set_screenshot_dir() # Create screenshot directory
         self.start()
-
 
 
     def get_current_driver(self):
@@ -548,6 +553,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
     def teardown(self):
         "Tears down the driver"
         self.driver.quit()
+        self.reset()
 
 
     def write(self,msg,level='info'):
