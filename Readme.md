@@ -9,7 +9,7 @@ You can use this test automation framework to write:
 
 3. API automation scripts to test endpoints of your web/mobile applications
 
-This GUI and API test automation framework is developed and maintained by [Qxf2 Services](https://qxf2.com). This framework is written in __Python__. Our framework is based on the __Page Object Model__ - a design pattern that makes maintaining and developing robust tests easy. We have also included our __API test automation framework__ based on the player-interface pattern in this repository. You can now write your API tests along with your Selenium and Appium tests. Please note: the API test examples are written for the sample API available at [Cars API](https://github.com/qxf2/cars-api) repository.
+This GUI and API test automation framework is developed and maintained by [Qxf2 Services](https://qxf2.com). This framework is written in __Python__ and is based on the __Page Object Model__ - a design pattern that makes maintaining and developing robust tests easy. We have also included our __API test automation framework__ based on the player-interface pattern in this repository. You can now write your API tests along with your Selenium and Appium tests. Please note: the API test examples are written for the sample API available at [Cars API](https://github.com/qxf2/cars-api) repository.
 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too! 
 
