@@ -128,6 +128,8 @@ def test_api_example(api_url='http://127.0.0.1:5000'):
                             negative=result['msg'])
         
         # write out test summary
+        expected_pass = test_obj.total
+        actual_pass = test_obj.passed
         test_obj.write_test_summary()
 
     except Exception, e:
@@ -135,8 +137,6 @@ def test_api_example(api_url='http://127.0.0.1:5000'):
         test_obj.write("Python says:%s" % str(e))
 
     # Assertion
-    expected_pass = test_obj.total
-    actual_pass = test_obj.passed
     assert expected_pass == actual_pass
 
 
