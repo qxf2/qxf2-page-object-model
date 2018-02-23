@@ -14,7 +14,7 @@ from utils.Option_Parser import Option_Parser
 import conf.mobile_bitcoin_conf as conf
 
 
-def test_price_page(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, mobile_sauce_flag, device_flag):
+def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, mobile_sauce_flag, device_flag):
     "Run the test."
     try:
         # Initalize flags for tests summary.
@@ -73,14 +73,13 @@ if __name__ == '__main__':
 
     # Run  the test only if the options provided are valid.
     if options_obj.check_options(options):
-        test_price_page(mobile_os_name = options.mobile_os_name,
+        test_mobile_bitcoin_price(mobile_os_name = options.mobile_os_name,
                           mobile_os_version = options.mobile_os_version,
                           device_name = options.device_name,
                           app_package = options.app_package,
                           app_activity = options.app_activity,
                           mobile_sauce_flag = options.mobile_sauce_flag,
-                          device_flag = options.device_flag,
-                          )
+                          device_flag = options.device_flag)
     else:
         print 'ERROR: Received incorrect comand line input arguments'
         print options_obj.print_usage()
