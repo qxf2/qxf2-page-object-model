@@ -206,10 +206,10 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.screenshot_dir = self.screenshots_parent_dir + os.sep  + self.testname
         if os.path.exists(self.screenshot_dir):
             for i in range(1,4096):
-                if os.path.exists(screenshot_dir + '_'+str(i)):
+                if os.path.exists(self.screenshot_dir + '_'+str(i)):
                     continue
                 else:
-                    os.rename(screenshot_dir,screenshot_dir +'_'+str(i))
+                    os.rename(self.screenshot_dir,self.screenshot_dir +'_'+str(i))
                     break
 
         return self.screenshot_dir
