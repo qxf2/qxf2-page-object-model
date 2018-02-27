@@ -93,12 +93,6 @@ def app_activity():
 
 
 @pytest.fixture
-def mobile_sauce_flag():
-    "pytest fixture for mobile sauce flag"
-    return pytest.config.getoption("-L")
-
-
-@pytest.fixture
 def device_flag():
     "pytest fixture for device flag"
     return pytest.config.getoption("-Q")
@@ -190,10 +184,6 @@ def pytest_addoption(parser):
                       dest="app_activity",
                       help="Enter name of app activity. Ex: .MainActivity",
                       default=".MainActivity")
-    parser.addoption("-L","--mobile_sauce_flag",
-                      dest="mobile_sauce_flag",
-                      help="Enter Y or N. 'Y' if you want to run the test in Sauce labs.",
-                      default="N")
     parser.addoption("-Q","--device_flag",
                       dest="device_flag",
                       help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
