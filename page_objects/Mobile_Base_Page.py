@@ -254,18 +254,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         pass
         
 
-    def get_xpath(self,xpath,verbose_flag=True):
-        "Return the DOM element of the xpath OR the 'None' object if the element is not found"
-        dom_element = None
-        try:
-            dom_element = self.driver.find_element_by_xpath(xpath)
-        except Exception,e:
-            if verbose_flag is True:
-                self.write(str(e),'debug')
-        
-        return dom_element
-
-
     def get_current_window_handle(self):
         "Return the latest window handle"
         return self.driver.current_window_handle
@@ -363,68 +351,23 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
                 return True
 
         return False
-
-
-    def click_mobile_element(self,xpath=None,id=None,wait_seconds=3):
-        "Click the mobile element"
-        if xpath is not None:
-            link = self.driver.find_element_by_xpath(xpath)
-        if id is not None:
-            link = self.driver.find_element_by_id(id)
-        if link is not None:
-            try:
-                link.click()
-                self.wait(wait_seconds)
-            except Exception,e:
-                self.write('Exception while clicking link with xpath:%s'%xpath)
-                self.write(str(e))
-            else:
-                return True
-
-        return False
-
-
-    def set_mobile_text(self,text,xpath=None,id=None,wait_seconds=3):
-        "Set a text in the mobile text field"
-        if xpath is not None:
-            link = self.driver.find_element_by_xpath(xpath)
-        if id is not None:
-            link = self.driver.find_element_by_id(id)
-        if link is not None:
-            try:
-                link.clear()
-                self.wait(wait_seconds)
-                link.send_keys(text)
-                try:
-                    self.driver.hide_keyboard()
-                except Exception,e:
-                    pass
-                else:
-                    pass
-            except Exception,e:
-                self.write('Exception while trying to set text')
-                self.write(str(e))
-            else:
-                return True
-
-        return False
     
 
-    def set_text(self,xpath,value,clear_flag=True):
+    def set_text(self,locator,value,clear_flag=True):
         "Set the value of the text field"
-        text_field = self.get_xpath(xpath)
+        text_field = self.get_element(locator)
         try:
             if clear_flag is True:
                 text_field.clear()
         except Exception, e:
-            self.write('ERROR: Could not clear the text field: %s'%xpath,'debug')
+            self.write('ERROR: Could not clear the text field: %s'%locator,'debug')
 
         result_flag = False
         try:
             text_field.send_keys(value)
             result_flag = True
         except Exception,e:
-            self.write('Unable to write to text field: %s'%xpath,'debug')
+            self.write('Unable to write to text field: %s'%locator,'debug')
             self.write(str(e),'debug')
 
         return result_flag
@@ -434,7 +377,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         "Return the text for a given xpath or the 'None' object if the element is not found"
         text = ''
         try:
-            text = self.get_xpath(xpath).text
+            text = self.get_element(locator).text
         except Exception,e:
             self.write(e)
             return None
@@ -454,22 +397,22 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return text
 
 
-    def select_checkbox(self,xpath):
+    def select_checkbox(self,locator):
         "Select a checkbox if not already selected"
-        checkbox = self.get_xpath(xpath)
+        checkbox = self.self.get_element(locator)
         if checkbox.is_selected() is False:
-            result_flag = self.toggle_checkbox(xpath)
+            result_flag = self.toggle_checkbox(locator)
         else:
             result_flag = True
 
         return result_flag
 
 
-    def deselect_checkbox(self,xpath):
+    def deselect_checkbox(self,locator):
         "Deselect a checkbox if it is not already deselected"
-        checkbox = self.get_xpath(xpath)
+        checkbox = self.get_element(locator)
         if checkbox.is_selected() is True:
-            result_flag = self.toggle_checkbox(xpath)
+            result_flag = self.toggle_checkbox(locator)
         else:
             result_flag = True
 
@@ -477,15 +420,15 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
     unselect_checkbox = deselect_checkbox #alias the method
 
 
-    def toggle_checkbox(self,xpath):
+    def toggle_checkbox(self,locator):
         "Toggle a checkbox"
-        return self.click_element(xpath)
+        return self.click_element(locator)
 
 
     def select_dropdown_option(self, select_locator, option_text):
         "Selects the option in the drop-down"
         result_flag = False
-        dropdown = self.driver.find_element_by_xpath(select_locator)
+        dropdown = self.get_element(select_locator)
         for option in dropdown.find_elements_by_tag_name('option'):
             if option.text == option_text:
                 option.click()
@@ -495,70 +438,39 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return result_flag
 
 
-    def check_element_present(self,xpath):
+    def check_element_present(self,locator):
         "This method checks if the web element is present in page or not and returns True or False accordingly"
         result_flag = False
-        if self.get_xpath(xpath,verbose_flag=False) is not None:
+        if self.get_element(locator,verbose_flag=False) is not None:
             result_flag = True
 
         return result_flag
 
 
-    def check_element_displayed(self,xpath):
+    def check_element_displayed(self,locator):
         "This method checks if the web element is visible on the page or not and returns True or False accordingly"
         result_flag = False
-        if self.get_xpath(xpath,verbose_flag=False) is not None:
-            element = self.get_xpath(xpath)
+        if self.get_element(locator) is not None:
+            element = self.get_element(locator,verbose_flag=False)
             if element.is_displayed() is True:
                 result_flag = True
 
         return result_flag
     
 
-    def get_elements(self,xpath,wait_seconds=1):
-        "Return elements list"
-        elements = None
+    def get_elements(self,locator,msg_flag=True):
+        "Return a list of DOM elements that match the locator"
+        dom_elements = []
         try:
-            elements = self.driver.find_elements_by_xpath(xpath)
-            self.wait(wait_seconds)
+            locator = self.split_locator(locator)
+            dom_elements = self.driver.find_elements(*locator)
         except Exception,e:
-            self.write(e)
-
-        return elements
-
-
-    def hit_enter(self,xpath,wait_seconds=2):
-        "Hit enter"
-        element = self.get_xpath(xpath)
-        try:
-            element.send_keys(Keys.ENTER)
-            self.wait(wait_seconds)
-        except Exception,e:
-            self.write(str(e),'debug')
-            return None
-
-
-    def scroll_down(self,xpath,wait_seconds=2):
-        "Scroll down"
-        element = self.get_xpath(xpath)
-        try:
-            element.send_keys(Keys.PAGE_DOWN)
-            self.wait(wait_seconds)
-        except Exception,e:
-            self.write(str(e),'debug')
-            return None
-
-
-    def hover(self,xpath,wait_seconds=2):
-        "Hover over the element"
-        #Note: perform() of ActionChains does not return a bool 
-        #So we have no way of returning a bool when hover is called
-        element = self.get_xpath(xpath)
-        action_obj = ActionChains(self.driver)
-        action_obj.move_to_element(element)
-        action_obj.perform()
-        self.wait(wait_seconds)
+            if msg_flag==True:
+                self.write(e,'debug')
+                self.write("Check your locator-'%s' in the conf/locators.conf file"%locator)
         
+        return dom_elements
+
 
     def teardown(self):
         "Tears down the driver"
