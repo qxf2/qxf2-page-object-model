@@ -42,10 +42,6 @@ class Option_Parser:
                             dest="remote_flag",
                             default="N",
                             help="Run the test in remote flag: Y or N")
-        self.parser.add_option("-S","--sauce_flag",
-                            dest="sauce_flag",
-                            default="N",
-                            help="Run the test in Sauce labs: Y or N")
         self.parser.add_option("-O","--os_version",
                             dest="os_version",
                             help="The operating system: xp, 7",
@@ -78,10 +74,6 @@ class Option_Parser:
                             dest="app_activity",
                             help="Enter name of app activity. Ex: .MainActivity",
                             default=".MainActivity")
-        self.parser.add_option("-L","--mobile_sauce_flag",
-                            dest="mobile_sauce_flag",
-                            help="Enter Y or N. 'Y' if you want to run the test in Sauce labs.",
-                            default="N")
         self.parser.add_option("-Q","--device_flag",
                             dest="device_flag",
                             help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
@@ -194,12 +186,6 @@ class Option_Parser:
         else:
             result_flag = False
             print "The device flag cannot be None. Use -Q to specify device flag."
-
-        if options.mobile_sauce_flag.lower() == 'n':
-            result_flag &= True
-        else:
-            result_flag = False
-            print "The sauce flag cannot be None. Use -L to specify sauce flag."
 
         return  result_flag
 
