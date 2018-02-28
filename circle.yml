@@ -9,9 +9,10 @@ general:
 test:
   override:
     - git clone https://github.com/qxf2/cars-api.git
+    - pip install flask
     - python cars-api/cars_app.py:
         background: true
-    - sleep 2
+    - sleep 5
     - py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result.xml --tb=native 
   post:
     - > 
