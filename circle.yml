@@ -8,7 +8,11 @@ general:
 
 test:
   override:
-    - py.test -s -v --ignore=./tests/test_api_example.py --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result.xml --tb=native 
+    - git clone https://github.com/qxf2/cars-api.git
+    - python cars-api/cars_app.py:
+        background: true
+    - sleep 2
+    - py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result.xml --tb=native 
   post:
     - > 
       if [ -n "${NIGHTLY_BUILD}" ]; then
