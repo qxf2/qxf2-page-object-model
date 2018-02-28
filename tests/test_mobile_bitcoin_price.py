@@ -14,7 +14,7 @@ from utils.Option_Parser import Option_Parser
 import conf.mobile_bitcoin_conf as conf
 
 
-def test_price_page(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, mobile_sauce_flag, device_flag):
+def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag):
     "Run the test."
     try:
         # Initalize flags for tests summary.
@@ -26,7 +26,7 @@ def test_price_page(mobile_os_name, mobile_os_version, device_name, app_package,
         
         #2. Setup and register a driver
         start_time = int(time.time())
-        test_obj.register_mobile_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag)
+        test_obj.register_mobile_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag)
 
         #3. Get value of expected page heading.
         expected_bitcoin_price_page_heading = conf.expected_bitcoin_price_page_heading
@@ -73,14 +73,13 @@ if __name__ == '__main__':
 
     # Run  the test only if the options provided are valid.
     if options_obj.check_options(options):
-        test_price_page(mobile_os_name = options.mobile_os_name,
+        test_mobile_bitcoin_price(mobile_os_name = options.mobile_os_name,
                           mobile_os_version = options.mobile_os_version,
                           device_name = options.device_name,
                           app_package = options.app_package,
                           app_activity = options.app_activity,
-                          mobile_sauce_flag = options.mobile_sauce_flag,
-                          device_flag = options.device_flag,
-                          )
+                          remote_flag = options.remote_flag,
+                          device_flag = options.device_flag)
     else:
         print 'ERROR: Received incorrect comand line input arguments'
         print options_obj.print_usage()

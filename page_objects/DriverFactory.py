@@ -108,9 +108,9 @@ class DriverFactory():
         return local_driver
 
 
-    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,mobile_sauce_flag,device_flag):
+    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag):
         "Setup mobile device"
-        #Get the sauce labs credentials from sauce.credentials file
+        #Get the remote credentials from remote_credentials file
         USERNAME = remote_credentials.USERNAME
         PASSWORD = remote_credentials.ACCESS_KEY
         desired_capabilities = {}
@@ -122,18 +122,23 @@ class DriverFactory():
         
         if device_flag.lower() == 'y':
             driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-        # if emulator_flag.lower() == 'y':
         if device_flag.lower() == 'n':
             desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
             driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-        if mobile_sauce_flag.lower() == 'y':
-            desired_capabilities['idleTimeout'] = 300
-            self.sauce_upload() #upload the application to the Sauce storage every time the test is run
-            desired_capabilities['app'] = 'sauce-storage:app-name' #replace app-name with the application name
-            desired_capabilities['name'] = 'Appium Python Test'
-            desired_capabilities['autoAcceptAlert']= 'true'
-            driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
-                desired_capabilities= desired_capabilities)
+        if (remote_flag.lower() == 'y'):
+            try:
+                if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
+                    desired_capabilities['idleTimeout'] = 300
+                    self.sauce_upload() #upload the application to the Sauce storage every time the test is run
+                    desired_capabilities['app'] = 'sauce-storage:app-name' #replace app-name with the application name
+                    desired_capabilities['name'] = 'Appium Python Test'
+                    desired_capabilities['autoAcceptAlert']= 'true'
+                    driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
+                        desired_capabilities= desired_capabilities)
+            except Exception,e:
+                print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
+                print "Python says:%s"%str(e)
+                print "SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"
         
         return driver
 

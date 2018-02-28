@@ -58,13 +58,49 @@ def os_version():
 
 @pytest.fixture
 def slack_flag():
-    "pytest fixture for os version"
+    "pytest fixture for sending reports on slack"
+    return pytest.config.getoption("-S")
+
+
+@pytest.fixture
+def mobile_os_name():
+    "pytest fixture for mobile os name"
+    return pytest.config.getoption("-G")
+
+
+@pytest.fixture
+def mobile_os_version():
+    "pytest fixture for mobile os version"
+    return pytest.config.getoption("-H")
+
+
+@pytest.fixture
+def device_name():
+    "pytest fixture for device name"
     return pytest.config.getoption("-I")
+
+
+@pytest.fixture
+def app_package():
+    "pytest fixture for app package"
+    return pytest.config.getoption("-J")
+
+
+@pytest.fixture
+def app_activity():
+    "pytest fixture for app activity"
+    return pytest.config.getoption("-K")
+
+
+@pytest.fixture
+def device_flag():
+    "pytest fixture for device flag"
+    return pytest.config.getoption("-Q")
 
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
-    if pytest.config.getoption("-I").lower() == 'y':
+    if pytest.config.getoption("-S").lower() == 'y':
         post_test_reports_to_slack.post_reports_to_slack()
 
 
@@ -124,9 +160,34 @@ def pytest_addoption(parser):
                       action="append",
                       help="The operating system: Windows 7, Linux",
                       default=[])
-    parser.addoption("-I","--slack_flag",
+    parser.addoption("-S","--slack_flag",
                       dest="slack_flag",
                       default="N",
                       help="Post the test report on slack channel: Y or N")
+    parser.addoption("-G","--mobile_os_name",
+                      dest="mobile_os_name",
+                      help="Enter operating system of mobile. Ex: Android, iOS",
+                      default="Android")
+    parser.addoption("-H","--mobile_os_version",
+                      dest="mobile_os_version",
+                      help="Enter version of operating system of mobile: 8.1.0",
+                      default="8.1.0")
+    parser.addoption("-I","--device_name",
+                      dest="device_name",
+                      help="Enter device name. Ex: Emulator, physical device name",
+                      default="Android Emulator")
+    parser.addoption("-J","--app_package",
+                      dest="app_package",
+                      help="Enter name of app package. Ex: bitcoininfo",
+                      default="com.dudam.rohan.bitcoininfo")
+    parser.addoption("-K","--app_activity",
+                      dest="app_activity",
+                      help="Enter name of app activity. Ex: .MainActivity",
+                      default=".MainActivity")
+    parser.addoption("-Q","--device_flag",
+                      dest="device_flag",
+                      help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
+                      default="N")
+
 
 

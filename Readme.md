@@ -81,7 +81,7 @@ a)py.test [options]
 	-V/-O	used to run against different browser versions/os versions	E.g: py.test -V 44 -O 8 (This will run each test 4 times in different browser version(default=45 & 44) and OS(default=7 & 8) combination)
 	-h	help for more options 						E.g: py.test -h
 	-k      used to run tests which match the given substring expresion 	E.g: py.test -k table  (This will trigger test_example_table.py test)
-	-I	used to post pytest reports on the Slack channel		E.g: py.test -I Y -v > log/pytest_report.log
+	-S	used to post pytest reports on the Slack channel		E.g: py.test -S Y -v > log/pytest_report.log
 	-n 	used to run tests in parallel					E.g: py.test -n 3 -v (This will run three tests in parallel)
 
 b)python tests/test_example_form.py (can also be used to run standalone test) 	
