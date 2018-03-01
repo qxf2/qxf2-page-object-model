@@ -8,14 +8,19 @@ general:
 
 test:
   override:
-    - git clone https://github.com/qxf2/cars-api.git
-    - pip install flask
+    # Clone qxf2/cars-api repo
+    - git clone https://github.com/qxf2/cars-api.git 
+    # Install flask as it is needed to run our cars-api web server
+    - pip install flask  
+    # Run cars-app server in background as it is mandatory to run our API test
     - python cars-api/cars_app.py:
         background: true
+    # Wait for sometime to start the server
     - sleep 5
+    # Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
     - py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result.xml --tb=native 
   post:
     - > 
       if [ -n "${NIGHTLY_BUILD}" ]; then
-         py.test -s -v --ignore=./tests/test_api_example.py --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result_nightly.xml --tb=native
+         py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result_nightly.xml --tb=native
       fi
