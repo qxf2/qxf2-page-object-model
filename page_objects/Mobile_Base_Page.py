@@ -66,14 +66,19 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
         self.failure_message_list = []
         self.screenshot_counter = 1
-    
+
+
+    def get_failure_message_list(self):
+        "Return the failure message list"
+        return self.failure_message_list
+            
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name).__class__
 
 
-    def register_mobile_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag):
+    def register_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag):
         "Register the mobile driver"
         self.driver = self.driver_obj.run_mobile(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag)
         self.set_screenshot_dir() # Create screenshot directory
@@ -85,20 +90,10 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         "Return current driver"        
         return self.driver
 
-        
-    def get_console_log(self):
-        "Return current browser's console logs from driver"
-        return self.driver.get_log('browser')
-
 
     def get_driver_title(self):
         "Return the title of the current page"
         return self.driver.title
-
-
-    def get_current_url(self):
-        "Return the current url"
-        return self.driver.current_url
 
 
     def register_testrail(self):
@@ -112,50 +107,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
         self.browserstack_obj = BrowserStack_Library()
-
-
-    def set_locator_conf(self,locator_path):
-        "Set the path of the configuration file with locators"
-        self.xpath_conf_file = locator_path
-        
-
-    def start(self):
-        "Dummy method to be over-written by child classes"
-        pass
-
-        
-    def _screenshot(func):
-        "Decorator for taking screenshot"
-        def wrapper(*args,**kwargs):
-            result = func(*args, **kwargs)
-            screenshot_name = '%003d'%args[0].screenshot_counter + '_' + func.__name__
-            args[0].screenshot_counter += 1
-            args[0].save_screenshot(screenshot_name)
-            return result
-        
-        return wrapper
-
-
-    def _exceptionHandler(f):
-        "Decorator to handle exceptions"
-        argspec = getargspec(f)
-        def inner(*args,**kwargs):
-            try:
-                return f(*args,**kwargs)
-            except Exception,e:
-                args[0].write('You have this exception')
-                args[0].write('Exception in method: %s'%str(f.__name__))
-                args[0].write('PYTHON SAYS: %s'%str(e))
-                
-        return inner 
-
-
-    def _get_xpath_string(key):
-        "Get the value of the given key from the xpath_conf_file"
-        xpath_conf_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','conf','locators.conf'))
-        value = Conf_Reader.get_value(xpath_conf_file,key)
-
-        return value
 
 
     def get_calling_module(self):
@@ -249,92 +200,50 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.wait(wait_time)
 
 
-    def get_page_xpaths(self,section):
+    def get_page_paths(self,section):
         "Open configurations file,go to right sections,return section obj"
         pass
-        
+    
 
-    def get_current_window_handle(self):
-        "Return the latest window handle"
-        return self.driver.current_window_handle
-
-
-    @_exceptionHandler
-    def set_window_name(self,name):
-        "Set the name of the current window name"
-        window_handle = self.get_current_window_handle()
-        self.window_structure[window_handle] = name
-
-
-    def get_window_by_name(self,window_name):
-        "Return window handle id based on name"
-        window_handle_id = None
-        for id,name in self.window_structure.iteritems():
-            if name == window_name:
-                window_handle_id = id
-                break
-
-        return window_handle_id
-
-
-    @_exceptionHandler
-    def switch_window(self,name=None):
-        "Make the driver switch to the last window or a window with a name"
-        result_flag = False
-        if name is not None:
-            window_handle_id = self.get_window_by_name(name)
-        else:
-            name = "Next"
-            window_handle_id = self.driver.window_handles[-1]
-
-        if window_handle_id is not None:
-            self.driver.switch_to_window(window_handle_id)
-            result_flag = True
-
-        self.conditional_write(result_flag,
-                               'Automation switched to the browser window: %s'%name,
-                               'Unable to locate and switch to the window with name: %s'%name,
-                               level='debug')
-
-        return result_flag
-
-
-    def close_current_window(self):
-        "Close the current window"
-        result_flag = False
+    def get_element(self,locator,verbose_flag=True):
+        "Return the DOM element of the path or 'None' if the element is not found "
+        dom_element = None
         try:
-            before_window_count = len(self.get_window_handles)
-            self.driver.close()
-            after_window_count = len(self.get_window_handles)
-            if (before_window_count - after_window_count) == 1:
-                result_flag = True
+            locator = self.split_locator(locator)
+            dom_element = self.driver.find_element(*locator)
         except Exception,e:
-            self.write('Could not close the current window')
-            self.write(str(e))
+            if verbose_flag is True:
+                self.write(str(e),'debug')
+                self.write("Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
+                self.get_session_details()
 
-        return result_flag
-
-
-    def get_window_handles(self):
-        "Get the window handles"
-        return self.driver.window_handles
+        return dom_element
 
 
-    def get_current_window_handle(self):
-        "Get the current window handle"
-        return self.driver.current_window_handle
+    def split_locator(self,locator):
+        "Split the locator type and locator"
+        result = ()
+        try:
+            result = tuple(locator.split(',',1))
+        except Exception,e:
+            self.write("Error while parsing locator")
+
+        return result
 
 
-    def get_xpaths(self,xpath,msg_flag=True):
-        "Return a list of DOM elements that match the xpath"
+    def get_elements(self,locator,msg_flag=True):
+        "Return a list of DOM elements that match the locator"
         dom_elements = []
         try:
-            dom_elements = self.driver.find_elements_by_xpath(xpath)
+            locator = self.split_locator(locator)
+            dom_elements = self.driver.find_elements(*locator)
         except Exception,e:
             if msg_flag==True:
                 self.write(e,'debug')
+                self.write("Check your locator-'%s' in the conf/locators.conf file"%locator)
         
         return dom_elements
+
 
 
     def click_element(self,locator,wait_time=3):
@@ -373,7 +282,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return result_flag
           
           
-    def get_text(self,xpath):
+    def get_text(self,locator):
         "Return the text for a given xpath or the 'None' object if the element is not found"
         text = ''
         try:
@@ -383,6 +292,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             return None
         else:
             return text.encode('utf-8')
+    get_text_by_locator = get_text #alias the method
         
 
     def get_dom_text(self,dom_element):
@@ -425,10 +335,10 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return self.click_element(locator)
 
 
-    def select_dropdown_option(self, select_locator, option_text):
+    def select_dropdown_option(self, locator, option_text):
         "Selects the option in the drop-down"
         result_flag = False
-        dropdown = self.get_element(select_locator)
+        dropdown = self.get_element(locator)
         for option in dropdown.find_elements_by_tag_name('option'):
             if option.text == option_text:
                 option.click()
@@ -458,20 +368,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         return result_flag
     
 
-    def get_elements(self,locator,msg_flag=True):
-        "Return a list of DOM elements that match the locator"
-        dom_elements = []
-        try:
-            locator = self.split_locator(locator)
-            dom_elements = self.driver.find_elements(*locator)
-        except Exception,e:
-            if msg_flag==True:
-                self.write(e,'debug')
-                self.write("Check your locator-'%s' in the conf/locators.conf file"%locator)
-        
-        return dom_elements
-
-
     def teardown(self):
         "Tears down the driver"
         self.driver.quit()
@@ -487,9 +383,42 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.log_obj.write(msg,level)
 
 
-    def get_failure_message_list(self):
-        "Return the failure message list"
-        return self.failure_message_list
+    def report_to_testrail(self,case_id,test_run_id,result_flag,msg=''):
+        "Update Test Rail"
+        if self.testrail_flag is True:
+            self.write('Automation is about to update TestRail for case id: %s'%str(case_id),level='debug')
+            msg += '\n'.join(self.msg_list)
+            msg = msg + "\n"
+            if self.browserstack_flag is True:
+                for image in self.image_url_list:
+                    msg += '\n' + '[' + image['name'] + ']('+ image['url']+')'
+                msg += '\n\n' + '[' + 'Watch Replay On BrowserStack' + ']('+ self.session_url+')'
+            self.tr_obj.update_testrail(case_id,test_run_id,result_flag,msg=msg)
+        self.image_url_list = []
+        self.msg_list = []
+
+
+    def wait(self,wait_seconds=5,locator=None):
+        "Performs wait for time provided"
+        if locator is not None:
+            self.smart_wait(wait_seconds,locator)
+        else:
+            time.sleep(wait_seconds)
+
+
+    def smart_wait(self,wait_seconds,locator):
+        "Performs an explicit wait for a particular element"
+        result_flag = False
+        try:
+            path = self.split_locator(locator)
+            WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
+            result_flag =True
+        except Exception,e:
+			self.conditional_write(result_flag,
+                               positive='Located the element: %s'%locator,
+                               negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_time))
+            
+        return result_flag
 
 
     def success(self,msg,level='info',pre_format='PASS: '):
@@ -524,87 +453,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.mini_check_counter += 1
 
 
-    def report_to_testrail(self,case_id,test_run_id,result_flag,msg=''):
-        "Update Test Rail"
-        if self.testrail_flag is True:
-            self.write('Automation is about to update TestRail for case id: %s'%str(case_id),level='debug')
-            msg += '\n'.join(self.msg_list)
-            msg = msg + "\n"
-            if self.browserstack_flag is True:
-                for image in self.image_url_list:
-                    msg += '\n' + '[' + image['name'] + ']('+ image['url']+')'
-                msg += '\n\n' + '[' + 'Watch Replay On BrowserStack' + ']('+ self.session_url+')'
-            self.tr_obj.update_testrail(case_id,test_run_id,result_flag,msg=msg)
-        self.image_url_list = []
-        self.msg_list = []
-        
-
-    def wait(self,wait_seconds=5,xpath=None):
-        "Performs wait for time provided"
-        if xpath is not None:
-            result_flag = self.explicit_wait(xpath,wait_seconds)
-        else:
-            time.sleep(wait_seconds)
-            result_flag = True
-
-        return result_flag
-
-
-    def explicit_wait(self,xpath,wait_seconds):
-        "Performs an explicit wait for a particular element"
-        result_flag = False
-        try:
-            WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located((By.XPATH, xpath)))
-            result_flag =True
-        except Exception,e:
-            self.write("Unable to locate element with xpath: %s"%xpath,'debug')
-
-        return result_flag
-
-
-    _screenshot = staticmethod(_screenshot)
-    _exceptionHandler = staticmethod(_exceptionHandler)
-    _get_xpath_string = staticmethod(_get_xpath_string)
-
-
-    def get_text_by_locator(self,locator):
-        "Return the text for a given path or the 'None' object if the element is not found"
-        text = ''
-        try:
-            text = self.get_element(locator).text
-        except Exception,e:
-            self.write(e)
-            return None
-        else:
-            return text.encode('utf-8')
-
-
-    def get_element(self,locator,verbose_flag=True):
-        "Return the DOM element of the path or 'None' if the element is not found "
-        dom_element = None
-        try:
-            locator = self.split_locator(locator)
-            dom_element = self.driver.find_element(*locator)
-        except Exception,e:
-            if verbose_flag is True:
-                self.write(str(e),'debug')
-                self.write("Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
-                self.get_session_details()
-
-        return dom_element
-
-
-    def split_locator(self,locator):
-        "Split the locator type and locator"
-        result = ()
-        try:
-            result = tuple(locator.split(',',1))
-        except Exception,e:
-            self.write("Error while parsing locator")
-
-        return result
-
-
     def write_test_summary(self):
         "Print out a useful, human readable summary"
         self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
@@ -618,4 +466,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
                 self.write(msg)
 
 
+    def start(self):
+        "Dummy method to be over-written by child classes"
+        pass
 
