@@ -26,7 +26,7 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
         
         #2. Setup and register a driver
         start_time = int(time.time())
-        test_obj.register_mobile_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag)
+        test_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag)
 
         #3. Get value of expected page heading.
         expected_bitcoin_price_page_heading = conf.expected_bitcoin_price_page_heading
