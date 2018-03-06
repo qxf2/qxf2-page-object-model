@@ -12,9 +12,10 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 from utils.Option_Parser import Option_Parser
 import conf.mobile_bitcoin_conf as conf
+import conf.testrail_caseid_conf as testrail_file
 
 
-def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag):
+def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, test_run_id):
     "Run the test."
     try:
         # Initalize flags for tests summary.
@@ -28,29 +29,42 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
         start_time = int(time.time())
         test_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag)
 
-        #3. Get value of expected page heading.
+        #3. Setup TestRail reporting
+        if testrail_flag.lower()=='y':
+            if test_run_id is None:
+                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+                testrail_flag = 'N'   
+            if test_run_id is not None:
+                test_obj.register_testrail()
+
+        #4. Get expected bitcoin price page header name
         expected_bitcoin_price_page_heading = conf.expected_bitcoin_price_page_heading
         
-        #4. Click on real time price page button and verify the price page heading.
+        #5. Click on real time price page button and verify the price page header name.
         result_flag = test_obj.click_on_real_time_price_button(expected_bitcoin_price_page_heading)
         test_obj.log_result(result_flag,
                     positive="Successfully visited the bitcoin real time price page.",
                     negative="Failed to visit the bitcoin real time price page.")
+        #Update TestRail
+        case_id = testrail_file.test_bitcoin_price_page_header
+        test_obj.report_to_testrail(case_id,test_run_id,result_flag)
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         
-        #5. Verify bitcoin real time price is displayed.
-        #Notice you don't need to create a new page object!
+        #6. Verify bitcoin real time price is displayed.
         if result_flag is True:
             result_flag = test_obj.get_bitcoin_real_time_price()
         test_obj.log_result(result_flag,
                             positive="Successfully got the bitcoin real time price in usd.",
                             negative="Failed to get the bitcoin real time price in usd.")
+        #Update TestRail
+        case_id = testrail_file.test_bitcoin_real_time_price
+        test_obj.report_to_testrail(case_id,test_run_id,result_flag)
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
 
-        #6. Print out the results.
+        #7. Print out the results.
         test_obj.write_test_summary()
 
-        #7. Teardown and Assertion.
+        #8. Teardown and Assertion.
         test_obj.wait(3)
         expected_pass = test_obj.result_counter
         actual_pass = test_obj.pass_counter
@@ -79,7 +93,9 @@ if __name__ == '__main__':
                           app_package = options.app_package,
                           app_activity = options.app_activity,
                           remote_flag = options.remote_flag,
-                          device_flag = options.device_flag)
+                          device_flag = options.device_flag,
+                          testrail_flag = options.testrail_flag,
+                          test_run_id = options.test_run_id)
     else:
         print 'ERROR: Received incorrect comand line input arguments'
         print options_obj.print_usage()
