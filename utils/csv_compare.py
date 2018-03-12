@@ -1,5 +1,6 @@
 """
-This script can be used to compare two csv files
+Qxf2 Services: Utility script to compare two csv files.
+
 """
 
 import csv,os
@@ -27,7 +28,7 @@ class Csv_Compare():
 
             if (len(actual_file)!= len(exp_file)):
                 result_flag = False
-                print "Mismatch in number of rows. The actual row count didnt match expected row count"
+                print "Mismatch in number of rows. The actual row count didn't match with expected row count"
             else:
                 for actual_row, actual_col in zip(actual_file,exp_file):
                     if actual_row == actual_col:
@@ -44,9 +45,11 @@ class Csv_Compare():
 #---USAGE EXAMPLES
 if __name__=='__main__':
     print "Start of %s"%__file__
-     
-    file1 = 'c:/Indira/sample/file1.csv'
-    file2 = 'c:/Indira/sample/file2.csv'
+
+    #Fill in the file1 and file2 paths
+    file1 = 'Add path for the first file here'
+    file2 = 'Add path for the second file here'
+
     #Initialize the csv object
     csv_obj = Csv_Compare()
 
