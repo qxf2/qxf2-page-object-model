@@ -41,10 +41,11 @@ class Base_Mechanize:
                       (url, error_message))
             elif (e.reason.args[0] == 10061):
                 print "\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m"
+                raise e
             else:
                 print(e.reason.args)
-            # bubble error back up after printing relevant details
-            raise e
+                # bubble error back up after printing relevant details
+                raise e  # We raise error only when unknown errors occurs (other than HTTP error and url open error 10061) 
 
         return {'response': response, 'error': error}
     
@@ -69,7 +70,6 @@ class Base_Mechanize:
             else:
                 print(e.reason.args)
             # bubble error back up after printing relevant details
-
             raise e
 
         return {'response': response, 'error': error}
