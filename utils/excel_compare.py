@@ -1,5 +1,6 @@
 """
-Utility script to compare two excel file using openxl module
+Qxf2 Services: Utility script to compare two excel files using openxl module
+
 """
 
 import openpyxl
@@ -49,17 +50,19 @@ class Excel_Compare():
 
             return result_flag
         
+
 #---USAGE EXAMPLES
 if __name__=='__main__':
     print "Start of %s"%__file__
-     
-    file1 = 'c:/Indira/sample/excel_file1.xlsx'
-    file2 = 'c:/Indira/sample/excel_file2.xlsx'
-    #Initialize the csv object
-    excel_obj = Excel_Compare()
+    # Enter the path details of the xl files here
+    file1 = 'Add path to the first xl file'
+    file2 = 'Add path to the second xl file'
+  
+    #Initialize the excel object
+    xl_obj = Excel_Compare()
 
     #Sample code to compare excel files
-    if excel_obj.is_equal(file1,file2) is True:
+    if xl_obj.is_equal(file1,file2) is True:
         print "Data in both the excel files matched\n"
     else:
-        print "Data mismatch in both the excel files"    
+        print "Data mismatch in both the excel files"
