@@ -12,11 +12,11 @@ class Csv_Compare():
 
         if not os.path.exists(csv_actual):
             result_flag = False
-            print 'Could not locate the generated csv: %s'%csv_actual
+            print 'Could not locate the csv file: %s'%csv_actual
 
         if not os.path.exists(csv_expected):
             result_flag = False
-            print 'Could not locate the baseline csv: %s'%csv_expected
+            print 'Could not locate the csv file: %s'%csv_expected
 
         if os.path.exists(csv_actual) and os.path.exists(csv_expected):
             #Open the csv file and put the content to list
@@ -49,7 +49,7 @@ if __name__=='__main__':
     #Fill in the file1 and file2 paths
     file1 = 'Add path for the first file here'
     file2 = 'Add path for the second file here'
-
+    
     #Initialize the csv object
     csv_obj = Csv_Compare()
 
