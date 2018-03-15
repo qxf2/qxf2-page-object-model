@@ -5,11 +5,13 @@ A wrapper around Mechanize to make Restful API calls
 import json
 import mechanize
 
+
 class Base_Mechanize:
     "Main base class for Mechanize based scripts"
 
     def __init__(self, url=None):
         pass
+
 
     def get_browser(self):
         "Create and return a browser object"
@@ -17,6 +19,7 @@ class Base_Mechanize:
         browser.set_handle_robots(False)
 
         return browser
+
 
     def get(self, url, headers={}):
         "Mechanize Get request"
@@ -36,12 +39,16 @@ class Base_Mechanize:
                 error_message = e.read()
                 print("\n******\nGET Error: %s %s" %
                       (url, error_message))
+            elif (e.reason.args[0] == 10061):
+                print "\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m"
+                raise e
             else:
                 print(e.reason.args)
-            # bubble error back up after printing relevant details
-                raise e
+                # bubble error back up after printing relevant details
+                raise e  # We raise error only when unknown errors occurs (other than HTTP error and url open error 10061) 
 
         return {'response': response, 'error': error}
+    
 
     def post(self, url, data=None, headers={}):
         "Mechanize Post request"
@@ -53,16 +60,20 @@ class Base_Mechanize:
                 url=url, data=data, headers=headers))
         except (mechanize.HTTPError, mechanize.URLError) as e:
             error = e
-            if isinstance(e, mechanize.HTTPError):
+            if isinstance(e, mechanize.HTTPError, mechanize.URLError):
                 error_message = e.read()
+                print "Iam here"
                 print("\n******\nPOST Error: %s %s %s" %
                       (url, error_message, str(data)))
+            elif (e.reason.args[0] == 10061):
+                print "\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m"
             else:
                 print(e.reason.args)
             # bubble error back up after printing relevant details
             raise e
 
         return {'response': response, 'error': error}
+
 
     def delete(self, url, headers={}):
         "Mechanize Delete request"
@@ -73,10 +84,13 @@ class Base_Mechanize:
             browser.open(Mechanize_Delete_Request_class(url, headers=headers))
             response = True
         except Exception, e:
+            if (e.reason.args[0] == 10061):
+                print "\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m"
             print("Exception in Mechanize_Delete_request: %s" % str(e))
             raise e
 
         return {'response': response, 'error': error}
+
 
     def put(self, url, data=None, headers={}):
         "Mechanize Put request"
@@ -92,6 +106,8 @@ class Base_Mechanize:
                 error_message = e.read()
                 print("\n******\nPUT Error: %s %s %s" %
                       (url, error_message, str(data)))
+            elif (e.reason.args[0] == 10061):
+                print "\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m"
             else:
                 print(str(e.reason.args))
             # bubble error back up after printing relevant details
