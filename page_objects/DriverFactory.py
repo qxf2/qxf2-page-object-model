@@ -4,7 +4,7 @@ NOTE: Change this class as you add support for:
 1. SauceLabs/BrowserStack
 2. More browsers like Opera
 """
-import dotenv,os,sys
+import dotenv,os,sys,requests
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -117,29 +117,32 @@ class DriverFactory():
         desired_capabilities['platformName'] = mobile_os_name
         desired_capabilities['platformVersion'] = mobile_os_version
         desired_capabilities['deviceName'] = device_name
-        desired_capabilities['appPackage'] = app_package
-        desired_capabilities['appActivity'] = app_activity
-        
-        if device_flag.lower() == 'y':
-            driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-        if device_flag.lower() == 'n':
-            desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
-            driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
+
         if (remote_flag.lower() == 'y'):
             try:
                 if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
                     desired_capabilities['idleTimeout'] = 300
                     self.sauce_upload() #upload the application to the Sauce storage every time the test is run
-                    desired_capabilities['app'] = 'sauce-storage:app-name' #replace app-name with the application name
+                    desired_capabilities['app'] = 'sauce-storage:Bitcoin.apk' #replace app-name with the application name
                     desired_capabilities['name'] = 'Appium Python Test'
                     desired_capabilities['autoAcceptAlert']= 'true'
+
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
             except Exception,e:
                 print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
                 print "Python says:%s"%str(e)
                 print "SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"
-        
+        else:
+            desired_capabilities['appPackage'] = app_package
+            desired_capabilities['appActivity'] = app_activity
+            if device_flag.lower() == 'y':
+                driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
+            else:
+                desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
+                driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
+
+
         return driver
 
 
@@ -148,12 +151,12 @@ class DriverFactory():
         USERNAME = remote_credentials.USERNAME
         PASSWORD = remote_credentials.ACCESS_KEY
         headers = {'Content-Type':'application/octet-stream'}
-        params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','app-name')) #replace app-name with the application name
+        params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
         fp = open(params,'rb')
         data = fp.read()
         fp.close()
-        response = requests.post('https://saucelabs.com/rest/v1/storage/%s/app-name?overwrite=true'%USERNAME,headers=headers,data=data,auth=('%s','%s')%(USERNAME,PASSWORD)) #reaplce app-name with the application name
-
+        response = requests.post('https://saucelabs.com/rest/v1/storage/%s/Bitcoin.apk?overwrite=true'%USERNAME,headers=headers,data=data,auth=(USERNAME,PASSWORD)) #reaplce app-name with the application name
+        
 
     def get_firefox_driver(self):
         "Return the Firefox driver"
