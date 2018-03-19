@@ -2,7 +2,7 @@ import pytest
 import os
 from conf import browser_os_name_conf
 from utils import post_test_reports_to_slack
-from utils.Email_Pytest_Report import Email_Pytest_Report
+from utils.email_pytest_report import Email_Pytest_Report
 
 
 @pytest.fixture
@@ -113,7 +113,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
         #Initialize the Email_Pytest_Report object
         email_obj = Email_Pytest_Report()
         # Send html formatted email body message with pytest report as an attachment
-        email_obj.send_test_report_email(html_body_flag=False,attachment_flag=True,report_file_path= 'default')
+        email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path= 'default')
 
 
 def pytest_generate_tests(metafunc):
