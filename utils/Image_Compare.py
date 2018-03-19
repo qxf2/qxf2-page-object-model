@@ -40,6 +40,7 @@ def is_equal(img_actual,img_expected,result):
             #Let's do some interesting processing now
             result_flag = analyze_difference_smartly(result)
             if result_flag is False:
+                print "Since there is a difference in pixel value of both images, we are checking the threshold value to pass the images with minor difference"
                 #Now with threshhold!
                 result_flag = True if rmsdiff(actual,expected) < 958 else False
             #For temporary debug purposes
