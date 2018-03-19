@@ -43,7 +43,7 @@ class Excel_Compare():
                     if actual_row == actual_col:
                         pass
                     else:
-                        print "Mismatch between actual and expected file at position: ",actual_file.index(actual_row)
+                        print "Mismatch between actual and expected file at position(each row consists of 23 cells):",actual_file.index(actual_row)
                         print "Data present only in Actual file: %s"%actual_row
                         print "Data present only in Expected file: %s"%actual_col
                         result_flag =  False
@@ -65,4 +65,4 @@ if __name__=='__main__':
     if xl_obj.is_equal(file1,file2) is True:
         print "Data in both the excel files matched\n"
     else:
-        print "Data mismatch in both the excel files"
+        print "Data mismatch between the actual and expected excel files"
