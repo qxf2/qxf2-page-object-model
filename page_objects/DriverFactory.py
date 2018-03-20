@@ -156,6 +156,10 @@ class DriverFactory():
         data = fp.read()
         fp.close()
         response = requests.post('https://saucelabs.com/rest/v1/storage/%s/Bitcoin.apk?overwrite=true'%USERNAME,headers=headers,data=data,auth=(USERNAME,PASSWORD)) #reaplce app-name with the application name
+        if (response.status_code == 200):
+            print("Apk file is uploaded successfully")
+        else:
+            print("Apk file not loaded")
         
 
     def get_firefox_driver(self):
@@ -178,8 +182,8 @@ class DriverFactory():
             if not os.path.exists(self.download_dir):
                 os.makedirs(self.download_dir)
         except Exception,e:
-            self.write("Exception when trying to set directory structure")
-            self.write(str(e))
+            print("Exception when trying to set directory structure")
+            print(str(e))
             
         profile = webdriver.firefox.firefox_profile.FirefoxProfile()
         set_pref = profile.set_preference
