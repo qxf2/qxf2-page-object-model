@@ -55,6 +55,6 @@ if __name__=='__main__':
 
     #Sample code to compare csv files
     if csv_obj.is_equal(file1,file2) is True:
-        print "Data in both the csv files matched\n"
+        print "Data matched in both the csv files\n"
     else:
-        print "Data mismatch in both the csv files"    
+        print "Data mismatch between the actual and expected csv files"    
