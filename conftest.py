@@ -2,6 +2,7 @@ import pytest
 import os
 from conf import browser_os_name_conf
 from utils import post_test_reports_to_slack
+from utils.email_pytest_report import Email_Pytest_Report
 
 
 @pytest.fixture
@@ -98,10 +99,21 @@ def device_flag():
     return pytest.config.getoption("-Q")
 
 
+@pytest.fixture
+def email_pytest_report():
+    "pytest fixture for device flag"
+    return pytest.config.getoption("--email_pytest_report")
+
+
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
     if pytest.config.getoption("-S").lower() == 'y':
         post_test_reports_to_slack.post_reports_to_slack()
+    elif pytest.config.getoption("--email_pytest_report").lower() == 'y':
+        #Initialize the Email_Pytest_Report object
+        email_obj = Email_Pytest_Report()
+        # Send html formatted email body message with pytest report as an attachment
+        email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path= 'default')
 
 
 def pytest_generate_tests(metafunc):
@@ -187,6 +199,10 @@ def pytest_addoption(parser):
     parser.addoption("-Q","--device_flag",
                       dest="device_flag",
                       help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
+                      default="N")
+    parser.addoption("--email_pytest_report",
+                      dest="email_pytest_report",
+                      help="Email pytest report: Y or N",
                       default="N")
 
 
