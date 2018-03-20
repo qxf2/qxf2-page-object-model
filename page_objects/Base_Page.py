@@ -200,15 +200,15 @@ class Base_Page(Borg,unittest.TestCase):
 
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"
-        if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.jpg'):
+        if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
             for i in range(1,100): 
-                if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.jpg'):
+                if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
                     continue
                 else:
-                    os.rename(self.screenshot_dir + os.sep +screenshot_name+'.jpg',self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.jpg')
+                    os.rename(self.screenshot_dir + os.sep +screenshot_name+'.png',self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png')
                     break
-        self.driver.get_screenshot_as_file(self.screenshot_dir + os.sep+ screenshot_name+'.jpg')
-	#self.conditional_write(flag=True,positive= screenshot_name + '.jpg',negative='', pre_format=pre_format)
+        self.driver.get_screenshot_as_file(self.screenshot_dir + os.sep+ screenshot_name+'.png')
+	#self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
         if self.browserstack_flag is True:
             self.append_latest_image(screenshot_name)
             
