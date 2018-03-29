@@ -4,7 +4,7 @@ NOTE: Change this class as you add support for:
 1. SauceLabs/BrowserStack
 2. More browsers like Opera
 """
-import dotenv,os,sys,requests
+import dotenv,os,sys,requests,json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -129,6 +129,16 @@ class DriverFactory():
 
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
+                if remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS':
+                    desired_capabilities['idleTimeout'] = 300
+                    desired_capabilities['realMobile'] = 'true'
+                    #self.browser_stack_upload() #upload the application to the Sauce storage every time the test is run
+                    #desired_capabilities['app'] = 'Bitcoin.apk' #replace app-name with the application name
+                    desired_capabilities['name'] = 'Appium Python Test'
+                    desired_capabilities['app'] = self.browser_stack_upload()
+                                    
+                    driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
+                        desired_capabilities= desired_capabilities)
             except Exception,e:
                 print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
                 print "Python says:%s"%str(e)
@@ -156,10 +166,36 @@ class DriverFactory():
         data = fp.read()
         fp.close()
         response = requests.post('https://saucelabs.com/rest/v1/storage/%s/Bitcoin.apk?overwrite=true'%USERNAME,headers=headers,data=data,auth=(USERNAME,PASSWORD)) #reaplce app-name with the application name
-        if (response.status_code == 200):
-            print("Apk file is uploaded successfully")
-        else:
-            print("Apk file not loaded")
+
+
+    def browser_stack_upload(self):
+        "Upload the apk to the BrowserStack storage"
+        USERNAME = remote_credentials.USERNAME
+        ACESS_KEY = remote_credentials.ACCESS_KEY
+        APP_NAME = 'Bitcoin Info_com.dudam.rohan.bitcoininfo.apk'
+        #check if the apk already present
+        app_url = None 
+        try:
+            # Check if the apk file already present
+            get_response = requests.get("https://api-cloud.browserstack.com/app-automate/recent_apps",auth=(USERNAME,ACESS_KEY))
+            # If the apk is already present get the app url
+            if len(get_response.json()) != 0:
+                get_json_data = json.loads(get_response.text)
+                app_url = get_json_data[0]['app_url']
+            # If the apk is not already present Upload the apk
+            if app_url == None:
+                apk_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk'))
+                files = {'file': open(apk_file,'rb')}
+                post_response = requests.post("https://api.browserstack.com/app-automate/upload",files=files,auth=(USERNAME,ACESS_KEY))
+                post_json_data = json.loads(post_response.text)
+                # Get the app url of the newly uploaded apk
+                app_url = post_json_data['app_url']            
+        except Exception as e:
+            print str(e)
+
+        return app_url
+        print app_url
+
         
 
     def get_firefox_driver(self):
