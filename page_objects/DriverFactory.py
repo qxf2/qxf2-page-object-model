@@ -119,23 +119,21 @@ class DriverFactory():
         desired_capabilities['deviceName'] = device_name
 
         if (remote_flag.lower() == 'y'):
+            desired_capabilities['idleTimeout'] = 300
+            desired_capabilities['name'] = 'Appium Python Test'
+
             try:
                 if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
-                    desired_capabilities['idleTimeout'] = 300
                     self.sauce_upload() #upload the application to the Sauce storage every time the test is run
                     desired_capabilities['app'] = 'sauce-storage:Bitcoin.apk' #replace app-name with the application name
-                    desired_capabilities['name'] = 'Appium Python Test'
                     desired_capabilities['autoAcceptAlert']= 'true'
 
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
-                if remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS':
-                    desired_capabilities['idleTimeout'] = 300
+
+                else:
                     desired_capabilities['realMobile'] = 'true'
-                    #self.browser_stack_upload() #upload the application to the Sauce storage every time the test is run
-                    #desired_capabilities['app'] = 'Bitcoin.apk' #replace app-name with the application name
-                    desired_capabilities['name'] = 'Appium Python Test'
-                    desired_capabilities['app'] = self.browser_stack_upload()
+                    desired_capabilities['app'] = self.browser_stack_upload() #upload the application to the Browserstack Storage
                                     
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
@@ -177,7 +175,7 @@ class DriverFactory():
         app_url = None 
         try:
             # Check if the apk file already present
-            get_response = requests.get("https://api-cloud.browserstack.com/app-automate/recent_apps",auth=(USERNAME,ACESS_KEY))
+            get_response = requests.get("https://api.browserstack.com/app-automate/recent_apps",auth=(USERNAME,ACESS_KEY))
             # If the apk is already present get the app url
             if len(get_response.json()) != 0:
                 get_json_data = json.loads(get_response.text)
@@ -194,9 +192,7 @@ class DriverFactory():
             print str(e)
 
         return app_url
-        print app_url
-
-        
+                
 
     def get_firefox_driver(self):
         "Return the Firefox driver"
