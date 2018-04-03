@@ -1,5 +1,5 @@
 --------
-A Pythonic Selenium and Appium test automation framework.
+A Pythonic Selenium and Appium test automation framework
 --------
 You can use this test automation framework to write:
 
