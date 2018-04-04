@@ -108,7 +108,7 @@ class DriverFactory():
         return local_driver
 
 
-    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag):
+    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name):
         "Setup mobile device"
         #Get the remote credentials from remote_credentials file
         USERNAME = remote_credentials.USERNAME
@@ -147,7 +147,7 @@ class DriverFactory():
             if device_flag.lower() == 'y':
                 driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
             else:
-                desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
+                desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name)) #replace app-name with the application name
                 driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
 
 
@@ -159,7 +159,7 @@ class DriverFactory():
         USERNAME = remote_credentials.USERNAME
         PASSWORD = remote_credentials.ACCESS_KEY
         headers = {'Content-Type':'application/octet-stream'}
-        params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
+        params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name)) #replace app-name with the application name
         fp = open(params,'rb')
         data = fp.read()
         fp.close()
@@ -182,7 +182,7 @@ class DriverFactory():
                 app_url = get_json_data[0]['app_url']
             # If the apk is not already present Upload the apk
             if app_url == None:
-                apk_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk'))
+                apk_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name))
                 files = {'file': open(apk_file,'rb')}
                 post_response = requests.post("https://api.browserstack.com/app-automate/upload",files=files,auth=(USERNAME,ACESS_KEY))
                 post_json_data = json.loads(post_response.text)

@@ -15,7 +15,7 @@ import conf.mobile_bitcoin_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 
 
-def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, test_run_id):
+def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, test_run_id,app_name):
     "Run the test."
     try:
         # Initalize flags for tests summary.
@@ -27,7 +27,7 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
         
         #2. Setup and register a driver
         start_time = int(time.time())
-        test_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag)
+        test_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name)
 
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -95,7 +95,8 @@ if __name__ == '__main__':
                           remote_flag = options.remote_flag,
                           device_flag = options.device_flag,
                           testrail_flag = options.testrail_flag,
-                          test_run_id = options.test_run_id)
+                          test_run_id = options.test_run_id,
+                          app_name = options.app_name)
     else:
         print 'ERROR: Received incorrect comand line input arguments'
         print options_obj.print_usage()

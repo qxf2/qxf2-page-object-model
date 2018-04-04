@@ -105,6 +105,12 @@ def email_pytest_report():
     return pytest.config.getoption("--email_pytest_report")
 
 
+@pytest.fixture
+def app_name():
+    "pytest fixture for app name"
+    return pytest.config.getoption("-D")
+
+
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
     if pytest.config.getoption("-S").lower() == 'y':
@@ -183,11 +189,11 @@ def pytest_addoption(parser):
     parser.addoption("-H","--mobile_os_version",
                       dest="mobile_os_version",
                       help="Enter version of operating system of mobile: 8.1.0",
-                      default="8.1.0")
+                      default="6.0")
     parser.addoption("-I","--device_name",
                       dest="device_name",
                       help="Enter device name. Ex: Emulator, physical device name",
-                      default="Android Emulator")
+                      default="Google Nexus 6")
     parser.addoption("-J","--app_package",
                       dest="app_package",
                       help="Enter name of app package. Ex: bitcoininfo",
@@ -204,6 +210,11 @@ def pytest_addoption(parser):
                       dest="email_pytest_report",
                       help="Email pytest report: Y or N",
                       default="N")
+    parser.addoption("-D","--app_name",
+                      dest="app_name",
+                      help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
+                      default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
+
 
 
 

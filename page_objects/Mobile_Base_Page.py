@@ -78,9 +78,9 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name).__class__
 
 
-    def register_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag):
+    def register_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name):
         "Register the mobile driver"
-        self.driver = self.driver_obj.run_mobile(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag)
+        self.driver = self.driver_obj.run_mobile(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name)
         self.set_screenshot_dir() # Create screenshot directory
         self.set_log_file() 
         self.start()
