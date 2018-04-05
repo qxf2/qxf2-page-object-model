@@ -99,7 +99,7 @@ class DriverFactory():
         elif  browser.lower() == "ie":
             local_driver = webdriver.Ie()
         elif browser.lower() == "chrome":
-            local_driver = webdriver.Chrome()
+            local_driver = webdriver.Chrome('C:\Python27\Scripts\chromedriver.exe')
         elif browser.lower() == "opera":
             local_driver = webdriver.Opera()
         elif browser.lower() == "safari":
