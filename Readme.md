@@ -1,5 +1,5 @@
 --------
-A Pythonic Selenium and Appium test automation framework
+A Pythonic Selenium, Appium and API test automation framework
 --------
 You can use this test automation framework to write:
 
@@ -14,7 +14,7 @@ This GUI and API test automation framework is developed and maintained by [Qxf2 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too! 
 
 ---------
-SETUP
+Setup for our Python integration testing framework 
 ---------
 
 a) Install Python 2.x
