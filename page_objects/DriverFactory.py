@@ -170,7 +170,6 @@ class DriverFactory():
         "Upload the apk to the BrowserStack storage"
         USERNAME = remote_credentials.USERNAME
         ACESS_KEY = remote_credentials.ACCESS_KEY
-        APP_NAME = 'Bitcoin Info_com.dudam.rohan.bitcoininfo.apk'
         #check if the apk already present
         app_url = None 
         try:
