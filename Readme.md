@@ -17,13 +17,25 @@ We've implemented some version of this framework at several [clients](https://qx
 Setup for our Python integration testing framework 
 ---------
 
+The setup for our open-sourced Python test automation framework is fairly simple. Don't get fooled by the length of this section. We have documented the setup instructions in detail so even beginners can get started. 
+
+The setup has four parts:
+
+1. Prerequisites 
+2. Setup for GUI/Selenium automation
+3. Setup for Mobile/Appium automation
+4. Setup for API automation
+
+##### 1. Prerequisites 
 a) Install Python 2.x
-
 b) Add Python 2.x to your PATH environment variable
-
 c) If you do not have it already, get pip (NOTE: Most recent Python distributions come with pip)
+d) pip install -r requirements.txt to install dependencies
 
-d) `pip install -r requirements.txt` to install dependencies
+If you ran into some problems on step (d), please report them as an issue or email Arun(mak@qxf2.com).
+
+
+### Update from here
 
 e) Get setup with your browser driver. If you don't know how to, please try:
 
