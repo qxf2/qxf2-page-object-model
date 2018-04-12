@@ -124,7 +124,7 @@ class DriverFactory():
 
             try:
                 if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
-                    self.sauce_upload() #upload the application to the Sauce storage every time the test is run
+                    self.sauce_upload(app_name) #upload the application to the Sauce storage every time the test is run
                     desired_capabilities['app'] = 'sauce-storage:Bitcoin.apk' #replace app-name with the application name
                     desired_capabilities['autoAcceptAlert']= 'true'
 
@@ -133,7 +133,7 @@ class DriverFactory():
 
                 else:
                     desired_capabilities['realMobile'] = 'true'
-                    desired_capabilities['app'] = self.browser_stack_upload() #upload the application to the Browserstack Storage
+                    desired_capabilities['app'] = self.browser_stack_upload(app_name) #upload the application to the Browserstack Storage
                                     
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
@@ -154,7 +154,7 @@ class DriverFactory():
         return driver
 
 
-    def sauce_upload(self):  
+    def sauce_upload(self,app_name):  
         "Upload the apk to the sauce temperory storage"
         USERNAME = remote_credentials.USERNAME
         PASSWORD = remote_credentials.ACCESS_KEY
@@ -166,7 +166,7 @@ class DriverFactory():
         response = requests.post('https://saucelabs.com/rest/v1/storage/%s/Bitcoin.apk?overwrite=true'%USERNAME,headers=headers,data=data,auth=(USERNAME,PASSWORD)) #reaplce app-name with the application name
 
 
-    def browser_stack_upload(self):
+    def browser_stack_upload(self,app_name):
         "Upload the apk to the BrowserStack storage"
         USERNAME = remote_credentials.USERNAME
         ACESS_KEY = remote_credentials.ACCESS_KEY
@@ -179,7 +179,9 @@ class DriverFactory():
             if len(get_response.json()) != 0:
                 get_json_data = json.loads(get_response.text)
                 app_url = get_json_data[0]['app_url']
+
             # If the apk is not already present Upload the apk
+            
             if app_url == None:
                 apk_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name))
                 files = {'file': open(apk_file,'rb')}
