@@ -35,20 +35,14 @@ d) pip install -r requirements.txt to install dependencies
 If you ran into some problems on step (d), please report them as an issue or email Arun(mak@qxf2.com).
 
 
-### Update from here
+### 2. Setup for GUI/Selenium automation
+ 
 
-e) Get setup with your browser driver. If you don't know how to, please try:
+a) Get setup with your browser driver. If you don't know how to, please try:
 
    > For Chrome: https://sites.google.com/a/chromium.org/chromedriver/getting-started
 
    > For Firefox: https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver	#Note: Check firefox version & selenium version compatibility before downloading geckodriver.
-
-f) [ADVANCED and OPTIONAL] Update 'conf/remote_credentials.py' if you want to run on BrowserStack/Sauce Labs
-
-g) [ADVANCED and OPTIONAL] In case you have TestRail Integration update the 'conf/testrail.conf' with proper case ids. Also update the 'conf/testrail.env' with url,user,password.
-
-h) [ADVANCED and OPTIONAL] Refer 'utils/post_test_reports_to_slack.py'and add slack incoming webhook url if you want to post the test reports on Slack channel.
-
 
 __If your setup goes well__, you should be to run a simple test with this command:
 
@@ -56,6 +50,17 @@ __If your setup goes well__, you should be to run a simple test with this comman
 
 2. Firefox: `python tests/test_example_form.py -B Firefox`
 
+
+Optional Steps for integrating with third-party tools: 
+
+* [Integrate Python GUI/Selenium automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Testrail) 
+
+
+* [BrowserStack](), 
+
+c) [ADVANCED and OPTIONAL] In case you have TestRail Integration update the 'conf/testrail.conf' with proper case ids. Also update the 'conf/testrail.env' with url,user,password.
+
+d) [ADVANCED and OPTIONAL] Refer 'utils/post_test_reports_to_slack.py'and add slack incoming webhook url if you want to post the test reports on Slack channel.
 
 
 -------------------
