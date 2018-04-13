@@ -108,7 +108,7 @@ class DriverFactory():
         return local_driver
 
 
-    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag):
+    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name):
         "Setup mobile device"
         #Get the remote credentials from remote_credentials file
         USERNAME = remote_credentials.USERNAME
@@ -124,8 +124,8 @@ class DriverFactory():
 
             try:
                 if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
-                    self.sauce_upload() #upload the application to the Sauce storage every time the test is run
-                    desired_capabilities['app'] = 'sauce-storage:Bitcoin.apk' #replace app-name with the application name
+                    self.sauce_upload(app_name) #Saucelabs expects the app to be uploaded to Sauce storage everytime the test is run
+                    desired_capabilities['app'] = 'sauce-storage:'+app_name
                     desired_capabilities['autoAcceptAlert']= 'true'
 
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
@@ -133,7 +133,7 @@ class DriverFactory():
 
                 else:
                     desired_capabilities['realMobile'] = 'true'
-                    desired_capabilities['app'] = self.browser_stack_upload() #upload the application to the Browserstack Storage
+                    desired_capabilities['app'] = self.browser_stack_upload(app_name) #upload the application to the Browserstack Storage
                                     
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
@@ -147,31 +147,28 @@ class DriverFactory():
             if device_flag.lower() == 'y':
                 driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
             else:
-                desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
+                desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name))
                 driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-
 
         return driver
 
 
-    def sauce_upload(self):  
+    def sauce_upload(self,app_name):  
         "Upload the apk to the sauce temperory storage"
         USERNAME = remote_credentials.USERNAME
         PASSWORD = remote_credentials.ACCESS_KEY
         headers = {'Content-Type':'application/octet-stream'}
-        params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk')) #replace app-name with the application name
+        params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name)) 
         fp = open(params,'rb')
         data = fp.read()
         fp.close()
-        response = requests.post('https://saucelabs.com/rest/v1/storage/%s/Bitcoin.apk?overwrite=true'%USERNAME,headers=headers,data=data,auth=(USERNAME,PASSWORD)) #reaplce app-name with the application name
+        response = requests.post('https://saucelabs.com/rest/v1/storage/%s/%s?overwrite=true'%(USERNAME,app_name),headers=headers,data=data,auth=(USERNAME,PASSWORD)) 
 
 
-    def browser_stack_upload(self):
-        "Upload the apk to the BrowserStack storage"
+    def browser_stack_upload(self,app_name):
+        "Upload the apk to the BrowserStack storage if its not done earlier"
         USERNAME = remote_credentials.USERNAME
         ACESS_KEY = remote_credentials.ACCESS_KEY
-        APP_NAME = 'Bitcoin Info_com.dudam.rohan.bitcoininfo.apk'
-        #check if the apk already present
         app_url = None 
         try:
             # Check if the apk file already present
@@ -180,9 +177,9 @@ class DriverFactory():
             if len(get_response.json()) != 0:
                 get_json_data = json.loads(get_response.text)
                 app_url = get_json_data[0]['app_url']
-            # If the apk is not already present Upload the apk
+            # If the apk is not already present Upload the apk            
             if app_url == None:
-                apk_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app','Bitcoin Info_com.dudam.rohan.bitcoininfo.apk'))
+                apk_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name))
                 files = {'file': open(apk_file,'rb')}
                 post_response = requests.post("https://api.browserstack.com/app-automate/upload",files=files,auth=(USERNAME,ACESS_KEY))
                 post_json_data = json.loads(post_response.text)

@@ -61,11 +61,11 @@ class Option_Parser:
         self.parser.add_option("-H","--mobile_os_version",
                             dest="mobile_os_version",
                             help="Enter version of operating system of mobile: 8.1.0",
-                            default="8.1.0")
+                            default="6.0")
         self.parser.add_option("-I","--device_name",
                             dest="device_name",
                             help="Enter device name. Ex: Emulator, physical device name",
-                            default="Android Emulator")
+                            default="Google Nexus 6")
         self.parser.add_option("-J","--app_package",
                             dest="app_package",
                             help="Enter name of app package. Ex: bitcoininfo",
@@ -78,6 +78,10 @@ class Option_Parser:
                             dest="device_flag",
                             help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
                             default="N")
+        self.parser.add_option("-D","--app_name",
+                            dest="app_name",
+                            help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
+                            default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
 
         
     def add_option(self,option_letter,option_word,dest,help_text):
