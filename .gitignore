@@ -10,3 +10,4 @@ log/
 geckodriver.log
 debug.log
 __pycache__
+.vs/
