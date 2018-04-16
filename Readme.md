@@ -1,5 +1,5 @@
 --------
-A Pythonic Selenium and Appium test automation framework
+A Pythonic Selenium, Appium and API test automation framework
 --------
 You can use this test automation framework to write:
 
@@ -14,37 +14,50 @@ This GUI and API test automation framework is developed and maintained by [Qxf2 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too! 
 
 ---------
-SETUP
+Setup for our Python integration testing framework 
 ---------
 
+The setup for our open-sourced Python test automation framework is fairly simple. Don't get fooled by the length of this section. We have documented the setup instructions in detail so even beginners can get started. 
+
+The setup has four parts:
+
+1. Prerequisites 
+2. Setup for GUI/Selenium automation
+3. Setup for Mobile/Appium automation
+4. Setup for API automation
+
+##### 1. Prerequisites 
 a) Install Python 2.x
-
 b) Add Python 2.x to your PATH environment variable
-
 c) If you do not have it already, get pip (NOTE: Most recent Python distributions come with pip)
+d) pip install -r requirements.txt to install dependencies
 
-d) `pip install -r requirements.txt` to install dependencies
+If you ran into some problems on step (d), please report them as an issue or email Arun(mak@qxf2.com).
 
-e) Get setup with your browser driver. If you don't know how to, please try:
 
-   > For Chrome: https://sites.google.com/a/chromium.org/chromedriver/getting-started
+##### 2. Setup for GUI/Selenium automation
+ 
 
-   > For Firefox: https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver	#Note: Check firefox version & selenium version compatibility before downloading geckodriver.
+a) Get setup with your browser driver. If you don't know how to, please try:
 
-f) [ADVANCED and OPTIONAL] Update 'conf/remote_credentials.py' if you want to run on BrowserStack/Sauce Labs
-
-g) [ADVANCED and OPTIONAL] In case you have TestRail Integration update the 'conf/testrail.conf' with proper case ids. Also update the 'conf/testrail.env' with url,user,password.
-
-h) [ADVANCED and OPTIONAL] Refer 'utils/post_test_reports_to_slack.py'and add slack incoming webhook url if you want to post the test reports on Slack channel.
-
+   > [For Chrome](https://sites.google.com/a/chromium.org/chromedriver/getting-started)
+   > [For Firefox]( https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver)	
+#Note: Check Firefox version & Selenium version compatibility before downloading geckodriver.
 
 __If your setup goes well__, you should be to run a simple test with this command:
 
-1. Chrome: `python tests/test_example_form.py -B Chrome` 
+1. Chrome: `pytest -B Chrome` 
 
-2. Firefox: `python tests/test_example_form.py -B Firefox`
+2. Firefox: `pytest -B Firefox`
 
+Optional Steps for integrating with third-party tools: 
 
+* [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Testrail) 
+* [Integrate our Python GUI/web automation framework with BrowserStack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#browserstack)
+* [Integrate our Python Selenium automation framework with Sauce Labs ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#sauce-labs)
+* [Run Python integration tests on Jenkins ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#jenkins)
+* [Run Python integration tests on CircleCI ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#circleci)
+* [Post Python automation test results on Slack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Utilities#slack-integration)
 
 -------------------
 Repository details
