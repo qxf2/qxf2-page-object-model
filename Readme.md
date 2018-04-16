@@ -35,33 +35,29 @@ d) pip install -r requirements.txt to install dependencies
 If you ran into some problems on step (d), please report them as an issue or email Arun(mak@qxf2.com).
 
 
-### 2. Setup for GUI/Selenium automation
+##### 2. Setup for GUI/Selenium automation
  
 
 a) Get setup with your browser driver. If you don't know how to, please try:
 
-   > For Chrome: https://sites.google.com/a/chromium.org/chromedriver/getting-started
-
-   > For Firefox: https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver	#Note: Check firefox version & selenium version compatibility before downloading geckodriver.
+   > [For Chrome](https://sites.google.com/a/chromium.org/chromedriver/getting-started)
+   > [For Firefox]( https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver)	
+#Note: Check Firefox version & Selenium version compatibility before downloading geckodriver.
 
 __If your setup goes well__, you should be to run a simple test with this command:
 
-1. Chrome: `python tests/test_example_form.py -B Chrome` 
+1. Chrome: `pytest -B Chrome` 
 
-2. Firefox: `python tests/test_example_form.py -B Firefox`
-
+2. Firefox: `pytest -B Firefox`
 
 Optional Steps for integrating with third-party tools: 
 
-* [Integrate Python GUI/Selenium automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Testrail) 
-
-
-* [BrowserStack](), 
-
-c) [ADVANCED and OPTIONAL] In case you have TestRail Integration update the 'conf/testrail.conf' with proper case ids. Also update the 'conf/testrail.env' with url,user,password.
-
-d) [ADVANCED and OPTIONAL] Refer 'utils/post_test_reports_to_slack.py'and add slack incoming webhook url if you want to post the test reports on Slack channel.
-
+* [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Testrail) 
+* [Integrate our Python GUI/web automation framework with BrowserStack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#browserstack)
+* [Integrate our Python Selenium automation framework with Sauce Labs ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#sauce-labs)
+* [Run Python integration tests on Jenkins ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#jenkins)
+* [Run Python integration tests on CircleCI ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#circleci)
+* [Post Python automation test results on Slack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Utilities#slack-integration)
 
 -------------------
 Repository details
