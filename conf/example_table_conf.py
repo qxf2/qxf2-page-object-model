@@ -2,4 +2,4 @@
 Conf file for test_example_table
 """
 
-name = "Bishop"
+name = "Michael"
