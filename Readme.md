@@ -46,11 +46,11 @@ a) Get setup with your browser driver. If you don't know how to, please try:
 
 __If your setup goes well__, you should be to run a simple test with this command:
 
-1. Chrome: `pytest -B Chrome` 
+1. Chrome: `pytest -k example_form -B Chrome` 
 
-2. Firefox: `pytest -B Firefox`
+2. Firefox: `pytest -k example_form -B Firefox`
 
-Optional Steps for integrating with third-party tools: 
+__Optional steps__ for integrating with third-party tools: 
 
 * [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Testrail) 
 * [Integrate our Python GUI/web automation framework with BrowserStack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#browserstack)
