@@ -2,7 +2,7 @@
 Conf file for test_example_form
 """
 
-name = "avinash"
-email = "Qxf2Basecamp@qxf2.com"
-phone_no = 973881212
+name = "knight"
+email = "knight@qxf2.com"
+phone_no = 1111111111
 gender = "Male"
