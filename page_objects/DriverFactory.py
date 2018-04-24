@@ -8,9 +8,11 @@ import dotenv,os,sys,requests,json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome import service
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from conf import remote_credentials
+from conf import opera_browser_conf
 
 class DriverFactory():
     
@@ -94,6 +96,8 @@ class DriverFactory():
     def run_local(self,os_name,os_version,browser,browser_version):
         "Return the local driver"
         local_driver = None
+        opera_options = None
+        opera_browser_location = opera_browser_conf.location
         if browser.lower() == "ff" or browser.lower() == 'firefox':
             local_driver = webdriver.Firefox()    
         elif  browser.lower() == "ie":
@@ -101,7 +105,13 @@ class DriverFactory():
         elif browser.lower() == "chrome":
             local_driver = webdriver.Chrome()
         elif browser.lower() == "opera":
-            local_driver = webdriver.Opera()
+            try:
+                options = webdriver.ChromeOptions()
+                options.binary_location = opera_browser_location # path to opera executable
+                local_driver = webdriver.Opera(options=options)
+                    
+            except Exception,e:
+                print "SOLUTION: It looks like you are trying to use Opera Browser. Please update Opera Browser location under conf/opera_browser_conf.\n"
         elif browser.lower() == "safari":
             local_driver = webdriver.Safari()
 
