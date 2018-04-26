@@ -66,7 +66,7 @@ __Optional steps__ for integrating with third-party tools:
 * [Post Python automation test results on Slack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Utilities#slack-integration)
 
 
-__2. Setup for Mobile/Appium automation__
+__3. Setup for Mobile/Appium automation__
 
 
 a) [Download and Install appium desktop app](https://github.com/appium/appium-desktop/releases/latest)
