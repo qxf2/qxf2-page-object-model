@@ -96,8 +96,6 @@ class DriverFactory():
     def run_local(self,os_name,os_version,browser,browser_version):
         "Return the local driver"
         local_driver = None
-        opera_options = None
-        opera_browser_location = opera_browser_conf.location
         if browser.lower() == "ff" or browser.lower() == 'firefox':
             local_driver = webdriver.Firefox()    
         elif  browser.lower() == "ie":
@@ -105,7 +103,9 @@ class DriverFactory():
         elif browser.lower() == "chrome":
             local_driver = webdriver.Chrome()
         elif browser.lower() == "opera":
-            try:
+	    opera_options = None
+            opera_browser_location = opera_browser_conf.location
+	    try:
                 options = webdriver.ChromeOptions()
                 options.binary_location = opera_browser_location # path to opera executable
                 local_driver = webdriver.Opera(options=options)
