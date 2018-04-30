@@ -104,8 +104,8 @@ class DriverFactory():
             local_driver = webdriver.Chrome()
         elif browser.lower() == "opera":
 	    opera_options = None
-            opera_browser_location = opera_browser_conf.location
-	    try:
+            try:
+                opera_browser_location = opera_browser_conf.location
                 options = webdriver.ChromeOptions()
                 options.binary_location = opera_browser_location # path to opera executable
                 local_driver = webdriver.Opera(options=options)
