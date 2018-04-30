@@ -6,8 +6,6 @@ The login method for droptask is included here. It will be moved to a page objec
 
 import time, os, logging, sys, re, json, logging, mechanize, requests, urllib, urllib2, httplib
 from utils.Base_Logging import Base_Logging
-from Mechanize_Extended import Mechanize_Put
-from Mechanize_Extended import Mechanize_Delete
 import conf.url_conf as conf
 
 
