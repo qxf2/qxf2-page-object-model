@@ -51,6 +51,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.window_structure = {}
             self.testrail_flag = False
             self.browserstack_flag = False
+            self.exceptions = []
 
             self.reset()
 
@@ -329,8 +330,10 @@ class Base_Page(Borg,unittest.TestCase):
         except Exception,e:
             if verbose_flag is True:
                 self.write(str(e),'debug')
-                self.write("Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
-
+                self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
+            self.exceptions.append("NEW: Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
+            e.message = "NEW: Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1])
+            raise e
         return dom_element
 
 
@@ -361,16 +364,17 @@ class Base_Page(Borg,unittest.TestCase):
 
     def click_element(self,locator,wait_time=3):
         "Click the button supplied"
-        link = self.get_element(locator)
-        if link is not None:
-            try:
+        try:
+            link = self.get_element(locator)
+            if link is not None:
                 link.click()
                 self.wait(wait_time)
-            except Exception,e:
-                self.write('Exception when clicking link with path: %s'%locator)
-                self.write(e)
-            else:
-                return True
+        except Exception, e:
+            self.write(e.message,'debug')
+            self.write('Exception when clicking link with path: %s'%locator)
+            self.write(e)
+        else:
+            return True
 
         return False
     
@@ -627,8 +631,12 @@ class Base_Page(Borg,unittest.TestCase):
         if len(failure_message_list) > 0:
             self.write('\n--------FAILURE SUMMARY--------\n')
             for msg in failure_message_list:
-                self.write(msg)      
-
+                self.write(msg)
+        if len(self.exceptions) > 0:
+            self.exceptions = list(set(self.exceptions))
+            self.write('\n--------USEFUL EXCEPTION--------')
+            for msg in self.exceptions:
+                self.write(msg)
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"

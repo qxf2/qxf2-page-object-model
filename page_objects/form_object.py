@@ -58,6 +58,7 @@ class Form_Object:
 
 
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def set_gender(self,gender,wait_seconds=1):
         "Set the gender on the form"
         self.click_element(self.gender_dropdown)
