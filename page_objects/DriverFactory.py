@@ -111,6 +111,8 @@ class DriverFactory():
                 local_driver = webdriver.Opera(options=options)
                     
             except Exception,e:
+	        print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
+                print "Python says:%s"%str(e)
                 print "SOLUTION: It looks like you are trying to use Opera Browser. Please update Opera Browser location under conf/opera_browser_conf.\n"
         elif browser.lower() == "safari":
             local_driver = webdriver.Safari()
