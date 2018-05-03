@@ -85,6 +85,18 @@ __Optional steps__ for more details on setting up appium and running tests on An
 * [Get started with mobile automation: Appium & Python](https://qxf2.com/blog/appium-mobile-automation/)
 * [Get Set Test an iOS app using Appium and Python](https://qxf2.com/blog/get-set-test-an-ios-app-using-appium-and-python/)
 
+
+__4. Setup for API automation__
+
+a. Get Cars API code from repo https://github.com/qxf2/cars-api using command "git clone https://github.com/qxf2/cars-api.git"
+
+b. Install Flask using command "pip install flask"
+
+c. Run cars-app server using command "python cars-api/cars_app.py"
+
+d. Run test_api_example now using command "pytest -k api -s"
+
+
 -------------------
 Repository details
 -------------------
