@@ -213,12 +213,12 @@ class Base_Page(Borg,unittest.TestCase):
             self.append_latest_image(screenshot_name)
             
 
-    def open(self,url,wait_seconds=2):
+    def open(self,url,wait_time=2):
         "Visit the page base_url + url"
         url = self.base_url + url
         if self.driver.current_url != url:
             self.driver.get(url)
-        self.wait(wait_seconds)
+        self.wait(wait_time)
 
 
     def get_current_url(self):
@@ -359,13 +359,13 @@ class Base_Page(Borg,unittest.TestCase):
         return dom_elements
 
 
-    def click_element(self,locator,wait_seconds=3):
+    def click_element(self,locator,wait_time=3):
         "Click the button supplied"
         link = self.get_element(locator)
         if link is not None:
             try:
                 link.click()
-                self.wait(wait_seconds)
+                self.wait(wait_time)
             except Exception,e:
                 self.write('Exception when clicking link with path: %s'%locator)
                 self.write(e)
@@ -476,29 +476,29 @@ class Base_Page(Borg,unittest.TestCase):
         return result_flag
 
 
-    def hit_enter(self,locator,wait_seconds=2):
+    def hit_enter(self,locator,wait_time=2):
         "Hit enter"
         element = self.get_element(locator)
         try:
             element.send_keys(Keys.ENTER)
-            self.wait(wait_seconds)
+            self.wait(wait_time)
         except Exception,e:
             self.write(str(e),'debug')
             return None
 
 
-    def scroll_down(self,locator,wait_seconds=2):
+    def scroll_down(self,locator,wait_time=2):
         "Scroll down"
         element = self.get_element(locator)
         try:
             element.send_keys(Keys.PAGE_DOWN)
-            self.wait(wait_seconds)
+            self.wait(wait_time)
         except Exception,e:
             self.write(str(e),'debug')
             return None
 
 
-    def hover(self,locator,wait_seconds=2):
+    def hover(self,locator,wait_time=2):
         "Hover over the element"
         #Note: perform() of ActionChains does not return a bool 
         #So we have no way of returning a bool when hover is called
@@ -506,7 +506,7 @@ class Base_Page(Borg,unittest.TestCase):
         action_obj = ActionChains(self.driver)
         action_obj.move_to_element(element)
         action_obj.perform()
-        self.wait(wait_seconds)
+        self.wait(wait_time)
         
 
     def teardown(self):
@@ -539,12 +539,12 @@ class Base_Page(Borg,unittest.TestCase):
         self.msg_list = []
         
 
-    def wait(self,wait_seconds=5,locator=None):
+    def wait(self,wait_time=5,locator=None):
         "Performs wait for time provided"
         if locator is not None:
-            self.smart_wait(wait_seconds,locator)
+            self.smart_wait(wait_time,locator)
         else:
-            time.sleep(wait_seconds)
+            time.sleep(wait_time)
 
 
     def smart_wait(self,wait_seconds,locator):
