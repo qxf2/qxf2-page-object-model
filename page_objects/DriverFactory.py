@@ -8,9 +8,11 @@ import dotenv,os,sys,requests,json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome import service
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from conf import remote_credentials
+from conf import opera_browser_conf
 
 class DriverFactory():
     
@@ -101,7 +103,18 @@ class DriverFactory():
         elif browser.lower() == "chrome":
             local_driver = webdriver.Chrome()
         elif browser.lower() == "opera":
-            local_driver = webdriver.Opera()
+	    opera_options = None
+            try:
+                opera_browser_location = opera_browser_conf.location
+                options = webdriver.ChromeOptions()
+                options.binary_location = opera_browser_location # path to opera executable
+                local_driver = webdriver.Opera(options=options)
+                    
+            except Exception,e:
+	        print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
+                print "Python says:%s"%str(e)
+                if  'no Opera binary' in str(e):
+                     print "SOLUTION: It looks like you are trying to use Opera Browser. Please update Opera Browser location under conf/opera_browser_conf.\n"
         elif browser.lower() == "safari":
             local_driver = webdriver.Safari()
 
