@@ -11,7 +11,7 @@ test:
     # Clone qxf2/cars-api repo
     - git clone https://github.com/qxf2/cars-api.git 
     # Install flask as it is needed to run our cars-api web server
-    - pip install flask  
+    - pip install -V Flask==0.12.2
     # Run cars-app server in background as it is mandatory to run our API test
     - python cars-api/cars_app.py:
         background: true
