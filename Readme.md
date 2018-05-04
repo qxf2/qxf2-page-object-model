@@ -96,6 +96,8 @@ c. Run cars-app server using command "python cars-api/cars_app.py"
 
 d. Run test_api_example now using command "pytest -k api -s"
 
+__Optional steps__ for more details on setting up API and running tests refer to below link:
+* [Easily Maintainable API Test Automation Framework](https://qxf2.com/blog/easily-maintainable-api-test-automation-framework/)
 
 -------------------
 Repository details
