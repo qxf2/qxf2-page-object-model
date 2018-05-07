@@ -91,14 +91,16 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         
         #10. Set and submit the form in one go
+        
         result_flag = test_obj.submit_form(name,email,phone,gender)
         test_obj.log_result(result_flag,
                             positive="Successfully submitted the form\n",
                             negative="Failed to submit the form \nOn url: %s"%test_obj.get_current_url())
+                            
         #Update TestRail
         case_id = testrail_file.test_example_form
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
-
+        
         #11. Check the heading on the redirect page
         #Notice you don't need to create a new page object!
         if result_flag is True:
@@ -117,7 +119,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form_footer_contact
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
-
+        
         #13. Print out the results
         test_obj.write_test_summary()
 
