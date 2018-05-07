@@ -557,7 +557,7 @@ class Base_Page(Borg,unittest.TestCase):
         except Exception,e:
 			self.conditional_write(result_flag,
                                positive='Located the element: %s'%locator,
-                               negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_time))
+                               negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
             
         return result_flag
 
