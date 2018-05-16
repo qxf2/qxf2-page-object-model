@@ -62,7 +62,7 @@ def test_example_table(base_url,browser,browser_version,os_version,os_name,remot
 
         #Teardown
         test_obj.wait(3)
-        xpected_pass = test_obj.result_counter
+        expected_pass = test_obj.result_counter
         actual_pass = test_obj.pass_counter
         test_obj.teardown() 
     
