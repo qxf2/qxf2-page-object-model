@@ -398,7 +398,7 @@ class Base_Page(Borg,unittest.TestCase):
                 text_field.clear()
         except Exception, e:
             self.write('ERROR: Could not clear the text field: %s'%locator,'debug')
-            self.exceptions.append('Exception occured when trying to find the locator:%s' %locator)
+            self.exceptions.append('Could not clear the text field: %s' %locator)
             #e.message ="Exception occured when trying to find the locator"
             #raise e
 
