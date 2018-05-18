@@ -151,9 +151,9 @@ class DriverFactory():
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
             except Exception,e:
-                print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
-                print "Python says:%s"%str(e)
-                print "SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"
+                print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
+                print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
+                print ('\033[92m'+"SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"+'\033[0m')
         else:
             try:
                 desired_capabilities['appPackage'] = app_package
@@ -165,9 +165,9 @@ class DriverFactory():
                     driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
 
             except Exception,e:
-                print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
-                print "Python says:%s"%str(e)
-                print "SOLUTION: It looks like you are trying to run test cases with Local Appium Setup. \nPlease make sure to run Appium Server and try again.\n"
+                print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
+                print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
+                print ('\033[92m'+"SOLUTION: It looks like you are trying to run test cases with Local Appium Setup. \nPlease make sure to run Appium Server and try again.\n"+'\033[0m')
 
         return driver
 	
