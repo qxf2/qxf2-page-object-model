@@ -9,7 +9,7 @@ jobs:
            - "./log" #Save the logs for all the tests
 
        test:
-         override:
+        - run:
             # Clone qxf2/cars-api repo
             - git clone https://github.com/qxf2/cars-api.git 
             # Install flask as it is needed to run our cars-api web server
