@@ -4,8 +4,7 @@ jobs:
        - store_artifacts:
            path: /tmp/artifact-1
            destination: artifact-file
-
-       steps:
+    steps:
         - checkout
         - run:
           name: Clone qxf2/cars-api repo
