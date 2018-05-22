@@ -3,10 +3,9 @@
 version: 2
 jobs:
     build:
-       general:
-        - artifacts:
-           - "./screenshots" #Save the screenshots for all the tests
-           - "./log" #Save the logs for all the tests
+       - store_artifacts:
+           path: /tmp/artifact-1
+           destination: artifact-file
 
        steps:
         - checkout
@@ -35,16 +34,7 @@ jobs:
         - run: 
            name: abc
            command: 
-               - > 
-        - run: 
-           name: bcd  
-           command: |  
+             - > 
               if [ -n "${NIGHTLY_BUILD}" ]; then
-        - run:
-           name: dce
-           command: |
               py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result_nightly.xml --tb=native
-        - run:  
-            name: abcd
-            command: |
               fi
