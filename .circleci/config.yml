@@ -1,5 +1,3 @@
-# Simple circle.yml to get started.
-# Add more as we grow
 version: 2
 jobs:
     build:
