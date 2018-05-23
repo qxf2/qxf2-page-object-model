@@ -18,7 +18,7 @@ copyright_text = "xpath,//p[contains(@class,'qxf2_copyright')]"
 #----
 
 #Locators for the form object(form_object.py)
-name_field = "id,names"       
+name_field = "xpath,//h2[@id='exampleForm']"       
 email_field = "name,email"
 phone_no_field = "css selector,#phone"
 click_me_button = "xpath,//button[text()='Click me!']"
