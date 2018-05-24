@@ -339,8 +339,8 @@ class Base_Page(Borg,unittest.TestCase):
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             e.message = "Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1])
-            raise get_element_failure
-            
+            raise e
+   
         return dom_element
 
 
@@ -396,17 +396,17 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             text_field = self.get_element(locator)
             if clear_flag is True:
-                text_field.clear()
-                print "After clear"
-        except Exception, get_element_failure:
-            self.write('Check locator: %s'%locator,'debug')
-        except Exception, e:
-            self.write('ERROR: Could not clear the text field: %s'%locator,'debug')
-            self.exceptions.append('Could not clear the text field: %s' %locator)
-            e.message ="Exception occured when trying to find the locator"
-            raise e
+                try:
+                    text_field.clear()
+                except Exception, e:
+                    self.write(str(e),'debug')
+                    self.exceptions.append('Could not clear the text field: %s' %locator)
+        except Exception,e:
+            self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
+
 
         result_flag = False
+        print "Before send keys"
         if text_field is not None:
             try:
                 text_field.send_keys(value)
@@ -415,8 +415,6 @@ class Base_Page(Borg,unittest.TestCase):
                 self.write('Unable to write to text field: %s'%locator,'debug')
                 self.write(str(e),'debug')
                 self.exceptions.append("Error when writing to text field-'%s' in the conf/locators.conf file"%locator)
-                e.message = "Error when writing text field-'%s' in the conf/locators.conf file"%locator
-                raise e
 
         return result_flag
           
