@@ -64,9 +64,9 @@ class Form_Object:
     @Wrapit._exceptionHandler
     def set_gender(self,gender,wait_seconds=1):
         "Set the gender on the form"
-        self.click_element(self.gender_dropdown)
+        result_flag = self.click_element(self.gender_dropdown)
         self.wait(wait_seconds)
-        result_flag = self.click_element(self.gender_option%gender)
+        result_flag &= self.click_element(self.gender_option%gender)
         self.conditional_write(result_flag,
             positive='Set the gender to: %s'%gender,
             negative='Failed to set the gender in the form',

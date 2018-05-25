@@ -338,7 +338,7 @@ class Base_Page(Borg,unittest.TestCase):
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
-            e.message = "Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1])
+            #e.message = "Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1])
             raise e
    
         return dom_element
@@ -367,8 +367,8 @@ class Base_Page(Borg,unittest.TestCase):
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Unable to locate the element with the xpath -'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
-            #e.message = "Unable to find the locator"
-            #raise e   
+            e.message = "Unable to find the locator"
+            raise e   
         
         return dom_elements
 
@@ -381,9 +381,10 @@ class Base_Page(Borg,unittest.TestCase):
                 link.click()
                 self.wait(wait_time)
         except Exception, e:
-            self.write(e.message,'debug')
+            self.write(str(e),'debug')
             self.write('Exception when clicking link with path: %s'%locator)
             self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
+            raise e
         else:
             return True
 
@@ -406,15 +407,15 @@ class Base_Page(Borg,unittest.TestCase):
 
 
         result_flag = False
-        print "Before send keys"
         if text_field is not None:
             try:
                 text_field.send_keys(value)
                 result_flag = True
             except Exception,e:
-                self.write('Unable to write to text field: %s'%locator,'debug')
+                self.write('Could not write to text field: %s'%locator,'debug')
                 self.write(str(e),'debug')
-                self.exceptions.append("Error when writing to text field-'%s' in the conf/locators.conf file"%locator)
+                self.exceptions.append("Could not write to text field-'%s' in the conf/locators.conf file"%locator)
+                raise e
 
         return result_flag
           
@@ -647,6 +648,8 @@ class Base_Page(Borg,unittest.TestCase):
         if flag is True:
             self.success(positive,level=level)
         if flag is False:
+            self.failure(negative,level=level)
+        if flag is None:
             self.failure(negative,level=level)
 
 

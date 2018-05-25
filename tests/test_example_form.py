@@ -48,7 +48,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.log_result(result_flag,
                             positive="Name was successfully set to: %s\n"%name,
                             negative="Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()))
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time))) 
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_form_name
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
@@ -62,7 +62,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form_email
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
-
+        
         #7. Set Phone number in form
         result_flag = test_obj.set_phone(phone)
         test_obj.log_result(result_flag,
@@ -72,7 +72,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form_phone
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
-
+        '''
         #8. Set Gender in form
         result_flag = test_obj.set_gender(gender)
         test_obj.log_result(result_flag,
@@ -82,7 +82,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form_gender
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
-
+        '''
         #9. Check the copyright
         result_flag = test_obj.check_copyright()
         test_obj.log_result(result_flag,
