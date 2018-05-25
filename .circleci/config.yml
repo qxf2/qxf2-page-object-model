@@ -5,5 +5,5 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Clone qxf2/cars-api repo
-        command: git clone https://github.com/qxf2/cars-api.git 
+          name: Clone qxf2/cars-api repo
+          command: git clone https://github.com/qxf2/cars-api.git 
