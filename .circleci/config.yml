@@ -25,11 +25,10 @@ jobs:
         name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
         command: |
           py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result.xml --tb=native 
-
       - run: 
         name: abc
         command: |
           - > 
-          if [ -n "${NIGHTLY_BUILD}" ]; then
-          py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result_nightly.xml --tb=native
-          fi
+            if [ -n "${NIGHTLY_BUILD}" ]; then
+            py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result_nightly.xml --tb=native
+            fi
