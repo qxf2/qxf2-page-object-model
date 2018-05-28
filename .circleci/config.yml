@@ -17,6 +17,7 @@ jobs:
           command: | 
             python cars-api/cars_app.py
             background: true
+            sleep 5
       - run:
           name: Wait for sometime to start the server
           command: |
