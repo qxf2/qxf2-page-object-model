@@ -1,36 +1,37 @@
 version: 2.0
 jobs:
-    build:
-       steps:
-          - checkout
-          - run:
-               name: Clone qxf2/cars-api repo
-               command: |
-                  git clone https://github.com/qxf2/cars-api.git 
-          - run:
-               name: Install flask as it is needed to run our cars-api web server
-               command: | 
-                  pip install -V Flask==0.12.2
-          - run:
-               name: Run cars-app server in background as it is mandatory to run our API test
-               command: | 
-                  python cars-api/cars_app.py:
-                  background: true
-          - run:
-               name: Wait for sometime to start the server
-               command: |
-                  sleep 5
-          - run:
-               name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
-               command: |
-                  py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result.xml --tb=native 
-       
-          - run: 
-               name: abc
-               command: |
-                  - > 
-                  if [ -n "${NIGHTLY_BUILD}" ]; then
-                  py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result_nightly.xml --tb=native
-                  fi
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run:
+          name: Clone qxf2/cars-api repo
+          command: |
+            git clone https://github.com/qxf2/cars-api.git 
+      - run:
+          name: Install flask as it is needed to run our cars-api web server
+          command: | 
+            pip install -V Flask==0.12.2
+      - run:
+          name: Run cars-app server in background as it is mandatory to run our API test
+          command: | 
+            python cars-api/cars_app.py:
+            background: true
+      - run:
+          name: Wait for sometime to start the server
+          command: |
+            sleep 5
+      - run:
+          name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
+          command: |
+            py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result.xml --tb=native 
+      - run: 
+          name: abc
+          command: |
+            - > 
+              if [ -n "${NIGHTLY_BUILD}" ]; then
+                 py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result_nightly.xml --tb=native
+              fi
+
               
               
