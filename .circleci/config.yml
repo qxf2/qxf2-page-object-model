@@ -25,6 +25,10 @@ jobs:
           command: |
             pip install pytest
       - run:
+          name: Install requests
+          command: |
+            pip install requests
+      - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
             py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result.xml --tb=native 
