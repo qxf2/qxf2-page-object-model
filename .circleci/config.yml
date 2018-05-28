@@ -21,13 +21,9 @@ jobs:
           command: |
             sleep 5
       - run:
-          name: Intall pytest
-          command: |
-            pip install pytest
-      - run:
           name: Install requests
           command: |
-            pip install requests
+            pip install -r requirements.txt
       - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
