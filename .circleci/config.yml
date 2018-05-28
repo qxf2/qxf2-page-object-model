@@ -15,7 +15,7 @@ jobs:
       - run:
           name: Run cars-app server in background as it is mandatory to run our API test
           command: | 
-            python cars-api/cars_app.py:
+            python cars-api/cars_app.py
             background: true
       - run:
           name: Wait for sometime to start the server
