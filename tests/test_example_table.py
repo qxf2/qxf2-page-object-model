@@ -15,7 +15,7 @@ import conf.example_table_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 
 
-def test_example_table(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,test_run_id):
+def test_example_table(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id):
     "Run the test"
     try:
 	#Initalize flags for tests summary
@@ -36,6 +36,9 @@ def test_example_table(base_url,browser,browser_version,os_version,os_name,remot
                 testrail_flag = 'N'   
             if test_run_id is not None:
                 test_obj.register_testrail()
+
+        if tesults_flag.lower()=='y':
+            test_obj.register_tesults()
 
         #4. Get the test details from the conf file
         name = conf.name
@@ -82,6 +85,7 @@ if __name__=='__main__':
                     base_url=options.url,
                     test_run_id=options.test_run_id,
                     testrail_flag=options.testrail_flag,
+                    tesults_flag=options.tesults_flag,
                     remote_flag=options.remote_flag,
                     os_version=options.os_version,
                     browser_version=options.browser_version,
