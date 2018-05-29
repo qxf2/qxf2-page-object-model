@@ -33,5 +33,10 @@ jobs:
           command: |
             - > 
               if [ -n "${NIGHTLY_BUILD}" ]; then
-                 py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junit-xml=$CIRCLE_TEST_REPORTS/result_nightly.xml --tb=native
+                 py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junitxml=test-reports/nighly_junit.xml --tb=native
               fi
+      - store_test_results:
+          path: test-reports
+
+      - store_artifacts:
+          path: test-reports 
