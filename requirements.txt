@@ -8,3 +8,4 @@ dotenv==0.0.5
 pytest-xdist==1.14
 pytest-rerunfailures==2.0.0
 pillow==5.0.0
+tesults==1.2.0
