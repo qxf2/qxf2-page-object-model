@@ -15,7 +15,7 @@ import conf.example_form_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 
 
-def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,test_run_id):
+def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id):
     "Run the test"
     try:
 	#Initalize flags for tests summary
@@ -36,6 +36,9 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
                 testrail_flag = 'N'   
             if test_run_id is not None:
                 test_obj.register_testrail()
+
+        if tesults_flag.lower()=='y':
+            test_obj.register_tesults()
         
         #4. Get the test details from the conf file
         name = conf.name
@@ -52,7 +55,8 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form_name
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
-
+        test_obj.add_tesults_case("Set Name", "Sets the name in the form", "test_example_form", result_flag, "Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()), [test_obj.log_obj.log_file_dir + os.sep + test_obj.log_obj.log_file_name])
+        
         #6. Set Email in form
         result_flag = test_obj.set_email(email) 
         test_obj.log_result(result_flag,
@@ -62,6 +66,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form_email
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
+        test_obj.add_tesults_case("Set Email", "Sets the email in the form", "test_example_form", result_flag, "Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()), [], {'Email': email}, {'_Email': email})
 
         #7. Set Phone number in form
         result_flag = test_obj.set_phone(phone)
@@ -72,6 +77,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form_phone
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
+        test_obj.add_tesults_case("Set Phone Number", "Sets the phone number in the form", "test_example_form", result_flag, "Failed to set phone number: %s \nOn url: %s\n"%(phone,test_obj.get_current_url()), [], {}, {'_Phone': phone, '_AnotherCustomField': 'Custom field value'})
 
         #8. Set Gender in form
         result_flag = test_obj.set_gender(gender)
@@ -82,6 +88,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form_gender
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
+        test_obj.add_tesults_case("Set Gender", "Sets the gender in the form", "test_example_form", result_flag, "Failed to set gender: %s \nOn url: %s\n"%(gender,test_obj.get_current_url()), [])
 
         #9. Check the copyright
         result_flag = test_obj.check_copyright()
@@ -89,7 +96,8 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
                             positive="Copyright check was successful\n",
                             negative="Copyright looks wrong.\nObtained the copyright%s\n"%test_obj.get_copyright())
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        
+        test_obj.add_tesults_case("Check copyright", "Checks the copyright", "test_example_form", result_flag, "Copyright looks wrong.\nObtained the copyright%s\n"%test_obj.get_copyright(), [])
+
         #10. Set and submit the form in one go
         result_flag = test_obj.submit_form(name,email,phone,gender)
         test_obj.log_result(result_flag,
@@ -98,6 +106,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
+        test_obj.add_tesults_case("Submit Form", "Submits the form", "test_example_form", result_flag,"Failed to submit the form \nOn url: %s"%test_obj.get_current_url(), [])
 
         #11. Check the heading on the redirect page
         #Notice you don't need to create a new page object!
@@ -107,6 +116,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
                             positive="Heading on the redirect page checks out!\n",
                             negative="Fail: Heading on the redirect page is incorrect!")
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        test_obj.add_tesults_case("Check Heading", "Checks the heading on the redirect page", "test_example_form", result_flag,"Fail: Heading on the redirect page is incorrect!", [])
 
         #12. Visit the contact page and verify the link
         result_flag = test_obj.goto_footer_link('Contact > Get in touch!','contact')    
@@ -117,7 +127,8 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         #Update TestRail
         case_id = testrail_file.test_example_form_footer_contact
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
-
+        test_obj.add_tesults_case("Contact page", "Visits the contact page and verifies the link", "test_example_form", result_flag,"\nFailed to visit the Contact page\n")
+        
         #13. Print out the results
         test_obj.write_test_summary()
 
@@ -125,7 +136,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.wait(3)
         expected_pass = test_obj.result_counter
         actual_pass = test_obj.pass_counter
-        test_obj.teardown() 
+        test_obj.teardown()
         
     except Exception,e:
         print "Exception when trying to run test:%s"%__file__
@@ -150,6 +161,7 @@ if __name__=='__main__':
                         os_name=options.os_name,
                         remote_flag=options.remote_flag,
                         testrail_flag=options.testrail_flag,
+                        tesults_flag=options.tesults_flag,
                         test_run_id=options.test_run_id) 
     else:
         print 'ERROR: Received incorrect comand line input arguments'

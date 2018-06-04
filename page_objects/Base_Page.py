@@ -17,6 +17,7 @@ from utils.BrowserStack_Library import BrowserStack_Library
 from DriverFactory import DriverFactory
 import PageFactory
 from utils.Test_Rail import Test_Rail
+from utils import Tesults
 from conf import remote_credentials as Conf
 
 
@@ -50,6 +51,8 @@ class Base_Page(Borg,unittest.TestCase):
             self.current_console_log_errors = []
             self.window_structure = {}
             self.testrail_flag = False
+            self.tesults_flag = False
+            self.images = []
             self.browserstack_flag = False
 
             self.reset()
@@ -113,6 +116,9 @@ class Base_Page(Borg,unittest.TestCase):
         self.testrail_flag = True
         self.tr_obj = Test_Rail()
 
+    def register_tesults(self):
+        "Register Tesults with Page"
+        self.tesults_flag = True
         
     def register_browserstack(self):
         "Register Browser Stack with Page"
@@ -211,7 +217,8 @@ class Base_Page(Borg,unittest.TestCase):
 	#self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
         if self.browserstack_flag is True:
             self.append_latest_image(screenshot_name)
-            
+        if self.tesults_flag is True:
+            self.images.append(screenshot_name)
 
     def open(self,url,wait_time=2):
         "Visit the page base_url + url"
@@ -537,6 +544,23 @@ class Base_Page(Borg,unittest.TestCase):
             self.tr_obj.update_testrail(case_id,test_run_id,result_flag,msg=msg)
         self.image_url_list = []
         self.msg_list = []
+        
+    def add_tesults_case(self, name, desc, suite, result_flag, msg='', files=[], params={}, custom={}):
+        if self.tesults_flag is True:
+            result = "unknown"
+            failReason = ""
+            if result_flag == True:
+                result = "pass"
+            if result_flag == False:
+                result = "fail"
+                failReason = msg
+            for image in self.images:
+                files.append(self.screenshot_dir + os.sep + image + '.png')
+            self.images = []
+            caseObj = {'name': name, 'suite': suite, 'desc': desc, 'result': result, 'reason': failReason, 'files': files, 'params': params}
+            for key, value in custom.iteritems():
+                caseObj[key] = str(value)
+            Tesults.add_test_case(caseObj)
         
 
     def wait(self,wait_seconds=5,locator=None):

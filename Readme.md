@@ -136,6 +136,7 @@ a)py.test [options]
 	-k      used to run tests which match the given substring expresion 	E.g: py.test -k table  (This will trigger test_example_table.py test)
 	-S	used to post pytest reports on the Slack channel		E.g: py.test -S Y -v > log/pytest_report.log
 	-n 	used to run tests in parallel					E.g: py.test -n 3 -v (This will run three tests in parallel)
+	--tesults 	used to report test results to tesults			E.g: py.test test_example_form.py --tesults Y(This will report test report to tesults)
 
 b)python tests/test_example_form.py (can also be used to run standalone test) 	
 
