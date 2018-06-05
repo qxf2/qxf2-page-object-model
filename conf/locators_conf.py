@@ -24,7 +24,7 @@ phone_no_field = "css selector,#phone"
 click_me_button = "xpath,//button[text()='Click me!']"
 gender_dropdown = "xpath,//button[@data-toggle='dropdown']"
 gender_option = "xpath,//a[text()='%s']"
-tac_checkbox = "xpath,//input[@type='checkboxs']"
+tac_checkbox = "xpath,//input[@type='checkbox']"
 #----
 
 #Locators for hamburger menu object(hamburg_menu_object.py)
