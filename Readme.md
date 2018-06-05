@@ -1,3 +1,5 @@
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=ZXhRS0ZhZ2l3ZE1zdGlEZlZQZEZRY05BUHZaT2pNUENNKyttMHVONjNlZz0tLTZEdFhLaG5TYlpndjJveWxBa1o3SlE9PQ==--64bcdaba3cecd57bb24d5e92f06f013a9b67ef6e)](https://www.browserstack.com/automate/public-build/ZXhRS0ZhZ2l3ZE1zdGlEZlZQZEZRY05BUHZaT2pNUENNKyttMHVONjNlZz0tLTZEdFhLaG5TYlpndjJveWxBa1o3SlE9PQ==--64bcdaba3cecd57bb24d5e92f06f013a9b67ef6e)
+
 --------
 A Pythonic Selenium, Appium and API test automation framework
 --------
@@ -160,3 +162,15 @@ d) On Ubuntu, you may run into an issue installing the cryptography module. You 
 NEED HELP?
 -----------
 Struggling to get your GUI automation going? You can hire Qxf2 Services to help. Contact us at mak@qxf2.com
+
+-----------
+Continuous Integration and Support
+-----------
+This project uses: 
+
+<img src="https://p14.zdusercontent.com/attachment/1015988/RUZZUUKzGhuHBgaH1BgsNphKC?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..7bLPNjjta-dLrqlsvUmhUQ.jHmAf1fOKtNU7OLR2E4sN-aAPdG_8li2sAocs7K1ObIOqP_HKFqHbYxs8QD73dzllq3KB7oIfFO6uzJCQd5sMvwgZg9M7UGmVYa4BEMHTuvQZEW0XD4PH4u5E20mttL77LftfVRn6WL6fdNqbWFc7QxXloWtUriLWZXYbEgOkp1npIaTfTYYy0gLlrF0HTDp0shMBtFsKlbPk3mMQT24MXteAK0WGcAZZUrMYyEqThwvL1BLCZKIqoq-yEBvyG6EZ_97O3fq5LXf2PAmtfNy3Rf7zoSgf-SCCq7JSpdYXJ0.ourdU_U4Z0rK9xFZTW9HNQ" alt="drawing" style="width: 100px; height: 70px"/>  <img src="https://github.com/circleci/media/blob/master/logo/build/horizontal_dark.1.png?raw=true" alt="drawing" style="width: 100px; height: 70px"/>
+
+ 1. [BrowserStack](https://www.browserstack.com/) for testing our web and mobile based tests on cloud
+
+
+2. [CircleCI](https://circleci.com/) for continuous integration
