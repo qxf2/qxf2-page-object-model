@@ -338,8 +338,7 @@ class Base_Page(Borg,unittest.TestCase):
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
-            #e.message = "Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1])
-            raise e
+            
    
         return dom_element
 
@@ -700,8 +699,8 @@ class Base_Page(Borg,unittest.TestCase):
         if len(self.exceptions) > 0:
             self.exceptions = list(set(self.exceptions))
             self.write('\n--------USEFUL EXCEPTION--------\n')
-            for msg in self.exceptions:
-                self.write(msg)
+            for (i,msg) in enumerate(self.exceptions,start=1):
+                self.write(i + msg)
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
