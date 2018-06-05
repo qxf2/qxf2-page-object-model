@@ -13,7 +13,6 @@
 ###########################################
 
 #Locators for the footer object(footer_object.py)
-
 footer_menu = "xpath,//ul[contains(@class,'nav-justified')]/descendant::a[text()='%s']"
 copyright_text = "xpath,//p[contains(@class,'qxf2_copyright')]"
 #----
@@ -25,7 +24,7 @@ phone_no_field = "css selector,#phone"
 click_me_button = "xpath,//button[text()='Click me!']"
 gender_dropdown = "xpath,//button[@data-toggle='dropdown']"
 gender_option = "xpath,//a[text()='%s']"
-tac_checkbox = "xpath,//input[@type='checkbox']"
+tac_checkbox = "xpath,//input[@type='checkboxs']"
 #----
 
 #Locators for hamburger menu object(hamburg_menu_object.py)
