@@ -168,9 +168,9 @@ Continuous Integration and Support
 -----------
 This project uses: 
 
-<img src="https://p14.zdusercontent.com/attachment/1015988/RUZZUUKzGhuHBgaH1BgsNphKC?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..7bLPNjjta-dLrqlsvUmhUQ.jHmAf1fOKtNU7OLR2E4sN-aAPdG_8li2sAocs7K1ObIOqP_HKFqHbYxs8QD73dzllq3KB7oIfFO6uzJCQd5sMvwgZg9M7UGmVYa4BEMHTuvQZEW0XD4PH4u5E20mttL77LftfVRn6WL6fdNqbWFc7QxXloWtUriLWZXYbEgOkp1npIaTfTYYy0gLlrF0HTDp0shMBtFsKlbPk3mMQT24MXteAK0WGcAZZUrMYyEqThwvL1BLCZKIqoq-yEBvyG6EZ_97O3fq5LXf2PAmtfNy3Rf7zoSgf-SCCq7JSpdYXJ0.ourdU_U4Z0rK9xFZTW9HNQ" alt="drawing" style="width: 100px; height: 70px"/>  <img src="https://github.com/circleci/media/blob/master/logo/build/horizontal_dark.1.png?raw=true" alt="drawing" style="width: 100px; height: 70px"/>
-
- 1. [BrowserStack](https://www.browserstack.com/) for testing our web and mobile based tests on cloud
+<img src="https://p14.zdusercontent.com/attachment/1015988/RUZZUUKzGhuHBgaH1BgsNphKC?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..7bLPNjjta-dLrqlsvUmhUQ.jHmAf1fOKtNU7OLR2E4sN-aAPdG_8li2sAocs7K1ObIOqP_HKFqHbYxs8QD73dzllq3KB7oIfFO6uzJCQd5sMvwgZg9M7UGmVYa4BEMHTuvQZEW0XD4PH4u5E20mttL77LftfVRn6WL6fdNqbWFc7QxXloWtUriLWZXYbEgOkp1npIaTfTYYy0gLlrF0HTDp0shMBtFsKlbPk3mMQT24MXteAK0WGcAZZUrMYyEqThwvL1BLCZKIqoq-yEBvyG6EZ_97O3fq5LXf2PAmtfNy3Rf7zoSgf-SCCq7JSpdYXJ0.ourdU_U4Z0rK9xFZTW9HNQ" alt="drawing" style="width: 100px; height: 80px" hspace="20"/>  <img src="https://github.com/circleci/media/blob/master/logo/build/horizontal_dark.1.png?raw=true" alt="drawing" style="width: 100px; height: 80px"/>
 
 
-2. [CircleCI](https://circleci.com/) for continuous integration
+ 1. [BrowserStack](https://www.browserstack.com) for testing our web and mobile based tests on cloud across different platform and browsers.
+ 
+ 2. [CircleCI](https://circleci.com/) for continuous integration.
