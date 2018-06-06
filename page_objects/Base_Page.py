@@ -374,20 +374,19 @@ class Base_Page(Borg,unittest.TestCase):
 
     def click_element(self,locator,wait_time=3):
         "Click the button supplied"
+        result_flag = False
         try:
             link = self.get_element(locator)
             if link is not None:
                 link.click()
-                self.wait(wait_time)
+                result_flag=True
+                self.wait(wait_time)                
         except Exception, e:
             self.write(str(e),'debug')
             self.write('Exception when clicking link with path: %s'%locator)
-            self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
-            raise e
-        else:
-            return True
+            self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)   
 
-        return False
+        return result_flag
     
 
     def set_text(self,locator,value,clear_flag=True):
@@ -395,7 +394,7 @@ class Base_Page(Borg,unittest.TestCase):
         text_field = None
         try:
             text_field = self.get_element(locator)
-            if clear_flag is True:
+            if text_field is not None and clear_flag is True:
                 try:
                     text_field.clear()
                 except Exception, e:
@@ -700,7 +699,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.exceptions = list(set(self.exceptions))
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
-                self.write(i + msg)
+                self.write(str(i)+"- " + msg)
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
