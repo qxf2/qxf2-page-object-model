@@ -159,18 +159,19 @@ c) If your are using firefox 47 and above, you need to set up Geckodriver. Refer
 d) On Ubuntu, you may run into an issue installing the cryptography module. You need to `sudo apt-get install libssl-dev` and then run `sudo pip install -r requirements.txt`
 
 -----------
-NEED HELP?
------------
-Struggling to get your GUI automation going? You can hire Qxf2 Services to help. Contact us at mak@qxf2.com
-
------------
 Continuous Integration and Support
 -----------
 This project uses: 
-
-<img src="https://p14.zdusercontent.com/attachment/1015988/RUZZUUKzGhuHBgaH1BgsNphKC?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..7bLPNjjta-dLrqlsvUmhUQ.jHmAf1fOKtNU7OLR2E4sN-aAPdG_8li2sAocs7K1ObIOqP_HKFqHbYxs8QD73dzllq3KB7oIfFO6uzJCQd5sMvwgZg9M7UGmVYa4BEMHTuvQZEW0XD4PH4u5E20mttL77LftfVRn6WL6fdNqbWFc7QxXloWtUriLWZXYbEgOkp1npIaTfTYYy0gLlrF0HTDp0shMBtFsKlbPk3mMQT24MXteAK0WGcAZZUrMYyEqThwvL1BLCZKIqoq-yEBvyG6EZ_97O3fq5LXf2PAmtfNy3Rf7zoSgf-SCCq7JSpdYXJ0.ourdU_U4Z0rK9xFZTW9HNQ" width="150" height="100" hspace="10"> <img src="https://github.com/circleci/media/blob/master/logo/build/horizontal_dark.1.png?raw=true" width="150" height="100" hspace="10">
+<a href="https://www.browserstack.com/">
+<img src="https://p14.zdusercontent.com/attachment/1015988/RUZZUUKzGhuHBgaH1BgsNphKC?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..7bLPNjjta-dLrqlsvUmhUQ.jHmAf1fOKtNU7OLR2E4sN-aAPdG_8li2sAocs7K1ObIOqP_HKFqHbYxs8QD73dzllq3KB7oIfFO6uzJCQd5sMvwgZg9M7UGmVYa4BEMHTuvQZEW0XD4PH4u5E20mttL77LftfVRn6WL6fdNqbWFc7QxXloWtUriLWZXYbEgOkp1npIaTfTYYy0gLlrF0HTDp0shMBtFsKlbPk3mMQT24MXteAK0WGcAZZUrMYyEqThwvL1BLCZKIqoq-yEBvyG6EZ_97O3fq5LXf2PAmtfNy3Rf7zoSgf-SCCq7JSpdYXJ0.ourdU_U4Z0rK9xFZTW9HNQ" width="150" hspace="10"></a>
+<a href="https://circleci.com/"><img src="https://github.com/circleci/media/blob/master/logo/build/horizontal_dark.1.png?raw=true"  hspace="10"></a>
 
 
  1. [BrowserStack](https://www.browserstack.com) for testing our web and mobile based tests on cloud across different platform and browsers.
  
  2. [CircleCI](https://circleci.com/) for continuous integration.
+
+-----------
+NEED HELP?
+-----------
+Struggling to get your GUI automation going? You can hire Qxf2 Services to help. Contact us at mak@qxf2.com
