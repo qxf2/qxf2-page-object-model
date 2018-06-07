@@ -2,8 +2,7 @@ version: 2.0
 jobs:
   build:
     machine: true
-    
-    working_directory: /test-reports
+        
     steps:
       - checkout
       - run:
@@ -32,8 +31,8 @@ jobs:
           command: |
             py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junitxml=test-reports/junit.xml --tb=native 
       - store_artifacts:
-          path: /test-reports/screenshots
+          path: ./screenshots
           destination: screenshots-file
       - store_artifacts:
-          path: /test-reports/logs
+          path: ./logs
           destination: logs-file
