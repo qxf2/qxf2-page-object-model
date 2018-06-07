@@ -473,9 +473,7 @@ class Base_Page(Borg,unittest.TestCase):
                 result_flag = True
         except Exception, e:
             self.write(e)
-            self.exceptions.append("Error when deselecting checkbox-'%s' in the conf/locators.conf file"%locator)    
-            e.message("An exception occured when deselecting checkbox")
-            raise e
+            self.exceptions.append("Error when deselecting checkbox-'%s' in the conf/locators.conf file"%locator)
         
         return result_flag
 
@@ -488,9 +486,7 @@ class Base_Page(Borg,unittest.TestCase):
             return self.click_element(locator)
         except Exception,e:
             self.write(e)
-            self.exceptions.append("Error when toggling checkbox-'%s' in the conf/locators.conf file"%locator)    
-            e.message("An exception occured when toggling checkbox")
-            raise e
+            self.exceptions.append("Error when toggling checkbox-'%s' in the conf/locators.conf file"%locator)
 
 
     def select_dropdown_option(self, locator, option_text):
