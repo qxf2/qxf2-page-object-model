@@ -33,4 +33,5 @@ jobs:
           path: test-reports
       - store_artifacts:
           path: /test-reports/logs
-		  path: /test-reports/screenshots
+      - store_artifacts:
+path: /test-reports/screenshots
