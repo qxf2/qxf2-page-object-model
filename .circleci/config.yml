@@ -2,6 +2,8 @@ version: 2.0
 jobs:
   build:
     machine: true
+    
+    working_directory: /tmp
     steps:
       - checkout
       - run:
@@ -29,7 +31,9 @@ jobs:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
             py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junitxml=test-reports/junit.xml --tb=native 
-      - store_test_results:
-          path: test-reports
       - store_artifacts:
-          path: /test-reports/logs
+          path: /tmp/screenshots
+          destination: screenshots-file
+      - store_artifacts:
+          path: /tmp/logs
+          destination: logs-file
