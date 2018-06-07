@@ -13,6 +13,7 @@
 ###########################################
 
 #Locators for the footer object(footer_object.py)
+
 footer_menu = "xpath,//ul[contains(@class,'nav-justified')]/descendant::a[text()='%s']"
 copyright_text = "xpath,//p[contains(@class,'qxf2_copyright')]"
 #----
