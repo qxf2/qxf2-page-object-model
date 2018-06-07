@@ -131,21 +131,28 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
         
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
-    if metafunc.config.getoption("-B") == []:
-      metafunc.config.option.browser = browser_os_name_conf.default_browser
+
     if 'browser' in metafunc.fixturenames:
-        if metafunc.config.getoption("-M").lower() == 'y':
+        if metafunc.config.getoption("-M").lower() == 'y':               
             if metafunc.config.getoption("-B") == ["all"]:
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
-                                    browser_os_name_conf.cross_browser_cross_platform_config)
-            else:
+                                    browser_os_name_conf.cross_browser_cross_os_name_config)
+            elif metafunc.config.getoption("-B") == []:
+                print browser_os_name_conf.default_config_list
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
-                                    browser_os_name_conf.default_config_list)
+                                    browser_os_name_conf.default_config_list) 
+            else:
+                config_list = [(metafunc.config.getoption("-B")[0],metafunc.config.getoption("-V")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
+                print config_list
+                metafunc.parametrize("browser,browser_version,os_name,os_version", 
+                                    config_list) 
         if metafunc.config.getoption("-M").lower() !='y':
             if metafunc.config.getoption("-B") == ["all"]:
                 metafunc.config.option.browser = browser_os_name_conf.local_browsers
             metafunc.parametrize("browser",
                                 metafunc.config.option.browser)
+            if metafunc.config.getoption("-B") == []:
+                metafunc.config.option.browser = browser_os_name_conf.default_browser
 
 
 def pytest_addoption(parser):

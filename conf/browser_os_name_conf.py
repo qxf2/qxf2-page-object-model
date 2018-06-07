@@ -16,16 +16,13 @@ chrome_versions = ["49","50"]  #chrome versions for the tests to run against on 
 os_list = ["windows","OS X"]   #list of os for the tests to run against on Browserstack/Sauce Labs
 windows_versions = ["7","8.1"] #list of windows versions for the tests to run against on Browserstack/Sauce Labs
 os_x_versions = ["yosemite"]   #list of os x versions for the tests to run against on Browserstack/Sauce Labs
-sauce_labs_os_x_versions = ["10.10"] #Set if running on sauce_labs instead of "yosemite"
 default_config_list = [("chrome","45","windows","7")] #default configuration against which the test would run if no -B all option is used
-
+safari_config_list = [("safari","8","OS X","yosemite")]
 
 def generate_configuration(browsers=browsers,firefox_versions=firefox_versions,chrome_versions=chrome_versions,
 							os_list=os_list,windows_versions=windows_versions,os_x_versions=os_x_versions):
 
 	"Generate test configuration"
-	if conf.REMOTE_BROWSER_PLATFORM == 'SL':
-		os_x_versions = sauce_labs_os_x_versions
 	test_config = []
 	for browser in browsers:
 		if browser == "firefox":
