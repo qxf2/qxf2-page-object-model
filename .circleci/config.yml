@@ -3,7 +3,7 @@ jobs:
   build:
     machine: true
     
-    working_directory: /tmp
+    working_directory: /test-reports
     steps:
       - checkout
       - run:
@@ -32,8 +32,8 @@ jobs:
           command: |
             py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junitxml=test-reports/junit.xml --tb=native 
       - store_artifacts:
-          path: /tmp/screenshots
+          path: /test-reports/screenshots
           destination: screenshots-file
       - store_artifacts:
-          path: /tmp/logs
+          path: /test-reports/logs
           destination: logs-file
