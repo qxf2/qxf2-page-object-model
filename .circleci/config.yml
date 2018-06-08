@@ -34,5 +34,5 @@ jobs:
           path: ./screenshots
           destination: screenshots-file
       - store_artifacts:
-          path: ./logs
+          path: ./log
           destination: logs-file
