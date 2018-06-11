@@ -136,7 +136,7 @@ def pytest_generate_tests(metafunc):
         if metafunc.config.getoption("-M").lower() == 'y':               
             if metafunc.config.getoption("-B") == ["all"]:
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
-                                    browser_os_name_conf.cross_browser_cross_os_name_config)
+                                    browser_os_name_conf.cross_browser_cross_platform_config)
             elif metafunc.config.getoption("-B") == []:
                 print browser_os_name_conf.default_config_list
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
