@@ -149,10 +149,13 @@ def pytest_generate_tests(metafunc):
         if metafunc.config.getoption("-M").lower() !='y':
             if metafunc.config.getoption("-B") == ["all"]:
                 metafunc.config.option.browser = browser_os_name_conf.local_browsers
-            metafunc.parametrize("browser",
+                metafunc.parametrize("browser",
                                 metafunc.config.option.browser)
             if metafunc.config.getoption("-B") == []:
-                metafunc.config.option.browser = browser_os_name_conf.default_browser
+                print browser_os_name_conf.default_browser
+                #print metafunc.config.option.browser
+	        metafunc.parametrize("browser",
+                                browser_os_name_conf.default_browser)
 
 
 def pytest_addoption(parser):
