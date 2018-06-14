@@ -4,7 +4,7 @@ Conf file to generate the cross browser cross platform test run configuration
 import remote_credentials as conf
 #Conf list for local
 default_browser = ["chrome"]  #default browser for the tests to run against when -B option is not used
-local_browsers = ["firefox","chrome","ie"]  #local browser list against which tests would run if no -M y option is used
+local_browsers = ["firefox","chrome"]  #local browser list against which tests would run if no -M Y and -B all is used
 
 
 #Conf list for Browserstack/Sauce Labs
