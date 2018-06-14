@@ -151,12 +151,14 @@ def pytest_generate_tests(metafunc):
                 metafunc.config.option.browser = browser_os_name_conf.local_browsers
                 metafunc.parametrize("browser",
                                 metafunc.config.option.browser)
-            if metafunc.config.getoption("-B") == []:
+            elif metafunc.config.getoption("-B") == []:
                 print browser_os_name_conf.default_browser
-                #print metafunc.config.option.browser
 	        metafunc.parametrize("browser",
                                 browser_os_name_conf.default_browser)
-
+	    else:
+		config_list_local = [(metafunc.config.getoption("-B")[0])]
+	        metafunc.parametrize("browser", 
+                                    config_list_local)
 
 def pytest_addoption(parser):
     parser.addoption("-B","--browser",
