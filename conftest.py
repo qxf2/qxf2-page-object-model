@@ -138,12 +138,10 @@ def pytest_generate_tests(metafunc):
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
                                     browser_os_name_conf.cross_browser_cross_platform_config)
             elif metafunc.config.getoption("-B") == []:
-                print browser_os_name_conf.default_config_list
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
                                     browser_os_name_conf.default_config_list) 
             else:
                 config_list = [(metafunc.config.getoption("-B")[0],metafunc.config.getoption("-V")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
-                print config_list
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
                                     config_list) 
         if metafunc.config.getoption("-M").lower() !='y':
@@ -151,7 +149,6 @@ def pytest_generate_tests(metafunc):
                 metafunc.config.option.browser = browser_os_name_conf.local_browsers
                 metafunc.parametrize("browser", metafunc.config.option.browser)
             elif metafunc.config.getoption("-B") == []:
-                print browser_os_name_conf.default_browser
                 metafunc.parametrize("browser",browser_os_name_conf.default_browser)
             else:
                 config_list_local = [(metafunc.config.getoption("-B")[0])]
