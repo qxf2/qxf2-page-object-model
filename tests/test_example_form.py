@@ -1,5 +1,5 @@
 """
-This is an example automated test to help you learn Qxf2's framework
+This is example automated test to help you learn Qxf2's framework
 Our automated test will do the following:
     #Open Qxf2 selenium-tutorial-main page.
     #Fill the example form.
