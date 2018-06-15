@@ -96,7 +96,6 @@ class Base_Page(Borg,unittest.TestCase):
         self.driver.maximize_window()
         
         if Conf.REMOTE_BROWSER_PLATFORM == 'BS' and remote_flag.lower() == 'y':
-            print "Before registering bs"
             self.register_browserstack()
             self.session_url = self.browserstack_obj.get_session_url()
             self.browserstack_msg = 'BrowserStack session URL:'
@@ -106,8 +105,7 @@ class Base_Page(Borg,unittest.TestCase):
 
 
     def get_current_driver(self):
-        "Return current driver"
-        
+        "Return current driver"        
         return self.driver
         
 
@@ -116,10 +114,12 @@ class Base_Page(Borg,unittest.TestCase):
         self.testrail_flag = True
         self.tr_obj = Test_Rail()
 
+
     def register_tesults(self):
         "Register Tesults with Page"
         self.tesults_flag = True
-        
+
+
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
@@ -219,6 +219,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.append_latest_image(screenshot_name)
         if self.tesults_flag is True:
             self.images.append(screenshot_name)
+
 
     def open(self,url,wait_time=2):
         "Visit the page base_url + url"
