@@ -507,14 +507,8 @@ class Base_Page(Borg,unittest.TestCase):
     def check_element_present(self,locator):
         "This method checks if the web element is present in page or not and returns True or False accordingly"
         result_flag = False
-        try:
-            if self.get_element(locator,verbose_flag=False) is not None:
-                result_flag = True
-        except Exception, e:
-            self.write(e)
-            self.exceptions.append("Web element not present in the page, please check the locator is correct -'%s' in the conf/locators.conf file"%locator)
-            #e.message("Web element not present in the page, please check the locator is correct -'%s' in the conf/locators.conf file"%locator)
-            #raise e
+        if self.get_element(locator,verbose_flag=False) is not None:
+            result_flag = True
         
         return result_flag
 
