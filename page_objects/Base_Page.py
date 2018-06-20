@@ -366,9 +366,7 @@ class Base_Page(Borg,unittest.TestCase):
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Unable to locate the element with the xpath -'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
-            e.message = "Unable to find the locator"
-            raise e   
-        
+
         return dom_elements
 
 
@@ -413,7 +411,6 @@ class Base_Page(Borg,unittest.TestCase):
                 self.write('Could not write to text field: %s'%locator,'debug')
                 self.write(str(e),'debug')
                 self.exceptions.append("Could not write to text field-'%s' in the conf/locators.conf file"%locator)
-                raise e
 
         return result_flag
           
@@ -440,8 +437,6 @@ class Base_Page(Borg,unittest.TestCase):
         except Exception, e:
             self.write(e)
             self.exceptions.append("Error when getting text from the DOM element-'%s' in the conf/locators.conf file"%locator)
-            e.message("An exception occured when getting text from the DOM element")
-            raise e
         
         return text
 
