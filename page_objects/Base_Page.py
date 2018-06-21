@@ -397,10 +397,9 @@ class Base_Page(Borg,unittest.TestCase):
                     text_field.clear()
                 except Exception, e:
                     self.write(str(e),'debug')
-                    self.exceptions.append('Could not clear the text field: %s' %locator)
+                    self.exceptions.append("Could not clear the text field- '%s' in the conf/locators.conf file"%locator)
         except Exception,e:
             self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
-
 
         result_flag = False
         if text_field is not None:
@@ -410,7 +409,7 @@ class Base_Page(Borg,unittest.TestCase):
             except Exception,e:
                 self.write('Could not write to text field: %s'%locator,'debug')
                 self.write(str(e),'debug')
-                self.exceptions.append("Could not write to text field-'%s' in the conf/locators.conf file"%locator)
+                self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
 
         return result_flag
           
@@ -486,17 +485,19 @@ class Base_Page(Borg,unittest.TestCase):
 
     def select_dropdown_option(self, locator, option_text):
         "Selects the option in the drop-down"
+        result_flag= False
         try:
-            dropdown = self.get_element(locator)  
+            dropdown = self.get_element(locator)
             for option in dropdown.find_elements_by_tag_name('option'):
                 if option.text == option_text:
                     option.click()
+                    result_flag = True
                     break
         except Exception, e:
             self.write(e)
-            self.exceptions.append("Error when selecting option from the drop-down")
-            e.message("An exception occured when selecting the option from drop-down")
-            raise e
+            self.exceptions.append("Error when selecting option from the drop-down '%s' "%locator)
+        
+        return result_flag
 
 
     def check_element_present(self,locator):
@@ -519,8 +520,7 @@ class Base_Page(Borg,unittest.TestCase):
         except Exception , e:
             self.write(e)
             self.exceptions.append("Web element not present in the page, please check the locator is correct -'%s' in the conf/locators.conf file"%locator)
-            e.message("Web element not present in the page, please check the locator is correct -'%s' in the conf/locators.conf file"%locator)
-            raise e
+
         return result_flag
 
 
