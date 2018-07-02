@@ -13,7 +13,7 @@ from page_objects.PageFactory import PageFactory
 from utils.Option_Parser import Option_Parser
 import conf.successive_form_creation_conf as conf
 
-def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,test_run_id):
+def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id):
     "Run the test"
     try:
 	#Initalize flags for tests summary
@@ -35,6 +35,9 @@ def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_
             if test_run_id is not None:
                 test_obj.register_testrail()
         
+        if tesults_flag.lower()=='y':
+            test_obj.register_tesults()
+        
         #4. Get the test details from the conf file and fill the forms
         form_list = conf.form_list
         form_number = 1		#Initalize form counter
@@ -55,6 +58,7 @@ def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_
                                 positive="Successfully submitted the form number %d\n"%form_number,
                                 negative="Failed to submit the form number %d \nOn url: %s"%(form_number,test_obj.get_current_url()))
             test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+            test_obj.add_tesults_case("Set and submit form " + str(form_number), "Sets and submits the form in one go", "test_successive_form_creation", result_flag, "Failed to submit the form number %d \nOn url: %s"%(form_number,test_obj.get_current_url()), [test_obj.log_obj.log_file_dir + os.sep + test_obj.log_obj.log_file_name])
 
             #b. Check the heading on the redirect page
             #Notice you don't need to create a new page object!
@@ -64,6 +68,7 @@ def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_
                                 positive="Heading on the redirect page checks out!\n",
                                 negative="Fail: Heading on the redirect page is incorrect!")
             test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+            test_obj.add_tesults_case("Check redirect heading "  + str(form_number), "Check the heading on the redirect page", "test_successive_form_creation", result_flag, "Fail: Heading on the redirect page is incorrect!", [])
 
             #c. Check the copyright
             result_flag = test_obj.check_copyright() 
@@ -71,6 +76,7 @@ def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_
                                 positive="Copyright check was successful\n",
                                 negative="Copyright looks wrong.\nObtained the copyright: %s\n"%test_obj.get_copyright())
             test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+            test_obj.add_tesults_case("Check copyright "  + str(form_number), "Check the copyright", "test_successive_form_creation", result_flag, "Copyright looks wrong.\nObtained the copyright: %s\n"%test_obj.get_copyright(), [])
 
             #d. Visit main page again
             test_obj = PageFactory.get_page_object("Main Page",base_url=base_url)
@@ -109,6 +115,7 @@ if __name__=='__main__':
                                     os_name=options.os_name,
                                     remote_flag=options.remote_flag,
                                     testrail_flag=options.testrail_flag,
+                                    tesults_flag=options.tesults_flag,
                                     test_run_id=options.test_run_id)                                    
     else:
         print 'ERROR: Received incorrect comand line input arguments'

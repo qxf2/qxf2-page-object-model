@@ -3,6 +3,7 @@ import os
 from conf import browser_os_name_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
+from utils import Tesults
 
 
 @pytest.fixture
@@ -62,6 +63,10 @@ def slack_flag():
     "pytest fixture for sending reports on slack"
     return pytest.config.getoption("-S")
 
+@pytest.fixture
+def tesults_flag():
+    "pytest fixture for sending results to tesults"
+    return pytest.config.getoption("--tesults")
 
 @pytest.fixture
 def mobile_os_name():
@@ -121,25 +126,33 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
         # Send html formatted email body message with pytest report as an attachment
         email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path= 'default')
 
-
+    if pytest.config.getoption("--tesults").lower() == 'y':
+        Tesults.post_results_to_tesults()
+        
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
-    if metafunc.config.getoption("-B") == []:
-      metafunc.config.option.browser = browser_os_name_conf.default_browser
+
     if 'browser' in metafunc.fixturenames:
-        if metafunc.config.getoption("-M").lower() == 'y':
+        if metafunc.config.getoption("-M").lower() == 'y':               
             if metafunc.config.getoption("-B") == ["all"]:
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
                                     browser_os_name_conf.cross_browser_cross_platform_config)
-            else:
+            elif metafunc.config.getoption("-B") == []:
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
-                                    browser_os_name_conf.default_config_list)
+                                    browser_os_name_conf.default_config_list) 
+            else:
+                config_list = [(metafunc.config.getoption("-B")[0],metafunc.config.getoption("-V")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
+                metafunc.parametrize("browser,browser_version,os_name,os_version", 
+                                    config_list) 
         if metafunc.config.getoption("-M").lower() !='y':
             if metafunc.config.getoption("-B") == ["all"]:
                 metafunc.config.option.browser = browser_os_name_conf.local_browsers
-            metafunc.parametrize("browser",
-                                metafunc.config.option.browser)
-
+                metafunc.parametrize("browser", metafunc.config.option.browser)
+            elif metafunc.config.getoption("-B") == []:
+                metafunc.parametrize("browser",browser_os_name_conf.default_browser)
+            else:
+                config_list_local = [(metafunc.config.getoption("-B")[0])]
+                metafunc.parametrize("browser", config_list_local)          
 
 def pytest_addoption(parser):
     parser.addoption("-B","--browser",
@@ -210,6 +223,10 @@ def pytest_addoption(parser):
                       dest="email_pytest_report",
                       help="Email pytest report: Y or N",
                       default="N")
+    parser.addoption("--tesults",
+                      dest="tesults_flag",
+                      default='N',
+                      help="Y or N. 'Y' if you want to report results with Tesults")
     parser.addoption("-D","--app_name",
                       dest="app_name",
                       help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",

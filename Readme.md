@@ -1,3 +1,5 @@
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=ZXhRS0ZhZ2l3ZE1zdGlEZlZQZEZRY05BUHZaT2pNUENNKyttMHVONjNlZz0tLTZEdFhLaG5TYlpndjJveWxBa1o3SlE9PQ==--64bcdaba3cecd57bb24d5e92f06f013a9b67ef6e)](https://www.browserstack.com/automate/public-build/ZXhRS0ZhZ2l3ZE1zdGlEZlZQZEZRY05BUHZaT2pNUENNKyttMHVONjNlZz0tLTZEdFhLaG5TYlpndjJveWxBa1o3SlE9PQ==--64bcdaba3cecd57bb24d5e92f06f013a9b67ef6e)
+
 --------
 A Pythonic Selenium, Appium and API test automation framework
 --------
@@ -85,6 +87,20 @@ __Optional steps__ for more details on setting up appium and running tests on An
 * [Get started with mobile automation: Appium & Python](https://qxf2.com/blog/appium-mobile-automation/)
 * [Get Set Test an iOS app using Appium and Python](https://qxf2.com/blog/get-set-test-an-ios-app-using-appium-and-python/)
 
+
+__4. Setup for API automation__
+
+a. Get Cars API code from repo https://github.com/qxf2/cars-api using command "git clone https://github.com/qxf2/cars-api.git"
+
+b. Install Flask using command "pip install flask"
+
+c. Run cars-app server using command "python cars-api/cars_app.py"
+
+d. Run test_api_example now using command "pytest -k api -s"
+
+__Optional steps__ for more details on setting up API and running tests refer to below link:
+* [Easily Maintainable API Test Automation Framework](https://qxf2.com/blog/easily-maintainable-api-test-automation-framework/)
+
 -------------------
 Repository details
 -------------------
@@ -122,6 +138,7 @@ a)py.test [options]
 	-k      used to run tests which match the given substring expresion 	E.g: py.test -k table  (This will trigger test_example_table.py test)
 	-S	used to post pytest reports on the Slack channel		E.g: py.test -S Y -v > log/pytest_report.log
 	-n 	used to run tests in parallel					E.g: py.test -n 3 -v (This will run three tests in parallel)
+	--tesults 	used to report test results to tesults			E.g: py.test test_example_form.py --tesults Y(This will report test report to tesults)
 
 b)python tests/test_example_form.py (can also be used to run standalone test) 	
 
@@ -140,6 +157,19 @@ b) If you don't have drivers set up for the web browsers, you will see a helpful
 c) If your are using firefox 47 and above, you need to set up Geckodriver. Refer following link for setup: https://qxf2.com/blog/selenium-geckodriver-issue/
 
 d) On Ubuntu, you may run into an issue installing the cryptography module. You need to `sudo apt-get install libssl-dev` and then run `sudo pip install -r requirements.txt`
+
+-----------
+Continuous Integration and Support
+-----------
+This project uses: 
+<a href="https://www.browserstack.com/">
+<img src="https://p14.zdusercontent.com/attachment/1015988/RUZZUUKzGhuHBgaH1BgsNphKC?token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0..7bLPNjjta-dLrqlsvUmhUQ.jHmAf1fOKtNU7OLR2E4sN-aAPdG_8li2sAocs7K1ObIOqP_HKFqHbYxs8QD73dzllq3KB7oIfFO6uzJCQd5sMvwgZg9M7UGmVYa4BEMHTuvQZEW0XD4PH4u5E20mttL77LftfVRn6WL6fdNqbWFc7QxXloWtUriLWZXYbEgOkp1npIaTfTYYy0gLlrF0HTDp0shMBtFsKlbPk3mMQT24MXteAK0WGcAZZUrMYyEqThwvL1BLCZKIqoq-yEBvyG6EZ_97O3fq5LXf2PAmtfNy3Rf7zoSgf-SCCq7JSpdYXJ0.ourdU_U4Z0rK9xFZTW9HNQ" width="150" height="100" hspace="10"></a>
+<a href="https://circleci.com/"><img src="https://github.com/circleci/media/blob/master/logo/build/horizontal_dark.1.png?raw=true" width="150" height="100" hspace="10"></a>
+
+
+ 1. [BrowserStack](https://www.browserstack.com) for testing our web and mobile based tests on cloud across different platform and browsers.
+ 
+ 2. [CircleCI](https://circleci.com/) for continuous integration.
 
 -----------
 NEED HELP?

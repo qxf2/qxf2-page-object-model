@@ -15,7 +15,7 @@ import conf.mobile_bitcoin_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 
 
-def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, test_run_id,app_name):
+def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name):
     "Run the test."
     try:
         # Initalize flags for tests summary.
@@ -36,6 +36,9 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
                 testrail_flag = 'N'   
             if test_run_id is not None:
                 test_obj.register_testrail()
+
+        if tesults_flag.lower()=='y':
+            test_obj.register_tesults()
 
         #4. Get expected bitcoin price page header name
         expected_bitcoin_price_page_heading = conf.expected_bitcoin_price_page_heading
