@@ -15,9 +15,9 @@ This GUI and API test automation framework is developed and maintained by [Qxf2 
 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too! 
 
----------
-Setup for our Python integration testing framework 
----------
+------
+Setup 
+------
 
 The setup for our open-sourced Python test automation framework is fairly simple. Don't get fooled by the length of this section. We have documented the setup instructions in detail so even beginners can get started. 
 
