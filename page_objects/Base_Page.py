@@ -54,7 +54,6 @@ class Base_Page(Borg,unittest.TestCase):
             self.tesults_flag = False
             self.images = []
             self.browserstack_flag = False
-            self.exceptions = []
 
             self.reset()
 
@@ -76,6 +75,7 @@ class Base_Page(Borg,unittest.TestCase):
         self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
         self.failure_message_list = []
         self.screenshot_counter = 1
+        self.exceptions = []
 
 
     def get_failure_message_list(self):
@@ -657,8 +657,6 @@ class Base_Page(Borg,unittest.TestCase):
             self.success(positive,level=level)
         if flag is False:
             self.failure(negative,level=level)
-        if flag is None:
-            self.failure(negative,level=level)
 
 
     def read_browser_console_log(self):
@@ -710,6 +708,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
+        self.write('************************')
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
