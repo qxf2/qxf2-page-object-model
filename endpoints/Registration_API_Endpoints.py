@@ -1,8 +1,9 @@
 """
 API endpoints for Registration 
 """
+from __future__ import absolute_import
 
-from Base_Mechanize import Base_Mechanize
+from .Base_Mechanize import Base_Mechanize
 
 class Registration_API_Endpoints(Base_Mechanize):
 	"Class for registration endpoints"

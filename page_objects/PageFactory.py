@@ -9,12 +9,13 @@ Pages implemented so far:
 4. Bitcoin main page
 5. Bitcoin price page
 """
+from __future__ import absolute_import
 
-from tutorial_main_page import Tutorial_Main_Page
-from tutorial_redirect_page import Tutorial_Redirect_Page
-from contact_page import Contact_Page
-from bitcoin_price_page import Bitcoin_Price_Page
-from bitcoin_main_page import Bitcoin_Main_Page
+from .tutorial_main_page import Tutorial_Main_Page
+from .tutorial_redirect_page import Tutorial_Redirect_Page
+from .contact_page import Contact_Page
+from .bitcoin_price_page import Bitcoin_Price_Page
+from .bitcoin_main_page import Bitcoin_Main_Page
 
 
 class PageFactory():

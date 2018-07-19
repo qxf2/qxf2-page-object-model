@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 import re
 import imaplib
 
-from mailbox import Mailbox
-from utf import encode as encode_utf7, decode as decode_utf7
-from exceptions import *
+from .mailbox import Mailbox
+from .utf import encode as encode_utf7, decode as decode_utf7
+from .exceptions import *
 
 class Gmail():
     # GMail IMAP defaults

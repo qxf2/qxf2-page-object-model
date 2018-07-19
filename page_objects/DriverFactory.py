@@ -4,6 +4,7 @@ NOTE: Change this class as you add support for:
 1. SauceLabs/BrowserStack
 2. More browsers like Opera
 """
+from __future__ import print_function
 import dotenv,os,sys,requests,json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -32,15 +33,15 @@ class DriverFactory():
                 else:
                     web_driver = self.run_sauce_lab(os_name,os_version,browser,browser_version)
                     
-            except Exception,e:
-                print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
-                print "Python says:%s"%str(e)
-                print "SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"
+            except Exception as e:
+                print("\nException when trying to get remote webdriver:%s"%sys.modules[__name__])
+                print("Python says:%s"%str(e))
+                print("SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n")
                 
         elif (remote_flag.lower() == 'n'):
                 web_driver = self.run_local(os_name,os_version,browser,browser_version)       
         else:
-            print "DriverFactory does not know the browser: ",browser
+            print("DriverFactory does not know the browser: ",browser)
             web_driver = None
 
         return web_driver   
@@ -103,18 +104,18 @@ class DriverFactory():
         elif browser.lower() == "chrome":
             local_driver = webdriver.Chrome()
         elif browser.lower() == "opera":
-	    opera_options = None
+            opera_options = None
             try:
                 opera_browser_location = opera_browser_conf.location
                 options = webdriver.ChromeOptions()
                 options.binary_location = opera_browser_location # path to opera executable
                 local_driver = webdriver.Opera(options=options)
                     
-            except Exception,e:
-	        print "\nException when trying to get remote webdriver:%s"%sys.modules[__name__]
-                print "Python says:%s"%str(e)
+            except Exception as e:
+                print("\nException when trying to get remote webdriver:%s"%sys.modules[__name__])
+                print("Python says:%s"%str(e))
                 if  'no Opera binary' in str(e):
-                     print "SOLUTION: It looks like you are trying to use Opera Browser. Please update Opera Browser location under conf/opera_browser_conf.\n"
+                     print("SOLUTION: It looks like you are trying to use Opera Browser. Please update Opera Browser location under conf/opera_browser_conf.\n")
         elif browser.lower() == "safari":
             local_driver = webdriver.Safari()
 
@@ -150,7 +151,7 @@ class DriverFactory():
                                     
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
-            except Exception,e:
+            except Exception as e:
                 print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
                 print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
                 print ('\033[92m'+"SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"+'\033[0m')
@@ -164,13 +165,13 @@ class DriverFactory():
                     desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name))
                     driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
 
-            except Exception,e:
+            except Exception as e:
                 print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
                 print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
                 print ('\033[92m'+"SOLUTION: It looks like you are trying to run test cases with Local Appium Setup. \nPlease make sure to run Appium Server and try again.\n"+'\033[0m')
 
         return driver
-	
+    
 
 
     def sauce_upload(self,app_name):  
@@ -206,7 +207,7 @@ class DriverFactory():
                 # Get the app url of the newly uploaded apk
                 app_url = post_json_data['app_url']            
         except Exception as e:
-            print str(e)
+            print(str(e))
 
         return app_url
                 
@@ -230,7 +231,7 @@ class DriverFactory():
             self.download_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','downloads'))
             if not os.path.exists(self.download_dir):
                 os.makedirs(self.download_dir)
-        except Exception,e:
+        except Exception as e:
             print("Exception when trying to set directory structure")
             print(str(e))
             

@@ -4,8 +4,9 @@ The hamburger menu has a bunch of options that can be:
 a) Clicked
 b) Hovered over
 """
+from __future__ import absolute_import
 
-from Base_Page import Base_Page
+from .Base_Page import Base_Page
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 

@@ -1,5 +1,6 @@
-from message import Message
-from utf import encode as encode_utf7, decode as decode_utf7
+from __future__ import absolute_import
+from .message import Message
+from .utf import encode as encode_utf7, decode as decode_utf7
 
 
 class Mailbox():

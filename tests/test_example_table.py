@@ -5,6 +5,7 @@ Our automated test will do the following:
     #Print out the entire table 
     #Verify if a certain name is present in the table
 """
+from __future__ import print_function
 
 #The import statements import: standard Python modules,conf,credential files
 import os,sys,time
@@ -65,16 +66,16 @@ def test_example_table(base_url,browser,browser_version,os_version,os_name,remot
         actual_pass = test_obj.pass_counter
         test_obj.teardown() 
     
-    except Exception,e:
-        print "Exception when trying to run test: %s"%__file__
-        print "Python says:%s"%str(e)
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
 
     assert expected_pass == actual_pass   
     
 
 #---START OF SCRIPT
 if __name__=='__main__':
-    print "Start of %s"%__file__
+    print("Start of %s"%__file__)
     #Creating an instance of the class
     options_obj = Option_Parser()
     options=options_obj.get_options()
@@ -91,5 +92,5 @@ if __name__=='__main__':
                     browser_version=options.browser_version,
                     os_name=options.os_name)
     else:
-        print 'ERROR: Received incorrect input arguments'
-        print options_obj.print_usage()
+        print('ERROR: Received incorrect input arguments')
+        print(options_obj.print_usage())

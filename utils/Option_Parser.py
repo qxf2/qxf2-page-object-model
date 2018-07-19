@@ -1,6 +1,7 @@
 """
 Class to wrap around parsing command line options
 """
+from __future__ import print_function
 
 import os, sys
 import optparse
@@ -82,6 +83,10 @@ class Option_Parser:
                             dest="app_name",
                             help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
                             default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
+        self.parser.add_option("-T","--tesults_flag",
+                            dest="tesults_flag",
+                            help="Enter Y or N. 'Y' if you want to report results with Tesults",
+                            default="N")
 
         
     def add_option(self,option_letter,option_word,dest,help_text):
@@ -104,16 +109,16 @@ class Option_Parser:
         self.conf_flag = True
         if os.path.exists(file_path):
             if not os.path.isfile(file_path):
-                print '\n****'
-                print 'Config file provided is not a file: '
-                print file_path
-                print '****'
+                print('\n****')
+                print('Config file provided is not a file: ')
+                print(file_path)
+                print('****')
                 self.conf_flag = False
         else:
-            print '\n****'
-            print 'Unable to locate the provided config file: '
-            print file_path
-            print '****'
+            print('\n****')
+            print('Unable to locate the provided config file: ')
+            print(file_path)
+            print('****')
             self.conf_flag = False
 
         return self.conf_flag
@@ -126,74 +131,74 @@ class Option_Parser:
             result_flag &= True
         else:
             result_flag = False
-            print "Browser cannot be None. Use -B to specify a browser"
+            print("Browser cannot be None. Use -B to specify a browser")
         if options.url is not None:
             result_flag &= True
         else:
             result_flag = False
-            print "Url cannot be None. Use -U to specify a url"
+            print("Url cannot be None. Use -U to specify a url")
         if options.api_url is not None:
             result_flag &= True
         else:
             result_flag = False
-            print "API URL cannot be None. Use -A to specify a api url"
+            print("API URL cannot be None. Use -A to specify a api url")
         if options.remote_flag.lower() == 'y':
             if options.browser_version is not None:
                 result_flag &= True
             else:
                 result_flag = False
-                print "Browser version cannot be None. Use -V to specify a browser version"
+                print("Browser version cannot be None. Use -V to specify a browser version")
             if options.os_name is not None:
                 result_flag &= True
             else:
                 result_flag = False
-                print "The operating system cannot be None. Use -P to specify an OS"
+                print("The operating system cannot be None. Use -P to specify an OS")
             if options.os_version is not None:
                 result_flag &= True
             else:
                 result_flag = False
-                print "The OS version cannot be None. Use -O to specify an OS version"
+                print("The OS version cannot be None. Use -O to specify an OS version")
 
         # Options for appium mobile tests.
         if options.mobile_os_name is not None:
             result_flag &= True
         else:
             result_flag = False
-            print "The mobile operating system cannot be None. Use -G to specify an OS."
+            print("The mobile operating system cannot be None. Use -G to specify an OS.")
 
         if options.mobile_os_version is not None:
             result_flag &= True
         else:
             result_flag = False
-            print "The mobile operating system version cannot be None. Use -H to specify an OS version."
+            print("The mobile operating system version cannot be None. Use -H to specify an OS version.")
 
         if options.device_name is not None:
             result_flag &= True
         else:
             result_flag = False
-            print "The device name cannot be None. Use -I to specify device name."
+            print("The device name cannot be None. Use -I to specify device name.")
 
         if options.app_package is not None:
             result_flag &= True
         else:
             result_flag = False
-            print "The application package name cannot be None. Use -J to specify application package name."
+            print("The application package name cannot be None. Use -J to specify application package name.")
 
         if options.app_activity is not None:
             result_flag &= True
         else:
             result_flag = False
-            print "The application activity name cannot be None. Use -K to specify application activity name."
+            print("The application activity name cannot be None. Use -K to specify application activity name.")
 
         if options.device_flag.lower() == 'n':
             result_flag &= True
         else:
             result_flag = False
-            print "The device flag cannot be None. Use -Q to specify device flag."
+            print("The device flag cannot be None. Use -Q to specify device flag.")
 
         return  result_flag
 
     
     def print_usage(self):
         "Print the option parser's usage string"
-        print self.parser.print_usage()
+        print(self.parser.print_usage())

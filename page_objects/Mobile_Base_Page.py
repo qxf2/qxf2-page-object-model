@@ -2,6 +2,7 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
+from __future__ import absolute_import
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -14,9 +15,9 @@ import sys,unittest,time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from inspect import getargspec
 from utils.BrowserStack_Library import BrowserStack_Library
-from DriverFactory import DriverFactory
+from .DriverFactory import DriverFactory
 from utils.Test_Rail import Test_Rail
-import PageFactory
+from .PageFactory import *
 
 
 class Borg:
@@ -133,7 +134,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             self.logs_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
             if not os.path.exists(self.logs_parent_dir):
                 os.makedirs(self.logs_parent_dir)
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to set directory structure")
             self.write(str(e))
 
@@ -144,7 +145,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             self.screenshot_dir = self.get_screenshot_dir()
             if not os.path.exists(self.screenshot_dir):
                 os.makedirs(self.screenshot_dir)
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to set screenshot directory")
             self.write(str(e))
 
@@ -211,7 +212,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         try:
             locator = self.split_locator(locator)
             dom_element = self.driver.find_element(*locator)
-        except Exception,e:
+        except Exception as e:
             if verbose_flag is True:
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
@@ -225,7 +226,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         result = ()
         try:
             result = tuple(locator.split(',',1))
-        except Exception,e:
+        except Exception as e:
             self.write("Error while parsing locator")
 
         return result
@@ -237,7 +238,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         try:
             locator = self.split_locator(locator)
             dom_elements = self.driver.find_elements(*locator)
-        except Exception,e:
+        except Exception as e:
             if msg_flag==True:
                 self.write(e,'debug')
                 self.write("Check your locator-'%s' in the conf/locators.conf file"%locator)
@@ -253,7 +254,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             try:
                 link.click()
                 self.wait(wait_time)
-            except Exception,e:
+            except Exception as e:
                 self.write('Exception when clicking link with path: %s'%locator)
                 self.write(e)
             else:
@@ -268,14 +269,14 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         try:
             if clear_flag is True:
                 text_field.clear()
-        except Exception, e:
+        except Exception as e:
             self.write('ERROR: Could not clear the text field: %s'%locator,'debug')
 
         result_flag = False
         try:
             text_field.send_keys(value)
             result_flag = True
-        except Exception,e:
+        except Exception as e:
             self.write('Unable to write to text field: %s'%locator,'debug')
             self.write(str(e),'debug')
 
@@ -287,7 +288,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         text = ''
         try:
             text = self.get_element(locator).text
-        except Exception,e:
+        except Exception as e:
             self.write(e)
             return None
         else:
@@ -301,7 +302,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         try:
             text = dom_element.text
             text = text.encode('utf-8')
-        except Exception, e:
+        except Exception as e:
             self.write(e)
         
         return text
@@ -413,10 +414,10 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             path = self.split_locator(locator)
             WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
             result_flag =True
-        except Exception,e:
-			self.conditional_write(result_flag,
-                               positive='Located the element: %s'%locator,
-                               negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_time))
+        except Exception as e:
+                    self.conditional_write(result_flag,
+                    positive='Located the element: %s'%locator,
+                    negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_time))
             
         return result_flag
 

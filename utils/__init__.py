@@ -7,13 +7,13 @@ def get_dict_item(from_this, get_this):
         return None
     item = from_this
     if isinstance(get_this, str):
-        if from_this.has_key(get_this):
+        if get_this in from_this:
             item = from_this[get_this]
         else:
             item = None
     else:
         for key in get_this:
-            if isinstance(item, dict) and item.has_key(key):
+            if isinstance(item, dict) and key in item:
                 item = item[key]
             else:
                 return None

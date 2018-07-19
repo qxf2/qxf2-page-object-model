@@ -6,6 +6,7 @@ Automated test will do the following:
     # Verify that the bitcoin real time price is displayed on the page.
     # Display the results.
 """
+from __future__ import print_function
 
 import os, sys, time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -73,9 +74,9 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
         actual_pass = test_obj.pass_counter
         test_obj.teardown()
 
-    except Exception, e:
-        print "Exception when trying to run test:%s" % __file__
-        print "Python says:%s" % str(e)
+    except Exception as e:
+        print("Exception when trying to run test:%s" % __file__)
+        print("Python says:%s" % str(e))
 
     assert expected_pass == actual_pass
 
@@ -83,7 +84,7 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
 # ---START OF SCRIPT
 
 if __name__ == '__main__':
-    print "Start of %s" % __file__
+    print("Start of %s" % __file__)
     # Creating an instance of the class.
     options_obj = Option_Parser()
     options = options_obj.get_options()
@@ -101,5 +102,5 @@ if __name__ == '__main__':
                           test_run_id = options.test_run_id,
                           app_name = options.app_name)
     else:
-        print 'ERROR: Received incorrect comand line input arguments'
-        print options_obj.print_usage()
+        print('ERROR: Received incorrect comand line input arguments')
+        print(options_obj.print_usage())

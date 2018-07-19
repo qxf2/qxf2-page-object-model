@@ -2,6 +2,7 @@
 Qxf2 Services: Utility script to compare two excel files using openxl module
 
 """
+from __future__ import print_function
 
 import openpyxl
 import os
@@ -12,11 +13,11 @@ class Excel_Compare():
         result_flag = True
         if not os.path.exists(xl_actual):
             result_flag = False
-            print 'Could not locate the excel file: %s'%xl_actual
+            print('Could not locate the excel file: %s'%xl_actual)
 
         if not os.path.exists(xl_expected):
             result_flag = False
-            print 'Could not locate the excel file %s'%xl_expected
+            print('Could not locate the excel file %s'%xl_expected)
 
         if os.path.exists(xl_actual) and os.path.exists(xl_expected):
             #Open the xl file and put the content to list
@@ -37,15 +38,15 @@ class Excel_Compare():
             #If there is row and column mismatch result_flag = False
             if (len(actual_file)!= len(exp_file)):
                 result_flag = False
-                print "Mismatch in number of rows or columns. The actual row or column count didn't match with expected row or column count"
+                print("Mismatch in number of rows or columns. The actual row or column count didn't match with expected row or column count")
             else:
                 for actual_row, actual_col in zip(actual_file,exp_file):
                     if actual_row == actual_col:
                         pass
                     else:
-                        print "Mismatch between actual and expected file at position(each row consists of 23 coordinates):",actual_file.index(actual_row)
-                        print "Data present only in Actual file: %s"%actual_row
-                        print "Data present only in Expected file: %s"%actual_col
+                        print("Mismatch between actual and expected file at position(each row consists of 23 coordinates):",actual_file.index(actual_row))
+                        print("Data present only in Actual file: %s"%actual_row)
+                        print("Data present only in Expected file: %s"%actual_col)
                         result_flag =  False
 
             return result_flag
@@ -53,7 +54,7 @@ class Excel_Compare():
 
 #---USAGE EXAMPLES
 if __name__=='__main__':
-    print "Start of %s"%__file__
+    print("Start of %s"%__file__)
     # Enter the path details of the xl files here
     file1 = 'Add path to the first xl file'
     file2 = 'Add path to the second xl file'
@@ -63,6 +64,6 @@ if __name__=='__main__':
 
     #Sample code to compare excel files
     if xl_obj.is_equal(file1,file2) is True:
-        print "Data matched in both the excel files\n"
+        print("Data matched in both the excel files\n")
     else:
-        print "Data mismatch between the actual and expected excel files"
+        print("Data mismatch between the actual and expected excel files")

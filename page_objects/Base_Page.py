@@ -2,6 +2,8 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
+from __future__ import print_function
+from __future__ import absolute_import
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -14,8 +16,8 @@ import unittest,time,logging,os,inspect,utils.Test_Rail
 from utils.Base_Logging import Base_Logging
 from inspect import getargspec
 from utils.BrowserStack_Library import BrowserStack_Library
-from DriverFactory import DriverFactory
-import PageFactory
+from .DriverFactory import DriverFactory
+from page_objects.PageFactory import *
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
@@ -84,7 +86,7 @@ class Base_Page(Borg,unittest.TestCase):
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
-        self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
+        self.__class__ = PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
 
 
     def register_driver(self,remote_flag,os_name,os_version,browser,browser_version):
@@ -149,7 +151,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.logs_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
             if not os.path.exists(self.logs_parent_dir):
                 os.makedirs(self.logs_parent_dir)
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to set directory structure")
             self.write(str(e))
 
@@ -160,7 +162,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.screenshot_dir = self.get_screenshot_dir(os_name,os_version,browser,browser_version,overwrite_flag=True)
             if not os.path.exists(self.screenshot_dir):
                 os.makedirs(self.screenshot_dir)
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to set screenshot directory")
             self.write(str(e))
 
@@ -249,7 +251,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             window_handle = self.get_current_window_handle()
             self.window_structure[window_handle] = name
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to set windows name")
             self.write(str(e))
 
@@ -282,7 +284,7 @@ class Base_Page(Borg,unittest.TestCase):
                                 'Automation switched to the browser window: %s'%name,
                                 'Unable to locate and switch to the window with name: %s'%name,
                                 level='debug')
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to switch window")
             self.write(str(e))
 
@@ -298,7 +300,7 @@ class Base_Page(Borg,unittest.TestCase):
             after_window_count = len(self.get_window_handles())
             if (before_window_count - after_window_count) == 1:
                 result_flag = True
-        except Exception,e:
+        except Exception as e:
             self.write('Could not close the current window')
             self.write(str(e))
 
@@ -322,8 +324,8 @@ class Base_Page(Borg,unittest.TestCase):
             path_conf_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'conf', 'locators.conf'))
             if path_conf_file is not None:
                 value = Conf_Reader.get_value(path_conf_file, key)
-        except Exception,e:
-            print str(e)
+        except Exception as e:
+            print(str(e))
 
         return value
 
@@ -334,7 +336,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             locator = self.split_locator(locator)
             dom_element = self.driver.find_element(*locator)
-        except Exception,e:
+        except Exception as e:
             if verbose_flag is True:
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
@@ -347,7 +349,7 @@ class Base_Page(Borg,unittest.TestCase):
         result = ()
         try:
             result = tuple(locator.split(',',1))
-        except Exception,e:
+        except Exception as e:
             self.write("Error while parsing locator")
   
         return result
@@ -359,7 +361,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             locator = self.split_locator(locator)
             dom_elements = self.driver.find_elements(*locator)
-        except Exception,e:
+        except Exception as e:
             if msg_flag==True:
                 self.write(e,'debug')
                 self.write("Check your locator-'%s' in the conf/locators.conf file"%locator)
@@ -374,7 +376,7 @@ class Base_Page(Borg,unittest.TestCase):
             try:
                 link.click()
                 self.wait(wait_time)
-            except Exception,e:
+            except Exception as e:
                 self.write('Exception when clicking link with path: %s'%locator)
                 self.write(e)
             else:
@@ -389,14 +391,14 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             if clear_flag is True:
                 text_field.clear()
-        except Exception, e:
+        except Exception as e:
             self.write('ERROR: Could not clear the text field: %s'%locator,'debug')
 
         result_flag = False
         try:
             text_field.send_keys(value)
             result_flag = True
-        except Exception,e:
+        except Exception as e:
             self.write('Unable to write to text field: %s'%locator,'debug')
             self.write(str(e),'debug')
 
@@ -408,7 +410,7 @@ class Base_Page(Borg,unittest.TestCase):
         text = ''
         try:
             text = self.get_element(locator).text
-        except Exception,e:
+        except Exception as e:
             self.write(e)
             return None
         else:
@@ -421,7 +423,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             text = dom_element.text
             text = text.encode('utf-8')
-        except Exception, e:
+        except Exception as e:
             self.write(e)
         
         return text
@@ -490,7 +492,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             element.send_keys(Keys.ENTER)
             self.wait(wait_time)
-        except Exception,e:
+        except Exception as e:
             self.write(str(e),'debug')
             return None
 
@@ -501,7 +503,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             element.send_keys(Keys.PAGE_DOWN)
             self.wait(wait_time)
-        except Exception,e:
+        except Exception as e:
             self.write(str(e),'debug')
             return None
 
@@ -579,10 +581,10 @@ class Base_Page(Borg,unittest.TestCase):
             path = self.split_locator(locator)
             WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
             result_flag =True
-        except Exception,e:
-			self.conditional_write(result_flag,
-                               positive='Located the element: %s'%locator,
-                               negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
+        except Exception as e:
+                        self.conditional_write(result_flag,
+                        positive='Located the element: %s'%locator,
+                        negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
             
         return result_flag
 
@@ -615,7 +617,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             log = self.driver.get_log('browser')
             return log
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when reading Browser Console log")
             self.write(str(e))
             return log
@@ -636,7 +638,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             self.driver.execute_script(js_script)
             result_flag = True
-        except Exception,e:
+        except Exception as e:
             result_flag = False
 
         return result_flag

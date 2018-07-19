@@ -1,6 +1,7 @@
 """
 Test Runner class. Lets you setup testrail and run a bunch of tests one after the other
 """
+from __future__ import print_function
 
 import os,subprocess
 
@@ -25,16 +26,16 @@ class Test_Runner_Class:
         file_exist_flag = True
         if os.path.exists(file_path):
             if not os.path.isfile(file_path):
-                print '\n****'
-                print 'Script file provided is not a file: '
-                print file_path
-                print '****'
+                print('\n****')
+                print('Script file provided is not a file: ')
+                print(file_path)
+                print('****')
                 file_exist_flag = False
         else:
-            print '\n****'
-            print 'Unable to locate the provided script file: '
-            print file_path
-            print '****'
+            print('\n****')
+            print('Unable to locate the provided script file: ')
+            print(file_path)
+            print('****')
             conf_flag = False
 
         return file_exist_flag
@@ -74,11 +75,11 @@ class Test_Runner_Class:
 
     def run_script(self,args_list):
         "Run the script on command line with given args_list"
-        print "\nWill be running the following script:"
-        print ' '.join(args_list)
-        print "Starting.."
+        print("\nWill be running the following script:")
+        print(' '.join(args_list))
+        print("Starting..")
         subprocess.call(args_list,shell=True)
-        print "Done!"
+        print("Done!")
 
 
     def setup_testrail_args_list(self,test_name=None,test_run_name='',case_ids_list=None,name_override_flag=True):
