@@ -3,10 +3,11 @@ This class models the redirect page of the Selenium tutorial
 URL: selenium-tutorial-redirect
 The page consists of a header, footer and some text
 """
+from __future__ import absolute_import
 
-from Base_Page import Base_Page
-from header_object import Header_Object
-from footer_object import Footer_Object
+from .Base_Page import Base_Page
+from .header_object import Header_Object
+from .footer_object import Footer_Object
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 

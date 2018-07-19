@@ -16,8 +16,8 @@ import unittest,time,logging,os,inspect,utils.Test_Rail
 from utils.Base_Logging import Base_Logging
 from inspect import getargspec
 from utils.BrowserStack_Library import BrowserStack_Library
-from .DriverFactory import DriverFactory
-from page_objects.PageFactory import *
+from page_objects.DriverFactory import DriverFactory
+from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
@@ -86,7 +86,7 @@ class Base_Page(Borg,unittest.TestCase):
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
-        self.__class__ = PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
+        self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
 
 
     def register_driver(self,remote_flag,os_name,os_version,browser,browser_version):
