@@ -95,7 +95,7 @@ def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_
         print "Exception when trying to run test :%s"%__file__
         print "Python says:%s"%str(e)
      
-    assert expected_pass == actual_pass 
+    assert expected_pass == actual_pass ,"Test failed: %s"%__file__
 
     
 #---START OF SCRIPT

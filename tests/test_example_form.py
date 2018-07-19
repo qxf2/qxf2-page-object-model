@@ -51,7 +51,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.log_result(result_flag,
                             positive="Name was successfully set to: %s\n"%name,
                             negative="Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()))
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time))) 
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_form_name
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
@@ -67,7 +67,6 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         case_id = testrail_file.test_example_form_email
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
         test_obj.add_tesults_case("Set Email", "Sets the email in the form", "test_example_form", result_flag, "Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()), [], {'Email': email}, {'_Email': email})
-
         #7. Set Phone number in form
         result_flag = test_obj.set_phone(phone)
         test_obj.log_result(result_flag,
@@ -99,10 +98,12 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.add_tesults_case("Check copyright", "Checks the copyright", "test_example_form", result_flag, "Copyright looks wrong.\nObtained the copyright%s\n"%test_obj.get_copyright(), [])
 
         #10. Set and submit the form in one go
+        
         result_flag = test_obj.submit_form(name,email,phone,gender)
         test_obj.log_result(result_flag,
                             positive="Successfully submitted the form\n",
                             negative="Failed to submit the form \nOn url: %s"%test_obj.get_current_url())
+                            
         #Update TestRail
         case_id = testrail_file.test_example_form
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
@@ -142,7 +143,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         print "Exception when trying to run test:%s"%__file__
         print "Python says:%s"%str(e)
 
-    assert expected_pass == actual_pass
+    assert expected_pass == actual_pass, "Test failed: %s"%__file__
        
     
 #---START OF SCRIPT   

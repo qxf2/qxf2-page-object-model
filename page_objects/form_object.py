@@ -22,6 +22,7 @@ class Form_Object:
     redirect_title = "redirect"    
 
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def set_name(self,name):
         "Set the name on the form"
         result_flag = self.set_text(self.name_field,name)
@@ -34,6 +35,7 @@ class Form_Object:
 
 
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def set_email(self,email):
         "Set the email on the form"
         result_flag = self.set_text(self.email_field,email)
@@ -46,6 +48,7 @@ class Form_Object:
 
 
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def set_phone(self,phone):
         "Set the phone on the form"
         result_flag = self.set_text(self.phone_no_field,phone)
@@ -58,11 +61,12 @@ class Form_Object:
 
 
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def set_gender(self,gender,wait_seconds=1):
         "Set the gender on the form"
-        self.click_element(self.gender_dropdown)
+        result_flag = self.click_element(self.gender_dropdown)
         self.wait(wait_seconds)
-        result_flag = self.click_element(self.gender_option%gender)
+        result_flag &= self.click_element(self.gender_option%gender)
         self.conditional_write(result_flag,
             positive='Set the gender to: %s'%gender,
             negative='Failed to set the gender in the form',
@@ -72,6 +76,7 @@ class Form_Object:
 
 
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def click_me(self):
         "Click on 'Click Me' button"
         result_flag = self.click_element(self.click_me_button)
@@ -84,6 +89,7 @@ class Form_Object:
 
 
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def accept_terms(self):
         "Accept the terms and conditions"
         result_flag = self.select_checkbox(self.tac_checkbox)
@@ -96,6 +102,7 @@ class Form_Object:
 
 
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def check_redirect(self):
         "Check if we have been redirected to the redirect page"
         result_flag = False
@@ -107,6 +114,7 @@ class Form_Object:
 
 
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def submit_form(self,username,email,phone,gender):
         "Submit the form"
         result_flag = self.set_name(username)

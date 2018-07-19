@@ -13,6 +13,7 @@ class Contact_Form_Object:
     #locators
     contact_name_field = locators.contact_name_field
 
+    @Wrapit._exceptionHandler
     def set_name(self,name):
         "Set the name on the Kick start form"
         result_flag = self.set_text(self.contact_name_field,name)

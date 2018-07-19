@@ -44,8 +44,12 @@ def test_example_table(base_url,browser,browser_version,os_version,os_name,remot
         name = conf.name
 
         #5. Print out table text neatly
-        test_obj.print_table_text()
-
+        result_flag = test_obj.print_table_text()
+        test_obj.log_result(result_flag,
+                            positive="Completed printing table text",
+                            negative="Unable to print the table text")
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        
         #6. Check if a name is present in the table
         result_flag = test_obj.check_name_present(name)
         test_obj.log_result(result_flag,
@@ -55,7 +59,7 @@ def test_example_table(base_url,browser,browser_version,os_version,os_name,remot
         #Update TestRail
         case_id = testrail_file.test_example_table
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
-
+        
         #7. Print out the result
         test_obj.write_test_summary()
 
@@ -69,7 +73,7 @@ def test_example_table(base_url,browser,browser_version,os_version,os_name,remot
         print "Exception when trying to run test: %s"%__file__
         print "Python says:%s"%str(e)
 
-    assert expected_pass == actual_pass   
+    assert expected_pass == actual_pass ,"Test failed: %s"%__file__
     
 
 #---START OF SCRIPT

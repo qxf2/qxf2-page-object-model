@@ -42,7 +42,7 @@ class Footer_Object:
 
         return result_flag
 
-
+    @Wrapit._exceptionHandler
     def get_copyright(self):
         "Get the current copyright"
         copyright = str(self.get_text(self.copyright_text))
@@ -60,7 +60,7 @@ class Footer_Object:
 
         return current_year
 
-
+    @Wrapit._exceptionHandler
     def check_copyright(self):
         "Check if the copyright is correct"
         result_flag = False
