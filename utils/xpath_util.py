@@ -1,7 +1,7 @@
 """
 Qxf2 Services: Utility script to generate XPaths for the given URL
-* Take the input URL
-* Parse the HTML using beautifilsoup
+* Take the input URL from the user
+* Parse the HTML content using beautifilsoup
 * Find all Input and Button tags
 * Guess the XPaths
 """
@@ -22,19 +22,19 @@ class Xpath_Util:
         return  self.xpath
 
     def guess_xpath_button(self,tag,attr,element):
-        "Guess the xpath for buttons"
+        "Guess the xpath for button tag"
         self.button_xpath = "//%s[%s='%s']"%(tag,attr,element)
        
         return  self.button_xpath
 
     def guess_xpath_using_contains(self,tag,attr,element):
-        "Guess the xpath using contains keyword"
+        "Guess the xpath using contains function"
         self.button_contains_xpath = "//%s[contains(%s,'%s')]"%(tag,attr,element)
         
         return self.button_contains_xpath
     
     def get_elements_list(self,locator):
-        "get all the elements for the given xpath"
+        "Get all the elements for the given xpath"
         self.ifunique = False
         if len(driver.find_elements_by_xpath(locator))==1:
             self.ifunique = True
@@ -46,7 +46,7 @@ class Xpath_Util:
 if __name__ == "__main__":
     print "Start of %s"%__file__
 
-    #Initialize the ssh object
+    #Initialize the xpath object
     xpath_obj = Xpath_Util()
 
     #Get the URL and parse
@@ -56,7 +56,7 @@ if __name__ == "__main__":
     driver = webdriver.Chrome()
     driver.get(url)
     
-    #Parsing a page with BeautifulSoup
+    #Parsing the HTML page with BeautifulSoup
     page = driver.execute_script("return document.body.innerHTML").encode('utf-8') #returns the inner HTML as a string
     soup = BeautifulSoup(page, 'html.parser')
  
@@ -67,7 +67,7 @@ if __name__ == "__main__":
     buttons = soup.find_all('button')
     
     if inputs == [] and buttons == []:
-        print "No input or button tags available to generate the Xpath"
+        print "No input or button tags available to generate the XPath"
     
     for input in inputs:        
         try:
@@ -105,7 +105,7 @@ if __name__ == "__main__":
                     print locator
                     continue
         except Exception,e:
-            print "Exception when generating xpath for input tags:%s"%__file__
+            print "Exception when generating XPath for input tags:%s"%__file__
             print "Python says:%s"%str(e)
             
     for button in buttons:
@@ -123,7 +123,7 @@ if __name__ == "__main__":
                     locator = xpath_obj.guess_xpath_using_contains("button","text()",button_text.strip())
 
                 if xpath_obj.get_elements_list(locator):   
-                    #UnicodeEncodeError: 'ascii' codec can't encode character u'\xa0' in position 20: ordinal not in range            
+                    #To fix UnicodeEncodeError: 'ascii' codec can't encode character u'\xa0' in position 20: ordinal not in range            
                     print locator.encode('utf-8')
                     continue
             if button.has_attr("name"):            
@@ -142,7 +142,7 @@ if __name__ == "__main__":
                     print locator
                     continue 
         except Exception,e:
-            print "Exception when generating xpath for buttons:%s"%__file__
+            print "Exception when generating XPath for button tags:%s"%__file__
             print "Python says:%s"%str(e)
      
     driver.quit() 
