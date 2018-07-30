@@ -4,6 +4,7 @@ Qxf2 Services: Utility script to generate XPaths for the given URL
 * Parse the HTML content using beautifilsoup
 * Find all Input and Button tags
 * Guess the XPaths
+* To run the script in Gitbash use command 'python -u utils/xpath_util.py'
 """
 
 from selenium import webdriver
