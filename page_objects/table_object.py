@@ -36,7 +36,7 @@ class Table_Object:
             for cell_dom in cell_doms:
                 row_text.append(self.get_dom_text(cell_dom))
             table_text.append(row_text)
-
+            
         return table_text
 
     
@@ -72,7 +72,7 @@ class Table_Object:
         if col_index > -1:
             table_text = self.get_all_text()
             #Transpose the matrix since you want the column
-            column_text = zip(*table_text)[col_index]
+            column_text = list(zip(*table_text))[col_index]
 
         return column_text
 
@@ -92,11 +92,13 @@ class Table_Object:
         result_flag = False
         if column_name == 'all':
             table_text = self.get_all_text()
+           
         else:
             table_text = [self.get_column_text(column_name)]
+            
         for row in table_text:
             for col in row:
-                if col == text:
+                if col.decode('utf-8') == text:
                     result_flag = True
                     break
             if result_flag is True:
@@ -115,6 +117,6 @@ class Table_Object:
         column_names = self.get_column_names()
         table_text = self.get_all_text()
 
-        self.write('||'.join(column_names))
+        self.write('||'.join(map(bytes.decode,column_names)))
         for row in table_text:
-            self.write('|'.join(row))
+            self.write('|'.join(map(bytes.decode,row)))
