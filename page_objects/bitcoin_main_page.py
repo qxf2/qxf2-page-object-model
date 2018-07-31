@@ -47,7 +47,7 @@ class Bitcoin_Main_Page(Mobile_Base_Page):
         "This method is to check if we have been redirected to the bitcoin real time price page."
         result_flag = False
         bitcoin_price_page_heading = self.get_text_by_locator(self.bitcoin_price_page_heading)
-        if bitcoin_price_page_heading == expected_bitcoin_price_page_heading:
+        if bitcoin_price_page_heading.decode('utf-8') == expected_bitcoin_price_page_heading:
             result_flag = True
             self.switch_page("bitcoin price page")
         
