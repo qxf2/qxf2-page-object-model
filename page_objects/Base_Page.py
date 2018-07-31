@@ -2,8 +2,6 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
-from __future__ import print_function
-from __future__ import absolute_import
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -16,7 +14,7 @@ import unittest,time,logging,os,inspect,utils.Test_Rail
 from utils.Base_Logging import Base_Logging
 from inspect import getargspec
 from utils.BrowserStack_Library import BrowserStack_Library
-from page_objects.DriverFactory import DriverFactory
+from .DriverFactory import DriverFactory
 from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
@@ -325,7 +323,7 @@ class Base_Page(Borg,unittest.TestCase):
             if path_conf_file is not None:
                 value = Conf_Reader.get_value(path_conf_file, key)
         except Exception as e:
-            print(str(e))
+            print (str(e))
 
         return value
 
@@ -582,9 +580,9 @@ class Base_Page(Borg,unittest.TestCase):
             WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
             result_flag =True
         except Exception as e:
-                        self.conditional_write(result_flag,
-                        positive='Located the element: %s'%locator,
-                        negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
+	        self.conditional_write(result_flag,
+                    positive='Located the element: %s'%locator,
+                    negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
             
         return result_flag
 
