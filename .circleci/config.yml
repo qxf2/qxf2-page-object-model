@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Install flask as it is needed to run our cars-api web server
           command: | 
-            pip3 install Flask
+            pip install Flask
       - run:
           name: Run cars-app server in background as it is mandatory to run our API test
           command: | 
@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Install requests
           command: |
-            pip3 install -r requirements.txt
+            pip install -r requirements.txt
       - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
