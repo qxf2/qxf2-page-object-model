@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Install flask as it is needed to run our cars-api web server
           command: | 
-            pip install Flask
+            pip3 install Flask
       - run:
           name: Run cars-app server in background as it is mandatory to run our API test
           command: | 
@@ -25,11 +25,11 @@ jobs:
       - run:
           name: Install requests
           command: |
-            pip install -r requirements.txt
+            pip3 install -r requirements.txt
       - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
-            py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py /tests/test_api_example.py --junitxml=test-reports/junit.xml --tb=native 
+             py -3 -m pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py /tests/test_api_example.py --junitxml=test-reports/junit.xml --tb=native 
       - store_artifacts:
           path: ./screenshots
           destination: screenshots-file
