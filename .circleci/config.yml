@@ -1,8 +1,8 @@
 version: 2.0
 jobs:
   build:
-    machine:	
-       post:		
+    machine:
+       post:
          - pyenv global 3.4.4 3.5.2 3.6.0
 
     steps:
