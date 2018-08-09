@@ -17,7 +17,7 @@ class Xpath_Util:
     def __init__(self):
         self.elements = None
         self.guessable_elements = ['input','button']
-        self.known_attribute_list = ['id','name','placeholder','value','type','title','class']
+        self.known_attribute_list = ['id','name','placeholder','value','title','type','class']
 
     def generate_xpath(self,soup):
         "generate the xpath"  
