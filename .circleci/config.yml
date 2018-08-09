@@ -1,9 +1,8 @@
 version: 2.0
 jobs:
   build:
-    machine:
-       python:
-         version:3.6.2
+    docker:
+      - image: circleci/python:3.6.2-stretch-browsers
     steps:
       - checkout
       - run:
