@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 import pytest
-import os
-from .conf import browser_os_name_conf
-from .utils import post_test_reports_to_slack
-from .utils.email_pytest_report import Email_Pytest_Report
-from .utils import Tesults
+import os,conf,utils
+from conf import browser_os_name_conf
+from utils import post_test_reports_to_slack
+from utils.email_pytest_report import Email_Pytest_Report
+from utils import Tesults
 
 
 @pytest.fixture
