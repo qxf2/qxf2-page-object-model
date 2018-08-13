@@ -1,10 +1,8 @@
 version: 2.0
 jobs:
   build:
-    machine:
-      docker:
+    docker:
       - image: circleci/python:3.7-stretch-browsers
-        
     steps:
       - checkout
       - run:
@@ -31,7 +29,8 @@ jobs:
       - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
-            py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junitxml=test-reports/junit.xml --tb=native 
+            #pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py /tests/test_api_example.py --junitxml=test-reports/junit.xml --tb=native 
+            pytest -s -v ./tests/test_example_form.py -B Firefox --junitxml=test-reports/junit.xml --tb=native 
       - store_artifacts:
           path: ./screenshots
           destination: screenshots-file
