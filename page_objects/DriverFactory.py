@@ -4,7 +4,6 @@ NOTE: Change this class as you add support for:
 1. SauceLabs/BrowserStack
 2. More browsers like Opera
 """
-from __future__ import print_function
 import dotenv,os,sys,requests,json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys

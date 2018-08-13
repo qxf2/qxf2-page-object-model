@@ -6,8 +6,6 @@ TestRail integration:
 
 API reference: http://docs.gurock.com/testrail-api2/start
 """
-from __future__ import print_function
-
 import dotenv,os
 from .testrail import *
 import conf.testrailenv_conf as conf_file

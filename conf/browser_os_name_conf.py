@@ -1,7 +1,6 @@
 """
 Conf file to generate the cross browser cross platform test run configuration
 """
-from __future__ import absolute_import
 from . import remote_credentials as conf
 #Conf list for local
 default_browser = ["chrome"]  #default browser for the tests to run against when -B option is not used
