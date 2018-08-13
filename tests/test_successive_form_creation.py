@@ -10,7 +10,7 @@ from __future__ import print_function
 #The import statements import: standard Python modules,conf,credential files
 import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from page_objects.PageFactory import *
+from page_objects.PageFactory import PageFactory
 from utils.Option_Parser import Option_Parser
 import conf.successive_form_creation_conf as conf
 
