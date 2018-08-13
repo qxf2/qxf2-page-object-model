@@ -9,3 +9,4 @@ pytest-xdist==1.22
 pytest-rerunfailures==4.1
 pillow==5.1.0
 conf==1.0.3
+utils==0.9.0
