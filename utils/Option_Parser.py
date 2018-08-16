@@ -1,8 +1,6 @@
 """
 Class to wrap around parsing command line options
 """
-from __future__ import print_function
-
 import os, sys
 import optparse
 

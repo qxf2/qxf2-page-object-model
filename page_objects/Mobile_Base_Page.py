@@ -2,8 +2,6 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
-from __future__ import absolute_import
-
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys

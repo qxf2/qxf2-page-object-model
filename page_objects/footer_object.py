@@ -4,8 +4,6 @@ We model it as two parts:
 1. The menu
 2. The copyright
 """
-from __future__ import absolute_import
-
 from datetime import datetime
 from .Base_Page import Base_Page
 import conf.locators_conf as locators

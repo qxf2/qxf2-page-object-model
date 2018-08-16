@@ -7,7 +7,6 @@ Steps to Use:
 Note: Your terminal must be pointed to root address of our POM while generating test report file using above command
 3. Check you are calling correct report log file or not
 '''
-from __future__ import print_function
 import json,os,requests 
 
 def post_reports_to_slack():

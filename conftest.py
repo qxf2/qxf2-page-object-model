@@ -1,4 +1,3 @@
-from __future__ import absolute_import
 import pytest
 import os,conf,utils
 from conf import browser_os_name_conf

@@ -1,7 +1,6 @@
 """
 API endpoints for Cars 
 """
-from __future__ import absolute_import
 
 from .Base_Mechanize import Base_Mechanize
 import json

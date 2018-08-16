@@ -10,8 +10,6 @@ API EXAMPLE TEST
 8. Verify registered cars count
 9. Delete newly added car -DELETE request
 """
-from __future__ import print_function
-
 import os
 import sys
 import time

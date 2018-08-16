@@ -1,7 +1,6 @@
 """
 Test Runner class. Lets you setup testrail and run a bunch of tests one after the other
 """
-from __future__ import print_function
 
 import os,subprocess
 

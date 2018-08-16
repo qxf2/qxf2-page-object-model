@@ -3,8 +3,6 @@ This class models the Qxf2.com header as a Page Object.
 The header consists of the Qxf2 logo, Qxf2 tag-line and the hamburger menu
 Since the hanburger menu is complex, we will model it as a separate object  
 """
-from __future__ import absolute_import
-
 from .Base_Page import Base_Page
 from .hamburger_menu_object import Hamburger_Menu_Object
 import conf.locators_conf as locators

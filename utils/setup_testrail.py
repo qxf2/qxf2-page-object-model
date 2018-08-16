@@ -9,8 +9,6 @@ d) Write out the latest run id to a 'latest_test_run.txt' file
 This script will NOT:
 a) Add a project if it does not exist
 """
-from __future__ import print_function
-from __future__ import absolute_import
 
 import os,ConfigParser,time
 from .Test_Rail import Test_Rail

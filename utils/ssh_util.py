@@ -5,7 +5,6 @@ Qxf2 Services: Utility script to ssh into a remote server
 * Upload a file
 * Download a file
 """
-from __future__ import print_function
 
 import paramiko
 import os,sys,time

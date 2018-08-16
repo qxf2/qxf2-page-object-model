@@ -12,8 +12,6 @@ Note:
 * To generate pytest_report.html file use following command from the root of repo e.g. py.test --html = log/pytest_report.html
 * To generate pytest_report.log file use following command from the root of repo e.g. py.test -k example_form -r F -v > log/pytest_report.log
 """
-from __future__ import print_function
-
 import smtplib
 import os,sys
 from email.mime.text import MIMEText

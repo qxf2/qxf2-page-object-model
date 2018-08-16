@@ -9,8 +9,6 @@ Pages implemented so far:
 4. Bitcoin main page
 5. Bitcoin price page
 """
-from __future__ import absolute_import
-
 from page_objects.tutorial_main_page import Tutorial_Main_Page
 from page_objects.tutorial_redirect_page import Tutorial_Redirect_Page
 from page_objects.contact_page import Contact_Page

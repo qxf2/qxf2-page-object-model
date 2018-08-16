@@ -2,8 +2,6 @@
 Qxf2 Services: A plug-n-play class for logging.
 This class wraps around Python's logging module.
 """
-from __future__ import print_function
-
 import logging, os, inspect
 import datetime
 import sys

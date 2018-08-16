@@ -4,7 +4,6 @@ a) serves as an interface between the test and API_Interface
 b) contains several useful wrappers around commonly used combination of actions
 c) maintains the test context/state 
 """
-from __future__ import absolute_import
 from base64 import b64encode
 from .API_Interface import API_Interface
 from utils.results import Results

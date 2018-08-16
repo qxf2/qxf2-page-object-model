@@ -1,7 +1,6 @@
 """
 A wrapper around Mechanize to make Restful API calls
 """
-from __future__ import print_function
 
 import json
 import mechanize

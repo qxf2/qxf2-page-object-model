@@ -12,8 +12,6 @@ A simple IMAP util that will help us with account activation
 2. Add a try catch decorator
 3. Enhance get_latest_email_uid to make all parameters optional
 """
-from __future__ import print_function
-
 #The import statements import: standard Python modules,conf
 import os,sys,time,imaplib,email,datetime
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

@@ -3,8 +3,6 @@ Qxf2 Services: Utility script to compare images
 * Compare two images(actual and expected) smartly and generate a resultant image
 * Get the sum of colors in an image
 """
-from __future__ import print_function
-
 from PIL import Image, ImageChops
 import math,operator,os
 

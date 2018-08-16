@@ -2,8 +2,6 @@
 Qxf2 Services: Utility script to compare two csv files.
 
 """
-from __future__ import print_function
-
 import csv,os
 
 class Csv_Compare():

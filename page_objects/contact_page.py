@@ -3,7 +3,6 @@ This class models the Contact page.
 URL: contact
 The page consists of a header, footer and form object.
 """
-from __future__ import absolute_import
 from .Base_Page import Base_Page
 from .contact_form_object import Contact_Form_Object
 from .header_object import Header_Object

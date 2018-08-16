@@ -5,8 +5,6 @@ Our automated test will do the following action repeatedly to fill number of for
     #Fill the example form
     #Click on Click me! button and check if its working fine
 """
-from __future__ import print_function
-
 #The import statements import: standard Python modules,conf,credential files
 import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))

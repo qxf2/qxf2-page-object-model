@@ -2,8 +2,6 @@
 Qxf2 Services: Utility script to compare two excel files using openxl module
 
 """
-from __future__ import print_function
-
 import openpyxl
 import os
 

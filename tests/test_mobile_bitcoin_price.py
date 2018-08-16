@@ -6,8 +6,6 @@ Automated test will do the following:
     # Verify that the bitcoin real time price is displayed on the page.
     # Display the results.
 """
-from __future__ import print_function
-
 import os, sys, time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory

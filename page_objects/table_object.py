@@ -1,8 +1,6 @@
 """
 This class models the table on the Selenium tutorial page
 """
-from __future__ import absolute_import
-
 from .Base_Page import Base_Page
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
