@@ -386,8 +386,8 @@ class Base_Page(Borg,unittest.TestCase):
             if link is not None:
                 link.click()
                 result_flag=True
-                self.wait(wait_time)                
-            except Exception as e:
+                self.wait(wait_time)
+        except Exception as e:
             self.write(str(e),'debug')
             self.write('Exception when clicking link with path: %s'%locator)
             self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)   
@@ -403,10 +403,10 @@ class Base_Page(Borg,unittest.TestCase):
             if text_field is not None and clear_flag is True:
                 try:
                     text_field.clear()
-        except Exception as e:
+                except Exception as e:
                     self.write(str(e),'debug')
                     self.exceptions.append("Could not clear the text field- '%s' in the conf/locators.conf file"%locator)
-        except Exception,e:
+        except Exception as e:
             self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
 
         result_flag = False
@@ -414,7 +414,7 @@ class Base_Page(Borg,unittest.TestCase):
             try:
                 text_field.send_keys(value)
                 result_flag = True
-        except Exception as e:
+            except Exception as e:
                 self.write('Could not write to text field: %s'%locator,'debug')
                 self.write(str(e),'debug')
                 self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
@@ -457,7 +457,7 @@ class Base_Page(Borg,unittest.TestCase):
                 result_flag = self.toggle_checkbox(locator)
             else:
                 result_flag = True
-        except Exception, e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when selecting checkbox-'%s' in the conf/locators.conf file"%locator)
                     
@@ -473,7 +473,7 @@ class Base_Page(Borg,unittest.TestCase):
                 result_flag = self.toggle_checkbox(locator)
             else:
                 result_flag = True
-        except Exception, e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when deselecting checkbox-'%s' in the conf/locators.conf file"%locator)
         
@@ -486,7 +486,7 @@ class Base_Page(Borg,unittest.TestCase):
         "Toggle a checkbox"
         try:
             return self.click_element(locator)
-        except Exception,e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when toggling checkbox-'%s' in the conf/locators.conf file"%locator)
 
@@ -501,7 +501,7 @@ class Base_Page(Borg,unittest.TestCase):
                     option.click()
                     result_flag = True
                     break
-        except Exception, e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when selecting option from the drop-down '%s' "%locator)
         
@@ -525,7 +525,7 @@ class Base_Page(Borg,unittest.TestCase):
                 element = self.get_element(locator,verbose_flag=False)
                 if element.is_displayed() is True:
                     result_flag = True
-        except Exception , e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Web element not present in the page, please check the locator is correct -'%s' in the conf/locators.conf file"%locator)
 

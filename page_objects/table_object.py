@@ -120,7 +120,7 @@ class Table_Object:
         self.write('||'.join(map(bytes.decode,column_names)))
         if table_text is not None:
             for row in table_text:
-            self.write('|'.join(map(bytes.decode,row)))
+                self.write('|'.join(map(bytes.decode,row)))
             result_flag = True
                 
         return result_flag
