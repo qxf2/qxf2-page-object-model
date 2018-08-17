@@ -144,7 +144,7 @@ def test_api_example(api_url='http://127.0.0.1:5000'):
         test_obj.write("Python says:%s" % str(e))
 
     # Assertion
-    assert expected_pass == actual_pass
+    assert expected_pass == actual_pass,"Test failed: %s"%__file__
 
 
 if __name__ == '__main__':

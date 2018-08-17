@@ -17,11 +17,12 @@ class Header_Object(Hamburger_Menu_Object):
     qxf2_tagline_part1 = locators.qxf2_tagline_part1
     qxf2_tagline_part2 = locators.qxf2_tagline_part2
 
+    @Wrapit._exceptionHandler
     def check_logo_present(self):
         "Check if a logo is present"
         return self.check_element_present(self.qxf2_logo)
 
-    
+    @Wrapit._exceptionHandler
     def check_tagline_present(self):
         "Check if the tagline is present"
         return self.check_element_present(self.qxf2_tagline_part1) and self.check_element_present(self.qxf2_tagline_part2)

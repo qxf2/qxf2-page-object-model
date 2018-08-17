@@ -24,6 +24,7 @@ class Table_Object:
 
     @Wrapit._check_browser_console_log
     @Wrapit._screenshot
+    @Wrapit._exceptionHandler
     def get_all_text(self):
         "Get the text within the table"
         table_text = []
@@ -74,7 +75,7 @@ class Table_Object:
 
         return column_text
 
-
+    @Wrapit._exceptionHandler
     def get_column_names(self):
         "Return a list with the column names"
         column_names = []
@@ -84,7 +85,7 @@ class Table_Object:
 
         return column_names
 
-
+    @Wrapit._exceptionHandler
     def check_cell_text_present(self,text,column_name='all'):
         "Check if the text you want is present in a cell"
         result_flag = False
@@ -104,17 +105,22 @@ class Table_Object:
 
         return result_flag
 
-    
+    @Wrapit._exceptionHandler
     def check_name_present(self,name):
         "Check if the supplied name is present anywhere in the table"
         return self.check_cell_text_present(name,column_name='name')
+   
 
-
+    @Wrapit._exceptionHandler
     def print_table_text(self):
         "Print out the table text neatly"
+        result_flag = False
         column_names = self.get_column_names()
         table_text = self.get_all_text()
-
         self.write('||'.join(map(bytes.decode,column_names)))
-        for row in table_text:
+        if table_text is not None:
+            for row in table_text:
             self.write('|'.join(map(bytes.decode,row)))
+            result_flag = True
+                
+        return result_flag
