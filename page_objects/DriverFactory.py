@@ -5,6 +5,7 @@ NOTE: Change this class as you add support for:
 2. More browsers like Opera
 """
 import dotenv,os,sys,requests,json
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
@@ -23,12 +24,12 @@ class DriverFactory():
         self.os_name=os_name
 
         
-    def get_web_driver(self,remote_flag,os_name,os_version,browser,browser_version):
+    def get_web_driver(self,remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name):
         "Return the appropriate driver"
         if (remote_flag.lower() == 'y'):
             try:
                 if remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS':
-                    web_driver = self.run_browserstack(os_name,os_version,browser,browser_version)
+                    web_driver = self.run_browserstack(os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
                 else:
                     web_driver = self.run_sauce_lab(os_name,os_version,browser,browser_version)
                     
@@ -46,7 +47,7 @@ class DriverFactory():
         return web_driver   
     
 
-    def run_browserstack(self,os_name,os_version,browser,browser_version):
+    def run_browserstack(self,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name):
         "Run the test in browser stack when remote flag is 'Y'"
         #Get the browser stack credentials from browser stack credentials file
         USERNAME = remote_credentials.USERNAME
@@ -61,11 +62,12 @@ class DriverFactory():
             desired_capabilities = DesiredCapabilities.OPERA        
         elif browser.lower() == 'safari':
             desired_capabilities = DesiredCapabilities.SAFARI
-
         desired_capabilities['os'] = os_name
         desired_capabilities['os_version'] = os_version
         desired_capabilities['browser_version'] = browser_version
-        
+        desired_capabilities['project'] = remote_project_name
+        desired_capabilities['build'] = remote_build_name+str(datetime.now().strftime("%c"))
+
         return webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"%(USERNAME,PASSWORD),resolve_ip= False),
             desired_capabilities=desired_capabilities)
     

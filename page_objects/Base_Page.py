@@ -88,11 +88,11 @@ class Base_Page(Borg,unittest.TestCase):
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
        
 
-    def register_driver(self,remote_flag,os_name,os_version,browser,browser_version):
+    def register_driver(self,remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name):
         "Register the driver with Page"      
         self.set_screenshot_dir(os_name,os_version,browser,browser_version) # Create screenshot directory
         self.set_log_file()
-        self.driver = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version)
+        self.driver = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
         self.driver.implicitly_wait(5) 
         self.driver.maximize_window()
         

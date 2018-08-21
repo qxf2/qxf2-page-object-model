@@ -59,6 +59,18 @@ def os_version():
 
 
 @pytest.fixture
+def remote_project_name():
+    "pytest fixture for browserStack project name"
+    return pytest.config.getoption("--remote_project_name")
+
+
+@pytest.fixture
+def remote_build_name():
+    "pytest fixture for browserStack build name"
+    return pytest.config.getoption("--remote_build_name")
+
+
+@pytest.fixture
 def slack_flag():
     "pytest fixture for sending reports on slack"
     return pytest.config.getoption("-S")
@@ -191,6 +203,14 @@ def pytest_addoption(parser):
                       action="append",
                       help="The operating system: Windows 7, Linux",
                       default=[])
+    parser.addoption("--remote_project_name",
+                      dest="remote_project_name",
+                      help="The project name if its run in BrowserStack",
+                      default="N")
+    parser.addoption("--remote_build_name",
+                      dest="remote_build_name",
+                      help="The build name if its run in BrowserStack",
+                      default="N")
     parser.addoption("-S","--slack_flag",
                       dest="slack_flag",
                       default="N",
