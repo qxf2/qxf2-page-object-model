@@ -65,8 +65,10 @@ class DriverFactory():
         desired_capabilities['os'] = os_name
         desired_capabilities['os_version'] = os_version
         desired_capabilities['browser_version'] = browser_version
-        desired_capabilities['project'] = remote_project_name
-        desired_capabilities['build'] = remote_build_name+str(datetime.now().strftime("%c"))
+        if remote_project_name is not None:
+            desired_capabilities['project'] = remote_project_name
+        if remote_build_name is not None:
+            desired_capabilities['build'] = remote_build_name+str(datetime.now().strftime("%c"))
 
         return webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"%(USERNAME,PASSWORD),resolve_ip= False),
             desired_capabilities=desired_capabilities)

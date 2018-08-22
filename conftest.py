@@ -206,11 +206,11 @@ def pytest_addoption(parser):
     parser.addoption("--remote_project_name",
                       dest="remote_project_name",
                       help="The project name if its run in BrowserStack",
-                      default="N")
+                      default=None)
     parser.addoption("--remote_build_name",
                       dest="remote_build_name",
                       help="The build name if its run in BrowserStack",
-                      default="N")
+                      default=None)
     parser.addoption("-S","--slack_flag",
                       dest="slack_flag",
                       default="N",

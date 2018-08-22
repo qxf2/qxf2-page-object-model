@@ -161,11 +161,11 @@ if __name__=='__main__':
                         os_version=options.os_version,
                         os_name=options.os_name,
                         remote_flag=options.remote_flag,
-                        remote_project_name=options.remote_project_name,
-                        remote_build_name=options.remote_build_name,
                         testrail_flag=options.testrail_flag,
                         tesults_flag=options.tesults_flag,
-                        test_run_id=options.test_run_id) 
+                        test_run_id=options.test_run_id,
+                        remote_project_name=options.remote_project_name,
+                        remote_build_name=options.remote_build_name) 
     else:
         print 'ERROR: Received incorrect comand line input arguments'
         print option_obj.print_usage()
