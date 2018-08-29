@@ -2,9 +2,9 @@
 API endpoints for Registration 
 """
 
-from .Base_Mechanize import Base_Mechanize
+from .Base_API import Base_API
 
-class Registration_API_Endpoints(Base_Mechanize):
+class Registration_API_Endpoints(Base_API):
 	"Class for registration endpoints"
 
 	def registration_url(self,suffix=''):

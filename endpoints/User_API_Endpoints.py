@@ -2,9 +2,9 @@
 API endpoints for Registration 
 """
 
-from .Base_Mechanize import Base_Mechanize
+from .Base_API import Base_API
 
-class User_API_Endpoints(Base_Mechanize):
+class User_API_Endpoints(Base_API):
 	"Class for user endpoints"
 
 	def user_url(self,suffix=''):
@@ -15,13 +15,13 @@ class User_API_Endpoints(Base_Mechanize):
 	def get_user_list(self,headers):
 		"get users list"
 		url = self.user_url('')
-                json_response = self.get(url,headers=headers)
-
-                return {
-                        'url':url,
-                        'response':json_response['response'],
-                        'error':json_response['error']
-                        }
+		json_response = self.get(url,headers=headers)
+		
+		return {
+                'url':url,
+                'response':json_response['response'],
+                'error':json_response['error']
+                }
 
  
 

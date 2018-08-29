@@ -28,7 +28,7 @@ class API_Player(Results):
         "encode auth details"
         user = username
         password = password
-        b64login = b64encode('%s:%s' % (user, password))
+        b64login = b64encode(bytes('%s:%s' % (user, password),"utf-8"))
         
         return b64login
 
@@ -66,6 +66,7 @@ class API_Player(Results):
         json_response = self.api_obj.get_car(url_params=url_params_encoded,
                                              headers=headers)
         response = json_response['response']
+        print (response)
         result_flag = True if response['successful'] == True else False
         self.write(msg='Fetched car details of :%s %s' % (car_name, response))
 
@@ -80,7 +81,8 @@ class API_Player(Results):
         json_response = self.api_obj.add_car(data=json.dumps(data),
                                              headers=headers)
         json_response = json_response['response']
-        response = json.loads(json_response.read())
+        response = json.loads(json_response.text)
+        print (response)
         result_flag = True if response['successful'] == True else False
 
         return result_flag

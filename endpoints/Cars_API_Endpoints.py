@@ -2,10 +2,10 @@
 API endpoints for Cars 
 """
 
-from .Base_Mechanize import Base_Mechanize
+from .Base_API import Base_API
 import json
 
-class Cars_API_Endpoints(Base_Mechanize):
+class Cars_API_Endpoints(Base_API):
 	"Class for cars endpoints"
 
 	def cars_url(self,suffix=''):
