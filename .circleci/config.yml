@@ -27,9 +27,16 @@ jobs:
           command: |
             pip install -r requirements.txt
       - run:
+          name: Update PATH and Define Environment Variable at Runtime
+          command: |
+            echo 'export PATH=/qxf2/qxf2-page-object-model/tree/master/conf/remote_credentials.py:$PATH' >> $BASH_ENV
+            echo 'export USERNAME=$(USERNAME)' >> $BASH_ENV
+            echo 'export ACCESS_KEY=$(ACCESS_KEY)' >> $BASH_ENV
+            source $BASH_ENV
+      - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
-            py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py --junitxml=test-reports/junit.xml --tb=native 
+            py.test -s -v --ignore=./tests/test_mobile_bitcoin_price.py -M Y --junitxml=test-reports/junit.xml --tb=native 
       - store_artifacts:
           path: ./screenshots
           destination: screenshots-file
