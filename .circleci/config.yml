@@ -29,7 +29,7 @@ jobs:
       - run:
           name: Update PATH and Define Environment Variable at Runtime
           command: |
-            sed -e s/REMOTE_BROWSER_PLATFORM/${REMOTE_BROWSER_PLATFORM}/g ./conf/remote_credentials.py > mySecureFile
+            #sed -e s/REMOTE_BROWSER_PLATFORM/${REMOTE_BROWSER_PLATFORM}/g ./conf/remote_credentials.py > mySecureFile
             sed -e s/USERNAME/${USERNAME}/g ./conf/remote_credentials.py > mySecureFile
             sed -e s/ACCESS_KEY/${ACCESS_KEY}/g ./conf/remote_credentials.py > mySecureFile
       - run:
