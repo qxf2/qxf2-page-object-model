@@ -31,10 +31,8 @@ jobs:
           pre:
             # update locally with:
             # openssl aes-256-cbc -e -in .conf/remote_credentials.py -.conf/remote_credentials_circle.py -k $KEY
-            - openssl aes-256-cbc -d -in .conf/remote_credentials_circle.py -k $KEY >> ~/.circlerc
-        test:
-          override:
-            - "echo USERNAME: $USERNAME ACCESS_KEY: $ACCESS_KEY"
+            openssl aes-256-cbc -d -in .conf/remote_credentials_circle.py -k $KEY >> ~/.circlerc
+        
       - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
