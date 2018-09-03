@@ -3,7 +3,7 @@
 REMOTE_BROWSER_PLATFORM = "BS or SL"
 
 
-USERNAME = "Add your BrowserStack/Sauce Labs usernam"
+USERNAME = "Add your BrowserStack/Sauce Labs username"
 ACCESS_KEY = "Add your BrowserStack/Sauce Labs accesskey"
 
 
