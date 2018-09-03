@@ -12,7 +12,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome import service
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
-from conf import remote_credentials
+from conf import remote_credentials_enc
 from conf import opera_browser_conf
 
 class DriverFactory():

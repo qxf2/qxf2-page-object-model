@@ -27,12 +27,22 @@ jobs:
           command: |
             pip install -r requirements.txt
       - run:
+        dependencies:
+          pre:
+            # update locally with:
+            # openssl aes-256-cbc -e -in .conf/remote_credentials.py -.conf/remote_credentials_circle.py -k $KEY
+            - openssl aes-256-cbc -d -in .conf/remote_credentials_circle.py -k $KEY >> ~/.circlerc
+        test:
+          override:
+            - "echo USERNAME: $USERNAME ACCESS_KEY: $ACCESS_KEY"
+      - run:
           name: Update PATH and Define Environment Variable at Runtime
           command: |
             #sed -e s/REMOTE_BROWSER_PLATFORM/${REMOTE_BROWSER_PLATFORM}/g ./conf/remote_credentials.py > mySecureFile
-            echo 'export PATH="$GOPATH/bin:$./conf/remote_credentials.py"' >> $BASH_ENV
-            echo 'export USER_NAME="$(USERNAME)"' >> $BASH_ENV
-            source $BASH_ENV
+            #echo 'export PATH="$GOPATH/bin:$./conf/remote_credentials.py"' >> $BASH_ENV
+            #echo PATH
+            #echo 'export USER_NAME="$(USERNAME)"' >> $BASH_ENV
+            #source $BASH_ENV
       - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
