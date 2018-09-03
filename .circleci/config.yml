@@ -27,11 +27,9 @@ jobs:
           command: |
             pip install -r requirements.txt
       - run:
+          name: Decrypt remote_credentials_enc.py using openssl
           command: |
-            # update locally with:
-            # openssl aes-256-cbc -e -in .conf/remote_credentials.py -.conf/remote_credentials_circle.py -k $KEY
-            openssl aes-256-cbc -d -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY
-        
+            openssl aes-256-cbc -d -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY     
       - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
