@@ -30,8 +30,9 @@ jobs:
           name: Update PATH and Define Environment Variable at Runtime
           command: |
             #sed -e s/REMOTE_BROWSER_PLATFORM/${REMOTE_BROWSER_PLATFORM}/g ./conf/remote_credentials.py > mySecureFile
-            sed -e s/USERNAME/${USERNAME}/g ./conf/remote_credentials.py > mySecureFile
-            sed -e s/ACCESS_KEY/${ACCESS_KEY}/g ./conf/remote_credentials.py > mySecureFile
+            echo 'export PATH=./conf/remote_credentials.py:$PATH' >> $BASH_ENV
+            echo 'export USERNAME=$(USERNAME)' >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
