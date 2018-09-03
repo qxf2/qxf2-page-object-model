@@ -30,7 +30,7 @@ jobs:
           name: Update PATH and Define Environment Variable at Runtime
           command: |
             #sed -e s/REMOTE_BROWSER_PLATFORM/${REMOTE_BROWSER_PLATFORM}/g ./conf/remote_credentials.py > mySecureFile
-            echo 'export PATH=./conf/remote_credentials.py:$PATH' >> $BASH_ENV
+            echo 'export PATH="$GOPATH/bin:$./conf/remote_credentials.py"' >> $BASH_ENV
             echo 'export USER_NAME="$(USERNAME)"' >> $BASH_ENV
             source $BASH_ENV
       - run:
