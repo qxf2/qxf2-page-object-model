@@ -1,4 +1,4 @@
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=UGw5UE4yb25vT0lobDRpbFpDNzNMSUtTa1VjcGd6R1Z5TUR6N2krUW1CMD0tLVcvaWttNWtJbDVCSWlLVFBIUjB6Z1E9PQ==--2554f092f35a68efe48cb3cf4c887a2dde968b9f)](https://www.browserstack.com/automate/public-build/UGw5UE4yb25vT0lobDRpbFpDNzNMSUtTa1VjcGd6R1Z5TUR6N2krUW1CMD0tLVcvaWttNWtJbDVCSWlLVFBIUjB6Z1E9PQ==--2554f092f35a68efe48cb3cf4c887a2dde968b9f)
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)](https://www.browserstack.com/automate/public-build/T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)
 
 --------
 A Pythonic Selenium, Appium and API test automation framework

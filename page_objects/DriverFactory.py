@@ -68,7 +68,7 @@ class DriverFactory():
         if remote_project_name is not None:
             desired_capabilities['project'] = remote_project_name
         if remote_build_name is not None:
-            desired_capabilities['build'] = remote_build_name+str(datetime.now().strftime("%c"))
+            desired_capabilities['build'] = remote_build_name+"_"+str(datetime.now().strftime("%c"))
 
         return webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"%(USERNAME,PASSWORD),resolve_ip= False),
             desired_capabilities=desired_capabilities)
