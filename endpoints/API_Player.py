@@ -112,11 +112,13 @@ class API_Player(Results):
                 'car_type': car_details['car_type']}
         data = json.dumps(data)
         headers = self.set_header_details(auth_details)
+        print (headers)
         json_response = self.api_obj.update_car(car_name,
                                                 data=data,
                                                 headers=headers)
         json_response = json_response['response']
-        response = json.loads(json_response.read())
+        response = json.loads(json_response.text)
+        print (response)
         result_flag = True if response['response']['successful'] == True else False
 
         return result_flag

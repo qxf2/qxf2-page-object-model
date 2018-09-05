@@ -39,9 +39,11 @@ class Base_API:
             #response = browser.open(mechanize.Request(url))
             #response = requests.get(url,auth=('eric','testqxf2'))
             response = requests.get(url,auth=(conf.user_name,conf.password))
-            print (response)
+            json_response = response.json() 
+            print (json_response['successful'])
+            print (response.json())
             response = json.loads(response.text)
-            print (response)
+            print ("??????%s"%response)
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -67,7 +69,7 @@ class Base_API:
         try:
             #response = browser.open(mechanize.Request(
                 #url=url, data=data, headers=headers))
-            response = requests.post(url=url,auth=(conf.user_name,conf.password),data=data, headers=headers)
+            response = requests.post('http://127.0.0.1:5000/cars/add',json ={'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'}, auth=('eric','testqxf2'))
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError,URLError):
@@ -84,15 +86,16 @@ class Base_API:
 
         return {'response': response, 'error': error}
 
-'''
+    
     def delete(self, url, headers={}):
         "Mechanize Delete request"
         #browser = self.get_browser()
         response = False
         error = {}
         try:
-            browser.open(Mechanize_Delete_Request_class(url, headers=headers))
-            response = True
+            #browser.open(Mechanize_Delete_Request_class(url, headers=headers))
+            #response = True
+            response = requests.delete('http://127.0.0.1:5000/cars/remove/figo', json = {'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=('eric','testqxf2'))
         except Exception as e:
             if (e.reason.args[0] == 10061):
                 print("\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m")
@@ -100,19 +103,19 @@ class Base_API:
             raise e
 
         return {'response': response, 'error': error}
-
+    
 
     def put(self, url, data=None, headers={}):
         "Mechanize Put request"
-        browser = self.get_browser()
+        #browser = self.get_browser()
         response = {}
         error = {}
         try:
-            response = browser.open(Mechanize_Put_Request_class(
-                url, data=data, headers=headers))
-        except (mechanize.HTTPError, mechanize.URLError) as e:
+            response = requests.put(
+                url, data=data, headers=headers)
+        except (HTTPError,URLError) as e:
             error = e
-            if isinstance(e, mechanize.HTTPError):
+            if isinstance(e,HTTPError):
                 error_message = e.read()
                 print("\n******\nPUT Error: %s %s %s" %
                       (url, error_message, str(data)))
@@ -125,7 +128,7 @@ class Base_API:
 
         return {'response': response, 'error': error}
 
-
+'''
 class Mechanize_Put_Request_class(mechanize.Request):
     "Extend the mechanize Request class to allow a http PUT"
 
