@@ -1,4 +1,4 @@
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=QkJKNFRIRUNMM2pCV1dlVGVDMW5zWExBcXBidEhOQXQvc0U5TjJGMEZzST0tLWxESGxyS3h4dE1ZZlV5dWRhM21yV0E9PQ==--44144f492e6f5dc486e4d8398c00b9648f60c7cb)](https://www.browserstack.com/automate/public-build/QkJKNFRIRUNMM2pCV1dlVGVDMW5zWExBcXBidEhOQXQvc0U5TjJGMEZzST0tLWxESGxyS3h4dE1ZZlV5dWRhM21yV0E9PQ==--44144f492e6f5dc486e4d8398c00b9648f60c7cb)
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)](https://www.browserstack.com/automate/public-build/T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)
 
 --------
 A Pythonic Selenium, Appium and API test automation framework
