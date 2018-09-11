@@ -38,7 +38,8 @@ class Base_API:
         try:
             #response = browser.open(mechanize.Request(url))
             #response = requests.get(url,auth=('eric','testqxf2'))
-            response = requests.get(url,auth=(conf.user_name,conf.password))
+            #response = requests.get(url,auth=(conf.user_name,conf.password))
+            response = requests.get(url=url,headers=headers)
             json_response = response.json() 
             print (json_response['successful'])
             print (response.json())
@@ -112,7 +113,7 @@ class Base_API:
         error = {}
         try:
             response = requests.put(
-                url, data=data, headers=headers)
+                'http://127.0.0.1:5000/cars/update/figo', json = {'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=('eric','testqxf2'))
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):

@@ -8,7 +8,7 @@ from base64 import b64encode
 from .API_Interface import API_Interface
 from utils.results import Results
 import json
-import urllib
+import urllib.parse
 import logging
 from utils.__init__ import get_dict_item
 from conf import api_example_conf as conf
@@ -28,7 +28,8 @@ class API_Player(Results):
         "encode auth details"
         user = username
         password = password
-        b64login = b64encode(bytes('%s:%s' % (user, password),"utf-8"))
+        #b64login = b64encode(bytes('%s:%s' % (user, password),"utf-8"))
+        b64login = b64encode(bytes('%s:%s' %(user, password),"utf-8"))
         
         return b64login
 
@@ -36,8 +37,12 @@ class API_Player(Results):
     def set_header_details(self, auth_details=None):
         "make header details"
         if auth_details != '' and auth_details is not None:
-            headers = {'content-type': 'application/json',
-                       'Authorization': 'Basic %s' % auth_details}
+            #headers = {'content-type': 'application/json',
+                       #'Authorization': 'Basic %s' % auth_details}
+            user = 'eric'
+            password = 'testqxf2'
+            b64login = b64encode(bytes('%s:%s' %(user, password),"utf-8"))
+            headers = {'Authorization': "Basic %s"%(b64login.decode('utf-8'))}
         else:
             headers = {'content-type': 'application/json'}
 
@@ -61,7 +66,7 @@ class API_Player(Results):
     def get_car(self, car_name, brand, auth_details=None):
         "gets a given car details"
         url_params = {'car_name': car_name, 'brand': brand}
-        url_params_encoded = urllib.urlencode(url_params)
+        url_params_encoded = urllib.parse.urlencode(url_params)
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.get_car(url_params=url_params_encoded,
                                              headers=headers)
@@ -91,7 +96,7 @@ class API_Player(Results):
     def register_car(self, car_name, brand, auth_details=None):
         "register car"
         url_params = {'car_name': car_name, 'brand': brand}
-        url_params_encoded = urllib.urlencode(url_params)
+        url_params_encoded = urllib.parse.urlencode(url_params)
         customer_details = conf.customer_details
         data = customer_details
         headers = self.set_header_details(auth_details)
@@ -99,6 +104,7 @@ class API_Player(Results):
                                                   data=json.dumps(data),
                                                   headers=headers)
         response = json.loads(json_response['response'])
+        print (response)
         result_flag = True if response['registered_car']['successful'] == True else False
 
         return result_flag

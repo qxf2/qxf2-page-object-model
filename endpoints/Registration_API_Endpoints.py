@@ -18,7 +18,7 @@ class Registration_API_Endpoints(Base_API):
 		json_response = self.post(url,data=data,headers=headers)
 		return {
 			'url':url,
-			'response':json_response['response'].read()
+			'response':json_response['response'].text
 		}
 
 
