@@ -30,7 +30,7 @@ jobs:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
             #pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py /tests/test_api_example.py --junitxml=test-reports/junit.xml --tb=native 
-            python -m pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py --ignore=./tests/test_api_example.py --junitxml=test-reports/junit.xml --tb=native 
+            python -m pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py --ignore=./tests/test_api_example.py --junitxml=test-reports/junit.xml --tb=native -B Mozilla 
       - store_artifacts:
           path: ./screenshots
           destination: screenshots-file
