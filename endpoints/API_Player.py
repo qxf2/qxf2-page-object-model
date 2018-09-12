@@ -92,7 +92,7 @@ class API_Player(Results):
 
         return result_flag
 
-
+    
     def register_car(self, car_name, brand, auth_details=None):
         "register car"
         url_params = {'car_name': car_name, 'brand': brand}
@@ -103,13 +103,15 @@ class API_Player(Results):
         json_response = self.api_obj.register_car(url_params=url_params_encoded,
                                                   data=json.dumps(data),
                                                   headers=headers)
+        print (json_response)
         response = json.loads(json_response['response'])
         print (response)
-        result_flag = True if response['registered_car']['successful'] == True else False
-
+        #result_flag = True if response['registered_car']['successful'] == True else False
+        result_flag = True if response['registered': []]['successful'] == True else False
+        
         return result_flag
 
-
+    
     def update_car(self, car_details, car_name='figo', auth_details=None):
         "updates a car"
         data = {'name': car_details['name'],
