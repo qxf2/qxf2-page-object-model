@@ -30,32 +30,36 @@ class API_Player(Results):
         password = password
         #b64login = b64encode(bytes('%s:%s' % (user, password),"utf-8"))
         b64login = b64encode(bytes('%s:%s' %(user, password),"utf-8"))
-        
+        #b64login = b64encode('%s:%s' % (user, password))
         return b64login
 
 
-    def set_header_details(self, auth_details=None):
+    def set_header_details(self, auth_details):
         "make header details"
         if auth_details != '' and auth_details is not None:
             #headers = {'content-type': 'application/json',
                        #'Authorization': 'Basic %s' % auth_details}
             user = 'eric'
             password = 'testqxf2'
-            b64login = b64encode(bytes('%s:%s' %(user, password),"utf-8"))
-            headers = {'Authorization': "Basic %s"%(b64login.decode('utf-8'))}
+            #b64login = b64encode(bytes('%s:%s' %(user, password),"utf-8"))
+            #b64login = b64encode('%s:%s' % (user, password))
+            headers = {'Authorization': "Basic %s"%(auth_details.decode('utf-8'))}
+            #headers = {'Authorization': "Basic %s"%(b64login.decode)}
         else:
             headers = {'content-type': 'application/json'}
 
         return headers
 
 
-    def get_cars(self, auth_details=None):
+    def get_cars(self, auth_details):
         "get available cars "
         headers = self.set_header_details(auth_details)
+        print(headers)
         json_response = self.api_obj.get_cars(headers=headers)
-        json_response = json_response['response']
-        result_flag = True if json_response['successful'] == True else False
-        self.write(msg="Fetched cars list:\n %s"%str(json_response))
+        print (json_response)
+        #json_response = json_response['response']
+        result_flag = True if json_response['response'] == 200 else False
+        self.write(msg="Fetched cars list:\n %s"%str(json_response['text']))
         self.conditional_write(result_flag,
                                positive="Successfully fetched cars",
                                negative="Could not fetch cars")
@@ -77,17 +81,38 @@ class API_Player(Results):
 
         return result_flag
 
-
-    def add_car(self, car_details, auth_details=None):
+    def add_car(self, car_details, auth_details):
         "adds a new car"
         car_details = conf.car_details
         data = car_details
         headers = self.set_header_details(auth_details)
-        json_response = self.api_obj.add_car(data=json.dumps(data),
-                                             headers=headers)
-        json_response = json_response['response']
-        response = json.loads(json_response.text)
+        response = self.api_obj.add_car(data=data,
+                headers=headers)
         print (response)
+        result_flag = True if response['response'] == 200 else False
+        
+        
+        return result_flag
+
+
+
+
+    '''
+    def add_car(self, car_details, auth_details=None,json =None):
+        "adds a new car"
+        car_details = conf.car_details
+        print (car_details)
+        data = car_details
+        headers = self.set_header_details(auth_details)
+        json_response = self.api_obj.add_car(data=data,
+                                             headers=headers)
+        print (json_response)
+        json_response = json_response['response']
+        print (json_response.text)
+        data = json_response.json()
+        response = json.loads(json_response.text)
+        response = json.loads(data.text)
+        print (data)
         result_flag = True if response['successful'] == True else False
 
         return result_flag
@@ -106,8 +131,8 @@ class API_Player(Results):
         print (json_response)
         response = json.loads(json_response['response'])
         print (response)
-        #result_flag = True if response['registered_car']['successful'] == True else False
-        result_flag = True if response['registered': []]['successful'] == True else False
+        result_flag = True if response['registered_car']['successful'] == True else False
+        #result_flag = True if response['registered:']['successful'] == True else False
         
         return result_flag
 
@@ -118,10 +143,11 @@ class API_Player(Results):
                 'brand': car_details['brand'],
                 'price_range': car_details['price_range'],
                 'car_type': car_details['car_type']}
-        data = json.dumps(data)
+        #data = json.dumps(data)
+
         headers = self.set_header_details(auth_details)
         print (headers)
-        json_response = self.api_obj.update_car(car_name,
+        json_response = self.api_obj.put(car_name,
                                                 data=data,
                                                 headers=headers)
         json_response = json_response['response']
@@ -233,3 +259,4 @@ class API_Player(Results):
             msg = "unknown reason"
 
         return {'result_flag': result_flag, 'msg': msg}
+    '''

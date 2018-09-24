@@ -23,13 +23,15 @@ class Base_API:
 
         #return browser
 
-
+    '''
     def get(self, url, headers={}):
         "Mechanize Get request"
         #browser = self.get_browser()
         request_headers = []
         response = {}
         error = {}
+        text = None
+        status_code = None
         #user = user_name
         #passwd = password
         for key, value in headers.items():
@@ -40,11 +42,12 @@ class Base_API:
             #response = requests.get(url,auth=('eric','testqxf2'))
             #response = requests.get(url,auth=(conf.user_name,conf.password))
             response = requests.get(url=url,headers=headers)
-            json_response = response.json() 
-            print (json_response['successful'])
-            print (response.json())
-            response = json.loads(response.text)
-            print ("??????%s"%response)
+            try:
+                json_response = response.json()
+            except:
+                json_response = None
+            status_code = response.status_code
+            text = response.text
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -59,25 +62,30 @@ class Base_API:
                 # bubble error back up after printing relevant details
                 raise e  # We raise error only when unknown errors occurs (other than HTTP error and url open error 10061) 
 
-        return {'response': response, 'error': error}
+        return {'response': status_code,'text':text,'json_response':json_response, 'error': error}
     
 
-    def post(self, url, data=None, headers={}):
+    def post(self, url,params=None, data=None,json=None,headers={}):
         "Mechanize Post request"
         #browser = self.get_browser()
         response = {}
         error = {}
         try:
+            #post_url = 'http://127.0.0.1:5000/cars/add/'
             #response = browser.open(mechanize.Request(
-                #url=url, data=data, headers=headers))
-            response = requests.post('http://127.0.0.1:5000/cars/add',json ={'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'}, auth=('eric','testqxf2'))
+            #url=url, data=data, headers=headers))
+            #response = requests.post('http://127.0.0.1:5000/cars/add',json ={'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'}, auth=('eric','testqxf2'))
+            print (url)
+            print (json)
+            print (headers)
+            response = requests.post(url,params=params,data=data,json=json,headers=headers)
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError,URLError):
                 error_message = e.read()
                 print("Iam here")
                 print("\n******\nPOST Error: %s %s %s" %
-                      (url, error_message, str(data)))
+                        (url, error_message, str(data)))
             elif (e.reason.args[0] == 10061):
                 print("\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m")
             else:
@@ -86,6 +94,61 @@ class Base_API:
             raise e
 
         return {'response': response, 'error': error}
+    '''
+    def get(self, url, headers={}):
+        "Get request"
+        json_response = None 
+        #request_headers = []
+        error = {}
+        #for key, value in headers.items():
+        #request_headers.append((key, value))
+        try:
+            response = requests.get(url=url,headers=headers)
+            try:
+                json_response = response.json()
+            except:
+                json_response = None
+        except (HTTPError,URLError) as e:
+            error = e
+            if isinstance(e,HTTPError):
+                error_message = e.read()
+                print("\n******\nGET Error: %s %s" %
+                    (url, error_message))
+            elif (e.reason.args[0] == 10061):
+                print("\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m")
+                raise e
+            else:
+                print(e.reason.args)
+                # bubble error back up after printing relevant details
+                raise e # We raise error only when unknown errors occurs (other than HTTP error and url open error 10061) 
+
+        return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
+
+
+    def post(self, url,params=None, data=None,json=None,headers={}):
+        "Post request"
+        error = {}
+        json_response = None
+        try:
+            response = requests.post(url,params=params,data=data,json=json,headers=headers)
+            try:
+                json_response = response.json()
+            except:
+                json_response = None
+        except (HTTPError,URLError) as e:
+            error = e
+            if isinstance(e,HTTPError,URLError):
+                error_message = e.read()
+                print("\n******\nPOST Error: %s %s %s" %
+                    (url, error_message, str(data)))
+            elif (e.reason.args[0] == 10061):
+                print("\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m")
+            else:
+                print(e.reason.args)
+                # bubble error back up after printing relevant details
+            raise e
+
+        return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
     
     def delete(self, url, headers={}):
@@ -106,14 +169,18 @@ class Base_API:
         return {'response': response, 'error': error}
     
 
-    def put(self, url, data=None, headers={}):
+    def put(self, car_name, data=None, headers={}):
         "Mechanize Put request"
         #browser = self.get_browser()
         response = {}
         error = {}
         try:
+            put_url = 'http://127.0.0.1:5000/cars/update/'+ car_name
+            print (put_url)
             response = requests.put(
-                'http://127.0.0.1:5000/cars/update/figo', json = {'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=('eric','testqxf2'))
+                put_url, json = data, headers = headers)
+            print (response)
+            #response = requests.put(url, json = data,headers=headers)
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):

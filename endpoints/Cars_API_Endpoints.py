@@ -16,22 +16,16 @@ class Cars_API_Endpoints(Base_API):
 	def add_car(self,data,headers):
 		"Adds a new car"
 		url = self.cars_url('/add')
-		json_response = self.post(url,data=data,headers=headers)
-		return {
-			'url':url,
-			'response':json_response['response']
-		}
+		print (data)
+		json_response = self.post(url,json=data,headers=headers)
+		return json_response
 
 
 	def get_cars(self,headers):
 		"gets list of cars"
 		url = self.cars_url()
 		json_response = self.get(url,headers=headers)
-		return {
-			'url':url,
-			'response':json_response['response']
-		}
-
+		return json_response
 
 	def get_car(self,url_params,headers):
 		"gets given car details"
