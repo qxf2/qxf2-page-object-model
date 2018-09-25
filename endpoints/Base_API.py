@@ -159,7 +159,8 @@ class Base_API:
         try:
             #browser.open(Mechanize_Delete_Request_class(url, headers=headers))
             #response = True
-            response = requests.delete('http://127.0.0.1:5000/cars/remove/figo', json = {'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=('eric','testqxf2'))
+            #response = requests.delete('http://127.0.0.1:5000/cars/remove/figo', json = {'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=('eric','testqxf2'))
+            response = requests.delete(url, json = json, headers = headers)
         except Exception as e:
             if (e.reason.args[0] == 10061):
                 print("\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m")
@@ -169,18 +170,33 @@ class Base_API:
         return {'response': response, 'error': error}
     
 
-    def put(self, car_name, data=None, headers={}):
+    def put(self,url,json=None, headers={}):
         "Mechanize Put request"
         #browser = self.get_browser()
-        response = {}
+        #response = {}
         error = {}
+        '''
         try:
-            put_url = 'http://127.0.0.1:5000/cars/update/'+ car_name
-            print (put_url)
-            response = requests.put(
-                put_url, json = data, headers = headers)
+            #put_url = 'http://127.0.0.1:5000/cars/update/'+ car_name
+            #print (put_url)
+           # response = requests.put(
+              # url, json = data, headers = headers)
             print (response)
             #response = requests.put(url, json = data,headers=headers)
+        '''
+        try:
+            print ('PUT',json)
+            response = requests.put(url,json=json,headers=headers)
+            print ('PUT',headers)
+            print ('PUT',url)
+            print ('PUT',response)
+            print (response.text)
+            try:
+                json_response = response.json()
+            except:
+                json_response = None
+
+
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -194,7 +210,7 @@ class Base_API:
             # bubble error back up after printing relevant details
             raise e
 
-        return {'response': response, 'error': error}
+        return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
 '''
 class Mechanize_Put_Request_class(mechanize.Request):

@@ -57,8 +57,8 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
     
     # Get Cars and verify if new car is added
     result_flag = test_obj.get_cars(auth_details)
-    '''
-    result_flag = test_obj.verify_car_count(expected_count=4,
+    
+    result_flag = test_obj.verify_car_count(expected_count=5,
                                             auth_details=auth_details)
     test_obj.log_result(result_flag,
                         positive='Total car count matches expected count',
@@ -100,14 +100,14 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
     test_obj.log_result(result_flag,
                         positive='Registered count matches expected value',
                         negative='Registered car count doesnt match expected value')
-
+    
     # Remove newly added car
     result_flag = test_obj.remove_car(auth_details=auth_details,
                                       car_name=update_car_name)
     test_obj.log_result(result_flag,
                         positive='Successfully deleted car %s' % update_car,
                         negative='Could not delete car %s ' % update_car)
-
+    
     # validate if car is deleted
     result_flag = test_obj.verify_car_count(expected_count=4,
                                             auth_details=auth_details)
@@ -152,7 +152,8 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
 
     # Assertion
     assert expected_pass == actual_pass,"Test failed: %s"%__file__
-    '''
+    
 
 if __name__ == '__main__':
     test_api_example()
+    

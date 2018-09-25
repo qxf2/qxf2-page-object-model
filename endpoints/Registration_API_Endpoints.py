@@ -15,10 +15,10 @@ class Registration_API_Endpoints(Base_API):
 	def register_car(self,url_params,data,headers):
 		"register car "
 		url = self.registration_url('car?')+url_params
-		json_response = self.post(url,data=data,headers=headers)
+		json_response = self.post(url,json=data,headers=headers)
 		return {
 			'url':url,
-			'response':json_response['response'].text
+			'response':json_response['response']
 		}
 
 

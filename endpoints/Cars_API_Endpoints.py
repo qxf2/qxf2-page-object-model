@@ -36,16 +36,26 @@ class Cars_API_Endpoints(Base_API):
 			'response':json_response['response']
 		}
 
-
-	def update_car(self,car_name,data,headers):
+	'''
+	def update_car(self,car_name,json,headers):
 		"updates a given car"
 		url = self.cars_url('/update/%s'%car_name)
-		json_response = self.put(url,data=data,headers=headers)
+		#url='http://127.0.0.1:5000/cars/update/'
+		json_response = self.put(url,json=json,headers=headers)
 		return {
 			'url':url,
 			'response':json_response['response']
 		}
+	'''
 
+	def update_car(self,car_name,json,headers):
+		"updates a given car"
+		url = self.cars_url('/update/%s'%car_name)
+		json_response =self.put(url,json=json,headers=headers)
+		return {
+			'url':url,
+			'response':json_response
+		}
 	
 	def remove_car(self,car_name,headers):
 		"deletes a car entry"

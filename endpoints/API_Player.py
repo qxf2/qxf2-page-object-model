@@ -71,15 +71,16 @@ class API_Player(Results):
         "gets a given car details"
         url_params = {'car_name': car_name, 'brand': brand}
         url_params_encoded = urllib.parse.urlencode(url_params)
+        print (url_params_encoded)
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.get_car(url_params=url_params_encoded,
                                              headers=headers)
-        response = json_response['response']
-        print (response)
-        result_flag = True if response['successful'] == True else False
+        #response = json_response
+        #print ('response')
+        #result_flag = True if response['successful'] == True else False
         self.write(msg='Fetched car details of :%s %s' % (car_name, response))
 
-        return result_flag
+        #return result_flag
 
     def add_car(self, car_details, auth_details):
         "adds a new car"
@@ -117,7 +118,7 @@ class API_Player(Results):
 
         return result_flag
 
-    
+    '''
     def register_car(self, car_name, brand, auth_details=None):
         "register car"
         url_params = {'car_name': car_name, 'brand': brand}
@@ -126,16 +127,18 @@ class API_Player(Results):
         data = customer_details
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.register_car(url_params=url_params_encoded,
-                                                  data=json.dumps(data),
+                                                  data=data,
                                                   headers=headers)
-        print (json_response)
-        response = json.loads(json_response['response'])
+        print ('register',json_response)
+        #response = json.loads(json_response['response'])
+        response = (json_response['response'])
         print (response)
-        result_flag = True if response['registered_car']['successful'] == True else False
-        #result_flag = True if response['registered:']['successful'] == True else False
+        #result_flag = True if response['registered_car']['successful'] == True else False
+        
+        result_flag = True if response['registered:']['successful'] == True else False
         
         return result_flag
-
+    
     
     def update_car(self, car_details, car_name='figo', auth_details=None):
         "updates a car"
@@ -147,17 +150,22 @@ class API_Player(Results):
 
         headers = self.set_header_details(auth_details)
         print (headers)
-        json_response = self.api_obj.put(car_name,
-                                                data=data,
-                                                headers=headers)
-        json_response = json_response['response']
-        response = json.loads(json_response.text)
-        print (response)
-        result_flag = True if response['response']['successful'] == True else False
+        print('UPDATE--IHJHJH',data)
+        response = self.api_obj.update_car(car_name,json=data,headers=headers)
+        print ('RESPONSE',response)
+        #print ('update',json_response)
+        #json_response = json_response['response']
+        #json_response = response['json_response']
+        Json_response = response['response']['json_response']
+        #response = json.loads(json_response.text)
+        #print ('update',response)
+        #result_flag = True if response['response']['successful'] == True else False
+        result_flag = True if response['response']['response'] == 200 else False
+        print ('resuRRRRRRRRRRRRRRRRRRR',response['response'])
 
         return result_flag
 
-
+    
     def remove_car(self, car_name, auth_details=None):
         "deletes a car entry"
         headers = self.set_header_details(auth_details)
@@ -166,7 +174,7 @@ class API_Player(Results):
         result_flag = True if json_response['response'] == True else False
 
         return result_flag
-
+    '''
 
     def get_registered_cars(self, auth_details=None):
         "gets registered cars"
@@ -190,17 +198,22 @@ class API_Player(Results):
         self.conditional_write(result_flag,
                                positive='Successfully deleted registered cars',
                                negative='Could not delete registered car')
-
-    def verify_car_count(self, expected_count, auth_details=None):
+    '''
+    def verify_car_count(self, expected_count, auth_details):
         "Verify car count"
         self.write('\n*****Verifying car count******')
         car_count = self.get_cars(auth_details)
-        car_count = len(car_count['cars_list'])
+        print ('????',car_count,'???')
+        #print ('cars_list')
+        #car_count = len(car_count['cars_list'])
+        print ((car_count['json_response']))
+        car_count = len(car_count['json_response']['cars_list']) 
+        print ('====',car_count,'====')
         result_flag = True if car_count == expected_count else False
 
         return result_flag
 
-
+    
     def verify_registration_count(self, expected_count, auth_details=None):
         "Verify registered car count"
         self.write('\n******Verifying registered car count********')
@@ -259,4 +272,4 @@ class API_Player(Results):
             msg = "unknown reason"
 
         return {'result_flag': result_flag, 'msg': msg}
-    '''
+    
