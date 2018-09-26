@@ -75,9 +75,11 @@ class API_Player(Results):
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.get_car(url_params=url_params_encoded,
                                              headers=headers)
-        #response = json_response
-        #print ('response')
+        print ('getcarrr',json_response)
+        response = json_response
+        print ('getcarrr',response)
         #result_flag = True if response['successful'] == True else False
+        result_flag = True if response == 200 else False
         self.write(msg='Fetched car details of :%s %s' % (car_name, response))
 
         #return result_flag
@@ -96,29 +98,6 @@ class API_Player(Results):
         return result_flag
 
 
-
-
-    '''
-    def add_car(self, car_details, auth_details=None,json =None):
-        "adds a new car"
-        car_details = conf.car_details
-        print (car_details)
-        data = car_details
-        headers = self.set_header_details(auth_details)
-        json_response = self.api_obj.add_car(data=data,
-                                             headers=headers)
-        print (json_response)
-        json_response = json_response['response']
-        print (json_response.text)
-        data = json_response.json()
-        response = json.loads(json_response.text)
-        response = json.loads(data.text)
-        print (data)
-        result_flag = True if response['successful'] == True else False
-
-        return result_flag
-
-    '''
     def register_car(self, car_name, brand, auth_details=None):
         "register car"
         url_params = {'car_name': car_name, 'brand': brand}
@@ -132,7 +111,7 @@ class API_Player(Results):
         print ('register',json_response)
         #response = json.loads(json_response['response'])
         response = (json_response['response'])
-        print (response)
+        print ("REgister:",response)
         #result_flag = True if response['registered_car']['successful'] == True else False
         
         result_flag = True if response['registered:']['successful'] == True else False
@@ -171,7 +150,8 @@ class API_Player(Results):
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.remove_car(car_name,
                                                 headers=headers)
-        result_flag = True if json_response['response'] == True else False
+        print ('remove_car_111',json_response)
+        result_flag = True if json_response['response'] == 200 else False
 
         return result_flag
     '''

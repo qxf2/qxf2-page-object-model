@@ -151,7 +151,7 @@ class Base_API:
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
     
-    def delete(self, url, headers={}):
+    def delete(self, url,headers={}):
         "Mechanize Delete request"
         #browser = self.get_browser()
         response = False
@@ -160,14 +160,28 @@ class Base_API:
             #browser.open(Mechanize_Delete_Request_class(url, headers=headers))
             #response = True
             #response = requests.delete('http://127.0.0.1:5000/cars/remove/figo', json = {'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'},auth=('eric','testqxf2'))
-            response = requests.delete(url, json = json, headers = headers)
-        except Exception as e:
-            if (e.reason.args[0] == 10061):
+            response = requests.delete(url,headers = headers)
+            print ('delete--hh',response)
+            try:
+                json_response = response.json()
+                print ('delete--hh',json_response)
+            except:
+                json_response = None
+        
+        except (HTTPError,URLError) as e:
+            error = e
+            if isinstance(e,HTTPError):
+                error_message = e.read()
+                print("\n******\nPUT Error: %s %s %s" %
+                      (url, error_message, str(data)))
+            elif (e.reason.args[0] == 10061):
                 print("\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m")
-            print("Exception in Mechanize_Delete_request: %s" % str(e))
+            else:
+                print(str(e.reason.args))
+            # bubble error back up after printing relevant details
             raise e
 
-        return {'response': response, 'error': error}
+        return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
     
 
     def put(self,url,json=None, headers={}):

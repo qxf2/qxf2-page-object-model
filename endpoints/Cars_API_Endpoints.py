@@ -61,6 +61,7 @@ class Cars_API_Endpoints(Base_API):
 		"deletes a car entry"
 		url =self.cars_url('/remove/%s'%car_name)
 		json_response = self.delete(url,headers=headers)
+		print ('removecar',json_response)
 		return{
 			'url':url,
 			'response':json_response['response']

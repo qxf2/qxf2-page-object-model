@@ -83,7 +83,7 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
     test_obj.log_result(result_flag,
                         positive='Successfully fetched car details of car : %s' % new_car,
                         negative='Couldnt fetch car details of car :%s' % new_car)
-    
+    '''
     # Register car
     customer_details = conf.customer_details
     result_flag = test_obj.register_car(auth_details=auth_details,
@@ -100,7 +100,7 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
     test_obj.log_result(result_flag,
                         positive='Registered count matches expected value',
                         negative='Registered car count doesnt match expected value')
-    
+    '''
     # Remove newly added car
     result_flag = test_obj.remove_car(auth_details=auth_details,
                                       car_name=update_car_name)
