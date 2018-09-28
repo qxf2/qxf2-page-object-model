@@ -83,7 +83,7 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
     test_obj.log_result(result_flag,
                         positive='Successfully fetched car details of car : %s' % new_car,
                         negative='Couldnt fetch car details of car :%s' % new_car)
-    '''
+    
     # Register car
     customer_details = conf.customer_details
     result_flag = test_obj.register_car(auth_details=auth_details,
@@ -92,10 +92,11 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
     test_obj.log_result(result_flag,
                         positive='Successfully registered new car %s with customer details %s' % (new_car, customer_details),
                         negative='Couldnt register new car %s with cutomer details %s' % (new_car, customer_details))
-
-    # Get Registered cars and check count
+    
+    #Get Registered cars and check count
     result_flag = test_obj.get_registered_cars(auth_details)
-    result_flag = test_obj.verify_registration_count(expected_count=0,
+    '''
+    result_flag = test_obj.verify_registration_count(expected_count=1,
                                                      auth_details=auth_details)
     test_obj.log_result(result_flag,
                         positive='Registered count matches expected value',
@@ -114,7 +115,7 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
     test_obj.log_result(result_flag,
                         positive='Total car count matches expected count after deleting one car',
                         negative='Total car count doesnt match expected count after deleting one car')
-
+    
     # Deleting registered car
     test_obj.delete_registered_car(auth_details)
     
@@ -156,4 +157,4 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
 
 if __name__ == '__main__':
     test_api_example()
-    
+   

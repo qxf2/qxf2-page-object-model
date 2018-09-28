@@ -16,6 +16,7 @@ class User_API_Endpoints(Base_API):
 		"get users list"
 		url = self.user_url('')
 		json_response = self.get(url,headers=headers)
+		print ('ENDPP_user_list',json_response)
 		
 		return {
                 'url':url,

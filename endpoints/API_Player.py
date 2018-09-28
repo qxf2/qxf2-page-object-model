@@ -100,21 +100,22 @@ class API_Player(Results):
 
     def register_car(self, car_name, brand, auth_details=None):
         "register car"
-        url_params = {'car_name': car_name, 'brand': brand}
-        url_params_encoded = urllib.parse.urlencode(url_params)
+        params = {'car_name': car_name, 'brand': brand}
+        params_encoded = urllib.parse.urlencode(params)
         customer_details = conf.customer_details
         data = customer_details
         headers = self.set_header_details(auth_details)
-        json_response = self.api_obj.register_car(url_params=url_params_encoded,
-                                                  data=data,
+        json_response = self.api_obj.register_car(params=params_encoded,
+                                                  json=data,
                                                   headers=headers)
         print ('register',json_response)
         #response = json.loads(json_response['response'])
         response = (json_response['response'])
         print ("REgister:",response)
+        print ("REgister:",json_response)
         #result_flag = True if response['registered_car']['successful'] == True else False
-        
-        result_flag = True if response['registered:']['successful'] == True else False
+        result_flag = True if json_response['response'] == 200 else False
+        #result_flag = True if response['registered:']['successful'] == True else False
         
         return result_flag
     
@@ -154,14 +155,18 @@ class API_Player(Results):
         result_flag = True if json_response['response'] == 200 else False
 
         return result_flag
-    '''
+    
 
     def get_registered_cars(self, auth_details=None):
         "gets registered cars"
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.get_registered_cars(headers=headers)
         response = json_response['registered_cars']
-        result_flag = True if response['successful'] == True else False
+        #print ('registered--cars',response)
+        print ('registered--cars',json_response)
+        #result_flag = True if response['successful'] == True else False
+        result_flag = True if json_response['registered_cars'] == 200 else False
+        #self.write(msg="Fetched registered cars list:\n %s"%str(json_response))
         self.write(msg="Fetched registered cars list:\n %s"%str(json_response))
         self.conditional_write(result_flag,
                                positive='Successfully fetched registered cars list',
@@ -174,11 +179,12 @@ class API_Player(Results):
         "deletes registered car"
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.delete_registered_car(headers=headers)
-        result_flag = True if json_response['response'] == True else False
+        print ('dele_regi_car',json_response)
+        result_flag = True if json_response['response'] == 200 else False
         self.conditional_write(result_flag,
                                positive='Successfully deleted registered cars',
                                negative='Could not delete registered car')
-    '''
+    
     def verify_car_count(self, expected_count, auth_details):
         "Verify car count"
         self.write('\n*****Verifying car count******')
@@ -186,7 +192,7 @@ class API_Player(Results):
         print ('????',car_count,'???')
         #print ('cars_list')
         #car_count = len(car_count['cars_list'])
-        print ((car_count['json_response']))
+        print ('veriiiiiiiiiiiiiiii',(car_count['json_response']))
         car_count = len(car_count['json_response']['cars_list']) 
         print ('====',car_count,'====')
         result_flag = True if car_count == expected_count else False
@@ -194,11 +200,13 @@ class API_Player(Results):
         return result_flag
 
     
-    def verify_registration_count(self, expected_count, auth_details=None):
+    def verify_registration_count(self, expected_count, auth_details):
         "Verify registered car count"
         self.write('\n******Verifying registered car count********')
         car_count = self.get_registered_cars(auth_details)
-        car_count = len(car_count['registered'])
+        print ('regi_car_count',car_count)
+        #print ('regiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',(car_count['json_response']))
+        #car_count = len(car_count['json_response']['registered_cars'])
         result_flag = True if car_count == expected_count else False
 
         return result_flag
@@ -215,6 +223,7 @@ class API_Player(Results):
         """if userlist result is none then return http error code"""
         try:
             response = get_dict_item(result, 'response')
+            print ('get_usr_lilllst',response)
             if response is not None:
                 user_list = get_dict_item(response, 'user_list')
                 error = get_dict_item(result, 'error')
