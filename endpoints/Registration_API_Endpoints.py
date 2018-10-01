@@ -26,9 +26,10 @@ class Registration_API_Endpoints(Base_API):
 		"gets registered cars"
 		url = self.registration_url('')
 		json_response = self.get(url,headers=headers)
+		#print ('json_regi_cars',json_response)
 		return {
 			'url':url,
-			'registered_cars':json_response['response']
+			'registered_cars':json_response['json_response']
 		}
 
 	def delete_registered_car(self,headers):

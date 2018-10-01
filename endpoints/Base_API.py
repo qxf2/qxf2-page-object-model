@@ -103,7 +103,10 @@ class Base_API:
         #for key, value in headers.items():
         #request_headers.append((key, value))
         try:
+            print ('get_url',url)
+            print ('get_headerssssssssss',headers)
             response = requests.get(url=url,headers=headers)
+            print ('respo_get_users', response)
             try:
                 json_response = response.json()
             except:
@@ -182,7 +185,7 @@ class Base_API:
             raise e
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
-    
+
 
     def put(self,url,json=None, headers={}):
         "Mechanize Put request"

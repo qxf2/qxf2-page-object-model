@@ -161,11 +161,12 @@ class API_Player(Results):
         "gets registered cars"
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.get_registered_cars(headers=headers)
+        print ('regggggg',json_response)
         response = json_response['registered_cars']
         #print ('registered--cars',response)
         print ('registered--cars',json_response)
-        #result_flag = True if response['successful'] == True else False
-        result_flag = True if json_response['registered_cars'] == 200 else False
+        result_flag = True if response['successful'] == True else False
+        #result_flag = True if json_response['registered_cars'] == 200 else False
         #self.write(msg="Fetched registered cars list:\n %s"%str(json_response))
         self.write(msg="Fetched registered cars list:\n %s"%str(json_response))
         self.conditional_write(result_flag,
@@ -204,22 +205,25 @@ class API_Player(Results):
         "Verify registered car count"
         self.write('\n******Verifying registered car count********')
         car_count = self.get_registered_cars(auth_details)
-        print ('regi_car_count',car_count)
+        print ('regiiiiiiiiiiiiiiiiiiiiiii_car_count',car_count)
         #print ('regiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',(car_count['json_response']))
         #car_count = len(car_count['json_response']['registered_cars'])
+        car_count = len(car_count['registered'])
         result_flag = True if car_count == expected_count else False
 
         return result_flag
 
 
-    def get_user_list(self, auth_details=None):
+    def get_user_list(self, auth_details):
         "get user list"
+        print ('usssssst',auth_details)
         headers = self.set_header_details(auth_details)
         result = self.api_obj.get_user_list(headers=headers)
+        print ('user_lllllll',result)
         self.write("Request & Response:\n%s\n" % str(result))
         user_list = {}
         response_code = None
-
+        '''
         """if userlist result is none then return http error code"""
         try:
             response = get_dict_item(result, 'response')
@@ -231,13 +235,14 @@ class API_Player(Results):
                 response_code = error.code
         except (TypeError, AttributeError) as e:
             raise e
-
+        '''
         return {'user_list': user_list, 'response_code': response_code}
 
 
     def check_validation_error(self, auth_details=None):
         "verify validatin error 403"
         result = self.get_user_list(auth_details)
+        print ('validationnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn',result)
         user_list = result['user_list']
         response_code = result['response_code']
         result_flag = False
