@@ -77,7 +77,6 @@ class Base_API:
             response = requests.delete(url,headers = headers)
             try:
                 json_response = response.json()
-                print ('delete--hh',json_response)
             except:
                 json_response = None
         

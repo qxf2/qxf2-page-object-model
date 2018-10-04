@@ -122,7 +122,6 @@ class API_Player(Results):
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.remove_car(car_name,
                                                 headers=headers)
-        print ('remove_car_111',json_response)
         result_flag = True if json_response['response'] == 200 else False
 
         return result_flag
@@ -170,32 +169,20 @@ class API_Player(Results):
 
         return result_flag
 
-
     def get_user_list(self, auth_details):
         "get user list"
         headers = self.set_header_details(auth_details)
-        result = self.api_obj.get_user_list(headers=headers)
-        self.write("Request & Response:\n%s\n" % str(result))
         user_list = {}
         response_code = None
-        
+
         """if userlist result is none then return http error code"""
         try:
-            #response = get_dict_item(result, 'response')
-            response = json_response
-            print ('get_usr_lilllst',response)
-            if response is not None:
-                #user_list = get_dict_item(response, 'user_list')
-                user_list = response
-                #error = get_dict_item(result, 'error')
-                error = error
-            if error is not None:
-                response_code = error.code
-        except (TypeError, AttributeError) as e:
+            result = self.api_obj.get_user_list(headers=headers)
+            self.write("Request & Response:\n%s\n" % str(result))
+        except Exception as e:
             raise e
-        
-        return {'user_list': user_list, 'response_code': response_code}
-        
+
+        return {'user_list': result['user_list'], 'response_code': result['response']}    
 
     def check_validation_error(self, auth_details=None):
         "verify validatin error 403"
@@ -206,7 +193,7 @@ class API_Player(Results):
         msg = ''
 
         "verify result based on user list and response code"
-        if user_list is None and response_code == 403:
+        if response_code == 403:
             msg = "403 FORBIDDEN: Authentication successful but no access for non admin users"
 
         elif response_code == 200:

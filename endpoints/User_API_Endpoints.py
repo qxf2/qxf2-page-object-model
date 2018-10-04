@@ -16,11 +16,11 @@ class User_API_Endpoints(Base_API):
 		"get users list"
 		url = self.user_url('')
 		json_response = self.get(url,headers=headers)
-		
 		return {
                 'url':url,
                 'response':json_response['response'],
-                'error':json_response['error']
+                'error':json_response['error'],
+				'user_list':json_response['json_response']
                 }
 
  
