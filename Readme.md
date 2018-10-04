@@ -1,4 +1,4 @@
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=QkJKNFRIRUNMM2pCV1dlVGVDMW5zWExBcXBidEhOQXQvc0U5TjJGMEZzST0tLWxESGxyS3h4dE1ZZlV5dWRhM21yV0E9PQ==--44144f492e6f5dc486e4d8398c00b9648f60c7cb)](https://www.browserstack.com/automate/public-build/QkJKNFRIRUNMM2pCV1dlVGVDMW5zWExBcXBidEhOQXQvc0U5TjJGMEZzST0tLWxESGxyS3h4dE1ZZlV5dWRhM21yV0E9PQ==--44144f492e6f5dc486e4d8398c00b9648f60c7cb)
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)](https://www.browserstack.com/automate/public-build/T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)
 
 --------
 A Pythonic Selenium, Appium and API test automation framework
@@ -11,7 +11,7 @@ You can use this test automation framework to write:
 
 3. __API automation__ scripts to test endpoints of your web/mobile applications
 
-This GUI and API test automation framework is developed and maintained by [Qxf2 Services](https://qxf2.com). This framework is written in __Python__ and is based on the __Page Object Model__ - a design pattern that makes it easy to maintain and develop robust tests. We have also included our __API test automation framework__ based on the player-interface pattern in this repository. You can now write your API tests along with your Selenium and Appium tests. Please note: the API test examples are written for the sample API available at [Cars API](https://github.com/qxf2/cars-api) repository.
+This GUI and API test automation framework is developed and maintained by [Qxf2 Services](https://qxf2.com). This framework is written in __Python__ and is based on the __Page Object Model__ - a design pattern that makes it easy to maintain and develop robust tests. We have also included our __API test automation framework__ based on the player-interface pattern in this repository. You can now write your API tests along with your Selenium and Appium tests. 
 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too! 
 
@@ -90,13 +90,7 @@ __Optional steps__ for more details on setting up appium and running tests on An
 
 __4. Setup for API automation__
 
-a. Get Cars API code from repo https://github.com/qxf2/cars-api using command "git clone https://github.com/qxf2/cars-api.git"
-
-b. Install Flask using command "pip install flask"
-
-c. Run cars-app server using command "python cars-api/cars_app.py"
-
-d. Run test_api_example now using command "pytest -k api -s"
+There are no extra setup steps for API automation. To verify, run test_api_example now using command "pytest -k api -s"
 
 __Optional steps__ for more details on setting up API and running tests refer to below link:
 * [Easily Maintainable API Test Automation Framework](https://qxf2.com/blog/easily-maintainable-api-test-automation-framework/)

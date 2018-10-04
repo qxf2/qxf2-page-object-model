@@ -12,7 +12,12 @@ from utils.Option_Parser import Option_Parser
 import conf.example_form_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 
+<<<<<<< HEAD
 def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id):
+=======
+
+def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
+>>>>>>> master
     "Run the test"
     try:
         #Initalize flags for tests summary
@@ -24,7 +29,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
 
         #2. Setup and register a driver
         start_time = int(time.time())	#Set start_time with current time
-        test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version)
+        test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
         
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -160,7 +165,9 @@ if __name__=='__main__':
                         remote_flag=options.remote_flag,
                         testrail_flag=options.testrail_flag,
                         tesults_flag=options.tesults_flag,
-                        test_run_id=options.test_run_id) 
+                        test_run_id=options.test_run_id,
+                        remote_project_name=options.remote_project_name,
+                        remote_build_name=options.remote_build_name) 
     else:
         print('ERROR: Received incorrect comand line input arguments')
         print(option_obj.print_usage())
