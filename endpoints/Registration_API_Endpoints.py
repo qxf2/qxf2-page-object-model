@@ -2,9 +2,9 @@
 API endpoints for Registration 
 """
 
-from .Base_Mechanize import Base_Mechanize
+from .Base_API import Base_API
 
-class Registration_API_Endpoints(Base_Mechanize):
+class Registration_API_Endpoints(Base_API):
 	"Class for registration endpoints"
 
 	def registration_url(self,suffix=''):
@@ -12,13 +12,13 @@ class Registration_API_Endpoints(Base_Mechanize):
 		return self.base_url+'/register/'+suffix
 
 
-	def register_car(self,url_params,data,headers):
+	def register_car(self,params,json,headers):
 		"register car "
-		url = self.registration_url('car?')+url_params
-		json_response = self.post(url,data=data,headers=headers)
+		url = self.registration_url('car?')+params
+		json_response = self.post(url,params=params,json=json,headers=headers)
 		return {
 			'url':url,
-			'response':json_response['response'].read()
+			'response':json_response['response']
 		}
 
 
@@ -28,7 +28,7 @@ class Registration_API_Endpoints(Base_Mechanize):
 		json_response = self.get(url,headers=headers)
 		return {
 			'url':url,
-			'registered_cars':json_response['response']
+			'registered_cars':json_response['json_response']
 		}
 
 	def delete_registered_car(self,headers):

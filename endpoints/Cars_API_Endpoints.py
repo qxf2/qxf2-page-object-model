@@ -2,10 +2,10 @@
 API endpoints for Cars 
 """
 
-from .Base_Mechanize import Base_Mechanize
+from .Base_API import Base_API
 import json
 
-class Cars_API_Endpoints(Base_Mechanize):
+class Cars_API_Endpoints(Base_API):
 	"Class for cars endpoints"
 
 	def cars_url(self,suffix=''):
@@ -16,22 +16,15 @@ class Cars_API_Endpoints(Base_Mechanize):
 	def add_car(self,data,headers):
 		"Adds a new car"
 		url = self.cars_url('/add')
-		json_response = self.post(url,data=data,headers=headers)
-		return {
-			'url':url,
-			'response':json_response['response']
-		}
+		json_response = self.post(url,json=data,headers=headers)
+		return json_response
 
 
 	def get_cars(self,headers):
 		"gets list of cars"
 		url = self.cars_url()
 		json_response = self.get(url,headers=headers)
-		return {
-			'url':url,
-			'response':json_response['response']
-		}
-
+		return json_response
 
 	def get_car(self,url_params,headers):
 		"gets given car details"
@@ -41,17 +34,15 @@ class Cars_API_Endpoints(Base_Mechanize):
 			'url':url,
 			'response':json_response['response']
 		}
-
-
-	def update_car(self,car_name,data,headers):
+	
+	def update_car(self,car_name,json,headers):
 		"updates a given car"
 		url = self.cars_url('/update/%s'%car_name)
-		json_response = self.put(url,data=data,headers=headers)
+		json_response =self.put(url,json=json,headers=headers)
 		return {
 			'url':url,
-			'response':json_response['response']
+			'response':json_response
 		}
-
 	
 	def remove_car(self,car_name,headers):
 		"deletes a car entry"
