@@ -25,9 +25,12 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
         #1. Create a test object.
         test_obj = PageFactory.get_page_object("bitcoin main page")
         
+        #Get the path of the .apk file
+        app_path = input('\nEnter the path of .apk file:')
+        
         #2. Setup and register a driver
         start_time = int(time.time())
-        test_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name)
+        test_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path)
 
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -87,7 +90,7 @@ if __name__ == '__main__':
     # Creating an instance of the class.
     options_obj = Option_Parser()
     options = options_obj.get_options()
-
+    
     # Run  the test only if the options provided are valid.
     if options_obj.check_options(options):
         test_mobile_bitcoin_price(mobile_os_name = options.mobile_os_name,

@@ -125,7 +125,7 @@ class DriverFactory():
         return local_driver
 
 
-    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name):
+    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path):
         "Setup mobile device"
         #Get the remote credentials from remote_credentials file
         USERNAME = remote_credentials.USERNAME
@@ -141,17 +141,15 @@ class DriverFactory():
 
             try:
                 if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
-                    self.sauce_upload(app_name) #Saucelabs expects the app to be uploaded to Sauce storage everytime the test is run
+                    self.sauce_upload(app_path,app_name) #Saucelabs expects the app to be uploaded to Sauce storage everytime the test is run
                     desired_capabilities['app'] = 'sauce-storage:'+app_name
-                    desired_capabilities['autoAcceptAlert']= 'true'
-
+                    desired_capabilities['autoAcceptAlert']= 'true'                      
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
 
                 else:
-                    desired_capabilities['realMobile'] = 'true'
-                    desired_capabilities['app'] = self.browser_stack_upload(app_name) #upload the application to the Browserstack Storage
-                                    
+                    desired_capabilities['realMobile'] = 'true'                   
+                    desired_capabilities['app'] = self.browser_stack_upload(app_name,app_path) #upload the application to the Browserstack Storage                                      
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
                         desired_capabilities= desired_capabilities)
             except Exception,e:
@@ -164,46 +162,44 @@ class DriverFactory():
                 desired_capabilities['appActivity'] = app_activity
                 if device_flag.lower() == 'y':
                     driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-                else:
-                    desired_capabilities['app'] = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name))
+                else:                    
+                    desired_capabilities['app'] = os.path.join(app_path,app_name)
                     driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-
             except Exception,e:
                 print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
                 print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
                 print ('\033[92m'+"SOLUTION: It looks like you are trying to run test cases with Local Appium Setup. \nPlease make sure to run Appium Server and try again.\n"+'\033[0m')
 
-        return driver
-	
+        return driver	
 
 
-    def sauce_upload(self,app_name):  
+    def sauce_upload(self,app_path,app_name):  
         "Upload the apk to the sauce temperory storage"
         USERNAME = remote_credentials.USERNAME
-        PASSWORD = remote_credentials.ACCESS_KEY
-        headers = {'Content-Type':'application/octet-stream'}
-        params = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name)) 
+        PASSWORD = remote_credentials.ACCESS_KEY        
+        headers = {'Content-Type':'application/octet-stream'}        
+        params = os.path.join(app_path,app_name)        
         fp = open(params,'rb')
-        data = fp.read()
+        data = fp.read()   
         fp.close()
-        response = requests.post('https://saucelabs.com/rest/v1/storage/%s/%s?overwrite=true'%(USERNAME,app_name),headers=headers,data=data,auth=(USERNAME,PASSWORD)) 
+        response = requests.post('https://saucelabs.com/rest/v1/storage/%s/%s?overwrite=true'%(USERNAME,app_name),headers=headers,data=data,auth=(USERNAME,PASSWORD))        
 
 
-    def browser_stack_upload(self,app_name):
+    def browser_stack_upload(self,app_name,app_path):
         "Upload the apk to the BrowserStack storage if its not done earlier"
         USERNAME = remote_credentials.USERNAME
         ACESS_KEY = remote_credentials.ACCESS_KEY
         app_url = None 
-        try:
+        try:          
             # Check if the apk file already present
-            get_response = requests.get("https://api.browserstack.com/app-automate/recent_apps",auth=(USERNAME,ACESS_KEY))
-            # If the apk is already present get the app url
-            if len(get_response.json()) != 0:
-                get_json_data = json.loads(get_response.text)
-                app_url = get_json_data[0]['app_url']
-            # If the apk is not already present Upload the apk            
-            if app_url == None:
-                apk_file = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','app',app_name))
+            get_response = requests.get("https://api.browserstack.com/app-automate/recent_apps",auth=(USERNAME,ACESS_KEY))            
+            # If the apk is already present get the app url                        
+            if len(get_response.json()) != 0:                
+                get_json_data = json.loads(get_response.text)                
+                app_url = get_json_data[0]['app_url']                                    
+            # If the apk is not already present Upload the apk           
+            if app_url == None:               
+                apk_file = os.path.join(app_path,app_name)                                
                 files = {'file': open(apk_file,'rb')}
                 post_response = requests.post("https://api.browserstack.com/app-automate/upload",files=files,auth=(USERNAME,ACESS_KEY))
                 post_json_data = json.loads(post_response.text)
@@ -211,7 +207,7 @@ class DriverFactory():
                 app_url = post_json_data['app_url']            
         except Exception as e:
             print str(e)
-
+            
         return app_url
                 
 
