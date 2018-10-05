@@ -6,13 +6,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Clone qxf2/cars-api repo
-          command: |
-            git clone https://github.com/qxf2/cars-api.git 
-      - run:
-          name: Install flask as it is needed to run our cars-api web server
-          command: | 
-            sudo pip install Flask
           name: Install requests
           command: |
             sudo pip install -r requirements.txt
