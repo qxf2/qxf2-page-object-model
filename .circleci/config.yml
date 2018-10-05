@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Install flask as it is needed to run our cars-api web server
           command: | 
-            pip install Flask
+            sudo pip install Flask
       - run:
           name: Run cars-app server in background as it is mandatory to run our API test
           command: | 
