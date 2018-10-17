@@ -9,8 +9,10 @@ To do:
 a) Handle expired sessions better
 """
 
-import os,requests
-import conf.remote_credentials as browserstack_credentials
+import os,requests,sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+#import conf.remote_credentials as remote_credentials
+from conf import remote_credentials
 
 
 class BrowserStack_Library():
@@ -23,8 +25,8 @@ class BrowserStack_Library():
     
     def get_auth(self):
         "Set up the auth object for the Requests library"
-        USERNAME = browserstack_credentials.USERNAME
-        PASSWORD = browserstack_credentials.ACCESS_KEY
+        USERNAME = remote_credentials.USERNAME
+        PASSWORD = remote_credentials.ACCESS_KEY
         auth = (USERNAME,PASSWORD)
 
         return auth

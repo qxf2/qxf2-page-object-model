@@ -7,9 +7,8 @@ TestRail integration:
 API reference: http://docs.gurock.com/testrail-api2/start
 """
 import dotenv,os
-from .testrail import *
+from utils import testrail
 import conf.testrailenv_conf as conf_file
-
 
 class Test_Rail:
     "Wrapper around TestRail's API"

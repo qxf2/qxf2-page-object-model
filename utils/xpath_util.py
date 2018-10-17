@@ -42,10 +42,10 @@ class Xpath_Util:
                                     # checking for the unique variable names                                                                       
                                     if variable_name != '' and variable_name not in self.variable_names:
                                         self.variable_names.append(variable_name)
-                                        print "%s_%s = %s"%(guessable_element, variable_name.encode('utf-8'), locator.encode('utf-8'))
+                                        print ("%s_%s = %s"%(guessable_element, variable_name.encode('utf-8'), locator.encode('utf-8')))
                                         break
                                     else:                                        
-                                        print locator.encode('utf-8') + "----> Couldn't generate appropriate variable name for this xpath"
+                                        print (locator.encode('utf-8') + "----> Couldn't generate appropriate variable name for this xpath")
                                         break    
                             elif guessable_element == 'button' and element.getText():                                                                                                
                                 button_text = element.getText()
@@ -61,18 +61,18 @@ class Xpath_Util:
                                         self.button_text_lists.append(button_text.lower())
                                         if not matches:  
                                             # Striping and replacing characters before printing the variable name                                                                                                                                                                                                                                                                     
-                                            print "%s_%s = %s"%(guessable_element,button_text.strip().strip("!?.").encode('utf-8').lower().replace(" + ","_").replace(" & ","_").replace(" ","_"), locator.encode('utf-8'))                                            
+                                            print ("%s_%s = %s"%(guessable_element,button_text.strip().strip("!?.").encode('utf-8').lower().replace(" + ","_").replace(" & ","_").replace(" ","_"), locator.encode('utf-8')))                                            
                                         else:
                                             # printing the variable name with ascii characters along with language counter 
-                                            print "%s_%s_%s = %s"%(guessable_element,"foreign_language",self.language_counter, locator.encode('utf-8')) + "---> Foreign language found, please change the variable name appropriately"
+                                            print ("%s_%s_%s = %s"%(guessable_element,"foreign_language",self.language_counter, locator.encode('utf-8')) + "---> Foreign language found, please change the variable name appropriately")
                                             self.language_counter +=1                                            
                                     else:
                                         # if the variable name is already taken
-                                        print locator.encode('utf-8') + "----> Couldn't generate appropriate variable name for this xpath"    
+                                        print (locator.encode('utf-8') + "----> Couldn't generate appropriate variable name for this xpath")
                                     break        
-        except Exception,e:
-            print "Exception when trying to generate xpath for:%s"%guessable_element
-            print "Python says:%s"%str(e)                                                  
+        except Exception as e:
+            print ("Exception when trying to generate xpath for:%s"%guessable_element)
+            print ("Python says:%s"%str(e))                                                  
     
         return result_flag
 
@@ -147,7 +147,7 @@ class Xpath_Util:
    
 #-------START OF SCRIPT--------
 if __name__ == "__main__":
-    print "Start of %s"%__file__
+    print ("Start of %s"%__file__)
 
     #Initialize the xpath object
     xpath_obj = Xpath_Util()
@@ -165,6 +165,6 @@ if __name__ == "__main__":
     
     #execute generate_xpath
     if xpath_obj.generate_xpath(soup) is False:
-        print "No XPaths generated for the URL:%s"%url
+        print ("No XPaths generated for the URL:%s"%url)
                  
     driver.quit() 
