@@ -29,26 +29,22 @@ class API_Player(Results):
         user = username
         password = password
         b64login = b64encode(bytes('%s:%s' %(user, password),"utf-8"))
-        return b64login
+        return b64login.decode('utf-8')
 
 
-    def set_header_details(self, auth_details):
+    def set_header_details(self, auth_details=None):
         "make header details"
         if auth_details != '' and auth_details is not None:
-            user = conf.user_name
-            password = conf.password
-            headers = {'Authorization': "Basic %s"%(auth_details.decode('utf-8'))}
+            headers = {'Authorization': "Basic %s"%(auth_details)}
         else:
             headers = {'content-type': 'application/json'}
 
         return headers
 
-
     def get_cars(self, auth_details):
         "get available cars "
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.get_cars(headers=headers)
-        print (json_response)
         result_flag = True if json_response['response'] == 200 else False
         self.write(msg="Fetched cars list:\n %s"%str(json_response['text']))
         self.conditional_write(result_flag,
@@ -65,11 +61,11 @@ class API_Player(Results):
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.get_car(url_params=url_params_encoded,
                                              headers=headers)
-        response = json_response
+        response = json_response['response']
         result_flag = True if response == 200 else False
         self.write(msg='Fetched car details of :%s %s' % (car_name, response))
 
-        #return result_flag
+        return result_flag
 
     def add_car(self, car_details, auth_details):
         "adds a new car"
@@ -86,12 +82,12 @@ class API_Player(Results):
 
     def register_car(self, car_name, brand, auth_details=None):
         "register car"
-        params = {'car_name': car_name, 'brand': brand}
-        params_encoded = urllib.parse.urlencode(params)
+        url_params = {'car_name': car_name, 'brand': brand}
+        url_params_encoded = urllib.parse.urlencode(url_params)
         customer_details = conf.customer_details
         data = customer_details
         headers = self.set_header_details(auth_details)
-        json_response = self.api_obj.register_car(params=params_encoded,
+        json_response = self.api_obj.register_car(url_params=url_params_encoded,
                                                   json=data,
                                                   headers=headers)
         response = (json_response['response'])

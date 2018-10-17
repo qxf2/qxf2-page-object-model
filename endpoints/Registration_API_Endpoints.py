@@ -1,3 +1,4 @@
+
 """
 API endpoints for Registration 
 """
@@ -12,10 +13,10 @@ class Registration_API_Endpoints(Base_API):
 		return self.base_url+'/register/'+suffix
 
 
-	def register_car(self,params,json,headers):
+	def register_car(self,url_params,json,headers):
 		"register car "
-		url = self.registration_url('car?')+params
-		json_response = self.post(url,params=params,json=json,headers=headers)
+		url = self.registration_url('car?')+url_params
+		json_response = self.post(url,params=url_params,json=json,headers=headers)
 		return {
 			'url':url,
 			'response':json_response['response']
