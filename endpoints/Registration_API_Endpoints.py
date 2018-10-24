@@ -19,7 +19,7 @@ class Registration_API_Endpoints(Base_API):
 		json_response = self.post(url,params=url_params,json=json,headers=headers)
 		return {
 			'url':url,
-			'response':json_response['response']
+			'response':json_response['json_response']
 		}
 
 
@@ -29,8 +29,9 @@ class Registration_API_Endpoints(Base_API):
 		json_response = self.get(url,headers=headers)
 		return {
 			'url':url,
-			'registered_cars':json_response['json_response']
+			'response':json_response['json_response']
 		}
+
 
 	def delete_registered_car(self,headers):
 		"deletes registered car"
@@ -38,5 +39,5 @@ class Registration_API_Endpoints(Base_API):
 		json_response = self.delete(url,headers)
 		return {
 		'url':url,
-		'response':json_response['response']
+		'response':json_response['json_response']
 		}

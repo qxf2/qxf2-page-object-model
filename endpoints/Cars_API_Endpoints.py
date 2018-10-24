@@ -17,14 +17,20 @@ class Cars_API_Endpoints(Base_API):
 		"Adds a new car"
 		url = self.cars_url('/add')
 		json_response = self.post(url,json=data,headers=headers)
-		return json_response
+		return {
+			'url':url,
+			'response':json_response['json_response']
+		}
 
 
 	def get_cars(self,headers):
 		"gets list of cars"
 		url = self.cars_url()
 		json_response = self.get(url,headers=headers)
-		return json_response
+		return {
+			'url':url,
+			'response':json_response['json_response']
+		}
 
 	def get_car(self,url_params,headers):
 		"gets given car details"
@@ -32,7 +38,7 @@ class Cars_API_Endpoints(Base_API):
 		json_response = self.get(url,headers=headers)
 		return {
 			'url':url,
-			'response':json_response['response']
+			'response':json_response['json_response']
 		}
 	
 	def update_car(self,car_name,json,headers):
@@ -41,7 +47,7 @@ class Cars_API_Endpoints(Base_API):
 		json_response =self.put(url,json=json,headers=headers)
 		return {
 			'url':url,
-			'response':json_response
+			'response':json_response['json_response']
 		}
 	
 	def remove_car(self,car_name,headers):
@@ -50,5 +56,5 @@ class Cars_API_Endpoints(Base_API):
 		json_response = self.delete(url,headers=headers)
 		return{
 			'url':url,
-			'response':json_response['response']
+			'response':json_response['json_response']
 		}

@@ -48,7 +48,7 @@ class Base_API:
         error = {}
         json_response = None
         try:
-            response = requests.post(url,params=params,data=data,json=json,headers=headers)
+            response = requests.post(url,params=params,json=json,headers=headers)
             try:
                 json_response = response.json()
             except:
@@ -58,7 +58,7 @@ class Base_API:
             if isinstance(e,HTTPError,URLError):
                 error_message = e.read()
                 print("\n******\nPOST Error: %s %s %s" %
-                    (url, error_message, str(data)))
+                    (url, error_message, str(json)))
             elif (e.reason.args[0] == 10061):
                 print("\033[1;31m\nURL open error: Please check if the API server is up or there is any other issue accessing the URL\033[1;m")
             else:
