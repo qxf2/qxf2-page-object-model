@@ -5,6 +5,7 @@ jobs:
       - image: circleci/python:3.6.4
     steps:
       - checkout
+      '''
       - run:
           name: Clone qxf2/cars-api repo
           command: |
@@ -22,6 +23,12 @@ jobs:
           name: Wait for sometime to start the server
           command: |
             sleep 5
+      '''
+      - run:
+          name: Run Cars_api Server
+          command: |
+            http://carsapi.pythonanywhere.com/cars 
+
       - run:
           name: Install requests
           command: |
