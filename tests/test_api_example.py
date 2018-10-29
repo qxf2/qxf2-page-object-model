@@ -21,7 +21,7 @@ from conf import api_example_conf as conf
 #<<<<<<< HEAD
 auth_details = (conf.user_name,conf.password)
 
-def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
+def test_api_example(api_url=http://carsapi.pythonanywhere.com, auth_details=auth_details):
 #=======
 #def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
 #>>>>>>> master
@@ -58,7 +58,7 @@ def test_api_example(api_url='http://127.0.0.1:5000',auth_details=auth_details):
                     \n 4. Run test_api_example now using command "pytest -k api -s" \n \033[1;m''')
 
 
-    
+
         # Get Cars and verify if new car is added
         result_flag = test_obj.get_cars(auth_details)
         

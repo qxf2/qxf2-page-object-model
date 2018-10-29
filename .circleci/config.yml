@@ -6,11 +6,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Run Cars_api Server
-          command: |
-            curl http://carsapi.pythonanywhere.com/cars 
-
-      - run:
           name: Install requests
           command: |
             sudo pip install -r requirements.txt
@@ -21,9 +16,7 @@ jobs:
       - run:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
-            #python --version
             python -m pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native 
-            #pytest -s -v tests/test_example_form.py -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native     
       - store_artifacts:
           path: ./screenshots
           destination: screenshots-file
