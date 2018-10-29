@@ -2,7 +2,7 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.5
+      - image: circleci/python:3.6.4
     steps:
       - checkout
       - run:
@@ -34,8 +34,8 @@ jobs:
           name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
           command: |
             #python --version
-            #pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native 
-            pytest -s -v tests/test_example_form.py -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native     
+            pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native 
+            #pytest -s -v tests/test_example_form.py -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native     
       - store_artifacts:
           path: ./screenshots
           destination: screenshots-file
