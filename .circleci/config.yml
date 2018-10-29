@@ -8,7 +8,7 @@ jobs:
       - run:
           name: Run Cars_api Server
           command: |
-            http://carsapi.pythonanywhere.com/cars 
+            curl http://carsapi.pythonanywhere.com/cars 
 
       - run:
           name: Install requests
