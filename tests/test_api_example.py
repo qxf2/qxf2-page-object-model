@@ -18,13 +18,10 @@ from endpoints.API_Player import API_Player
 from conf import api_example_conf as conf
 
 
-#<<<<<<< HEAD
 auth_details = (conf.user_name,conf.password)
 
 def test_api_example(api_url='http://carsapi.pythonanywhere.com', auth_details=auth_details):
-#=======
-#def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
-#>>>>>>> master
+
     "Run api test"
     
     try:
