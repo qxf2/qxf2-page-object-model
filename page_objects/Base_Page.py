@@ -609,7 +609,7 @@ class Base_Page(Borg,unittest.TestCase):
                 files.append(self.screenshot_dir + os.sep + image + '.png')
             self.images = []
             caseObj = {'name': name, 'suite': suite, 'desc': desc, 'result': result, 'reason': failReason, 'files': files, 'params': params}
-            for key, value in custom.iteritems():
+            for key, value in custom.items():
                 caseObj[key] = str(value)
             Tesults.add_test_case(caseObj)
         
