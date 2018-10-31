@@ -14,9 +14,9 @@ jobs:
           command: |
             git clone https://github.com/qxf2/bitcoin-info.git
             cd ./bitcoin-info/app
-            app_path=`pwd`
+            export app_path=`pwd`
             echo $app_path
-            export $app_path
+            #export $app_path
       - run:
           name: Decrypt remote_credentials_enc.py using openssl
           command: |
@@ -26,7 +26,7 @@ jobs:
           command: |
             echo $app_path   
             #echo "path" > /home/circleci/project/bitcoin-info/app/           
-            "py.test -s -v tests/test_mobile_bitcoin_price.py $app_path -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial"
+            "py.test -s -v ./tests/test_mobile_bitcoin_price.py $app_path -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial"
 
       - store_artifacts:
           path: ./screenshots
