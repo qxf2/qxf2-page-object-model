@@ -13,7 +13,7 @@ jobs:
           name: Mobile app
           command: |
             git clone https://github.com/qxf2/bitcoin-info.git
-            cd ./Bitcoin_Info/app
+            cd ./bitcoin-info/app
             app_path=`pwd`      
       - run:
           name: Decrypt remote_credentials_enc.py using openssl
