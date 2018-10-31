@@ -41,8 +41,8 @@ class Ssh_Util:
             self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             #Connect to the server
             if (self.password == ''):
-                self.pkey = paramiko.RSAKey.from_private_key_file(self.pkey)
-                self.client.connect(hostname=self.host, port=self.port, username=self.username,pkey=self.pkey ,timeout=self.timeout, allow_agent=False, look_for_keys=False)
+                private_key = paramiko.RSAKey.from_private_key_file(self.pkey)
+                self.client.connect(hostname=self.host, port=self.port, username=self.username,pkey=private_key,timeout=self.timeout, allow_agent=False, look_for_keys=False)
                 print "Connected to the server",self.host
             else:
                 self.client.connect(hostname=self.host, port=self.port,username=self.username,password=self.password,timeout=self.timeout, allow_agent=False, look_for_keys=False)    
@@ -156,9 +156,8 @@ if __name__=='__main__':
     if ssh_obj.execute_command(ssh_obj.commands) is True:
         print "Commands executed successfully\n"
     else:
-        print "Unable to execute the commands"
+        print "Unable to execute the commands"    
     
-    """
     #Sample code to upload a file to the server
     if ssh_obj.upload_file(ssh_obj.uploadlocalfilepath,ssh_obj.uploadremotefilepath) is True:
         print "File uploaded successfully", ssh_obj.uploadremotefilepath
@@ -170,4 +169,4 @@ if __name__=='__main__':
         print "File downloaded successfully", ssh_obj.downloadlocalfilepath
     else:
         print  "Failed to download the file"
-    """
+    
