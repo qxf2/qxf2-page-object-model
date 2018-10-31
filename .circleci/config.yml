@@ -26,7 +26,7 @@ jobs:
           command: |
             echo $app_path   
             #echo "path" > /home/circleci/project/bitcoin-info/app/           
-            "py.test -s -v ./tests/test_mobile_bitcoin_price.py $app_path -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial"
+            py.test -s -k mobile "$app_path" -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial
 
       - store_artifacts:
           path: ./screenshots
