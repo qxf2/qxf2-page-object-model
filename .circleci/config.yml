@@ -14,7 +14,9 @@ jobs:
           command: |
             git clone https://github.com/qxf2/bitcoin-info.git
             cd ./bitcoin-info/app
-            app_path=`pwd`      
+            app_path=`pwd`
+            echo $app_path
+            export $app_path
       - run:
           name: Decrypt remote_credentials_enc.py using openssl
           command: |
