@@ -144,7 +144,7 @@ class DriverFactory():
                     #Checking if the app_name is having spaces and replacing it with blank
                     if ' ' in app_name:
                         app_name = app_name.replace(' ','')
-                        print "The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name                                          
+                        print ("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)                                          
                     desired_capabilities['app'] = 'sauce-storage:'+app_name
                     desired_capabilities['autoAcceptAlert']= 'true'                      
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
@@ -187,7 +187,7 @@ class DriverFactory():
             fp.close()            
             response = requests.post('https://saucelabs.com/rest/v1/storage/%s/%s?overwrite=true'%(USERNAME,app_name),headers=headers,data=data,auth=(USERNAME,PASSWORD))
         except Exception as e:
-            print str(e)      
+            print (str(e))     
 
 
     def browser_stack_upload(self,app_name,app_path):
