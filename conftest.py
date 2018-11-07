@@ -258,7 +258,7 @@ def pytest_addoption(parser):
                       default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
     parser.addoption("-N","--app_path",
                       dest="app_path",
-                      help="Enter path location")
+                      help="Enter app path")
 
 
 

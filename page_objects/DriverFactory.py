@@ -190,7 +190,7 @@ class DriverFactory():
                 app_name = app_name.replace(' ','')
                 print "The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name                                                      
             response = requests.post('https://saucelabs.com/rest/v1/storage/%s/%s?overwrite=true'%(USERNAME,app_name),headers=headers,data=data,auth=(USERNAME,PASSWORD))
-            if response == 200:
+            if response.status_code == 200:
                 result_flag=True
                 print "App successfully uploaded to sauce storage"
         except Exception as e:
