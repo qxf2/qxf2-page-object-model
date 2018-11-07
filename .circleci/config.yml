@@ -12,24 +12,20 @@ jobs:
       - run:
           name: Mobile app
           command: |
-            git clone https://github.com/qxf2/bitcoin-info.git
-            cd ./bitcoin-info/app
-            export app_path=`pwd`
-            echo $app_path
-            #export $app_path
+            git clone https://github.com/qxf2/bitcoin-info.git           
+      - run:
+          name: Set Environment Variables
+          command: |                      
+            echo 'export app_path=/home/circleci/project/bitcoin-info/app/' >> $BASH_ENV  
       - run:
           name: Decrypt remote_credentials_enc.py using openssl
           command: |
             openssl aes-256-cbc -d -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY     
       - run:
-          name: Run the API and Selenium tests only (Ignoring to run mobile test as we are not yet set to run mobile test on server)
-          command: |
-            echo $app_path   
-            #echo "path" > /home/circleci/project/bitcoin-info/app/           
-            #py.test -s -k mobile -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial
-            py.test -s -v -k mobile -N "$app_path" -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native                      
-                      
-
+          name: Run the API, Mobile and Selenium tests
+          command: |              
+            #py.test -s -v -k mobile -N "$app_path" -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native                 
+            py.test -s -v -N "$app_path" -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native
       - store_artifacts:
           path: ./screenshots
           destination: screenshots-file
