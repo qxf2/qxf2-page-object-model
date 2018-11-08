@@ -32,6 +32,7 @@ class Cars_API_Endpoints(Base_API):
 			'response':json_response['json_response']
 		}
 
+
 	def get_car(self,url_params,headers):
 		"gets given car details"
 		url = self.cars_url('/find?')+url_params
@@ -41,6 +42,7 @@ class Cars_API_Endpoints(Base_API):
 			'response':json_response['json_response']
 		}
 	
+
 	def update_car(self,car_name,json,headers):
 		"updates a given car"
 		url = self.cars_url('/update/%s'%car_name)
@@ -49,6 +51,7 @@ class Cars_API_Endpoints(Base_API):
 			'url':url,
 			'response':json_response['json_response']
 		}
+		
 	
 	def remove_car(self,car_name,headers):
 		"deletes a car entry"

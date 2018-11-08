@@ -42,6 +42,7 @@ class API_Player(Results):
 
         return headers
 
+    
     def get_cars(self, auth_details=None):
         "get available cars "
         headers = self.set_header_details(auth_details)
@@ -70,7 +71,7 @@ class API_Player(Results):
         return result_flag
 
 
-    def add_car(self, car_details, auth_details):
+    def add_car(self, car_details, auth_details=None):
         "adds a new car"
         car_details = conf.car_details
         data = car_details
@@ -147,8 +148,9 @@ class API_Player(Results):
         self.conditional_write(result_flag,
                                positive='Successfully deleted registered cars',
                                negative='Could not delete registered car')
+
     
-    def verify_car_count(self, expected_count, auth_details):
+    def verify_car_count(self, expected_count, auth_details=None):
         "Verify car count"
         self.write('\n*****Verifying car count******')
         car_count = self.get_cars(auth_details)
@@ -158,7 +160,7 @@ class API_Player(Results):
         return result_flag
 
     
-    def verify_registration_count(self, expected_count, auth_details):
+    def verify_registration_count(self, expected_count, auth_details=None):
         "Verify registered car count"
         self.write('\n******Verifying registered car count********')
         car_count = self.get_registered_cars(auth_details)
@@ -168,7 +170,7 @@ class API_Player(Results):
         return result_flag
 
 
-    def get_user_list(self, auth_details):
+    def get_user_list(self, auth_details=None):
         "get user list"
         headers = self.set_header_details(auth_details)
         result = self.api_obj.get_user_list(headers=headers)

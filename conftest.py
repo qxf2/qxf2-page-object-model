@@ -222,7 +222,7 @@ def pytest_addoption(parser):
     parser.addoption("-H","--mobile_os_version",
                       dest="mobile_os_version",
                       help="Enter version of operating system of mobile: 8.1.0",
-                      default="8.0")
+                      default="6.0")
     parser.addoption("-I","--device_name",
                       dest="device_name",
                       help="Enter device name. Ex: Emulator, physical device name",
