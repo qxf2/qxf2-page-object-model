@@ -29,6 +29,7 @@ class API_Player(Results):
         user = username
         password = password
         b64login = b64encode(bytes('%s:%s' %(user, password),"utf-8"))
+        
         return b64login.decode('utf-8')
 
 
@@ -68,6 +69,7 @@ class API_Player(Results):
 
         return result_flag
 
+
     def add_car(self, car_details, auth_details):
         "adds a new car"
         car_details = conf.car_details
@@ -77,7 +79,6 @@ class API_Player(Results):
                 headers=headers)
         result_flag = True if json_response['response']['successful'] == True else False
   
-       
         return result_flag
 
 
