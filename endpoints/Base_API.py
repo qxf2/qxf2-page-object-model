@@ -10,7 +10,7 @@ from urllib.error import URLError
 from conf import api_example_conf as conf
 
 class Base_API:
-    "Main base class for Mechanize based scripts"
+    "Main base class for Requests based scripts"
 
     def __init__(self, url=None):
         pass
