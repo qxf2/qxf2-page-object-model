@@ -33,7 +33,7 @@ class Table_Object:
             row_text = []
             cell_doms = self.get_elements(self.cols_relative_xpath%(index+1))
             for cell_dom in cell_doms:
-                row_text.append(self.get_dom_text(cell_dom))
+                row_text.append(self.get_dom_text(cell_dom).decode('utf-8'))
             table_text.append(row_text)
             
         return table_text
@@ -81,7 +81,7 @@ class Table_Object:
         column_names = []
         col_doms = self.get_elements(self.cols_header)
         for col_dom in col_doms:
-            column_names.append(self.get_dom_text(col_dom))
+            column_names.append(self.get_dom_text(col_dom).decode('utf-8'))
 
         return column_names
 
@@ -117,10 +117,10 @@ class Table_Object:
         result_flag = False
         column_names = self.get_column_names()
         table_text = self.get_all_text()
-        self.write('||'.join(map(bytes.decode,column_names)))
+        self.write('||'.join(column_names))
         if table_text is not None:
             for row in table_text:
-                self.write('|'.join(map(bytes.decode,row)))
+                self.write('|'.join(row))
             result_flag = True
                 
         return result_flag

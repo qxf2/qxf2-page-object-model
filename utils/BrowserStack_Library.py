@@ -10,9 +10,7 @@ a) Handle expired sessions better
 """
 
 import os,requests,sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-#import conf.remote_credentials as remote_credentials
-from conf import remote_credentials
+from conf import remote_credentials as remote_credentials
 
 
 class BrowserStack_Library():

@@ -5,7 +5,6 @@ Our automated test will do the following:
     #Print out the entire table 
     #Verify if a certain name is present in the table
 """
-from __future__ import print_function
 
 #The import statements import: standard Python modules,conf,credential files
 import os,sys,time
