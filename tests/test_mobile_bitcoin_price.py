@@ -15,7 +15,7 @@ import conf.mobile_bitcoin_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 
 
-def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name):
+def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path):
     "Run the test."
     try:
         # Initalize flags for tests summary.
@@ -23,10 +23,7 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
         actual_pass = -1
 
         #1. Create a test object.
-        test_obj = PageFactory.get_page_object("bitcoin main page")
-        
-        #Get the path of the .apk file
-        app_path = input('\nEnter the path of .apk file:')
+        test_obj = PageFactory.get_page_object("bitcoin main page")      
         
         #2. Setup and register a driver
         start_time = int(time.time())

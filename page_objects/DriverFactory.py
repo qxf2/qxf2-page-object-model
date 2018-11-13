@@ -143,8 +143,7 @@ class DriverFactory():
                     self.sauce_upload(app_path,app_name) #Saucelabs expects the app to be uploaded to Sauce storage everytime the test is run
                     #Checking if the app_name is having spaces and replacing it with blank
                     if ' ' in app_name:
-                        app_name = app_name.replace(' ','')
-                        print "The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name                                          
+                        app_name = app_name.replace(' ','')                        
                     desired_capabilities['app'] = 'sauce-storage:'+app_name
                     desired_capabilities['autoAcceptAlert']= 'true'                      
                     driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
@@ -179,16 +178,25 @@ class DriverFactory():
         "Upload the apk to the sauce temperory storage"
         USERNAME = remote_credentials.USERNAME
         PASSWORD = remote_credentials.ACCESS_KEY
+        result_flag=False
         try:
             headers = {'Content-Type':'application/octet-stream'}                   
             params = os.path.join(app_path,app_name)                         
             fp = open(params,'rb')
             data = fp.read()   
-            fp.close()            
+            fp.close()
+            #Checking if the app_name is having spaces and replacing it with blank
+            if ' ' in app_name:
+                app_name = app_name.replace(' ','')
+                print "The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name                                                      
             response = requests.post('https://saucelabs.com/rest/v1/storage/%s/%s?overwrite=true'%(USERNAME,app_name),headers=headers,data=data,auth=(USERNAME,PASSWORD))
+            if response.status_code == 200:
+                result_flag=True
+                print "App successfully uploaded to sauce storage"
         except Exception as e:
             print str(e)      
 
+        return result_flag
 
     def browser_stack_upload(self,app_name,app_path):
         "Upload the apk to the BrowserStack storage if its not done earlier"
