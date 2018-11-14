@@ -127,6 +127,11 @@ def app_name():
     "pytest fixture for app name"
     return pytest.config.getoption("-D")
 
+@pytest.fixture
+def app_path():
+    "pytest fixture for app path"
+    return pytest.config.getoption("-N")    
+
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
@@ -251,7 +256,9 @@ def pytest_addoption(parser):
                       dest="app_name",
                       help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
                       default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
-
+    parser.addoption("-N","--app_path",
+                      dest="app_path",
+                      help="Enter app path")
 
 
 
