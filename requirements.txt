@@ -1,10 +1,8 @@
 requests==2.20.0
 pytest==3.6.3
 selenium==3.13.0
-#mechanize==0.2.5
 python_dotenv==0.8.2
 Appium_Python_Client==0.28
-#dotenv==0.0.5
 pytest-xdist==1.22
 pytest-rerunfailures==4.1
 pillow==5.1.0
