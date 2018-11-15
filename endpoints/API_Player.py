@@ -73,7 +73,6 @@ class API_Player(Results):
 
     def add_car(self, car_details, auth_details=None):
         "adds a new car"
-        car_details = conf.car_details
         data = car_details
         headers = self.set_header_details(auth_details)
         json_response = self.api_obj.add_car(data=data,
