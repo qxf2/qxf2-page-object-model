@@ -85,7 +85,17 @@ class Option_Parser:
                             dest="tesults_flag",
                             help="Enter Y or N. 'Y' if you want to report results with Tesults",
                             default="N")
-
+        self.parser.add_option("-N","--app_path",
+                            dest="app_path",
+                            help="Enter app path")
+        self.parser.add_option("--remote_project_name",
+                            dest="remote_project_name",
+                            help="The project name if its run in BrowserStack",
+                            default=None)
+        self.parser.add_option("--remote_build_name",
+                            dest="remote_build_name",
+                            help="The build name if its run in BrowserStack",
+                            default=None)
         
     def add_option(self,option_letter,option_word,dest,help_text):
         "Add an option to our parser"
