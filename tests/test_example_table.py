@@ -69,16 +69,16 @@ def test_example_table(base_url,browser,browser_version,os_version,os_name,remot
         actual_pass = test_obj.pass_counter
         test_obj.teardown() 
     
-    except Exception,e:
-        print "Exception when trying to run test: %s"%__file__
-        print "Python says:%s"%str(e)
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
 
     assert expected_pass == actual_pass ,"Test failed: %s"%__file__
     
 
 #---START OF SCRIPT
 if __name__=='__main__':
-    print "Start of %s"%__file__
+    print("Start of %s"%__file__)
     #Creating an instance of the class
     options_obj = Option_Parser()
     options=options_obj.get_options()
@@ -97,5 +97,5 @@ if __name__=='__main__':
                     remote_project_name=options.remote_project_name,
                     remote_build_name=options.remote_build_name)
     else:
-        print 'ERROR: Received incorrect input arguments'
-        print options_obj.print_usage()
+        print('ERROR: Received incorrect input arguments')
+        print(options_obj.print_usage())

@@ -1,5 +1,5 @@
 #
-# TestRail API binding for Python 2.x (API v2, available since 
+# TestRail API binding for Python 3.x (API v2, available since 
 # TestRail 3.0)
 #
 # Learn more:
@@ -10,7 +10,8 @@
 # Copyright Gurock Software GmbH. See license.md for details.
 #
 
-import urllib2, json, base64
+import urllib.request, urllib.error
+import json, base64
 
 class APIClient:
 	def __init__(self, base_url):
@@ -19,6 +20,7 @@ class APIClient:
 		if not base_url.endswith('/'):
 			base_url += '/'
 		self.__url = base_url + 'index.php?/api/v2/'
+		print ("API")
 
 	#
 	# Send Get
@@ -52,21 +54,27 @@ class APIClient:
 
 	def __send_request(self, method, uri, data):
 		url = self.__url + uri
-		request = urllib2.Request(url)
+		request = urllib.request.Request(url)
 		if (method == 'POST'):
-			request.add_data(json.dumps(data))
-		auth = base64.encodestring('%s:%s' % (self.user, self.password)).strip()
+			request.data = bytes(json.dumps(data), 'utf-8')
+		auth = str(
+			base64.b64encode(
+				bytes('%s:%s' % (self.user, self.password), 'utf-8')
+			),
+			'ascii'
+		).strip()
 		request.add_header('Authorization', 'Basic %s' % auth)
 		request.add_header('Content-Type', 'application/json')
 
 		e = None
 		try:
-			response = urllib2.urlopen(request).read()
-		except urllib2.HTTPError as e:
-			response = e.read()
+			response = urllib.request.urlopen(request).read()
+		except urllib.error.HTTPError as ex:
+			response = ex.read()
+			e = ex
 
 		if response:
-			result = json.loads(response)
+			result = json.loads(response.decode())
 		else:
 			result = {}
 

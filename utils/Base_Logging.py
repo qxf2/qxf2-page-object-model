@@ -2,7 +2,6 @@
 Qxf2 Services: A plug-n-play class for logging.
 This class wraps around Python's logging module.
 """
-
 import logging, os, inspect
 import datetime
 import sys
@@ -58,9 +57,9 @@ class Base_Logging():
         "Reset the log handlers if they exist"
         try:
             log.handlers = []
-        except Exception,e:
-            print 'Failed to close the logger object'
-            print 'Exception', e
+        except Exception as e:
+            print('Failed to close the logger object')
+            print('Exception', e)
             
 
     def set_log_level(self,log,level=logging.INFO):

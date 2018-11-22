@@ -12,7 +12,6 @@ Note:
 * To generate pytest_report.html file use following command from the root of repo e.g. py.test --html = log/pytest_report.html
 * To generate pytest_report.log file use following command from the root of repo e.g. py.test -k example_form -r F -v > log/pytest_report.log
 """
-
 import smtplib
 import os,sys
 from email.mime.text import MIMEText
@@ -153,7 +152,7 @@ class Email_Pytest_Report:
 
 #---USAGE EXAMPLES
 if __name__=='__main__':
-    print "Start of %s"%__file__
+    print("Start of %s"%__file__)
      
     #Initialize the Email_Pytest_Report object
     email_obj = Email_Pytest_Report()
@@ -174,7 +173,7 @@ if __name__=='__main__':
     email_obj.send_test_report_email(html_body_flag=False,attachment_flag=True,report_file_path='default')
 
     #5. Send different type of attachment
-    image_file = "C:\Users\Public\Pictures\Sample Pictures\Koala.jpg"  # add attachment file here
+    image_file = ("C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg") # add attachment file here
     email_obj.send_test_report_email(html_body_flag=False,attachment_flag=True,report_file_path= image_file)
     '''
     

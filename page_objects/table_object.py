@@ -1,8 +1,7 @@
 """
 This class models the table on the Selenium tutorial page
 """
-
-from Base_Page import Base_Page
+from .Base_Page import Base_Page
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 
@@ -34,9 +33,9 @@ class Table_Object:
             row_text = []
             cell_doms = self.get_elements(self.cols_relative_xpath%(index+1))
             for cell_dom in cell_doms:
-                row_text.append(self.get_dom_text(cell_dom))
+                row_text.append(self.get_dom_text(cell_dom).decode('utf-8'))
             table_text.append(row_text)
-
+            
         return table_text
 
     
@@ -72,7 +71,7 @@ class Table_Object:
         if col_index > -1:
             table_text = self.get_all_text()
             #Transpose the matrix since you want the column
-            column_text = zip(*table_text)[col_index]
+            column_text = list(zip(*table_text))[col_index]
 
         return column_text
 
@@ -82,7 +81,7 @@ class Table_Object:
         column_names = []
         col_doms = self.get_elements(self.cols_header)
         for col_dom in col_doms:
-            column_names.append(self.get_dom_text(col_dom))
+            column_names.append(self.get_dom_text(col_dom).decode('utf-8'))
 
         return column_names
 
@@ -92,11 +91,13 @@ class Table_Object:
         result_flag = False
         if column_name == 'all':
             table_text = self.get_all_text()
+           
         else:
             table_text = [self.get_column_text(column_name)]
+            
         for row in table_text:
             for col in row:
-                if col == text:
+                if col.decode('utf-8') == text:
                     result_flag = True
                     break
             if result_flag is True:

@@ -11,7 +11,7 @@ a) Add a project if it does not exist
 """
 
 import os,ConfigParser,time
-from Test_Rail import Test_Rail
+from .Test_Rail import Test_Rail
 from optparse import OptionParser
 
 
@@ -20,16 +20,16 @@ def check_file_exists(file_path):
     conf_flag = True
     if os.path.exists(file_path):
         if not os.path.isfile(file_path):
-            print '\n****'
-            print 'Config file provided is not a file: '
-            print file_path
-            print '****'
+            print('\n****')
+            print('Config file provided is not a file: ')
+            print(file_path)
+            print('****')
             conf_flag = False
     else:
-        print '\n****'
-        print 'Unable to locate the provided config file: '
-        print file_path
-        print '****'
+        print('\n****')
+        print('Unable to locate the provided config file: ')
+        print(file_path)
+        print('****')
         conf_flag = False
 
     return conf_flag
@@ -101,8 +101,8 @@ def setup_testrail(project_name='POM DEMO',milestone_name=None,test_run_name=Non
             run_id = tr_obj.get_run_id(project_name,test_run_name)
             save_new_test_run_details(os.path.join(conf_dir,'latest_test_run.txt'),test_run_name,run_id)
     else:
-        print 'Project does not exist: ',project_name
-        print 'Stopping the script without doing anything.'
+        print('Project does not exist: ',project_name)
+        print('Stopping the script without doing anything.')
 
 
 
@@ -153,6 +153,6 @@ if __name__=='__main__':
                        name_override_flag=options.name_override_flag,
                        case_ids_list=options.case_ids_list)
     else:
-        print 'ERROR: Received incorrect input arguments'
-        print parser.print_usage()
+        print('ERROR: Received incorrect input arguments')
+        print(parser.print_usage())
         

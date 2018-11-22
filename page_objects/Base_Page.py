@@ -14,8 +14,8 @@ import unittest,time,logging,os,inspect,utils.Test_Rail
 from utils.Base_Logging import Base_Logging
 from inspect import getargspec
 from utils.BrowserStack_Library import BrowserStack_Library
-from DriverFactory import DriverFactory
-import PageFactory
+from .DriverFactory import DriverFactory
+from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
@@ -150,7 +150,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.logs_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
             if not os.path.exists(self.logs_parent_dir):
                 os.makedirs(self.logs_parent_dir)
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to set directory structure")
             self.write(str(e))
             self.exceptions.append("Error when setting up the directory structure")
@@ -162,7 +162,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.screenshot_dir = self.get_screenshot_dir(os_name,os_version,browser,browser_version,overwrite_flag=True)
             if not os.path.exists(self.screenshot_dir):
                 os.makedirs(self.screenshot_dir)
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to set screenshot directory")
             self.write(str(e))
             self.exceptions.append("Error when setting up the screenshot directory")
@@ -252,7 +252,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             window_handle = self.get_current_window_handle()
             self.window_structure[window_handle] = name
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to set windows name")
             self.write(str(e))
             self.exceptions.append("Error when setting up the name of the current window")
@@ -286,7 +286,7 @@ class Base_Page(Borg,unittest.TestCase):
                                 'Automation switched to the browser window: %s'%name,
                                 'Unable to locate and switch to the window with name: %s'%name,
                                 level='debug')
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when trying to switch window")
             self.write(str(e))
             self.exceptions.append("Error when switching browser window")
@@ -303,7 +303,7 @@ class Base_Page(Borg,unittest.TestCase):
             after_window_count = len(self.get_window_handles())
             if (before_window_count - after_window_count) == 1:
                 result_flag = True
-        except Exception,e:
+        except Exception as e:
             self.write('Could not close the current window')
             self.write(str(e))
             self.exceptions.append("Error when trying to close the current window")
@@ -328,8 +328,8 @@ class Base_Page(Borg,unittest.TestCase):
             path_conf_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'conf', 'locators.conf'))
             if path_conf_file is not None:
                 value = Conf_Reader.get_value(path_conf_file, key)
-        except Exception,e:
-            print str(e)
+        except Exception as e:
+            print (str(e))
             self.exceptions.append("Error when fetching locator from the locator.conf")
 
         return value
@@ -341,7 +341,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             locator = self.split_locator(locator)
             dom_element = self.driver.find_element(*locator)
-        except Exception,e:
+        except Exception as e:
             if verbose_flag is True:
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
@@ -356,7 +356,7 @@ class Base_Page(Borg,unittest.TestCase):
         result = ()
         try:
             result = tuple(locator.split(',',1))
-        except Exception,e:
+        except Exception as e:
             self.write("Error while parsing locator")
             self.exceptions.append("Unable to split the locator-'%s' in the conf/locators.conf file"%(locator[0],locator[1]))
               
@@ -369,7 +369,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             locator = self.split_locator(locator)
             dom_elements = self.driver.find_elements(*locator)
-        except Exception,e:
+        except Exception as e:
             if msg_flag==True:
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
@@ -386,8 +386,8 @@ class Base_Page(Borg,unittest.TestCase):
             if link is not None:
                 link.click()
                 result_flag=True
-                self.wait(wait_time)                
-        except Exception, e:
+                self.wait(wait_time)
+        except Exception as e:
             self.write(str(e),'debug')
             self.write('Exception when clicking link with path: %s'%locator)
             self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)   
@@ -403,10 +403,10 @@ class Base_Page(Borg,unittest.TestCase):
             if text_field is not None and clear_flag is True:
                 try:
                     text_field.clear()
-                except Exception, e:
+                except Exception as e:
                     self.write(str(e),'debug')
                     self.exceptions.append("Could not clear the text field- '%s' in the conf/locators.conf file"%locator)
-        except Exception,e:
+        except Exception as e:
             self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
 
         result_flag = False
@@ -414,7 +414,7 @@ class Base_Page(Borg,unittest.TestCase):
             try:
                 text_field.send_keys(value)
                 result_flag = True
-            except Exception,e:
+            except Exception as e:
                 self.write('Could not write to text field: %s'%locator,'debug')
                 self.write(str(e),'debug')
                 self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
@@ -427,7 +427,7 @@ class Base_Page(Borg,unittest.TestCase):
         text = ''
         try:
             text = self.get_element(locator).text
-        except Exception,e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when getting text from the path-'%s' in the conf/locators.conf file"%locator)
             return None
@@ -441,7 +441,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             text = dom_element.text
             text = text.encode('utf-8')
-        except Exception, e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when getting text from the DOM element-'%s' in the conf/locators.conf file"%locator)
         
@@ -457,7 +457,7 @@ class Base_Page(Borg,unittest.TestCase):
                 result_flag = self.toggle_checkbox(locator)
             else:
                 result_flag = True
-        except Exception, e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when selecting checkbox-'%s' in the conf/locators.conf file"%locator)
                     
@@ -473,7 +473,7 @@ class Base_Page(Borg,unittest.TestCase):
                 result_flag = self.toggle_checkbox(locator)
             else:
                 result_flag = True
-        except Exception, e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when deselecting checkbox-'%s' in the conf/locators.conf file"%locator)
         
@@ -486,7 +486,7 @@ class Base_Page(Borg,unittest.TestCase):
         "Toggle a checkbox"
         try:
             return self.click_element(locator)
-        except Exception,e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when toggling checkbox-'%s' in the conf/locators.conf file"%locator)
 
@@ -501,7 +501,7 @@ class Base_Page(Borg,unittest.TestCase):
                     option.click()
                     result_flag = True
                     break
-        except Exception, e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Error when selecting option from the drop-down '%s' "%locator)
         
@@ -525,7 +525,7 @@ class Base_Page(Borg,unittest.TestCase):
                 element = self.get_element(locator,verbose_flag=False)
                 if element.is_displayed() is True:
                     result_flag = True
-        except Exception , e:
+        except Exception as e:
             self.write(e)
             self.exceptions.append("Web element not present in the page, please check the locator is correct -'%s' in the conf/locators.conf file"%locator)
 
@@ -538,7 +538,7 @@ class Base_Page(Borg,unittest.TestCase):
             element = self.get_element(locator)
             element.send_keys(Keys.ENTER)
             self.wait(wait_time)
-        except Exception,e:
+        except Exception as e:
             self.write(str(e),'debug')
             self.exceptions.append("An exception occurred when hitting enter")
             return None
@@ -550,7 +550,7 @@ class Base_Page(Borg,unittest.TestCase):
             element = self.get_element(locator)
             element.send_keys(Keys.PAGE_DOWN)
             self.wait(wait_time)
-        except Exception,e:
+        except Exception as e:
             self.write(str(e),'debug')
             self.exceptions.append("An exception occured when scrolling down")
             return None
@@ -609,7 +609,7 @@ class Base_Page(Borg,unittest.TestCase):
                 files.append(self.screenshot_dir + os.sep + image + '.png')
             self.images = []
             caseObj = {'name': name, 'suite': suite, 'desc': desc, 'result': result, 'reason': failReason, 'files': files, 'params': params}
-            for key, value in custom.iteritems():
+            for key, value in custom.items():
                 caseObj[key] = str(value)
             Tesults.add_test_case(caseObj)
         
@@ -629,10 +629,10 @@ class Base_Page(Borg,unittest.TestCase):
             path = self.split_locator(locator)
             WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
             result_flag =True
-        except Exception,e:
-			self.conditional_write(result_flag,
-                               positive='Located the element: %s'%locator,
-                               negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
+        except Exception as e:
+	        self.conditional_write(result_flag,
+                    positive='Located the element: %s'%locator,
+                    negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
             
         return result_flag
 
@@ -665,7 +665,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             log = self.driver.get_log('browser')
             return log
-        except Exception,e:
+        except Exception as e:
             self.write("Exception when reading Browser Console log")
             self.write(str(e))
             return log
@@ -686,7 +686,7 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             self.driver.execute_script(js_script)
             result_flag = True
-        except Exception,e:
+        except Exception as e:
             result_flag = False
 
         return result_flag

@@ -5,8 +5,6 @@ Our automated test will do the following:
     #Fill the example form.
     #Click on Click me! button and check if its working fine.
 """
-
-#The import statements import: standard Python modules,conf,credential files
 import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
@@ -16,9 +14,10 @@ import conf.testrail_caseid_conf as testrail_file
 
 
 def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
+
     "Run the test"
     try:
-	#Initalize flags for tests summary
+        #Initalize flags for tests summary
         expected_pass = 0
         actual_pass = -1
 
@@ -45,7 +44,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         email = conf.email
         phone = conf.phone_no
         gender = conf.gender
- 
+
         #5. Set name in form
         result_flag = test_obj.set_name(name) 
         test_obj.log_result(result_flag,
@@ -139,16 +138,16 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         actual_pass = test_obj.pass_counter
         test_obj.teardown()
         
-    except Exception,e:
-        print "Exception when trying to run test:%s"%__file__
-        print "Python says:%s"%str(e)
+    except Exception as e:
+        print("Exception when trying to run test:%s"%__file__)
+        print("Python says:%s"%str(e))
 
     assert expected_pass == actual_pass, "Test failed: %s"%__file__
        
     
 #---START OF SCRIPT   
 if __name__=='__main__':
-    print "Start of %s"%__file__
+    print("Start of %s"%__file__)
     #Creating an instance of the class
     options_obj = Option_Parser()
     options = options_obj.get_options()
@@ -167,5 +166,5 @@ if __name__=='__main__':
                         remote_project_name=options.remote_project_name,
                         remote_build_name=options.remote_build_name) 
     else:
-        print 'ERROR: Received incorrect comand line input arguments'
-        print option_obj.print_usage()
+        print('ERROR: Received incorrect comand line input arguments')
+        print(option_obj.print_usage())
