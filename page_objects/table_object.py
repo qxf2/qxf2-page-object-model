@@ -97,7 +97,7 @@ class Table_Object:
             
         for row in table_text:
             for col in row:
-                if col.decode('utf-8') == text:
+                if col == text:
                     result_flag = True
                     break
             if result_flag is True:
