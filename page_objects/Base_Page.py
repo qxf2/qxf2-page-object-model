@@ -597,6 +597,7 @@ class Base_Page(Borg,unittest.TestCase):
         self.msg_list = []
         
     def add_tesults_case(self, name, desc, suite, result_flag, msg='', files=[], params={}, custom={}):
+        "Update Tesults with test results"
         if self.tesults_flag is True:
             result = "unknown"
             failReason = ""
