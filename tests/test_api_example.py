@@ -9,6 +9,7 @@ API EXAMPLE TEST
 7. Get list of registered cars -GET
 8. Verify registered cars count
 9. Delete newly added car -DELETE request
+
 """
 import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
