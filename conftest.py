@@ -1,5 +1,4 @@
-import pytest
-import os
+import os,pytest
 from conf import browser_os_name_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
@@ -17,10 +16,12 @@ def base_url():
     "pytest fixture for base url"
     return pytest.config.getoption("-U")
 
+
 @pytest.fixture
 def api_url():
     "pytest fixture for base url"
     return pytest.config.getoption("-A")
+    
 
 @pytest.fixture
 def test_run_id():
@@ -75,10 +76,12 @@ def slack_flag():
     "pytest fixture for sending reports on slack"
     return pytest.config.getoption("-S")
 
+
 @pytest.fixture
 def tesults_flag():
     "pytest fixture for sending results to tesults"
     return pytest.config.getoption("--tesults")
+
 
 @pytest.fixture
 def mobile_os_name():
@@ -126,6 +129,7 @@ def email_pytest_report():
 def app_name():
     "pytest fixture for app name"
     return pytest.config.getoption("-D")
+
 
 @pytest.fixture
 def app_path():
