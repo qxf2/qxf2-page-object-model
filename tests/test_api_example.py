@@ -10,9 +10,7 @@ API EXAMPLE TEST
 8. Verify registered cars count
 9. Delete newly added car -DELETE request
 """
-import os
-import sys
-import time
+import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from endpoints.API_Player import API_Player
 from conf import api_example_conf as conf
@@ -28,13 +26,12 @@ def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
         test_obj = API_Player(url=api_url)
         expected_pass = 0
         actual_pass = -1
-
+        
         # set authentication details
         username = conf.user_name
         password = conf.password
         auth_details = test_obj.set_auth_details(username, password)
         
-
         # add cars
         car_details = conf.car_details
         
@@ -51,8 +48,6 @@ def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
                     \n 2. Install Flask using command "pip install flask"
                     \n 3. Run cars-app server using command "python cars-api/cars_app.py"
                     \n 4. Run test_api_example now using command "pytest -k api -s" \n \033[1;m''')
-
-
 
         # Get Cars and verify if new car is added
         result_flag = test_obj.get_cars(auth_details)
