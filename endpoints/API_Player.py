@@ -149,12 +149,25 @@ class API_Player(Results):
                                negative='Could not delete registered car')
 
     
-    def verify_car_count(self, expected_count, auth_details=None):
+    def verify_car_count_before_add(self, expected_count, car_count_1, auth_details=None):
+        "Verify car count"
+        self.write('\n*****Verifying car count******')
+        car_count = self.get_cars(auth_details)
+        car_count = len(car_count['cars_list'])
+        car_count_1 = car_count
+        
+        result_flag = True if car_count_1 == expected_count else False
+
+        return result_flag
+
+     def verify_car_count(self, expected_count, car_count_1, auth_details=None):
         "Verify car count"
         self.write('\n*****Verifying car count******')
         car_count = self.get_cars(auth_details)
         car_count = len(car_count['cars_list']) 
-        result_flag = True if car_count == expected_count else False
+        car_count_1 = car_count
+
+        result_flag = True if car_count == expected_count + 1 else False
 
         return result_flag
 
