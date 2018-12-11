@@ -56,7 +56,7 @@ class API_Player(Results):
 
         return json_response
 
-
+    
     def get_car(self, car_name, brand, auth_details=None):
         "gets a given car details"
         url_params = {'car_name': car_name, 'brand': brand}
@@ -70,7 +70,7 @@ class API_Player(Results):
 
         return result_flag
 
-
+    
     def add_car(self, car_details, auth_details=None):
         "adds a new car"
         data = car_details
@@ -81,7 +81,7 @@ class API_Player(Results):
   
         return result_flag
 
-
+    
     def register_car(self, car_name, brand, auth_details=None):
         "register car"
         url_params = {'car_name': car_name, 'brand': brand}
@@ -148,7 +148,24 @@ class API_Player(Results):
                                positive='Successfully deleted registered cars',
                                negative='Could not delete registered car')
 
-    
+   
+    def get_car_count(self,auth_details=None):
+        "Verify car count at the start"
+        self.write('\n*****Verifying car count******')
+        car_count = self.get_cars(auth_details)
+        car_count = len(car_count['cars_list']) 
+
+        return car_count
+
+
+    def get_regi_car_count(self,auth_details=None):
+        "Verify registered car count"
+        car_count_registered = self.get_registered_cars(auth_details)
+        car_count_registered = len(car_count_registered['registered'])
+
+        return car_count_registered
+
+
     def verify_car_count(self, expected_count, auth_details=None):
         "Verify car count"
         self.write('\n*****Verifying car count******')
@@ -157,7 +174,7 @@ class API_Player(Results):
         result_flag = True if car_count == expected_count else False
 
         return result_flag
-
+    
     
     def verify_registration_count(self, expected_count, auth_details=None):
         "Verify registered car count"

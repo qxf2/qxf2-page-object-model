@@ -17,11 +17,8 @@ from conf import api_example_conf as conf
 
 
 def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
-
     "Run api test"
-    
     try:
-
         # Create test object
         test_obj = API_Player(url=api_url)
         expected_pass = 0
@@ -32,9 +29,8 @@ def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
         password = conf.password
         auth_details = test_obj.set_auth_details(username, password)
 
-        car_count_list = test_obj.get_cars(auth_details)
-        car_count_list = len(car_count_list['cars_list'])
-        
+        initial_car_count = test_obj.get_car_count(auth_details)
+      
 
         # add cars
         car_details = conf.car_details
@@ -58,7 +54,7 @@ def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
         # Get Cars and verify if new car is added
         result_flag = test_obj.get_cars(auth_details)
         
-        result_flag = test_obj.verify_car_count(expected_count=car_count_list+1,
+        result_flag = test_obj.verify_car_count(expected_count=initial_car_count+1,
                                                 auth_details=auth_details)
         test_obj.log_result(result_flag,
                             positive='Total car count matches expected count',
@@ -95,11 +91,9 @@ def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
         
         #Get Registered cars and check count
         result_flag = test_obj.get_registered_cars(auth_details)
-
-        car_count_registered = test_obj.get_registered_cars(auth_details)
-        car_count_registered = len(car_count_registered['registered'])
-        
-        result_flag = test_obj.verify_registration_count(expected_count=car_count_registered,
+        register_car_count = test_obj.get_regi_car_count(auth_details)
+  
+        result_flag = test_obj.verify_registration_count(expected_count=register_car_count,
                                                          auth_details=auth_details)
         test_obj.log_result(result_flag,
                             positive='Registered count matches expected value',
@@ -113,7 +107,7 @@ def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
                             negative='Could not delete car %s ' % update_car)
         
         # validate if car is deleted
-        result_flag = test_obj.verify_car_count(expected_count=car_count_list,
+        result_flag = test_obj.verify_car_count(expected_count=initial_car_count,
                                                 auth_details=auth_details)
         test_obj.log_result(result_flag,
                             positive='Total car count matches expected count after deleting one car',
