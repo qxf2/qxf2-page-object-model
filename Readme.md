@@ -15,6 +15,8 @@ This GUI and API test automation framework is developed and maintained by [Qxf2 
 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too! 
 
+If you end up using our framework, please let us know by giving us a star on GitHub and/or dropping an email to __mak@qxf2.com__
+
 ------
 Setup 
 ------
