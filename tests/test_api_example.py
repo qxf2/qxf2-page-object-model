@@ -34,20 +34,11 @@ def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
         
         # add cars
         car_details = conf.car_details
-        
-        try:
-            result_flag = test_obj.add_car(car_details=car_details,
+        result_flag = test_obj.add_car(car_details=car_details,
                                           auth_details=auth_details)
-            test_obj.log_result(result_flag,
+        test_obj.log_result(result_flag,
                                positive='Successfully added new car with details %s' % car_details,
                                negative='Could not add new car with details %s' % car_details)
-        except:
-            print ('''\033[1;32m \n test_api_example.py URL Open Exception: Looks like you are trying to run the test_api_example without running Cars API Server.
-                    \n Follow below steps to run test_api_example test:
-                    \n 1. Get Cars API code from repo https://github.com/qxf2/cars-api using command "git clone https://github.com/qxf2/cars-api.git"
-                    \n 2. Install Flask using command "pip install flask"
-                    \n 3. Run cars-app server using command "python cars-api/cars_app.py"
-                    \n 4. Run test_api_example now using command "pytest -k api -s" \n \033[1;m''')
 
         # Get Cars and verify if new car is added
         result_flag = test_obj.get_cars(auth_details)
