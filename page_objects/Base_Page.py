@@ -339,9 +339,13 @@ class Base_Page(Borg,unittest.TestCase):
         "Return the DOM element of the path or 'None' if the element is not found "
         dom_element = None
         try:
+            print (locator)
             locator = self.split_locator(locator)
+            print ("--")
             dom_element = self.driver.find_element(*locator)
+            print ("dom element")
         except Exception as e:
+            print ("This is a exception")
             if verbose_flag is True:
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
@@ -381,7 +385,7 @@ class Base_Page(Borg,unittest.TestCase):
     def click_element(self,locator,wait_time=3):
         "Click the button supplied"
         result_flag = False
-        try:
+        try:            
             link = self.get_element(locator)
             if link is not None:
                 link.click()
@@ -400,6 +404,7 @@ class Base_Page(Borg,unittest.TestCase):
         text_field = None
         try:
             text_field = self.get_element(locator)
+            print (text_field)
             if text_field is not None and clear_flag is True:
                 try:
                     text_field.clear()
@@ -658,6 +663,9 @@ class Base_Page(Borg,unittest.TestCase):
             self.success(positive,level=level)
         if flag is False:
             self.failure(negative,level=level)
+        if flag is None:
+            self.failure(negative,level=level)    
+
 
 
     def read_browser_console_log(self):
@@ -672,13 +680,13 @@ class Base_Page(Borg,unittest.TestCase):
             return log
 
 
-    def conditional_write(self,flag,positive,negative,level='info',pre_format="  - "):
-        "Write out either the positive or the negative message based on flag"
+    def conditional_write(self,flag,positive,negative,level='info'):
+        "Write out either the positive or the negative message based on flag"      
         if flag is True:
-            self.write(pre_format + positive,level)
+            self.write(positive,level)
             self.mini_check_pass_counter += 1
         if flag is False:
-            self.write(pre_format + negative,level)
+            self.write(negative,level)
         self.mini_check_counter += 1
 
 
