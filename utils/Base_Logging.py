@@ -19,7 +19,7 @@ class Base_Logging():
         
         
     def set_log(self,log_file_name,level,format,test_module_name=None):
-        "Set logging"
+        "Add an handler sending log messages to a sink"
         if test_module_name is None:
             test_module_name = self.get_calling_module()              
         if not os.path.exists(self.log_file_dir):
@@ -29,16 +29,13 @@ class Base_Logging():
         else:
             log_file_name = self.log_file_dir + os.sep + log_file_name
         
-        logger.add(log_file_name,level=level, 
-        format=format, 
-        rotation="200 KB", filter=None, colorize=True, serialize=False, backtrace=True, enqueue=False, catch=True)
+        logger.add(log_file_name,level=level,format=format, 
+        rotation="30 days", filter=None, colorize=False, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
     def get_calling_module(self):
         "Get the name of the calling module"        
-        calling_file = inspect.stack()[-1][1]
-        #for file_node in inspect.stack():
-        #    print (file_node[1].split(os.sep)[-1])            
+        calling_file = inspect.stack()[-1][1]                  
         if 'runpy' in calling_file:
             calling_file = inspect.stack()[4][1]
         
@@ -56,16 +53,16 @@ class Base_Logging():
     def write(self,msg,level='info'):
         "Write out a message"
         fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead        
-        d = {'caller_func': fname}          
-        if level.lower()== 'debug':            
-            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                        
+        d = {'caller_func': fname}                    
+        if level.lower()== 'debug': 
+            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                      
         elif level.lower()== 'info':
-            logger.info("{module} | {msg}",module=d['caller_func'],msg=msg)               
-        elif level.lower()== 'warn' or level.lower()=='warning':
+            logger.info("{module} | {msg}",module=d['caller_func'],msg=msg)           
+        elif level.lower()== 'warn' or level.lower()=='warning':           
             logger.warning("{module} | {msg}",module=d['caller_func'],msg=msg)
         elif level.lower()== 'error':
-            logger.error("{module} | {msg}",module=d['caller_func'],msg=msg)
-        elif level.lower()== 'critical':
-            logger.critival("{module} | {msg}",module=d['caller_func'],msg=msg)
+            logger.error("{module} | {msg}",module=d['caller_func'],msg=msg)            
+        elif level.lower()== 'critical':   
+            logger.critical("{module} | {msg}",module=d['caller_func'],msg=msg)            
         else:
             logger.critical("Unknown level passed for the msg: {}", msg)

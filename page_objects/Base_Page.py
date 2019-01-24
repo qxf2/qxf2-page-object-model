@@ -338,20 +338,15 @@ class Base_Page(Borg,unittest.TestCase):
     def get_element(self,locator,verbose_flag=True):
         "Return the DOM element of the path or 'None' if the element is not found "
         dom_element = None
-        try:
-            print (locator)
-            locator = self.split_locator(locator)
-            print ("--")
-            dom_element = self.driver.find_element(*locator)
-            print ("dom element")
-        except Exception as e:
-            print ("This is a exception")
+        try:            
+            locator = self.split_locator(locator)            
+            dom_element = self.driver.find_element(*locator)            
+        except Exception as e:            
             if verbose_flag is True:
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
-            
-   
+               
         return dom_element
 
 
@@ -403,8 +398,7 @@ class Base_Page(Borg,unittest.TestCase):
         "Set the value of the text field"
         text_field = None
         try:
-            text_field = self.get_element(locator)
-            print (text_field)
+            text_field = self.get_element(locator)            
             if text_field is not None and clear_flag is True:
                 try:
                     text_field.clear()
@@ -662,10 +656,7 @@ class Base_Page(Borg,unittest.TestCase):
         if flag is True:
             self.success(positive,level=level)
         if flag is False:
-            self.failure(negative,level=level)
-        if flag is None:
-            self.failure(negative,level=level)    
-
+            self.failure(negative,level=level)        
 
 
     def read_browser_console_log(self):
@@ -717,7 +708,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
-        self.write('************************')
+        self.write('\n************************')
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
