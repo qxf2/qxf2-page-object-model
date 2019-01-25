@@ -30,7 +30,7 @@ class Base_Logging():
             log_file_name = self.log_file_dir + os.sep + log_file_name
         
         logger.add(log_file_name,level=level,format=format, 
-        rotation="30 days", filter=None, colorize=False, serialize=False, backtrace=True, enqueue=False, catch=True)
+        rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
     def get_calling_module(self):
