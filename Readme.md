@@ -56,9 +56,9 @@ a) Get setup with your browser driver. If you don't know how to, please try:
 
 __If your setup goes well__, you should be to run a simple test with this command:
 
-1. Chrome: `py -m pytest -k example_form -B Chrome` 
+1. Chrome: `python -m pytest -k example_form -B Chrome` 
 
-2. Firefox: `py -m pytest -k example_form -B Firefox`
+2. Firefox: `python -m pytest -k example_form -B Firefox`
 
 __Optional steps__ for integrating with third-party tools: 
 
@@ -83,7 +83,7 @@ d) [Install the appium Python client library](https://pypi.python.org/pypi/Appiu
 pip install Appium-Python-Client
 
 __If your setup goes well__, you should be to run a simple mobile test with this command after starting the Appium and Android emulator:
-`py -m pytest -k mobile_bitcoin_price -H $Emulator_OS_Version -I $Emulator_Name`
+`python -m pytest -k mobile_bitcoin_price -H $Emulator_OS_Version -I $Emulator_Name`
 
 __Optional steps__ for more details on setting up appium and running tests on Android or iOS refer to below links:
 * [Get started with mobile automation: Appium & Python](https://qxf2.com/blog/appium-mobile-automation/)
@@ -125,16 +125,16 @@ COMMANDS FOR RUNNING TESTS
 
 a)py.test [options]
 
-	-s	used to display the output on the screen			E.g: py -m pytest -s (This will run all the tests in the directory and subdirectories)
-	-U  	used to run against specific URL				E.g: py -m pytest -U http://YOUR_localhost_URL (This will run against your local instance)
-	-M  	used to run tests on Browserstack/Sauce Lab			E.g: py -m pytest -s -M Y -U https://qxf2.com	
-	-B all	used to run the test against multiple browser 			E.g:py -m pytest -B all(This will run each test against the list of browsers specified in the conftest.py file,firefox and chrome in our case)
-	-V/-O	used to run against different browser versions/os versions	E.g: py -m pytest -V 44 -O 8 (This will run each test 4 times in different browser version(default=45 & 44) and OS(default=7 & 8) combination)
-	-h	help for more options 						E.g: py -m pytest -h
-	-k      used to run tests which match the given substring expresion 	E.g: py -m pytest -k table  (This will trigger test_example_table.py test)
-	-S	used to post pytest reports on the Slack channel		E.g: py -m pytest -S Y -v > log/pytest_report.log
-	-n 	used to run tests in parallel					E.g: py -m pytest -n 3 -v (This will run three tests in parallel)
-	--tesults 	used to report test results to tesults			E.g: py -m pytest test_example_form.py --tesults Y(This will report test report to tesults)
+	-s	used to display the output on the screen			E.g: python -m pytest -s (This will run all the tests in the directory and subdirectories)
+	-U  	used to run against specific URL				E.g: python -m pytest -U http://YOUR_localhost_URL (This will run against your local instance)
+	-M  	used to run tests on Browserstack/Sauce Lab			E.g: python -m pytest -s -M Y -U https://qxf2.com	
+	-B all	used to run the test against multiple browser 			E.g:python -m pytest -B all(This will run each test against the list of browsers specified in the conftest.py file,firefox and chrome in our case)
+	-V/-O	used to run against different browser versions/os versions	E.g: python -m pytest -V 44 -O 8 (This will run each test 4 times in different browser version(default=45 & 44) and OS(default=7 & 8) combination)
+	-h	help for more options 						E.g: python -m pytest -h
+	-k      used to run tests which match the given substring expresion 	E.g: python -m pytest -k table  (This will trigger test_example_table.py test)
+	-S	used to post pytest reports on the Slack channel		E.g: python -m pytest -S Y -v > log/pytest_report.log
+	-n 	used to run tests in parallel					E.g: python -m pytest -n 3 -v (This will run three tests in parallel)
+	--tesults 	used to report test results to tesults			E.g: python -m pytest test_example_form.py --tesults Y(This will report test report to tesults)
 
 b)python tests/test_example_form.py (can also be used to run standalone test) 	
 
