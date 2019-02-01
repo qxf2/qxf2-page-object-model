@@ -671,13 +671,13 @@ class Base_Page(Borg,unittest.TestCase):
             return log
 
 
-    def conditional_write(self,flag,positive,negative,level='info'):
+    def conditional_write(self,flag,positive,negative,level='info',pre_format="  - "):
         "Write out either the positive or the negative message based on flag"      
         if flag is True:
-            self.write(positive,level)
+            self.write(pre_format + positive,level)
             self.mini_check_pass_counter += 1
         else:
-            self.write(negative,level)
+            self.write(pre_format + negative,level)
         self.mini_check_counter += 1
 
 
@@ -708,7 +708,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
-        self.write('\n************************')
+        self.write('************************')
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
