@@ -338,16 +338,15 @@ class Base_Page(Borg,unittest.TestCase):
     def get_element(self,locator,verbose_flag=True):
         "Return the DOM element of the path or 'None' if the element is not found "
         dom_element = None
-        try:
-            locator = self.split_locator(locator)
-            dom_element = self.driver.find_element(*locator)
-        except Exception as e:
+        try:            
+            locator = self.split_locator(locator)            
+            dom_element = self.driver.find_element(*locator)            
+        except Exception as e:            
             if verbose_flag is True:
                 self.write(str(e),'debug')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
-            
-   
+               
         return dom_element
 
 
@@ -381,7 +380,7 @@ class Base_Page(Borg,unittest.TestCase):
     def click_element(self,locator,wait_time=3):
         "Click the button supplied"
         result_flag = False
-        try:
+        try:            
             link = self.get_element(locator)
             if link is not None:
                 link.click()
@@ -399,7 +398,7 @@ class Base_Page(Borg,unittest.TestCase):
         "Set the value of the text field"
         text_field = None
         try:
-            text_field = self.get_element(locator)
+            text_field = self.get_element(locator)            
             if text_field is not None and clear_flag is True:
                 try:
                     text_field.clear()
@@ -418,7 +417,7 @@ class Base_Page(Borg,unittest.TestCase):
                 self.write('Could not write to text field: %s'%locator,'debug')
                 self.write(str(e),'debug')
                 self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
-
+    
         return result_flag
           
           
@@ -656,8 +655,8 @@ class Base_Page(Borg,unittest.TestCase):
         "Write out the result of the test"
         if flag is True:
             self.success(positive,level=level)
-        if flag is False:
-            self.failure(negative,level=level)
+        else:            
+            self.failure(negative,level=level)        
 
 
     def read_browser_console_log(self):
@@ -673,11 +672,11 @@ class Base_Page(Borg,unittest.TestCase):
 
 
     def conditional_write(self,flag,positive,negative,level='info',pre_format="  - "):
-        "Write out either the positive or the negative message based on flag"
+        "Write out either the positive or the negative message based on flag"      
         if flag is True:
             self.write(pre_format + positive,level)
             self.mini_check_pass_counter += 1
-        if flag is False:
+        else:
             self.write(pre_format + negative,level)
         self.mini_check_counter += 1
 
