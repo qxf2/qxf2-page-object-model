@@ -16,7 +16,7 @@ from endpoints.API_Player import API_Player
 from conf import api_example_conf as conf
 
 
-def test_api_example(api_url='http://carsapi.pythonanywhere.com'):
+def test_api_example(api_url='http://35.167.62.251/'):
     "Run api test"
     try:
         # Create test object
