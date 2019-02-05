@@ -417,7 +417,7 @@ class Base_Page(Borg,unittest.TestCase):
                 self.write('Could not write to text field: %s'%locator,'debug')
                 self.write(str(e),'debug')
                 self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
-
+    
         return result_flag
           
           
@@ -655,7 +655,7 @@ class Base_Page(Borg,unittest.TestCase):
         "Write out the result of the test"
         if flag is True:
             self.success(positive,level=level)
-        if flag is False:
+        else:            
             self.failure(negative,level=level)        
 
 
@@ -676,7 +676,7 @@ class Base_Page(Borg,unittest.TestCase):
         if flag is True:
             self.write(positive,level)
             self.mini_check_pass_counter += 1
-        if flag is False:
+        else:
             self.write(negative,level)
         self.mini_check_counter += 1
 
