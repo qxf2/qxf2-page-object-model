@@ -9,7 +9,7 @@ from loguru import logger
 
 class Base_Logging():
     "A plug-n-play class for logging"
-    def __init__(self,log_file_name=None,level="DEBUG",format="{time} | {level} | {module} | {message}"):
+    def __init__(self,log_file_name=None,level="DEBUG",format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module} | {message}"):
         "Constructor for the logging class"
         self.log_file_name=log_file_name
         self.log_file_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))

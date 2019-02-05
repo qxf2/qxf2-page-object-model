@@ -708,7 +708,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
-        self.write('\n************************')
+        self.write('************************')
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
