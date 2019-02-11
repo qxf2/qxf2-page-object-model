@@ -671,13 +671,13 @@ class Base_Page(Borg,unittest.TestCase):
             return log
 
 
-    def conditional_write(self,flag,positive,negative,level='info',pre_format="  - "):
+    def conditional_write(self,flag,positive,negative,level='info'):
         "Write out either the positive or the negative message based on flag"      
         if flag is True:
-            self.write(pre_format + positive,level)
+            self.write(positive,level)
             self.mini_check_pass_counter += 1
         else:
-            self.write(pre_format + negative,level)
+            self.write(negative,level)
         self.mini_check_counter += 1
 
 
