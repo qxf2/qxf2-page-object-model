@@ -2,7 +2,7 @@
 Class to hold miscellaneous but useful decorators for our framework
 """
 
-from inspect import getargspec
+from inspect import getfullargspec
 from page_objects.Base_Page import Base_Page
 
 
@@ -11,7 +11,7 @@ class Wrapit():
     "Wrapit class to hold decorator functions"	
     def _exceptionHandler(f):
         "Decorator to handle exceptions"
-        argspec = getargspec(f)
+        argspec = getfullargspec(f)
         def inner(*args,**kwargs):
             try:
                 return f(*args,**kwargs)
