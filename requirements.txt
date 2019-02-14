@@ -1,5 +1,5 @@
 requests==2.20.0
-pytest==4.1.1
+pytest==3.6.3
 selenium==3.13.0
 python_dotenv==0.8.2
 Appium_Python_Client==0.28
