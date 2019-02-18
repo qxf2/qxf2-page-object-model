@@ -10,4 +10,5 @@ log/
 .pytest_cache/
 geckodriver.log
 debug.log
+.pytest_cache/
 __pycache__
