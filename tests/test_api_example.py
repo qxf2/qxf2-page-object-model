@@ -10,12 +10,12 @@ API EXAMPLE TEST
 8. Verify registered cars count
 9. Delete newly added car -DELETE request
 """
-import os,sys,time
+import os,sys,time,pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from endpoints.API_Player import API_Player
 from conf import api_example_conf as conf
 
-
+@pytest.mark.api_test()
 def test_api_example(api_url='http://35.167.62.251/'):
     "Run api test"
     try:
