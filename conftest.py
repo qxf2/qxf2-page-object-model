@@ -134,7 +134,32 @@ def app_name():
 @pytest.fixture
 def app_path():
     "pytest fixture for app path"
-    return pytest.config.getoption("-N")    
+    return pytest.config.getoption("-N")  
+
+
+def pytest_addoption(parser):
+    # Method to add the option to ini
+    parser.addini("rp_uuid",'help',type="pathlist")
+    parser.addini("rp_endpoint",'help',type="pathlist")
+    parser.addini("rp_project",'help',type="pathlist")
+    parser.addini("rp_launch",'help',type="pathlist")              
+ 
+@pytest.hookimpl()
+def pytest_configure(config):
+    # Sets the launch name based on the marker selected.
+    suite = config.getoption("markexpr")
+    try:
+        config._inicache["rp_uuid"]="fa75a8c3-d6ab-4c64-97e3-2f906b4b98d9"
+        config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
+        config._inicache["rp_project"]="nilaya123_personal"
+        #config._inicache["rp_launch"]="test_api_example" 
+        if suite == "gui_test":            
+            config._inicache["rp_launch"]="gui_test"
+        elif suite == "api_test":
+            config._inicache["rp_launch"]="api_test" 
+ 
+    except Exception as e:
+        print (str(e))  
 
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
