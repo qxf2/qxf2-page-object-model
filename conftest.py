@@ -147,7 +147,6 @@ def pytest_addoption(parser):
 @pytest.hookimpl()
 def pytest_configure(config):
     # Sets the launch name based on the marker selected.
-    suite = config.getoption("markexpr")
     try:
         config._inicache["rp_uuid"]="d1e64364-c7fd-40ea-8989-da74bf2ab80b"
         config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
