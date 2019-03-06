@@ -18,7 +18,7 @@ def test_gui():
     print ("GUI Test")
     pass
 
-
+'''
 
 def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
 
@@ -175,3 +175,4 @@ if __name__=='__main__':
     else:
         print('ERROR: Received incorrect comand line input arguments')
         print(option_obj.print_usage())
+'''

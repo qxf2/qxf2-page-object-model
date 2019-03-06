@@ -149,14 +149,10 @@ def pytest_configure(config):
     # Sets the launch name based on the marker selected.
     suite = config.getoption("markexpr")
     try:
-        config._inicache["rp_uuid"]="fa75a8c3-d6ab-4c64-97e3-2f906b4b98d9"
+        config._inicache["rp_uuid"]="d1e64364-c7fd-40ea-8989-da74bf2ab80b"
         config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
         config._inicache["rp_project"]="nilaya123_personal"
-        #config._inicache["rp_launch"]="test_api_example" 
-        if suite == "gui_test":            
-            config._inicache["rp_launch"]="gui_test"
-        elif suite == "api_test":
-            config._inicache["rp_launch"]="api_test" 
+        config._inicache["rp_launch"]="test" 
  
     except Exception as e:
         print (str(e))  
