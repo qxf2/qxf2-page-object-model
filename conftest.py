@@ -185,6 +185,10 @@ def pytest_addoption(parser):
                       dest="url",
                       default="https://qxf2.com",
                       help="The url of the application")
+    parser.addoption("-A","--api_url",
+                      dest="url",
+                      default="https://qxf2.com",
+                      help="The url of the api")
     parser.addoption("-X","--testrail_flag",
                       dest="testrail_flag",
                       default='N',
