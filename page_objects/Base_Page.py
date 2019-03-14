@@ -19,6 +19,7 @@ from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
+from conftest import if_reportportal
 
 
 class Borg:
@@ -209,6 +210,23 @@ class Base_Page(Borg,unittest.TestCase):
 
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"
+        if if_reportportal:
+
+            try:
+                with open(screenshot_name+'.png', "rb") as fh:
+                    image = fh.read()
+ 
+                rp_logger.info(
+                    image_name,
+                    attachment={
+                        "data": image,
+                        "mime": "application/octet-stream"
+                    },
+                )
+            except Exception as e:
+                print("Exception when trying to save screenshot to reportportal: %s" %str(e))
+        
+            
         if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
             for i in range(1,100): 
                 if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
@@ -612,7 +630,7 @@ class Base_Page(Borg,unittest.TestCase):
             for key, value in custom.items():
                 caseObj[key] = str(value)
             Tesults.add_test_case(caseObj)
-        
+      
 
     def wait(self,wait_seconds=5,locator=None):
         "Performs wait for time provided"

@@ -4,6 +4,8 @@ from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
 
+reportportal_flag = False
+
 
 @pytest.fixture
 def browser():
@@ -148,7 +150,7 @@ def pytest_addoption(parser):
 def pytest_configure(config):
     # Sets the launch name based on the marker selected.
     try:
-        config._inicache["rp_uuid"]="d1e64364-c7fd-40ea-8989-da74bf2ab80b"
+        config._inicache["rp_uuid"]="8ba83dec-e824-48b1-9c5a-62d53e793ac8"
         config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
         config._inicache["rp_project"]="nilaya123_personal"
         config._inicache["rp_launch"]="test" 
