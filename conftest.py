@@ -4,8 +4,6 @@ from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
 
-reportportal_flag = False
-
 
 @pytest.fixture
 def browser():
@@ -86,6 +84,12 @@ def tesults_flag():
 
 
 @pytest.fixture
+def rp_logger(request):
+    "pytest fixture for sending results to reportportal"
+    return pytest.config.getoption("--reportportal")
+
+
+@pytest.fixture
 def mobile_os_name():
     "pytest fixture for mobile os name"
     return pytest.config.getoption("-G")
@@ -149,14 +153,18 @@ def pytest_addoption(parser):
 @pytest.hookimpl()
 def pytest_configure(config):
     # Sets the launch name based on the marker selected.
+    global if_reportportal
+    if_reportportal =config.getoption('--reportportal')
+    
     try:
-        config._inicache["rp_uuid"]="8ba83dec-e824-48b1-9c5a-62d53e793ac8"
+        config._inicache["rp_uuid"]="7efd0795-ee61-4239-89fa-384179d0b7c3"
         config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
         config._inicache["rp_project"]="nilaya123_personal"
         config._inicache["rp_launch"]="test" 
  
     except Exception as e:
-        print (str(e))  
+        print (str(e)) 
+
 
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
@@ -171,6 +179,22 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
 
     if pytest.config.getoption("--tesults").lower() == 'y':
         Tesults.post_results_to_tesults()
+
+
+def rp_logger(request):
+    import logging
+    # Import Report Portal logger and handler to the test module.
+    from pytest_reportportal import RPLogger, RPLogHandler
+    # Setting up a logging.
+    logging.setLoggerClass(RPLogger)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    # Create handler for Report Portal.
+    rp_handler = RPLogHandler(request.node.config.py_test_service)
+    # Set INFO level for Report Portal handler.
+    rp_handler.setLevel(logging.INFO)
+    return logger
+  
         
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
@@ -285,6 +309,7 @@ def pytest_addoption(parser):
     parser.addoption("-N","--app_path",
                       dest="app_path",
                       help="Enter app path")
+  
 
 
 

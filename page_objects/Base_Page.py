@@ -19,7 +19,7 @@ from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
-from conftest import if_reportportal
+
 
 
 class Borg:
@@ -206,18 +206,25 @@ class Base_Page(Borg,unittest.TestCase):
         image_dict['name'] = screenshot_name
         image_dict['url'] = screenshot_url
         self.image_url_list.append(image_dict)
-        
 
+  
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"
+        
+        from conftest import if_reportportal
+        from conftest import rp_logger
+        print (if_reportportal)
+
         if if_reportportal:
 
             try:
-                with open(screenshot_name+'.png', "rb") as fh:
+                print (screenshot_name)
+                screenshot_name = self.screenshot_dir + os.sep + screenshot_name+'.png'
+                self.driver.save_screenshot(screenshot_name)
+                with open(screenshot_name, "rb") as fh:
                     image = fh.read()
  
-                rp_logger.info(
-                    image_name,
+                rp_logger.info(                    image_name,
                     attachment={
                         "data": image,
                         "mime": "application/octet-stream"
