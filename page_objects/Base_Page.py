@@ -210,30 +210,6 @@ class Base_Page(Borg,unittest.TestCase):
   
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"
-        
-        from conftest import if_reportportal
-        from conftest import rp_logger
-        print (if_reportportal)
-
-        if if_reportportal:
-
-            try:
-                print (screenshot_name)
-                screenshot_name = self.screenshot_dir + os.sep + screenshot_name+'.png'
-                self.driver.save_screenshot(screenshot_name)
-                with open(screenshot_name, "rb") as fh:
-                    image = fh.read()
- 
-                rp_logger.info(                    image_name,
-                    attachment={
-                        "data": image,
-                        "mime": "application/octet-stream"
-                    },
-                )
-            except Exception as e:
-                print("Exception when trying to save screenshot to reportportal: %s" %str(e))
-        
-            
         if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
             for i in range(1,100): 
                 if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
@@ -247,6 +223,24 @@ class Base_Page(Borg,unittest.TestCase):
             self.append_latest_image(screenshot_name)
         if self.tesults_flag is True:
             self.images.append(screenshot_name)
+
+    def save_screenshot_reportportal(self,reportportal_logger,image_name):
+        "Method to save image to ReportPortal"
+        try:
+            screenshot_name = image_name+'.png'
+            self.driver.save_screenshot(screenshot_name)
+            with open(screenshot_name, "rb") as fh:
+                image = fh.read()
+ 
+            reportportal_logger.info(
+            image_name,
+            attachment={
+                "data": image,
+                "mime": "application/octet-stream"
+            },
+        )
+        except Exception as e:
+            print("Exception when trying to save screenshot to reportportal: %s" %str(e))        
 
 
     def open(self,url,wait_time=2):

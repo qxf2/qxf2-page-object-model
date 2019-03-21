@@ -84,9 +84,9 @@ def tesults_flag():
 
 
 @pytest.fixture
-def rp_logger(request):
+def reportportal_logger(request):
     "pytest fixture for sending results to reportportal"
-    return pytest.config.getoption("--reportportal")
+    return request.config.getoption("--reportportal")
 
 
 @pytest.fixture
@@ -181,6 +181,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
         Tesults.post_results_to_tesults()
 
 
+@pytest.fixture(scope="session")
 def rp_logger(request):
     import logging
     # Import Report Portal logger and handler to the test module.
@@ -309,6 +310,10 @@ def pytest_addoption(parser):
     parser.addoption("-N","--app_path",
                       dest="app_path",
                       help="Enter app path")
+    parser.addoption("--reportportal_logger",
+                      dest="reportportal_logger",
+                      default = False,
+                      help="Enter reportportal_logger")
   
 
 

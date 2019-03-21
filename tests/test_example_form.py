@@ -13,7 +13,7 @@ import conf.example_form_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 
 
-def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,rp_logger):
+def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,reportportal_logger,rp_logger):
 
     "Run the test"
     try:
@@ -38,6 +38,9 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
 
         if tesults_flag.lower()=='y':
             test_obj.register_tesults()
+
+        if reportportal_logger:
+           test_obj.save_screenshot_reportportal(rp_logger,image_name)
         
         #4. Get the test details from the conf file
         name = conf.name
