@@ -55,6 +55,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.tesults_flag = False
             self.images = []
             self.browserstack_flag = False
+            self.reportportal_logger = False
 
             self.reset()
 
@@ -223,17 +224,28 @@ class Base_Page(Borg,unittest.TestCase):
             self.append_latest_image(screenshot_name)
         if self.tesults_flag is True:
             self.images.append(screenshot_name)
+        if self.reportportal_logger is True:
+            self.images.append(screenshot_name)
+        
 
-    def save_screenshot_reportportal(self,reportportal_logger,image_name):
+    def save_screenshot_reportportal(self,reportportal_logger,screenshot_name):
         "Method to save image to ReportPortal"
         try:
-            screenshot_name = image_name+'.png'
+            if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
+                for i in range(1,100): 
+                    if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
+                        continue
+                    else:
+                        os.rename(self.screenshot_dir + os.sep +screenshot_name+'.png',self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png')
+                    break
+            self.driver.get_screenshot_as_file(self.screenshot_dir + os.sep+ screenshot_name+'.png')
+            #screenshot_name = image_name+'.png'
             self.driver.save_screenshot(screenshot_name)
             with open(screenshot_name, "rb") as fh:
                 image = fh.read()
  
             reportportal_logger.info(
-            image_name,
+            screenshot_name,
             attachment={
                 "data": image,
                 "mime": "application/octet-stream"
