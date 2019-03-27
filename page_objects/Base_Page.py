@@ -19,6 +19,7 @@ from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
+from conftest import if_reportportal
 
 
 
