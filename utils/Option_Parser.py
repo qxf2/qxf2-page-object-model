@@ -27,7 +27,7 @@ class Option_Parser:
                             help="The url of the application")
         self.parser.add_option("-A","--api_url",
                             dest="api_url",
-                            default="http://127.0.0.1:5000",
+                            default="http://35.167.62.251/",
                             help="The url of the api")
         self.parser.add_option("-X","--testrail_flag",
                             dest="testrail_flag",
