@@ -132,6 +132,30 @@ def app_name(request):
 
 
 @pytest.fixture
+def ud_id():
+    "pytest fixture for iOS udid"
+    return pytest.config.getoption("--ud_id")
+
+
+@pytest.fixture
+def org_id():
+    "pytest fixture for iOS team id"
+    return pytest.config.getoption("--org_id")
+
+
+@pytest.fixture
+def signing_id():
+    "pytest fixture for iOS signing id"
+    return pytest.config.getoption("--signing_id")
+
+
+@pytest.fixture
+def no_reset_flag():
+    "pytest fixture for no_reset_flag"
+    return pytest.config.getoption("--no_reset_flag")
+
+
+@pytest.fixture
 def app_path(request):
     "pytest fixture for app path"
     return request.config.getoption("-N")    
@@ -264,6 +288,22 @@ def pytest_addoption(parser):
                       dest="app_name",
                       help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
                       default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
+    parser.addoption("--ud_id",
+                      dest="ud_id",
+                      help="Enter your iOS device UDID which is required to run appium test in iOS device",
+                      default=None)
+    parser.addoption("--org_id",
+                      dest="org_id",
+                      help="Enter your iOS Team ID which is required to run appium test in iOS device",
+                      default=None)
+    parser.addoption("--signing_id",
+                      dest="signing_id",
+                      help="Enter your iOS app signing id which is required to run appium test in iOS device",
+                      default="iPhone Developer")
+    parser.addoption("--no_reset_flag",
+                      dest="no_reset_flag",
+                      help="Pass false if you want to reset app eveytime you run app else false",
+                      default="true")
     parser.addoption("-N","--app_path",
                       dest="app_path",
                       help="Enter app path")
