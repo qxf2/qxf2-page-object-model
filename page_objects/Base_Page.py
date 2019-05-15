@@ -88,7 +88,7 @@ class Base_Page(Borg,unittest.TestCase):
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
        
 
-    def register_driver(self,remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name,ud_id,org_id,signing_id,no_reset_flag):
+    def register_driver(self,remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name):
         "Register the driver with Page"      
         self.set_screenshot_dir(os_name,os_version,browser,browser_version) # Create screenshot directory
         self.set_log_file()
