@@ -157,10 +157,10 @@ def pytest_configure(config):
     if_reportportal =config.getoption('--reportportal')
     
     try:
-        config._inicache["rp_uuid"]="d41bcc59-f1c1-42e5-af46-fdd56e65208a"
+        config._inicache["rp_uuid"]="fbbb58a2-629c-4010-8da2-5c247adc9f82"
         config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
         config._inicache["rp_project"]="nilaya123_personal"
-        config._inicache["rp_launch"]="test" 
+        config._inicache["rp_launch"]="nilaya123_TEST_EXAMPLE" 
  
     except Exception as e:
         print (str(e)) 
@@ -180,7 +180,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
     if pytest.config.getoption("--tesults").lower() == 'y':
         Tesults.post_results_to_tesults()
 
-
+'''
 @pytest.fixture(scope="session")
 def rp_logger(request):
     import logging
@@ -195,6 +195,7 @@ def rp_logger(request):
     # Set INFO level for Report Portal handler.
     rp_handler.setLevel(logging.INFO)
     return logger
+'''
   
         
 def pytest_generate_tests(metafunc):
