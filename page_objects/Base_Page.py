@@ -21,7 +21,7 @@ from utils import Tesults
 from conf import remote_credentials as Conf
 from conftest import if_reportportal
 import pytest
-
+'''
 @pytest.fixture(scope="session")
 def rp_logger(request):
     import logging
@@ -36,6 +36,7 @@ def rp_logger(request):
     # Set INFO level for Report Portal handler.
     rp_handler.setLevel(logging.INFO)
     return logger
+'''
 
 class Borg:
     #The borg design pattern is to share state

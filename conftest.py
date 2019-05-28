@@ -157,7 +157,7 @@ def pytest_configure(config):
     if_reportportal =config.getoption('--reportportal')
     
     try:
-        config._inicache["rp_uuid"]="fbbb58a2-629c-4010-8da2-5c247adc9f82"
+        config._inicache["rp_uuid"]="ee9b8ca3-0406-46f9-8610-4ed57672d9ec"
         config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
         config._inicache["rp_project"]="nilaya123_personal"
         config._inicache["rp_launch"]="nilaya123_TEST_EXAMPLE" 
