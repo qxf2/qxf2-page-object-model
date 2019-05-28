@@ -6,141 +6,149 @@ from utils import Tesults
 
 
 @pytest.fixture
-def browser():
+def browser(request):
     "pytest fixture for browser"
-    return pytest.config.getoption("-B")
+    import logging
+    # Import Report Portal logger and handler to the test module.
+    from pytest_reportportal import RPLogger, RPLogHandler
+    # Setting up a logging.
+    logging.setLoggerClass(RPLogger)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    # Create handler for Report Portal.
+    rp_handler = RPLogHandler(request.node.config.py_test_service)
+    # Set INFO level for Report Portal handler.
+    rp_handler.setLevel(logging.INFO)
+    request.config.option.rp_logger = logger
+    print (request.config.option.rp_logger)
+    
+    return request.config.getoption("-B")
 
 
 @pytest.fixture
-def base_url():
+def base_url(request):
     "pytest fixture for base url"
-    return pytest.config.getoption("-U")
+    return request.config.getoption("-U")
 
 
 @pytest.fixture
-def api_url():
+def api_url(request):
     "pytest fixture for base url"
-    return pytest.config.getoption("-A")
+    return request.config.getoption("-A")
     
 
 @pytest.fixture
-def test_run_id():
+def test_run_id(request):
     "pytest fixture for test run id"
-    return pytest.config.getoption("-R")
+    return request.config.getoption("-R")
 
 
 @pytest.fixture
-def testrail_flag():
+def testrail_flag(request):
     "pytest fixture for test rail flag"
-    return pytest.config.getoption("-X")
+    return request.config.getoption("-X")
 
 
 @pytest.fixture
-def remote_flag():
+def remote_flag(request):
     "pytest fixture for browserstack/sauce flag"
-    return pytest.config.getoption("-M")
+    return request.config.getoption("-M")
 
 
 @pytest.fixture
-def browser_version():
+def browser_version(request):
     "pytest fixture for browser version"
-    return pytest.config.getoption("-V") 
+    return request.config.getoption("-V") 
 
 
 @pytest.fixture
-def os_name():
+def os_name(request):
     "pytest fixture for os_name"
-    return pytest.config.getoption("-P") 
+    return request.config.getoption("-P") 
 
 
 @pytest.fixture
-def os_version():
+def os_version(request):
     "pytest fixture for os version"
-    return pytest.config.getoption("-O")
+    return request.config.getoption("-O")
 
 
 @pytest.fixture
-def remote_project_name():
+def remote_project_name(request):
     "pytest fixture for browserStack project name"
-    return pytest.config.getoption("--remote_project_name")
+    return request.config.getoption("--remote_project_name")
 
 
 @pytest.fixture
-def remote_build_name():
+def remote_build_name(request):
     "pytest fixture for browserStack build name"
-    return pytest.config.getoption("--remote_build_name")
+    return request.config.getoption("--remote_build_name")
 
 
 @pytest.fixture
-def slack_flag():
+def slack_flag(request):
     "pytest fixture for sending reports on slack"
-    return pytest.config.getoption("-S")
+    return request.config.getoption("-S")
 
 
 @pytest.fixture
-def tesults_flag():
+def tesults_flag(request):
     "pytest fixture for sending results to tesults"
-    return pytest.config.getoption("--tesults")
-
-
-@pytest.fixture
-def reportportal_logger(request):
-    "pytest fixture for sending results to reportportal"
-    return request.config.getoption("--reportportal")
+    return request.config.getoption("--tesults")
 
 
 @pytest.fixture
 def mobile_os_name():
     "pytest fixture for mobile os name"
-    return pytest.config.getoption("-G")
+    return request.config.getoption("-G")
 
 
 @pytest.fixture
-def mobile_os_version():
+def mobile_os_version(request):
     "pytest fixture for mobile os version"
-    return pytest.config.getoption("-H")
+    return request.config.getoption("-H")
 
 
 @pytest.fixture
-def device_name():
+def device_name(request):
     "pytest fixture for device name"
-    return pytest.config.getoption("-I")
+    return request.config.getoption("-I")
 
 
 @pytest.fixture
-def app_package():
+def app_package(request):
     "pytest fixture for app package"
-    return pytest.config.getoption("-J")
+    return request.config.getoption("-J")
 
 
 @pytest.fixture
-def app_activity():
+def app_activity(request):
     "pytest fixture for app activity"
-    return pytest.config.getoption("-K")
+    return request.config.getoption("-K")
 
 
 @pytest.fixture
-def device_flag():
+def device_flag(request):
     "pytest fixture for device flag"
-    return pytest.config.getoption("-Q")
+    return request.config.getoption("-Q")
 
 
 @pytest.fixture
-def email_pytest_report():
+def email_pytest_report(request):
     "pytest fixture for device flag"
-    return pytest.config.getoption("--email_pytest_report")
+    return request.config.getoption("--email_pytest_report")
 
 
 @pytest.fixture
-def app_name():
+def app_name(request):
     "pytest fixture for app name"
-    return pytest.config.getoption("-D")
+    return request.config.getoption("-D")
 
 
 @pytest.fixture
-def app_path():
+def app_path(request):
     "pytest fixture for app path"
-    return pytest.config.getoption("-N")  
+    return request.config.getoption("-N")    
 
 
 def pytest_addoption(parser):
@@ -157,32 +165,30 @@ def pytest_configure(config):
     if_reportportal =config.getoption('--reportportal')
     
     try:
-        config._inicache["rp_uuid"]="ee9b8ca3-0406-46f9-8610-4ed57672d9ec"
+        config._inicache["rp_uuid"]="e071a803-872d-4808-be8b-268bec2c41dc"
         config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
         config._inicache["rp_project"]="nilaya123_personal"
         config._inicache["rp_launch"]="nilaya123_TEST_EXAMPLE" 
  
     except Exception as e:
         print (str(e)) 
-
-
+    
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
-    if pytest.config.getoption("-S").lower() == 'y':
+    if  terminalreporter.config.getoption("-S").lower() == 'y':
         post_test_reports_to_slack.post_reports_to_slack()
-    elif pytest.config.getoption("--email_pytest_report").lower() == 'y':
+    elif terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
         #Initialize the Email_Pytest_Report object
         email_obj = Email_Pytest_Report()
         # Send html formatted email body message with pytest report as an attachment
         email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path= 'default')
 
-    if pytest.config.getoption("--tesults").lower() == 'y':
+    if  terminalreporter.config.getoption("--tesults").lower() == 'y':
         Tesults.post_results_to_tesults()
 
-'''
-@pytest.fixture(scope="session")
-def rp_logger(request):
+def pytest_sessionstart(session):
+    """ before session.main() is called. """
     import logging
     # Import Report Portal logger and handler to the test module.
     from pytest_reportportal import RPLogger, RPLogHandler
@@ -191,12 +197,13 @@ def rp_logger(request):
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.DEBUG)
     # Create handler for Report Portal.
-    rp_handler = RPLogHandler(request.node.config.py_test_service)
+    rp_handler = RPLogHandler(session.config.py_test_service)
     # Set INFO level for Report Portal handler.
     rp_handler.setLevel(logging.INFO)
-    return logger
-'''
-  
+    session.config.option.rp_logger = logger
+    print (session.config.option.rp_logger)
+    #print (dir(session.config))
+ 
         
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
@@ -311,10 +318,10 @@ def pytest_addoption(parser):
     parser.addoption("-N","--app_path",
                       dest="app_path",
                       help="Enter app path")
-    parser.addoption("--reportportal_logger",
-                      dest="reportportal_logger",
-                      default = False,
-                      help="Enter reportportal_logger")
+    parser.addoption("--rp_logger",
+                      dest="rp_logger",
+                      default = None,
+                      help="RP logger object")
   
 
 

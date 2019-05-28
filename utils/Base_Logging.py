@@ -6,6 +6,7 @@ import os, inspect
 import datetime
 import sys
 from loguru import logger
+import pytest
 
 class Base_Logging():
     "A plug-n-play class for logging"
@@ -53,7 +54,23 @@ class Base_Logging():
     def write(self,msg,level='info'):
         "Write out a message"
         fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead        
-        d = {'caller_func': fname}                    
+        d = {'caller_func': fname}
+        if pytest.config._config.getoption('--reportportal'):
+            logger = pytest.config._config.getoption('--rp_logger')
+            if level.lower()== 'debug': 
+                logger.debug(msg=msg)                
+            elif level.lower()== 'info':
+                logger.info(msg)           
+            elif level.lower()== 'warn' or level.lower()=='warning':           
+                logger.warning(msg)
+            elif level.lower()== 'error':
+                logger.error(msg)            
+            elif level.lower()== 'critical':   
+                logger.critical(msg)            
+            else:
+                logger.critical(msg)
+            return 
+                                
         if level.lower()== 'debug': 
             logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                      
         elif level.lower()== 'info':
