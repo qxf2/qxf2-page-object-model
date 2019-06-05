@@ -55,7 +55,6 @@ class Base_Page(Borg,unittest.TestCase):
             self.tesults_flag = False
             self.images = []
             self.browserstack_flag = False
-            self.reportportal_logger = False
 
             self.reset()
 
@@ -208,30 +207,29 @@ class Base_Page(Borg,unittest.TestCase):
         image_dict['url'] = screenshot_url
         self.image_url_list.append(image_dict)
 
-  
+
+    def save_screenshot_reportportal(self,image_name):
+        "Method to save image to ReportPortal"
+        try:            
+            rp_logger = self.log_obj.setup_rp_logging()
+            with open(image_name, "rb") as fh:
+                image = fh.read()
+ 
+            rp_logger.info(
+                image_name,
+                attachment={
+                    "data": image,
+                    "mime": "application/octet-stream"
+                },
+            )
+        except Exception as e:
+            self.write("Exception when trying to get rplogger")
+            self.write(str(e))
+            self.exceptions.append("Error when trying to get reportportal logger")
+
+
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"
-        
-        if pytest.config._config.getoption('--reportportal'):
-            rp_logger = pytest.config._config.getoption('--rp_logger')
-            try:
-                print (screenshot_name)
-                screenshot_name = self.screenshot_dir + os.sep + screenshot_name+'.png'
-                self.driver.save_screenshot(screenshot_name)
-                with open(screenshot_name, "rb") as fh:
-                    image = fh.read()
- 
-                rp_logger.info(
-                    screenshot_name,
-                    attachment={
-                        "data": image,
-                        "mime": "application/octet-stream"
-                    },
-                )
-            except Exception as e:
-                print("Exception when trying to save screenshot to reportportal: %s" %str(e))
-        
-            
         if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
             for i in range(1,100): 
                 if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
@@ -239,12 +237,16 @@ class Base_Page(Borg,unittest.TestCase):
                 else:
                     os.rename(self.screenshot_dir + os.sep +screenshot_name+'.png',self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png')
                     break
-        self.driver.get_screenshot_as_file(self.screenshot_dir + os.sep+ screenshot_name+'.png')
-	#self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
+        screenshot_name = self.screenshot_dir + os.sep + screenshot_name+'.png'
+        self.driver.get_screenshot_as_file(screenshot_name)
+	    #self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
+        if hasattr(pytest,'config'):
+            if pytest.config._config.getoption('--reportportal'):
+                self.save_screenshot_reportportal(screenshot_name)
         if self.browserstack_flag is True:
             self.append_latest_image(screenshot_name)
         if self.tesults_flag is True:
-            self.images.append(screenshot_name)     
+            self.images.append(screenshot_name)
 
 
     def open(self,url,wait_time=2):
@@ -635,7 +637,7 @@ class Base_Page(Borg,unittest.TestCase):
             for key, value in custom.items():
                 caseObj[key] = str(value)
             Tesults.add_test_case(caseObj)
-      
+        
 
     def wait(self,wait_seconds=5,locator=None):
         "Performs wait for time provided"

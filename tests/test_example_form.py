@@ -38,10 +38,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
 
         if tesults_flag.lower()=='y':
             test_obj.register_tesults()
-        '''
-        if reportportal_logger:
-           test_obj.save_screenshot_reportportal(rp_logger,screenshot_name)
-        '''
+       
         #4. Get the test details from the conf file
         name = conf.name
         email = conf.email
@@ -58,10 +55,6 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         case_id = testrail_file.test_example_form_name
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
         test_obj.add_tesults_case("Set Name", "Sets the name in the form", "test_example_form", result_flag, "Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()), [test_obj.log_obj.log_file_dir + os.sep + test_obj.log_obj.log_file_name])
-        '''
-        if reportportal_logger:
-           test_obj.save_screenshot_reportportal(rp_logger,screenshot_name= 'rp_name_1')
-        '''
         #6. Set Email in form
         result_flag = test_obj.set_email(email) 
         test_obj.log_result(result_flag,

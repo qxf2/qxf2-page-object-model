@@ -8,20 +8,6 @@ from utils import Tesults
 @pytest.fixture
 def browser(request):
     "pytest fixture for browser"
-    import logging
-    # Import Report Portal logger and handler to the test module.
-    from pytest_reportportal import RPLogger, RPLogHandler
-    # Setting up a logging.
-    logging.setLoggerClass(RPLogger)
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    # Create handler for Report Portal.
-    rp_handler = RPLogHandler(request.node.config.py_test_service)
-    # Set INFO level for Report Portal handler.
-    rp_handler.setLevel(logging.INFO)
-    request.config.option.rp_logger = logger
-    print (request.config.option.rp_logger)
-    
     return request.config.getoption("-B")
 
 
@@ -98,7 +84,7 @@ def tesults_flag(request):
 
 
 @pytest.fixture
-def mobile_os_name():
+def mobile_os_name(request):
     "pytest fixture for mobile os name"
     return request.config.getoption("-G")
 
@@ -156,8 +142,9 @@ def pytest_addoption(parser):
     parser.addini("rp_uuid",'help',type="pathlist")
     parser.addini("rp_endpoint",'help',type="pathlist")
     parser.addini("rp_project",'help',type="pathlist")
-    parser.addini("rp_launch",'help',type="pathlist")              
- 
+    parser.addini("rp_launch",'help',type="pathlist")  
+
+
 @pytest.hookimpl()
 def pytest_configure(config):
     # Sets the launch name based on the marker selected.
@@ -165,14 +152,14 @@ def pytest_configure(config):
     if_reportportal =config.getoption('--reportportal')
     
     try:
-        config._inicache["rp_uuid"]="d5984330-6978-4b87-99c1-229bf6201470"
+        config._inicache["rp_uuid"]="ff0f33f7-a0ec-40dc-b834-537cca049297"
         config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
         config._inicache["rp_project"]="nilaya123_personal"
         config._inicache["rp_launch"]="nilaya123_TEST_EXAMPLE" 
  
     except Exception as e:
         print (str(e)) 
-    
+
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
@@ -187,24 +174,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
     if  terminalreporter.config.getoption("--tesults").lower() == 'y':
         Tesults.post_results_to_tesults()
 
-def pytest_sessionstart(session):
-    """ before session.main() is called. """
-    import logging
-    # Import Report Portal logger and handler to the test module.
-    from pytest_reportportal import RPLogger, RPLogHandler
-    # Setting up a logging.
-    logging.setLoggerClass(RPLogger)
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    # Create handler for Report Portal.
-    rp_handler = RPLogHandler(session.config.py_test_service)
-    # Set INFO level for Report Portal handler.
-    rp_handler.setLevel(logging.INFO)
-    session.config.option.rp_logger = logger
-    print (session.config.option.rp_logger)
-    #print (dir(session.config))
- 
-        
+
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
 
@@ -228,7 +198,9 @@ def pytest_generate_tests(metafunc):
                 metafunc.parametrize("browser",browser_os_name_conf.default_browser)
             else:
                 config_list_local = [(metafunc.config.getoption("-B")[0])]
-                metafunc.parametrize("browser", config_list_local)          
+                metafunc.parametrize("browser", config_list_local)
+
+
 
 def pytest_addoption(parser):
     parser.addoption("-B","--browser",
@@ -240,6 +212,10 @@ def pytest_addoption(parser):
                       dest="url",
                       default="https://qxf2.com",
                       help="The url of the application")
+    parser.addoption("-A","--api_url",
+                      dest="url",
+                      default="http://35.167.62.251",
+                      help="The url of the api")
     parser.addoption("-X","--testrail_flag",
                       dest="testrail_flag",
                       default='N',
@@ -318,11 +294,7 @@ def pytest_addoption(parser):
     parser.addoption("-N","--app_path",
                       dest="app_path",
                       help="Enter app path")
-    parser.addoption("--rp_logger",
-                      dest="rp_logger",
-                      default = None,
-                      help="RP logger object")
-  
+
 
 
 

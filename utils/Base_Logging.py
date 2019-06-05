@@ -5,8 +5,9 @@ This class wraps around Python's loguru module.
 import os, inspect
 import datetime
 import sys
+import pytest,logging
 from loguru import logger
-import pytest
+from pytest_reportportal import RPLogger, RPLogHandler
 
 class Base_Logging():
     "A plug-n-play class for logging"
@@ -33,7 +34,7 @@ class Base_Logging():
         logger.add(log_file_name,level=level,format=format, 
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
-    '''
+
     def get_calling_module(self):
         "Get the name of the calling module"        
         calling_file = inspect.stack()[-1][1]                  
@@ -49,30 +50,49 @@ class Base_Logging():
         self.calling_module = calling_filename[-1].split('.')[0]
 
         return self.calling_module
+
+
+    def setup_rp_logging(self):
+        "Setup reportportal logging"
+        try:
+            # Setting up a logging.
+            logging.setLoggerClass(RPLogger)
+            rp_logger = logging.getLogger(__name__)
+            rp_logger.setLevel(logging.INFO)
+            # Create handler for Report Portal.
+            rp_handler = RPLogHandler(pytest.config._config.py_test_service)
+            # Set INFO level for Report Portal handler.
+            rp_handler.setLevel(logging.INFO)
+            return rp_logger
+        except Exception as e:
+            self.write("Exception when trying to set rplogger")
+            self.write(str(e))
+            self.exceptions.append("Error when setting up the reportportal logger")
     
-    
+
     def write(self,msg,level='info'):
         "Write out a message"
         fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead        
-        d = {'caller_func': fname}
-        if pytest.config._config.getoption('--reportportal'):
-            logger = pytest.config._config.getoption('--rp_logger')
-            if level.lower()== 'debug': 
-                logger.debug(msg=msg)                
-            elif level.lower()== 'info':
-                logger.info(msg)           
-            elif level.lower()== 'warn' or level.lower()=='warning':           
-                logger.warning(msg)
-            elif level.lower()== 'error':
-                logger.error(msg)            
-            elif level.lower()== 'critical':   
-                logger.critical(msg)            
-            else:
-                logger.critical(msg)
-            return 
-                                
+        d = {'caller_func': fname}   
+        if hasattr(pytest,'config'):  
+            if pytest.config._config.getoption('--reportportal'):
+                rp_logger = self.setup_rp_logging()
+                if level.lower()== 'debug': 
+                    rp_logger.debug(msg=msg)                
+                elif level.lower()== 'info':
+                    rp_logger.info(msg)           
+                elif level.lower()== 'warn' or level.lower()=='warning':           
+                    rp_logger.warning(msg)
+                elif level.lower()== 'error':
+                    rp_logger.error(msg)            
+                elif level.lower()== 'critical':   
+                    rp_logger.critical(msg)            
+                else:
+                    rp_logger.critical(msg)
+                return 
+
         if level.lower()== 'debug': 
-            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                      
+            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                
         elif level.lower()== 'info':
             logger.info("{module} | {msg}",module=d['caller_func'],msg=msg)           
         elif level.lower()== 'warn' or level.lower()=='warning':           
@@ -83,54 +103,3 @@ class Base_Logging():
             logger.critical("{module} | {msg}",module=d['caller_func'],msg=msg)            
         else:
             logger.critical("Unknown level passed for the msg: {}", msg)
-        '''
-
-    def get_calling_module(self):
-        "Get the name of the calling module"        
-        calling_file = inspect.stack()[-1][1]                  
-        if 'runpy' in calling_file:
-            calling_file = inspect.stack()[4][1]
-        
-        calling_filename = calling_file.split(os.sep)
-
-        #This logic bought to you by windows + cygwin + git bash 
-        if len(calling_filename) == 1: #Needed for 
-            calling_filename = calling_file.split('/')
-        
-        self.calling_module = calling_filename[-1].split('.')[0]
-
-        return self.calling_module
-    
-    
-    def write(self,msg,level='info'):
-        "Write out a message"
-        fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead        
-        d = {'caller_func': fname}
-        if pytest.config._config.getoption('--reportportal'):
-            rp_logger = pytest.config._config.getoption('--rp_logger')
-            if level.lower()== 'debug': 
-                rp_logger.debug(msg=msg)                
-            elif level.lower()== 'info':
-                rp_logger.info(msg)           
-            elif level.lower()== 'warn' or level.lower()=='warning':           
-                rp_logger.warning(msg)
-            elif level.lower()== 'error':
-                rp_logger.error(msg)            
-            elif level.lower()== 'critical':   
-                rp_logger.critical(msg)            
-            else:
-                rp_logger.critical(msg)
-            return 
-                                
-        if level.lower()== 'debug': 
-            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                      
-        elif level.lower()== 'info':
-            logger.info("{module} | {msg}",module=d['caller_func'],msg=msg)           
-        elif level.lower()== 'warn' or level.lower()=='warning':           
-            logger.warning("{module} | {msg}",module=d['caller_func'],msg=msg)
-        elif level.lower()== 'error':
-            logger.error("{module} | {msg}",module=d['caller_func'],msg=msg)            
-        elif level.lower()== 'critical':   
-            logger.critical("{module} | {msg}",module=d['caller_func'],msg=msg)            
-        else:
-            logger.critical("Unknown level passed for the msg: {}", msg)  
