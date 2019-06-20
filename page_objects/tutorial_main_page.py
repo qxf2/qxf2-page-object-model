@@ -11,9 +11,10 @@ from .footer_object import Footer_Object
 from utils.Wrapit import Wrapit
 
 
-class Tutorial_Main_Page(Base_Page,Form_Object,Header_Object,Table_Object,Footer_Object):
+class Tutorial_Main_Page(Base_Page, Form_Object,
+                         Header_Object, Table_Object, Footer_Object):
     "Page Object for the tutorial's main page"
-    
+
     def start(self):
         "Use this method to go to specific URL -- if needed"
         url = 'selenium-tutorial-main'

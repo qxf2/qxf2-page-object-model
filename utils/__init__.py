@@ -1,6 +1,7 @@
 
 "Check if dict item exist for given key else return none"
 
+
 def get_dict_item(from_this, get_this):
     """ get dic object item """
     if not from_this:

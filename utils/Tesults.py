@@ -3,23 +3,26 @@ import conf.tesults_conf as conf_file
 
 cases = []
 
+
 def add_test_case(data):
     cases.append(data)
 
-def post_results_to_tesults ():
-    token = conf_file.target_token_default # uses default token unless otherwise specified
+
+def post_results_to_tesults():
+    # uses default token unless otherwise specified
+    token = conf_file.target_token_default
     data = {
         'target': token,
-        'results': { 'cases': cases }
+        'results': {'cases': cases}
     }
-    print ('-----Tesults output-----')
+    print('-----Tesults output-----')
     if len(data['results']['cases']) > 0:
-        print (data)
+        print(data)
         print('Uploading results to Tesults...')
         ret = tesults.results(data)
-        print ('success: ' + str(ret['success']))
-        print ('message: ' + str(ret['message']))
-        print ('warnings: ' + str(ret['warnings']))
-        print ('errors: ' + str(ret['errors']))
+        print('success: ' + str(ret['success']))
+        print('message: ' + str(ret['message']))
+        print('warnings: ' + str(ret['warnings']))
+        print('errors: ' + str(ret['errors']))
     else:
-        print ('No test results.')
+        print('No test results.')

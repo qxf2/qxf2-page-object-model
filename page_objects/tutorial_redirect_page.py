@@ -10,10 +10,10 @@ import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 
 
-class Tutorial_Redirect_Page(Base_Page,Header_Object,Footer_Object):
+class Tutorial_Redirect_Page(Base_Page, Header_Object, Footer_Object):
     "Page Object for the tutorial's redirect page"
 
-    #locators
+    # locators
     heading = locators.heading
 
     def start(self):
@@ -21,13 +21,13 @@ class Tutorial_Redirect_Page(Base_Page,Header_Object,Footer_Object):
         url = 'selenium-tutorial-redirect'
         self.open(url)
 
-    @Wrapit._exceptionHandler    
+    @Wrapit._exceptionHandler
     def check_heading(self):
         "Check if the heading exists"
         result_flag = self.check_element_present(self.heading)
         self.conditional_write(result_flag,
-            positive='Correct heading present on redirect page',
-            negative='Heading on redirect page is INCORRECT!!',
-            level='debug')
+                               positive='Correct heading present on redirect page',
+                               negative='Heading on redirect page is INCORRECT!!',
+                               level='debug')
 
         return result_flag

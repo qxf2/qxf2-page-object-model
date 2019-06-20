@@ -10,8 +10,8 @@ from utils.Wrapit import Wrapit
 
 class Form_Object:
     "Page object for the Form"
-    
-    #locators
+
+    # locators
     name_field = locators.name_field
     email_field = locators.email_field
     phone_no_field = locators.phone_no_field
@@ -19,61 +19,57 @@ class Form_Object:
     gender_dropdown = locators.gender_dropdown
     gender_option = locators.gender_option
     tac_checkbox = locators.tac_checkbox
-    redirect_title = "redirect"    
+    redirect_title = "redirect"
 
     @Wrapit._screenshot
     @Wrapit._exceptionHandler
-    def set_name(self,name):
+    def set_name(self, name):
         "Set the name on the form"
-        result_flag = self.set_text(self.name_field,name)
+        result_flag = self.set_text(self.name_field, name)
         self.conditional_write(result_flag,
-            positive='Set the name to: %s'%name,
-            negative='Failed to set the name in the form',
-            level='debug')
+                               positive='Set the name to: %s' % name,
+                               negative='Failed to set the name in the form',
+                               level='debug')
 
-        return result_flag 
-
+        return result_flag
 
     @Wrapit._screenshot
     @Wrapit._exceptionHandler
-    def set_email(self,email):
+    def set_email(self, email):
         "Set the email on the form"
-        result_flag = self.set_text(self.email_field,email)
+        result_flag = self.set_text(self.email_field, email)
         self.conditional_write(result_flag,
-            positive='Set the email to: %s'%email,
-            negative='Failed to set the email in the form',
-            level='debug')
+                               positive='Set the email to: %s' % email,
+                               negative='Failed to set the email in the form',
+                               level='debug')
 
         return result_flag
 
-
     @Wrapit._screenshot
     @Wrapit._exceptionHandler
-    def set_phone(self,phone):
+    def set_phone(self, phone):
         "Set the phone on the form"
-        result_flag = self.set_text(self.phone_no_field,phone)
+        result_flag = self.set_text(self.phone_no_field, phone)
         self.conditional_write(result_flag,
-            positive='Set the phone to: %s'%phone,
-            negative='Failed to set the phone in the form',
-            level='debug')
+                               positive='Set the phone to: %s' % phone,
+                               negative='Failed to set the phone in the form',
+                               level='debug')
 
         return result_flag
 
-
     @Wrapit._screenshot
     @Wrapit._exceptionHandler
-    def set_gender(self,gender,wait_seconds=1):
+    def set_gender(self, gender, wait_seconds=1):
         "Set the gender on the form"
         result_flag = self.click_element(self.gender_dropdown)
         self.wait(wait_seconds)
-        result_flag &= self.click_element(self.gender_option%gender)
+        result_flag &= self.click_element(self.gender_option % gender)
         self.conditional_write(result_flag,
-            positive='Set the gender to: %s'%gender,
-            negative='Failed to set the gender in the form',
-            level='debug')
+                               positive='Set the gender to: %s' % gender,
+                               negative='Failed to set the gender in the form',
+                               level='debug')
 
         return result_flag
-
 
     @Wrapit._screenshot
     @Wrapit._exceptionHandler
@@ -81,12 +77,11 @@ class Form_Object:
         "Click on 'Click Me' button"
         result_flag = self.click_element(self.click_me_button)
         self.conditional_write(result_flag,
-            positive='Clicked on the "click me" button',
-            negative='Failed to click on "click me" button',
-            level='debug')
+                               positive='Clicked on the "click me" button',
+                               negative='Failed to click on "click me" button',
+                               level='debug')
 
         return result_flag
-
 
     @Wrapit._screenshot
     @Wrapit._exceptionHandler
@@ -94,12 +89,11 @@ class Form_Object:
         "Accept the terms and conditions"
         result_flag = self.select_checkbox(self.tac_checkbox)
         self.conditional_write(result_flag,
-            positive='Accepted the terms and conditions',
-            negative='Failed to accept the terms and conditions',
-            level='debug')
-            
-        return result_flag
+                               positive='Accepted the terms and conditions',
+                               negative='Failed to accept the terms and conditions',
+                               level='debug')
 
+        return result_flag
 
     @Wrapit._screenshot
     @Wrapit._exceptionHandler
@@ -109,13 +103,12 @@ class Form_Object:
         if self.redirect_title in self.driver.title:
             result_flag = True
             self.switch_page("redirect")
-        
-        return result_flag
 
+        return result_flag
 
     @Wrapit._screenshot
     @Wrapit._exceptionHandler
-    def submit_form(self,username,email,phone,gender):
+    def submit_form(self, username, email, phone, gender):
         "Submit the form"
         result_flag = self.set_name(username)
         result_flag &= self.set_email(email)
@@ -126,5 +119,3 @@ class Form_Object:
         result_flag &= self.check_redirect()
 
         return result_flag
-
-
