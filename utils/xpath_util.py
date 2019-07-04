@@ -129,7 +129,12 @@ class Xpath_Util:
         # condition to check the length of the 'id' attribute and ignore if
         # there are numerics in the 'id' attribute. Also ingnoring id values
         # having "input" and "button" strings.
-        if (element.has_attr('id') and len(element['id']) > 2) and bool(re.search(r'\d', element['id'])) == False and (
+        if (
+                element.has_attr('id') and len(
+                    element['id']) > 2) and bool(
+                re.search(
+                    r'\d',
+                    element['id'])) == False and (
                 "input" not in element['id'].lower() and "button" not in element['id'].lower()):
             self.variable_name = element['id'].strip("_")
         # condition to check if the 'value' attribute exists and not having
@@ -177,18 +182,32 @@ class Xpath_Util:
         else:
             self.variable_name = ''
 
-        return self.variable_name.lower().replace("+/- ", "").replace("| ", "").replace(" / ", "_").  \
-            replace("/", "_").replace(" - ", "_").replace(" ", "_").replace("&", "").replace("-", "_").      \
-            replace(
-            "[",
-            "_").replace(
-            "]",
+        return self.variable_name.lower().replace(
+            "+/- ",
             "").replace(
-            ",",
+            "| ",
             "").replace(
-                "__",
+            " / ",
+            "_"). replace(
+                "/",
                 "_").replace(
-                    ".com",
+                    " - ",
+                    "_").replace(
+                        " ",
+                        "_").replace(
+                            "&",
+                            "").replace(
+                                "-",
+                                "_"). replace(
+                                    "[",
+                                    "_").replace(
+                                        "]",
+                                        "").replace(
+                                            ",",
+                                            "").replace(
+                                                "__",
+                                                "_").replace(
+                                                    ".com",
             "").strip("_")
 
     def guess_xpath(self, tag, attr, element):

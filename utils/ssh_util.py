@@ -5,14 +5,13 @@ Qxf2 Services: Utility script to ssh into a remote server
 * Upload a file
 * Download a file
 """
-
-from conf import ssh_conf as conf_file
 import socket
 import paramiko
 import os
 import sys
 import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from conf import ssh_conf as conf_file
 
 
 class Ssh_Util:

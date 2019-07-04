@@ -9,8 +9,15 @@ import subprocess
 class Test_Runner_Class:
     "Test Runner class"
 
-    def __init__(self, base_url='http://qxf2.com', testrail_flag='N', browserstack_flag='N',
-                 os_name='Windows', os_version='7', browser='firefox', browser_version='33'):
+    def __init__(
+            self,
+            base_url='http://qxf2.com',
+            testrail_flag='N',
+            browserstack_flag='N',
+            os_name='Windows',
+            os_version='7',
+            browser='firefox',
+            browser_version='33'):
         "Constructor"
         self.python_executable = "python"
         self.util_directory = os.path.abspath((os.path.dirname(__file__)))
@@ -45,8 +52,15 @@ class Test_Runner_Class:
 
         return file_exist_flag
 
-    def reset(self, base_url=None, testrail_flag=None, browserstack_flag=None,
-              os_name=None, os_version=None, browser=None, browser_version=None):
+    def reset(
+            self,
+            base_url=None,
+            testrail_flag=None,
+            browserstack_flag=None,
+            os_name=None,
+            os_version=None,
+            browser=None,
+            browser_version=None):
         "Reset the private variables"
         if base_url is not None:
             self.base_url = base_url
@@ -85,7 +99,11 @@ class Test_Runner_Class:
         print("Done!")
 
     def setup_testrail_args_list(
-            self, test_name=None, test_run_name='', case_ids_list=None, name_override_flag=True):
+            self,
+            test_name=None,
+            test_run_name='',
+            case_ids_list=None,
+            name_override_flag=True):
         "Convert the command line arguments into list for setup_testrail.py"
         args_list = []
         # python setup_testrail.py -r test_run_name -d test_run_description

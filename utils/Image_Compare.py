@@ -100,14 +100,14 @@ def get_color_sum(img):
 if __name__ == '__main__':
     # Please update below img1, img2, result_img values before running this
     # script
-    img1 = r'Add path of first image'
-    img2 = r'Add path of second image'
+    img1 = r'C:/Users/annap/Pictures/Saved Pictures/annapoorani.jpg'
+    img2 = r'C:/Users/annap/Pictures/Saved Pictures/annapoorani-Copy.jpg'
     # please add path along with resultant image name which you want
-    result_img = r'Add path of result image'
+    result_img = r'C:/Users/annap/Pictures/Saved Pictures/result_image.jpeg'
 
     # Compare images and generate a resultant difference image
     result_flag = is_equal(img1, img2, result_img)
-    if (result_flag == True):
+    if (result_flag):
         print("Both images are matching")
     else:
         print("Images are not matching")

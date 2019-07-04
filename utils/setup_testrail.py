@@ -60,8 +60,14 @@ def save_new_test_run_details(filename, test_run_name, test_run_id):
     fp.close()
 
 
-def setup_testrail(project_name='POM DEMO', milestone_name=None, test_run_name=None,
-                   test_cases_conf=None, description=None, name_override_flag='N', case_ids_list=None):
+def setup_testrail(
+        project_name='POM DEMO',
+        milestone_name=None,
+        test_run_name=None,
+        test_cases_conf=None,
+        description=None,
+        name_override_flag='N',
+        case_ids_list=None):
     "Setup TestRail for an automated run"
     # 1. Get project id
     # 2. if milestone_name is not None
@@ -149,22 +155,30 @@ if __name__ == '__main__':
                       dest="test_run_name",
                       default=None,
                       help="Test run name")
-    parser.add_option("-t", "--test_cases_conf",
-                      dest="test_cases_conf",
-                      default="setup_testrail.conf",
-                      help="Test cases conf listing test names and ids you want added")
-    parser.add_option("-d", "--test_run_description",
-                      dest="test_run_description",
-                      default=None,
-                      help="The name of the test Registration_Tests/Intro_Run_Tests/Sales_Demo_Tests")
-    parser.add_option("-n", "--name_override_flag",
-                      dest="name_override_flag",
-                      default="Y",
-                      help="Y or N. 'N' if you don't want to override the default test_run_name")
-    parser.add_option("-c", "--case_ids_list",
-                      dest="case_ids_list",
-                      default=None,
-                      help="Pass all case ids with comma separated you want to add in test run")
+    parser.add_option(
+        "-t",
+        "--test_cases_conf",
+        dest="test_cases_conf",
+        default="setup_testrail.conf",
+        help="Test cases conf listing test names and ids you want added")
+    parser.add_option(
+        "-d",
+        "--test_run_description",
+        dest="test_run_description",
+        default=None,
+        help="The name of the test Registration_Tests/Intro_Run_Tests/Sales_Demo_Tests")
+    parser.add_option(
+        "-n",
+        "--name_override_flag",
+        dest="name_override_flag",
+        default="Y",
+        help="Y or N. 'N' if you don't want to override the default test_run_name")
+    parser.add_option(
+        "-c",
+        "--case_ids_list",
+        dest="case_ids_list",
+        default=None,
+        help="Pass all case ids with comma separated you want to add in test run")
 
     (options, args) = parser.parse_args()
 

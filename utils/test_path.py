@@ -1,8 +1,8 @@
-from conf import test_path_conf as conf
 import os
 import sys
 import shutil
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from conf import test_path_conf as conf
 
 # get details from conf file for POM
 src_pom_files_list = conf.src_pom_files_list

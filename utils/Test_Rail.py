@@ -100,8 +100,9 @@ class Test_Rail:
                 try:
                     data = {'name': milestone_name,
                             'description': milestone_description}
-                    result = self.client.send_post('add_milestone/%s' % str(project_id),
-                                                   data)
+                    result = self.client.send_post(
+                        'add_milestone/%s' %
+                        str(project_id), data)
                 except Exception as e:
                     print('Exception in create_new_project() creating new project.')
                     print('PYTHON SAYS: ')
@@ -129,8 +130,15 @@ class Test_Rail:
         else:
             print("Project already exists %s" % new_project_name)
 
-    def create_test_run(self, project_name, test_run_name, milestone_name=None,
-                        description="", suite_name=None, case_ids=[], assigned_to=None):
+    def create_test_run(
+            self,
+            project_name,
+            test_run_name,
+            milestone_name=None,
+            description="",
+            suite_name=None,
+            case_ids=[],
+            assigned_to=None):
         "Create a new test run if it does not already exist"
         # reference: http://docs.gurock.com/testrail-api2/reference-runs
         project_id = self.get_project_id(project_name)

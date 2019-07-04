@@ -12,8 +12,8 @@ A simple IMAP util that will help us with account activation
 2. Add a try catch decorator
 3. Enhance get_latest_email_uid to make all parameters optional
 """
-# The import statements import: standard Python modules,conf
-import conf.email_conf as conf_file
+# The import statements import: standard Python modules conf
+
 import os
 import sys
 import time
@@ -21,6 +21,7 @@ import imaplib
 import email
 import datetime
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import conf.email_conf as conf_file
 
 
 class Email_Util:
@@ -186,7 +187,7 @@ if __name__ == '__main__':
             if "Hi Email_Util" and "This email was sent to you" in line:
                 data_flag = True
                 break
-        if data_flag == True:
+        if data_flag:
             print(
                 "PASS: Automation provided correct Email details. Email contents matched with provided data.")
         else:
@@ -216,10 +217,10 @@ if __name__ == '__main__':
                     data_flag = True
                     break
 
-            if data_flag == True:
+            if data_flag:
                 break
 
-        if data_flag == True and expected_pom_url == pom_url:
+        if data_flag and expected_pom_url == pom_url:
             print(
                 "PASS: Automation provided correct mail details. Got correct Qxf2 POM url from mail body. URL: %s" %
                 pom_url)

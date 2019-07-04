@@ -40,7 +40,7 @@ class Email_Pytest_Report:
     def get_test_report_data(self, html_body_flag=True,
                              report_file_path='default'):
         "get test report data from pytest_report.html or pytest_report.txt or from user provided file"
-        if html_body_flag == True and report_file_path == 'default':
+        if html_body_flag and report_file_path == 'default':
             # To generate pytest_report.html file use following command e.g.
             # py.test --html = log/pytest_report.html
             test_report_file = os.path.abspath(
@@ -119,18 +119,22 @@ class Email_Pytest_Report:
             # Encode the payload using Base64
             encoders.encode_base64(attachment)
         # Set the filename parameter
-        attachment.add_header('Content-Disposition',
-                              'attachment',
-                              filename=os.path.basename(attachment_report_file))
+        attachment.add_header(
+            'Content-Disposition',
+            'attachment',
+            filename=os.path.basename(attachment_report_file))
 
         return attachment
 
     def send_test_report_email(
-            self, html_body_flag=True, attachment_flag=False, report_file_path='default'):
+            self,
+            html_body_flag=True,
+            attachment_flag=False,
+            report_file_path='default'):
         "send test report email"
         # 1. Get html formatted email body data from report_file_path file
         # (log/pytest_report.html) and do not add it as an attachment
-        if html_body_flag == True and attachment_flag == False:
+        if html_body_flag and attachment_flag == False:
             # get html formatted test report data from log/pytest_report.html
             testdata = self.get_test_report_data(
                 html_body_flag, report_file_path)
@@ -148,7 +152,7 @@ class Email_Pytest_Report:
 
         # 3. Add html formatted email body message along with an attachment
         # file
-        elif html_body_flag == True and attachment_flag == True:
+        elif html_body_flag and attachment_flag:
             message = MIMEMultipart()
             # add html formatted body message to email
             html_body = MIMEText('''<p>Hello,</p>
@@ -165,7 +169,8 @@ class Email_Pytest_Report:
         else:
             message = MIMEMultipart()
             # add test formatted body message to email
-            plain_text_body = MIMEText('''Hello,\n\tPlease check attachment to see test built report.
+            plain_text_body = MIMEText(
+                '''Hello,\n\tPlease check attachment to see test built report.
                                        \n\nNote: For best UI experience, download the attachment and open  using Chrome browser.''')  # Add/Update email body message here as per your requirement
             message.attach(plain_text_body)
             # add attachment to email

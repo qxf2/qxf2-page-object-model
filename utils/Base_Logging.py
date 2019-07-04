@@ -12,8 +12,11 @@ from loguru import logger
 class Base_Logging():
     "A plug-n-play class for logging"
 
-    def __init__(self, log_file_name=None, level="DEBUG",
-                 format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module} | {message}"):
+    def __init__(
+            self,
+            log_file_name=None,
+            level="DEBUG",
+            format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module} | {message}"):
         "Constructor for the logging class"
         self.log_file_name = log_file_name
         self.log_file_dir = os.path.abspath(
@@ -33,8 +36,17 @@ class Base_Logging():
         else:
             log_file_name = self.log_file_dir + os.sep + log_file_name
 
-        logger.add(log_file_name, level=level, format=format,
-                   rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
+        logger.add(
+            log_file_name,
+            level=level,
+            format=format,
+            rotation="30 days",
+            filter=None,
+            colorize=None,
+            serialize=False,
+            backtrace=True,
+            enqueue=False,
+            catch=True)
 
     def get_calling_module(self):
         "Get the name of the calling module"

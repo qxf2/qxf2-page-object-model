@@ -24,7 +24,9 @@ class Excel_Compare():
             xl_sheet = actual_xlfile.active
             actual_file = []
             for row in xl_sheet.iter_rows(
-                    min_row=1, max_col=xl_sheet.max_column, max_row=xl_sheet.max_row):
+                    min_row=1,
+                    max_col=xl_sheet.max_column,
+                    max_row=xl_sheet.max_row):
                 for cell in row:
                     actual_file.append(cell.value)
 
@@ -32,7 +34,9 @@ class Excel_Compare():
             xl_sheet = exp_xlfile.active
             exp_file = []
             for row in xl_sheet.iter_rows(
-                    min_row=1, max_col=xl_sheet.max_column, max_row=xl_sheet.max_row):
+                    min_row=1,
+                    max_col=xl_sheet.max_column,
+                    max_row=xl_sheet.max_row):
                 for cell in row:
                     exp_file.append(cell.value)
 

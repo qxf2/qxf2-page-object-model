@@ -175,9 +175,8 @@ class Message():
 
         # Parse attachments into attachment objects array for this message
         self.attachments = [
-            Attachment(attachment) for attachment in self.message._payload
-            if not isinstance(attachment, basestring) and attachment.get('Content-Disposition') is not None
-        ]
+            Attachment(attachment) for attachment in self.message._payload if not isinstance(
+                attachment, basestring) and attachment.get('Content-Disposition') is not None]
 
     def fetch(self):
         if not self.message:
@@ -223,8 +222,11 @@ class Message():
         self.gmail.use_mailbox(original_mailbox.name)
 
         # combine and sort sent and received messages
-        return sorted(dict(received_messages.items() +
-                           sent_messages.items()).values(), key=lambda m: m.sent_at)
+        return sorted(
+            dict(
+                received_messages.items() +
+                sent_messages.items()).values(),
+            key=lambda m: m.sent_at)
 
 
 class Attachment:
