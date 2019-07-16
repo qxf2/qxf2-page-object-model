@@ -11,7 +11,6 @@ from page_objects.PageFactory import PageFactory
 from utils.Option_Parser import Option_Parser
 import conf.example_form_conf as conf
 import conf.testrail_caseid_conf as testrail_file
-import cProfile,io,pstats
 
 
 def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
@@ -62,7 +61,8 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         result_flag = test_obj.set_email(email) 
         test_obj.log_result(result_flag,
                             positive="Email was successfully set to: %s\n"%email,
-                            negative="Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()))
+                            negative="Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()),
+                            level="critical")
                             
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         #Update TestRail
