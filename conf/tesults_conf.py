@@ -7,4 +7,4 @@ utils/Tesults.py will use the target_token_default unless otherwise specified
 Find out more about targets here: https://www.tesults.com/docs?doc=target
 """
 
-target_token_default = ""
+target_token_default = " "
