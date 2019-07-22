@@ -47,16 +47,14 @@ def test_example_table(base_url,browser,browser_version,os_version,os_name,remot
         result_flag = test_obj.print_table_text()
         test_obj.log_result(result_flag,
                             positive="Completed printing table text",
-                            negative="Unable to print the table text",
-                            level="critical")
+                            negative="Unable to print the table text")
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         
         #6. Check if a name is present in the table
         result_flag = test_obj.check_name_present(name)
         test_obj.log_result(result_flag,
                             positive="Located the name %s in the table"%name,
-                            negative="The name %s is not present under name column on the Page with url: %s"%(name,test_obj.get_current_url()),
-                            level="critical")
+                            negative="The name %s is not present under name column on the Page with url: %s"%(name,test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_table

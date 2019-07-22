@@ -1,0 +1,598 @@
+         396937 function calls (396527 primitive calls) in 58.813 seconds
+
+   Ordered by: internal time
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+       11   28.009    2.546   28.009    2.546 {built-in method time.sleep}
+       91   26.416    0.290   26.416    0.290 {method 'recv_into' of '_socket.socket' objects}
+        7    3.022    0.432    3.022    0.432 {method 'connect' of '_socket.socket' objects}
+        1    0.498    0.498    0.499    0.499 {built-in method _winapi.CreateProcess}
+     2080    0.222    0.000    0.222    0.000 {built-in method nt.stat}
+      464    0.104    0.000    0.343    0.001 C:\Python36\lib\inspect.py:714(getmodule)
+       22    0.090    0.004    0.090    0.004 {built-in method io.open}
+    65660    0.050    0.000    0.050    0.000 {built-in method builtins.hasattr}
+    65162    0.036    0.000    0.052    0.000 C:\Python36\lib\inspect.py:64(ismodule)
+       12    0.025    0.002    5.173    0.431 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:1004(get_screenshot_as_file)
+82283/82282    0.024    0.000    0.024    0.000 {built-in method builtins.isinstance}
+        6    0.020    0.003    0.020    0.003 {built-in method _socket.getaddrinfo}
+    58739    0.017    0.000    0.017    0.000 {method 'get' of 'dict' objects}
+     1772    0.017    0.000    0.037    0.000 C:\Python36\lib\ntpath.py:472(normpath)
+       82    0.016    0.000    0.017    0.000 {method 'write' of '_io.TextIOWrapper' objects}
+     1580    0.012    0.000    0.211    0.000 C:\Python36\lib\inspect.py:680(getsourcefile)
+      464    0.009    0.000    0.560    0.001 C:\Python36\lib\inspect.py:760(findsource)
+     1861    0.007    0.000    0.009    0.000 C:\Python36\lib\ntpath.py:122(splitdrive)
+      105    0.007    0.000    0.007    0.000 {method 'sendall' of '_socket.socket' objects}
+     1103    0.006    0.000    0.006    0.000 {method 'match' of '_sre.SRE_Pattern' objects}
+      464    0.006    0.000    0.645    0.001 C:\Python36\lib\inspect.py:1425(getframeinfo)
+     1591    0.006    0.000    0.013    0.000 C:\Python36\lib\inspect.py:643(getfile)
+     3228    0.004    0.000    0.013    0.000 {built-in method builtins.any}
+       12    0.004    0.000    0.004    0.000 {built-in method binascii.a2b_base64}
+        1    0.004    0.004    0.004    0.004 {built-in method nt.rename}
+       82    0.004    0.000    0.012    0.000 C:\Python36\lib\site-packages\loguru\_datetime.py:13(__format__)
+     6407    0.004    0.000    0.004    0.000 {method 'endswith' of 'str' objects}
+     4863    0.004    0.000    0.004    0.000 {method 'replace' of 'str' objects}
+      328    0.004    0.000    0.004    0.000 {method 'strftime' of 'datetime.date' objects}
+      440    0.004    0.000    0.007    0.000 C:\Python36\lib\http\client.py:1195(putheader)
+     1772    0.003    0.000    0.045    0.000 C:\Python36\lib\ntpath.py:539(abspath)
+     1772    0.003    0.000    0.003    0.000 {built-in method nt._getfullpathname}
+     1116    0.003    0.000    0.115    0.000 C:\Python36\lib\inspect.py:702(getabsfile)
+       67    0.003    0.000   26.498    0.395 C:\Python36\lib\site-packages\selenium\webdriver\remote\remote_connection.py:474(_request)
+      464    0.003    0.000    0.049    0.000 C:\Python36\lib\linecache.py:53(checkcache)
+       67    0.003    0.000    0.003    0.000 C:\Python36\lib\json\decoder.py:345(raw_decode)
+     1616    0.003    0.000    0.178    0.000 C:\Python36\lib\genericpath.py:16(exists)
+15498/15469    0.003    0.000    0.003    0.000 {built-in method builtins.len}
+     2272    0.003    0.000    0.003    0.000 {method 'split' of 'str' objects}
+       12    0.003    0.000    0.003    0.000 {method 'write' of '_io.BufferedWriter' objects}
+     4740    0.003    0.000    0.005    0.000 C:\Python36\lib\inspect.py:687(<genexpr>)
+      152    0.003    0.000    0.004    0.000 {method 'sub' of '_sre.SRE_Pattern' objects}
+       67    0.003    0.000    0.003    0.000 C:\Python36\lib\socket.py:218(makefile)
+      277    0.002    0.000   26.419    0.095 {method 'readline' of '_io.BufferedReader' objects}
+       41    0.002    0.000    0.039    0.001 C:\Python36\lib\site-packages\loguru\_logger.py:1402(log_function)
+     4088    0.002    0.000    0.002    0.000 {method 'startswith' of 'str' objects}
+     1157    0.002    0.000    0.004    0.000 C:\Python36\lib\ntpath.py:44(normcase)
+       44    0.002    0.000    0.648    0.015 C:\Python36\lib\inspect.py:1464(getouterframes)
+     6662    0.002    0.000    0.002    0.000 {built-in method nt.fspath}
+     4740    0.002    0.000    0.003    0.000 C:\Python36\lib\inspect.py:690(<genexpr>)
+       67    0.002    0.000    0.024    0.000 C:\Python36\lib\http\client.py:194(parse_headers)
+       67    0.002    0.000   26.447    0.395 C:\Python36\lib\http\client.py:290(begin)
+      142    0.002    0.000    0.002    0.000 {method 'readlines' of '_io._IOBase' objects}
+       67    0.002    0.000   26.420    0.394 C:\Python36\lib\http\client.py:257(_read_status)
+        8    0.002    0.000    0.002    0.000 C:\Python36\lib\socket.py:139(__init__)
+       67    0.002    0.000    0.022    0.000 C:\Python36\lib\http\client.py:1241(_send_request)
+      134    0.002    0.000    0.011    0.000 C:\Python36\lib\email\feedparser.py:218(_parsegen)
+       67    0.002    0.000    0.006    0.000 C:\Python36\lib\http\client.py:1071(putrequest)
+      446    0.001    0.000    0.001    0.000 {method 'fullmatch' of '_sre.SRE_Pattern' objects}
+      603    0.001    0.000    0.003    0.000 C:\Python36\lib\email\message.py:462(get)
+      472    0.001    0.000    0.007    0.000 C:\Python36\lib\re.py:286(_compile)
+       67    0.001    0.000   26.504    0.396 C:\Python36\lib\site-packages\selenium\webdriver\remote\remote_connection.py:453(execute)
+     1856    0.001    0.000    0.002    0.000 C:\Python36\lib\inspect.py:229(istraceback)
+     4040    0.001    0.000    0.001    0.000 {method 'lower' of 'str' objects}
+     1906    0.001    0.000    0.001    0.000 {method 'lstrip' of 'str' objects}
+     1542    0.001    0.000    0.001    0.000 {method 'encode' of 'str' objects}
+       82    0.001    0.000    0.033    0.000 C:\Python36\lib\site-packages\loguru\_handler.py:144(emit)
+       67    0.001    0.000    0.001    0.000 C:\Python36\lib\json\encoder.py:204(iterencode)
+     1856    0.001    0.000    0.002    0.000 C:\Python36\lib\inspect.py:239(isframe)
+     1017    0.001    0.000    0.001    0.000 {built-in method __new__ of type object at 0x560237B8}
+2185/2182    0.001    0.000    0.001    0.000 {method 'join' of 'str' objects}
+       83    0.001    0.000    0.013    0.000 {method 'format_map' of 'str' objects}
+       67    0.001    0.000    0.005    0.000 C:\Python36\lib\http\client.py:438(read)
+      268    0.001    0.000    0.005    0.000 C:\Python36\lib\email\message.py:564(get_content_type)
+       67    0.001    0.000    0.002    0.000 C:\Python36\lib\email\feedparser.py:471(_parse_headers)
+   248/67    0.001    0.000    0.001    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:266(_wrap_value)
+       41    0.001    0.000    0.001    0.000 {method 'flush' of '_io.TextIOWrapper' objects}
+     1392    0.001    0.000    0.002    0.000 C:\Python36\lib\inspect.py:81(ismethod)
+       67    0.001    0.000   26.507    0.396 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:300(execute)
+     1394    0.001    0.000    0.002    0.000 C:\Python36\lib\inspect.py:73(isclass)
+      694    0.001    0.000    0.001    0.000 {built-in method builtins.min}
+       19    0.001    0.000    0.001    0.000 C:\Python36\lib\sre_compile.py:250(_optimize_charset)
+      210    0.001    0.000    0.001    0.000 {method 'decode' of 'bytes' objects}
+     1392    0.001    0.000    0.001    0.000 C:\Python36\lib\inspect.py:159(isfunction)
+       67    0.001    0.000    0.002    0.000 C:\Python36\lib\email\feedparser.py:139(__init__)
+       67    0.001    0.000    0.020    0.000 C:\Python36\lib\email\parser.py:60(parsestr)
+      464    0.001    0.000    0.082    0.000 C:\Python36\lib\linecache.py:37(getlines)
+     1392    0.001    0.000    0.001    0.000 C:\Python36\lib\inspect.py:253(iscode)
+       67    0.001    0.000   26.452    0.395 C:\Python36\lib\http\client.py:1287(getresponse)
+     2646    0.001    0.000    0.001    0.000 {method 'append' of 'list' objects}
+       43    0.001    0.000    0.002    0.000 C:\Python36\lib\site-packages\loguru\_datetime.py:75(now)
+       67    0.001    0.000    0.019    0.000 C:\Python36\lib\email\parser.py:42(parse)
+       68    0.001    0.000    0.001    0.000 C:\Python36\lib\urllib\parse.py:394(urlsplit)
+       82    0.001    0.000    0.001    0.000 {method 'timetuple' of 'datetime.datetime' objects}
+       67    0.001    0.000    0.001    0.000 {method 'close' of '_io.BufferedReader' objects}
+       67    0.001    0.000    0.004    0.000 C:\Python36\lib\http\client.py:227(__init__)
+       67    0.001    0.000    0.001    0.000 C:\Python36\lib\email\feedparser.py:53(__init__)
+      469    0.001    0.000    0.002    0.000 C:\Python36\lib\email\_policybase.py:281(_sanitize_header)
+       41    0.001    0.000    0.505    0.012 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Base_Logging.py:53(write)
+       67    0.001    0.000    0.010    0.000 C:\Python36\lib\http\client.py:1017(_send_output)
+      268    0.001    0.000    0.001    0.000 C:\Python36\lib\email\message.py:29(_splitparam)
+      521    0.001    0.000    0.001    0.000 {built-in method builtins.max}
+       68    0.001    0.000    0.003    0.000 C:\Python36\lib\urllib\parse.py:361(urlparse)
+       91    0.001    0.000   26.417    0.290 C:\Python36\lib\socket.py:572(readinto)
+       67    0.001    0.000    0.002    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\remote_connection.py:167(get_remote_connection_headers)
+      466    0.001    0.000    0.004    0.000 C:\Python36\lib\re.py:231(compile)
+       67    0.001    0.000    0.001    0.000 C:\Python36\lib\socket.py:560(__init__)
+      335    0.001    0.000    0.001    0.000 C:\Python36\lib\email\feedparser.py:78(readline)
+     60/8    0.001    0.000    0.003    0.000 C:\Python36\lib\sre_compile.py:64(_compile)
+       67    0.001    0.000    0.002    0.000 C:\Python36\lib\email\feedparser.py:101(push)
+        7    0.001    0.000    0.001    0.000 C:\Python36\lib\socket.py:409(_real_close)
+      201    0.001    0.000    0.001    0.000 C:\Python36\lib\logging\__init__.py:1542(isEnabledFor)
+      440    0.001    0.000    0.001    0.000 {method 'search' of '_sre.SRE_Pattern' objects}
+       67    0.001    0.000    0.001    0.000 C:\Python36\lib\socket.py:649(close)
+      134    0.001    0.000    0.001    0.000 C:\Python36\lib\email\message.py:120(__init__)
+       47    0.001    0.000    0.001    0.000 C:\Python36\lib\ntpath.py:200(split)
+        1    0.001    0.001    2.026    2.026 C:\Python36\lib\site-packages\selenium\webdriver\remote\remote_connection.py:200(__init__)
+       67    0.001    0.000    0.002    0.000 C:\Python36\lib\string.py:105(substitute)
+       43    0.001    0.000    0.001    0.000 {built-in method time.localtime}
+      335    0.001    0.000    0.001    0.000 C:\Python36\lib\email\feedparser.py:128(__next__)
+      134    0.001    0.000    0.001    0.000 C:\Python36\lib\email\_policybase.py:293(header_source_parse)
+       85    0.001    0.000    0.001    0.000 {method 'replace' of 'datetime.datetime' objects}
+      303    0.001    0.000    0.001    0.000 C:\Python36\lib\enum.py:801(__and__)
+       67    0.000    0.000    0.002    0.000 {method 'read' of '_io.BufferedReader' objects}
+      686    0.000    0.000    0.001    0.000 C:\Python36\lib\enum.py:515(__new__)
+      288    0.000    0.000    0.000    0.000 {method 'partition' of 'str' objects}
+      105    0.000    0.000    0.009    0.000 C:\Python36\lib\http\client.py:956(send)
+      138    0.000    0.000    0.001    0.000 C:\Python36\lib\urllib\parse.py:109(_coerce_args)
+       67    0.000    0.000    0.004    0.000 C:\Python36\lib\json\decoder.py:334(decode)
+      134    0.000    0.000    0.001    0.000 C:\Python36\lib\email\message.py:497(get_all)
+      134    0.000    0.000    0.002    0.000 C:\Python36\lib\http\client.py:713(getheader)
+      125    0.000    0.000    0.000    0.000 {method 'timestamp' of 'datetime.datetime' objects}
+      507    0.000    0.000    0.001    0.000 C:\Python36\lib\http\client.py:995(_output)
+        2    0.000    0.000    0.000    0.000 {built-in method nt.mkdir}
+      111    0.000    0.000    0.000    0.000 {method 'format' of 'str' objects}
+      533    0.000    0.000    0.001    0.000 C:\Python36\lib\site-packages\loguru\_datetime.py:66(get)
+      134    0.000    0.000    0.012    0.000 C:\Python36\lib\email\feedparser.py:178(_call_parse)
+       12    0.000    0.000    5.175    0.431 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:210(save_screenshot)
+      201    0.000    0.000    0.000    0.000 C:\Python36\lib\logging\__init__.py:1528(getEffectiveLevel)
+       67    0.000    0.000    0.002    0.000 C:\Python36\lib\http\client.py:596(_safe_read)
+    32/15    0.000    0.000    0.001    0.000 C:\Python36\lib\sre_parse.py:470(_parse)
+       67    0.000    0.000    0.002    0.000 C:\Python36\lib\json\encoder.py:182(encode)
+      686    0.000    0.000    0.001    0.000 C:\Python36\lib\enum.py:265(__call__)
+      469    0.000    0.000    0.001    0.000 C:\Python36\lib\email\utils.py:51(_has_surrogates)
+      158    0.000    0.000    0.000    0.000 C:\Python36\lib\socket.py:611(readable)
+      164    0.000    0.000    0.003    0.000 C:\Python36\lib\calendar.py:58(__getitem__)
+       33    0.000    0.000    0.433    0.013 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:575(write)
+       67    0.000    0.000    0.001    0.000 C:\Python36\lib\email\feedparser.py:70(close)
+      641    0.000    0.000    0.000    0.000 {method 'join' of 'bytes' objects}
+        8    0.000    0.000    0.081    0.010 C:\Python36\lib\linecache.py:82(updatecache)
+      201    0.000    0.000    0.001    0.000 C:\Python36\lib\logging\__init__.py:1284(debug)
+       67    0.000    0.000    0.001    0.000 C:\Python36\lib\email\feedparser.py:197(_new_message)
+      469    0.000    0.000    0.002    0.000 C:\Python36\lib\email\_policybase.py:311(header_fetch_parse)
+       67    0.000    0.000    0.001    0.000 C:\Python36\lib\http\client.py:804(_get_content_length)
+       67    0.000    0.000    0.002    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\utils.py:33(dump_json)
+      201    0.000    0.000    0.004    0.000 C:\Python36\lib\email\message.py:588(get_content_maintype)
+       87    0.000    0.000    0.000    0.000 C:\Python36\lib\string.py:119(convert)
+       67    0.000    0.000    0.004    0.000 C:\Python36\lib\email\feedparser.py:184(close)
+       67    0.000    0.000    0.001    0.000 C:\Python36\lib\http\client.py:405(close)
+      134    0.000    0.000    0.000    0.000 {method 'truncate' of '_io.StringIO' objects}
+      621    0.000    0.000    0.000    0.000 {method 'group' of '_sre.SRE_Match' objects}
+       67    0.000    0.000    0.001    0.000 {function HTTPResponse.close at 0x03F55C48}
+       84    0.000    0.000    0.000    0.000 {built-in method _codecs.charmap_encode}
+      744    0.000    0.000    0.000    0.000 {method 'strip' of 'str' objects}
+        1    0.000    0.000   58.813   58.813 test_example_form.py:18(test_example_form)
+      164    0.000    0.000    0.002    0.000 C:\Python36\lib\calendar.py:77(__getitem__)
+       67    0.000    0.000    0.005    0.000 C:\Python36\lib\json\__init__.py:302(loads)
+       67    0.000    0.000    0.005    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\utils.py:37(load_json)
+      335    0.000    0.000    0.000    0.000 C:\Python36\lib\http\client.py:1243(<genexpr>)
+      293    0.000    0.000    0.000    0.000 {method 'find' of 'str' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method sys.getwindowsversion}
+       67    0.000    0.000    0.002    0.000 C:\Python36\lib\json\__init__.py:183(dumps)
+        8    0.000    0.000    0.078    0.010 C:\Python36\lib\tokenize.py:448(open)
+       67    0.000    0.000    0.022    0.000 C:\Python36\lib\http\client.py:1236(request)
+       43    0.000    0.000    0.000    0.000 {built-in method now}
+       67    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\errorhandler.py:103(check_response)
+       67    0.000    0.000    0.010    0.000 C:\Python36\lib\http\client.py:1223(endheaders)
+      268    0.000    0.000    0.000    0.000 {method 'count' of 'str' objects}
+       84    0.000    0.000    0.000    0.000 C:\Python36\lib\encodings\cp1252.py:18(encode)
+       68    0.000    0.000    0.001    0.000 C:\Python36\lib\platform.py:1028(system)
+       67    0.000    0.000    0.013    0.000 C:\Python36\lib\email\feedparser.py:173(feed)
+       67    0.000    0.000    0.000    0.000 C:\Python36\lib\email\parser.py:18(__init__)
+      134    0.000    0.000    0.000    0.000 {method 'end' of '_sre.SRE_Match' objects}
+        8    0.000    0.000   26.340    3.293 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:380(click_element)
+     13/1    0.000    0.000    0.000    0.000 C:\Python36\lib\copy.py:132(deepcopy)
+       18    0.000    0.000   10.461    0.581 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:338(get_element)
+        5    0.000    0.000    3.042    0.608 C:\Python36\lib\socket.py:688(create_connection)
+        6    0.000    0.000    0.000    0.000 {method 'settimeout' of '_socket.socket' objects}
+       42    0.000    0.000    0.000    0.000 C:\Python36\lib\genericpath.py:117(_splitext)
+       68    0.000    0.000    0.000    0.000 C:\Python36\lib\urllib\parse.py:178(_userinfo)
+      134    0.000    0.000    0.000    0.000 C:\Python36\lib\email\feedparser.py:122(pushlines)
+       67    0.000    0.000    0.000    0.000 C:\Python36\lib\socket.py:403(_decref_socketios)
+       91    0.000    0.000    0.000    0.000 {method '_checkClosed' of '_io._IOBase' objects}
+       41    0.000    0.000    0.017    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:73(rotating_write)
+       67    0.000    0.000    0.000    0.000 C:\Python36\lib\http\client.py:417(flush)
+      134    0.000    0.000    0.000    0.000 {method 'read' of '_io.StringIO' objects}
+      268    0.000    0.000    0.000    0.000 {method 'seek' of '_io.StringIO' objects}
+    95/44    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:173(getwidth)
+       44    0.000    0.000    0.649    0.015 C:\Python36\lib\inspect.py:1492(stack)
+       67    0.000    0.000    0.000    0.000 C:\Python36\lib\http\client.py:370(_check_close)
+    91/65    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:283(_unwrap_value)
+       19    0.000    0.000    0.001    0.000 C:\Python36\lib\sre_compile.py:223(_compile_charset)
+       18    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:353(split_locator)
+        2    0.000    0.000   14.473    7.236 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\form_object.py:63(set_gender)
+     12/5    0.000    0.000   36.674    7.335 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Wrapit.py:30(wrapper)
+       75    0.000    0.000    0.000    0.000 C:\Python36\lib\os.py:664(__getitem__)
+      243    0.000    0.000    0.000    0.000 {method 'items' of 'dict' objects}
+       68    0.000    0.000    0.000    0.000 C:\Python36\lib\urllib\parse.py:146(username)
+      181    0.000    0.000    0.000    0.000 {method 'rstrip' of 'str' objects}
+       91    0.000    0.000    0.000    0.000 {method '_checkReadable' of '_io._IOBase' objects}
+       67    0.000    0.000    0.000    0.000 C:\Python36\lib\email\message.py:303(set_payload)
+      246    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:163(__getitem__)
+      191    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:232(__next)
+       42    0.000    0.000    0.000    0.000 C:\Python36\lib\ntpath.py:223(splitext)
+      134    0.000    0.000    0.000    0.000 C:\Python36\lib\email\message.py:479(set_raw)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:995(add_option)
+       20    0.000    0.000    0.000    0.000 C:\Python36\lib\urllib\parse.py:386(_splitnetloc)
+       85    0.000    0.000    0.000    0.000 {built-in method sys._getframe}
+      128    0.000    0.000    0.000    0.000 C:\Python36\lib\os.py:687(__iter__)
+       67    0.000    0.000    0.002    0.000 C:\Python36\lib\http\client.py:400(_close_conn)
+       67    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\remote_connection.py:553(<listcomp>)
+      134    0.000    0.000    0.000    0.000 {method 'extend' of 'collections.deque' objects}
+        1    0.000    0.000    0.000    0.000 {method 'listen' of '_socket.socket' objects}
+       67    0.000    0.000    0.000    0.000 C:\Python36\lib\email\feedparser.py:210(_pop_message)
+     24/8    0.000    0.000    0.001    0.000 C:\Python36\lib\sre_parse.py:407(_parse_sub)
+       67    0.000    0.000    0.000    0.000 C:\Python36\lib\string.py:88(__init__)
+       18    0.000    0.000   10.395    0.578 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:942(find_element)
+       67    0.000    0.000    0.000    0.000 {method 'write' of '_io.StringIO' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method _winapi.CreatePipe}
+       68    0.000    0.000    0.001    0.000 C:\Python36\lib\platform.py:890(uname)
+       10    0.000    0.000    0.222    0.022 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:678(conditional_write)
+        6    0.000    0.000    0.020    0.003 C:\Python36\lib\socket.py:728(getaddrinfo)
+       12    0.000    0.000    5.133    0.428 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:1045(get_screenshot_as_png)
+       64    0.000    0.000    0.000    0.000 C:\Python36\lib\_collections_abc.py:760(__iter__)
+       68    0.000    0.000    0.000    0.000 {method 'update' of 'dict' objects}
+       41    0.000    0.000    0.000    0.000 C:\Python36\lib\threading.py:1230(current_thread)
+        1    0.000    0.000    0.000    0.000 {built-in method nt._isdir}
+       41    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:134(rotation_function)
+       41    0.000    0.000    0.002    0.000 C:\Python36\lib\site-packages\loguru\_logger.py:642(writer)
+       82    0.000    0.000    0.000    0.000 {built-in method builtins.divmod}
+     17/9    0.000    0.000   42.288    4.699 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Wrapit.py:15(inner)
+        6    0.000    0.000    0.000    0.000 C:\Python36\lib\encodings\idna.py:147(encode)
+       69    0.000    0.000    0.000    0.000 {method 'pop' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 {method 'bind' of '_socket.socket' objects}
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:564(__init__)
+      126    0.000    0.000    0.000    0.000 {method 'rfind' of 'str' objects}
+       82    0.000    0.000    0.000    0.000 {method 'total_seconds' of 'datetime.timedelta' objects}
+       75    0.000    0.000    0.000    0.000 C:\Python36\lib\os.py:734(encodekey)
+       11    0.000    0.000   28.009    2.546 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:617(wait)
+       11    0.000    0.000    0.000    0.000 C:\Python36\lib\ntpath.py:75(join)
+        8    0.000    0.000    0.001    0.000 C:\Python36\lib\tokenize.py:355(detect_encoding)
+        1    0.000    0.000    7.791    7.791 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\footer_object.py:28(goto_footer_link)
+       16    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:279(create_web_element)
+        1    0.000    0.000    0.179    0.179 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:171(get_screenshot_dir)
+       18    0.000    0.000    0.000    0.000 C:\Python36\lib\socket.py:97(_intenum_converter)
+       20    0.000    0.000    2.674    0.134 C:\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py:615(_execute)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:613(_set_attrs)
+       67    0.000    0.000    0.000    0.000 {function HTTPResponse.flush at 0x03F55C90}
+       41    0.000    0.000    0.001    0.000 C:\Python36\lib\ntpath.py:234(basename)
+       27    0.000    0.000    0.000    0.000 {built-in method _codecs.utf_8_decode}
+       76    0.000    0.000    0.000    0.000 {method 'rpartition' of 'str' objects}
+       27    0.000    0.000    0.000    0.000 C:\Python36\lib\codecs.py:318(decode)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\common\utils.py:139(keys_to_typing)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\urllib\parse.py:190(_hostinfo)
+       41    0.000    0.000    0.000    0.000 C:\Python36\lib\multiprocessing\process.py:190(ident)
+      153    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:253(get)
+      201    0.000    0.000    0.000    0.000 {method 'popleft' of 'collections.deque' objects}
+       12    0.000    0.000    0.004    0.000 C:\Python36\lib\base64.py:65(b64decode)
+      137    0.000    0.000    0.000    0.000 {method 'upper' of 'str' objects}
+        1    0.000    0.000    0.499    0.499 C:\Python36\lib\subprocess.py:959(_execute_child)
+       12    0.000    0.000    0.131    0.011 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:660(current_url)
+      273    0.000    0.000    0.000    0.000 {built-in method builtins.setattr}
+        4    0.000    0.000    3.041    0.760 C:\Python36\lib\site-packages\selenium\webdriver\common\utils.py:97(is_connectable)
+       16    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py:59(__init__)
+       11    0.000    0.000    0.059    0.005 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:235(get_current_url)
+        1    0.000    0.000    0.000    0.000 {built-in method winreg.OpenKeyEx}
+        8    0.000    0.000    0.005    0.001 C:\Python36\lib\sre_compile.py:557(compile)
+       31    0.000    0.000    0.000    0.000 C:\Python36\lib\enum.py:795(__or__)
+       66    0.000    0.000    0.000    0.000 C:\Python36\lib\http\client.py:428(isclosed)
+        7    0.000    0.000    0.001    0.000 C:\Python36\lib\socket.py:413(close)
+        6    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_compile.py:378(<listcomp>)
+       41    0.000    0.000    0.000    0.000 C:\Python36\lib\threading.py:1092(ident)
+        1    0.000    0.000   13.988   13.988 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:91(register_driver)
+       42    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:275(<genexpr>)
+        8    0.000    0.000    0.000    0.000 {method 'seek' of '_io.BufferedReader' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method _socket.gethostname}
+       75    0.000    0.000    0.000    0.000 C:\Python36\lib\os.py:728(check_str)
+        1    0.000    0.000    0.082    0.082 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:699(write_test_summary)
+        1    0.000    0.000    4.658    4.658 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:112(__init__)
+        1    0.000    0.000   21.757   21.757 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\form_object.py:116(submit_form)
+       74    0.000    0.000    0.000    0.000 {method 'extend' of 'list' objects}
+        8    0.000    0.000    0.001    0.000 C:\Python36\lib\sre_parse.py:844(parse)
+       12    0.000    0.000    5.129    0.427 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:1054(get_screenshot_as_base64)
+        2    0.000    0.000    0.001    0.000 C:\Python36\lib\gettext.py:466(find)
+      2/1    0.000    0.000    0.006    0.006 C:\Python36\lib\site-packages\loguru\_logger.py:150(add)
+       38    0.000    0.000    0.000    0.000 C:\Python36\lib\http\client.py:149(_encode)
+       95    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:171(append)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:592(_set_opt_strings)
+        4    0.000    0.000    0.345    0.086 C:\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py:447(send_keys)
+      4/2    0.000    0.000    0.000    0.000 C:\Python36\lib\abc.py:196(__subclasscheck__)
+      2/1    0.000    0.000    0.000    0.000 C:\Python36\lib\copy.py:236(_deepcopy_dict)
+       64    0.000    0.000    0.000    0.000 C:\Python36\lib\_collections_abc.py:719(__iter__)
+        5    0.000    0.000    0.054    0.011 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:640(success)
+      138    0.000    0.000    0.000    0.000 C:\Python36\lib\urllib\parse.py:98(_noop)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\platform.py:500(win32_ver)
+      123    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:248(match)
+      134    0.000    0.000    0.000    0.000 C:\Python36\lib\email\feedparser.py:125(__iter__)
+        1    0.000    0.000    8.203    8.203 C:\Python36\lib\site-packages\selenium\webdriver\chrome\webdriver.py:33(__init__)
+       82    0.000    0.000    0.000    0.000 {method 'utcoffset' of 'datetime.timezone' objects}
+       60    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:111(__init__)
+       22    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_compile.py:388(_simple)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_compile.py:482(_compile_info)
+        6    0.000    0.000   10.676    1.779 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:397(set_text)
+       41    0.000    0.000    0.000    0.000 {built-in method nt.getpid}
+        1    0.000    0.000    0.004    0.004 C:\Python36\lib\site-packages\loguru\_string_parsers.py:29(parse_duration)
+       82    0.000    0.000    0.000    0.000 {method 'tzname' of 'datetime.timezone' objects}
+       92    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_compile.py:102(fixup)
+        1    0.000    0.000    1.207    1.207 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:727(maximize_window)
+       47    0.000    0.000    0.000    0.000 C:\Python36\lib\ntpath.py:34(_get_bothseps)
+        4    0.000    0.000    0.000    0.000 C:\Python36\lib\urllib\parse.py:165(port)
+        3    0.000    0.000    0.097    0.032 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\footer_object.py:44(get_copyright)
+        1    0.000    0.000    0.499    0.499 C:\Python36\lib\subprocess.py:588(__init__)
+        1    0.000    0.000    0.000    0.000 {method 'setsockopt' of '_socket.socket' objects}
+        1    0.000    0.000    0.001    0.001 C:\Python36\lib\http\client.py:933(connect)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1306(get_default_values)
+        8    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:598(add_tesults_case)
+       41    0.000    0.000    0.000    0.000 C:\Python36\lib\multiprocessing\process.py:146(name)
+      114    0.000    0.000    0.000    0.000 {built-in method _sre.getlower}
+       41    0.000    0.000    0.000    0.000 {built-in method _thread.get_ident}
+        4    0.000    0.000    0.000    0.000 C:\Python36\lib\urllib\parse.py:154(hostname)
+        1    0.000    0.000    1.518    1.518 C:\Python36\lib\site-packages\selenium\webdriver\common\service.py:61(start)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:62(_make_w3c_caps)
+       82    0.000    0.000    0.000    0.000 {built-in method builtins.abs}
+       70    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:285(tell)
+       16    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:294(_class_escape)
+        4    0.000    0.000    0.000    0.000 C:\Python36\lib\gettext.py:205(_expand_lang)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\subprocess.py:422(list2cmdline)
+        1    0.000    0.000    1.014    1.014 C:\Python36\lib\site-packages\selenium\webdriver\common\utils.py:43(find_connectable_ip)
+       41    0.000    0.000    0.000    0.000 C:\Python36\lib\threading.py:1076(name)
+       41    0.000    0.000    0.000    0.000 C:\Python36\lib\multiprocessing\process.py:35(current_process)
+       92    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:159(__len__)
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\colorama\win32.py:97(_winapi_test)
+        3    0.000    0.000    0.018    0.006 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:649(failure)
+        1    0.000    0.000    0.000    0.000 {built-in method nt.open}
+        6    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_compile.py:376(_mk_bitmap)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\http\client.py:836(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\subprocess.py:878(_get_handles)
+        1    0.000    0.000    3.131    3.131 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\form_object.py:78(click_me)
+        9    0.000    0.000    0.000    0.000 C:\Python36\lib\tokenize.py:385(find_cookie)
+        8    0.000    0.000    0.072    0.009 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:658(log_result)
+        8    0.000    0.000    2.158    0.270 C:\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py:78(click)
+       43    0.000    0.000    0.000    0.000 {method 'values' of 'dict' objects}
+        1    0.000    0.000    0.002    0.002 C:\Python36\lib\site-packages\selenium\webdriver\common\utils.py:31(free_port)
+        1    0.000    0.000    0.006    0.006 C:\Python36\lib\site-packages\loguru\_file_sink.py:25(__init__)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\codecs.py:308(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:206(__init__)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:828(fix_flags)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_handler.py:16(__init__)
+       47    0.000    0.000    0.000    0.000 {method 'find' of 'bytearray' objects}
+        6    0.000    0.000    0.000    0.000 {method 'split' of 'bytes' objects}
+        8    0.000    0.000    0.004    0.000 C:\Python36\lib\sre_compile.py:542(_code)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        3    0.000    0.000    0.097    0.032 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:424(get_text)
+        1    0.000    0.000    8.203    8.203 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\DriverFactory.py:27(get_web_driver)
+        2    0.000    0.000    0.323    0.162 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\form_object.py:24(set_name)
+        8    0.000    0.000    0.000    0.000 {method 'startswith' of 'bytes' objects}
+       22    0.000    0.000    0.000    0.000 {built-in method builtins.id}
+        8    0.000    0.000    0.000    0.000 {built-in method _sre.compile}
+        4    0.000    0.000    0.000    0.000 C:\Python36\lib\copy.py:252(_keep_alive)
+        9    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:223(__init__)
+        1    0.000    0.000    0.018    0.018 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:195(set_log_file)
+        2    0.000    0.000    0.266    0.133 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\form_object.py:50(set_phone)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:968(_check_conflict)
+        1    0.000    0.000    0.000    0.000 {method 'getsockname' of '_socket.socket' objects}
+        1    0.000    0.000    0.179    0.179 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:159(set_screenshot_dir)
+        1    0.000    0.000    4.658    4.658 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:230(start_session)
+        1    0.000    0.000    0.003    0.003 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:885(implicitly_wait)
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\common\utils.py:81(join_host_port)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Option_Parser.py:18(set_standard_options)
+        2    0.000    0.000    0.001    0.000 C:\Python36\lib\os.py:195(makedirs)
+       43    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:81(groups)
+        3    0.000    0.000    0.000    0.000 {built-in method _winapi.DuplicateHandle}
+        1    0.000    0.000    0.000    0.000 {built-in method winreg.QueryValueEx}
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\abc.py:180(__instancecheck__)
+       13    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:84(opengroup)
+        3    0.000    0.000    0.000    0.000 C:\Python36\lib\subprocess.py:950(_make_inheritable)
+        9    0.000    0.000    0.000    0.000 C:\Python36\lib\copy.py:190(_deepcopy_atomic)
+       12    0.000    0.000    0.000    0.000 C:\Python36\lib\base64.py:34(_bytes_from_decode_data)
+        9    0.000    0.000    0.001    0.000 C:\Python36\lib\tokenize.py:379(read_or_stop)
+      2/1    0.000    0.000    0.005    0.005 C:\Python36\lib\site-packages\loguru\_file_sink.py:114(make_rotation_function)
+        2    0.000    0.000   10.194    5.097 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\form_object.py:37(set_email)
+        1    0.000    0.000    3.107    3.107 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\form_object.py:91(accept_terms)
+        5    0.000    0.000    0.000    0.000 {built-in method _winapi.CloseHandle}
+        6    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:585(report_to_testrail)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:43(__init__)
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\common\exceptions.py:33(__str__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\re.py:314(_compile_repl)
+        5    0.000    0.000    0.000    0.000 {method 'copy' of 'dict' objects}
+       13    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:96(closegroup)
+        4    0.000    0.000    0.000    0.000 C:\Python36\lib\locale.py:379(normalize)
+        1    0.000    0.000    0.011    0.011 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Base_Logging.py:36(get_calling_module)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:583(_check_opt_strings)
+        1    0.000    0.000    0.172    0.172 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:130(get_calling_module)
+       10    0.000    0.000    0.000    0.000 C:\Python36\lib\_collections_abc.py:657(get)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:876(parse_template)
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:106(<genexpr>)
+        1    0.000    0.000    4.378    4.378 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:227(open)
+        1    0.000    0.000    0.018    0.018 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Base_Logging.py:12(__init__)
+        2    0.000    0.000    0.000    0.000 {method 'tolist' of 'memoryview' objects}
+        1    0.000    0.000    0.017    0.017 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Base_Logging.py:21(set_log)
+        1    0.000    0.000    0.050    0.050 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\footer_object.py:62(check_copyright)
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\enum.py:544(_missing_)
+        1    0.000    0.000    0.001    0.001 C:\Python36\lib\optparse.py:1178(__init__)
+        4    0.000    0.000    0.107    0.027 C:\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py:93(clear)
+        1    0.000    0.000    0.005    0.005 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\form_object.py:104(check_redirect)
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_compile.py:381(_bytes_to_codes)
+        1    0.000    0.000    0.002    0.002 C:\Python36\lib\site-packages\selenium\webdriver\common\service.py:37(__init__)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\codecs.py:259(__init__)
+        5    0.000    0.000    0.000    0.000 C:\Python36\lib\_weakrefset.py:58(__iter__)
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\copy.py:210(_deepcopy_list)
+        1    0.000    0.000    2.026    2.026 C:\Python36\lib\site-packages\selenium\webdriver\chrome\remote_connection.py:23(__init__)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\subprocess.py:179(Close)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:638(_check_type)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:144(set_directory_structure)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\_weakrefset.py:70(__contains__)
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\locale.py:345(_replace_encoding)
+        1    0.000    0.000    4.378    4.378 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\tutorial_main_page.py:17(start)
+        1    0.000    0.000    3.090    3.090 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:450(select_checkbox)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:76(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:825(__init__)
+        1    0.000    0.000    0.001    0.001 C:\Python36\lib\site-packages\loguru\_file_sink.py:80(initialize_file)
+       72    0.000    0.000    0.000    0.000 {built-in method builtins.ord}
+       22    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:167(__setitem__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\urllib\parse.py:450(urlunparse)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\urllib\parse.py:461(urlunsplit)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:632(_check_action)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:696(_check_nargs)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:705(_check_callback)
+        3    0.000    0.000    0.051    0.017 C:\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py:73(text)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\colorama\ansitowin32.py:52(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_handler.py:96(make_ansimarkup)
+        1    0.000    0.000    0.000    0.000 {built-in method nt.close}
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\encodings\__init__.py:43(normalize_encoding)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:675(_check_dest)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:690(_check_const)
+        1    0.000    0.000    8.203    8.203 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\DriverFactory.py:100(run_local)
+        2    0.000    0.000    0.000    0.000 {built-in method _thread.allocate_lock}
+       11    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:342(_escape)
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\subprocess.py:773(_get_devnull)
+       15    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:752(get_opt_string)
+       16    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:761(check_value)
+        1    0.000    0.000    3.059    3.059 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:484(toggle_checkbox)
+        3    0.000    0.000    0.000    0.000 C:\Python36\lib\_weakrefset.py:26(__exit__)
+        3    0.000    0.000    0.000    0.000 C:\Python36\lib\_weakrefset.py:36(__init__)
+        2    0.000    0.000    0.001    0.000 C:\Python36\lib\gettext.py:572(dgettext)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\chrome\options.py:185(to_capabilities)
+        2    0.000    0.000    0.001    0.001 C:\Python36\lib\site-packages\loguru\_string_parsers.py:57(<genexpr>)
+       16    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_compile.py:539(isstring)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:587(<listcomp>)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\platform.py:721(_node)
+        1    0.000    0.000    0.001    0.001 C:\Python36\lib\site-packages\loguru\_string_parsers.py:5(parse_size)
+        1    0.000    0.000    0.000    0.000 {built-in method _locale._getdefaultlocale}
+        8    0.000    0.000    0.000    0.000 {built-in method time.time}
+        3    0.000    0.000    0.000    0.000 C:\Python36\lib\_weakrefset.py:20(__enter__)
+       21    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:662(_check_choice)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1503(_process_short_opts)
+        1    0.000    0.000    0.005    0.005 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:334(title)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:103(make_glob_pattern)
+        4    0.000    0.000    0.000    0.000 C:\Python36\lib\ntpath.py:241(dirname)
+        2    0.000    0.000    0.001    0.000 C:\Python36\lib\gettext.py:506(translation)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\common\service.py:51(service_url)
+        1    0.000    0.000    1.018    1.018 C:\Python36\lib\site-packages\selenium\webdriver\common\service.py:114(is_connectable)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:99(format_path)
+        1    0.000    0.000    0.000    0.000 {method 'findall' of '_sre.SRE_Pattern' objects}
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\common\exceptions.py:28(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\colorama\win32.py:103(winapi_test)
+        6    0.000    0.000    0.000    0.000 {method 'translate' of 'bytearray' objects}
+        1    0.000    0.000    0.001    0.001 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Option_Parser.py:11(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\chrome\service.py:44(command_line_args)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\_bootlocale.py:11(getpreferredencoding)
+        4    0.000    0.000    0.000    0.000 C:\Python36\lib\_weakrefset.py:81(add)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\locale.py:612(getpreferredencoding)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\subprocess.py:1023(_internal_poll)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:69(reset)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\glob.py:161(escape)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\ansimarkup\markup.py:50(parse)
+        1    0.000    0.000    0.000    0.000 {built-in method winreg.CloseKey}
+        5    0.000    0.000    0.000    0.000 {built-in method builtins.getattr}
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\_collections_abc.py:672(keys)
+        5    0.000    0.000    0.002    0.000 C:\Python36\lib\re.py:174(fullmatch)
+       10    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:161(__delitem__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:963(expand_template)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:920(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1355(parse_args)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\PageFactory.py:21(get_page_object)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:122(make_from_time)
+        1    0.000    0.000    2.305    2.305 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:328(get)
+        3    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\colorama\win32.py:104(<genexpr>)
+        1    0.000    0.000    0.000    0.000 {built-in method _winapi.WaitForSingleObject}
+        1    0.000    0.000    0.000    0.000 {built-in method msvcrt.open_osfhandle}
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\re.py:324(_subx)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1235(_add_help_option)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1407(_process_args)
+        4    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py:590(parent)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\common\service.py:106(assert_process_still_running)
+        1    0.000    0.000    0.002    0.002 C:\Python36\lib\site-packages\selenium\webdriver\chrome\service.py:26(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\chrome\options.py:29(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_logger.py:751(<listcomp>)
+       10    0.000    0.000    0.000    0.000 {method 'isalnum' of 'str' objects}
+        2    0.000    0.000    0.000    0.000 <frozen importlib._bootstrap>:997(_handle_fromlist)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\_collections_abc.py:664(__contains__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\_collections_abc.py:680(values)
+        1    0.000    0.000    0.001    0.001 C:\Python36\lib\re.py:214(findall)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_compile.py:441(_get_charset_prefix)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_parse.py:885(addgroup)
+        2    0.000    0.000    0.001    0.000 C:\Python36\lib\gettext.py:611(gettext)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\string.py:287(parse)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\subprocess.py:203(_cleanup)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:775(process)
+        8    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_handler.py:115(update_format)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\ansimarkup\markup.py:26(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Option_Parser.py:135(check_options)
+      4/2    0.000    0.000    0.000    0.000 {built-in method builtins.issubclass}
+        2    0.000    0.000    0.000    0.000 C:\Python36\lib\_collections_abc.py:698(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\re.py:330(filter)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\subprocess.py:184(Detach)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:28(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1245(_populate_option_list)
+        1    0.000    0.000    0.014    0.014 C:\Python36\lib\site-packages\selenium\webdriver\remote\webelement.py:150(is_selected)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\colorama\ansitowin32.py:95(get_win32_calls)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_handler.py:103(decolorize_format)
+        6    0.000    0.000    0.000    0.000 {built-in method _winapi.GetCurrentProcess}
+        2    0.000    0.000    0.000    0.000 {method 'cast' of 'memoryview' objects}
+        2    0.000    0.000    0.000    0.000 {built-in method msvcrt.get_osfhandle}
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\codecs.py:185(__init__)
+        3    0.000    0.000    0.000    0.000 C:\Python36\lib\_weakrefset.py:16(__init__)
+        3    0.000    0.000    0.000    0.000 C:\Python36\lib\_weakrefset.py:52(_commit_removals)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\http\client.py:879(_get_hostport)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:372(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:931(_create_option_mappings)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1230(_create_option_list)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1264(set_usage)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\chrome\webdriver.py:154(create_options)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:15(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\ansimarkup\markup.py:71(strip)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\ansimarkup\markup.py:172(compile_tag_regex)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\utils\Option_Parser.py:108(get_options)
+        2    0.000    0.000    0.000    0.000 {method 'index' of 'str' objects}
+        2    0.000    0.000    0.001    0.001 {built-in method builtins.next}
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\sre_compile.py:414(_get_literal_prefix)
+        1    0.000    0.000    0.000    0.000 <string>:12(__new__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\subprocess.py:852(poll)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:768(convert_value)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:787(take_action)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1255(_init_parsing_state)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1349(_get_args)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:60(setup_write_function)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\DriverFactory.py:20(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\os.py:1067(__subclasshook__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:947(set_conflict_handler)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1300(_get_all_options)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:81(get_failure_message_list)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:216(start_client)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\webdriver.py:1176(file_detector)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\switch_to.py:30(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\remote\mobile.py:45(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\chrome\options.py:92(extensions)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\colorama\ansitowin32.py:30(__init__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\colorama\ansitowin32.py:36(__getattr__)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:183(add_interval)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:194(make_retention_function)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\loguru\_file_sink.py:233(make_compression_function)
+        7    0.000    0.000    0.000    0.000 {method 'add' of 'set' objects}
+        3    0.000    0.000    0.000    0.000 {method 'remove' of 'set' objects}
+        3    0.000    0.000    0.000    0.000 {method '__subclasses__' of 'type' objects}
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\codecs.py:213(setstate)
+        1    0.000    0.000    0.000    0.000 C:\Users\Qxf2 Services\newgithub\qxf2-page-object-model\page_objects\Base_Page.py:31(is_first_time)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:749(takes_value)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:952(set_description)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:1394(check_values)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\chrome\options.py:37(binary_location)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\chrome\options.py:54(debugger_address)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\chrome\options.py:139(experimental_options)
+        1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}
+        3    0.000    0.000    0.000    0.000 {method '__subclasshook__' of 'object' objects}
+        1    0.000    0.000    0.000    0.000 {built-in method _string.formatter_parser}
+        2    0.000    0.000    0.000    0.000 {built-in method builtins.callable}
+        2    0.000    0.000    0.000    0.000 {built-in method _ctypes.byref}
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\optparse.py:231(set_parser)
+        1    0.000    0.000    0.000    0.000 C:\Python36\lib\site-packages\selenium\webdriver\chrome\options.py:73(arguments)
+        4    0.000    0.000    0.000    0.000 {method 'reverse' of 'list' objects}
+
+
