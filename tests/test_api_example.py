@@ -1,6 +1,5 @@
 """
 API EXAMPLE TEST
-
 1. Add new car - POST request(without url_params)
 2. Get all cars - GET request(without url_params)
 3. Verify car count
@@ -39,8 +38,7 @@ def test_api_example(api_url='http://35.167.62.251/'):
                                           auth_details=auth_details)
         test_obj.log_result(result_flag,
                                positive='Successfully added new car with details %s' % car_details,
-                               negative='Could not add new car with details %s' % car_details,
-                               level="critical")
+                               negative='Could not add new car with details %s' % car_details)
 
 
 
@@ -51,8 +49,7 @@ def test_api_example(api_url='http://35.167.62.251/'):
                                                 auth_details=auth_details)
         test_obj.log_result(result_flag,
                             positive='Total car count matches expected count',
-                            negative='Total car count doesnt match expected count',
-                            level="critical")
+                            negative='Total car count doesnt match expected count')
         
         # Update car
         update_car = conf.update_car
@@ -62,8 +59,7 @@ def test_api_example(api_url='http://35.167.62.251/'):
                                           car_details=update_car)
         test_obj.log_result(result_flag,
                             positive='Successfully updated car : %s' % update_car_name,
-                            negative='Couldnt update car :%s' % update_car_name,
-                            level="critical")
+                            negative='Couldnt update car :%s' % update_car_name)
         
         # Get one car details
         new_car = conf.car_name_1
@@ -73,8 +69,7 @@ def test_api_example(api_url='http://35.167.62.251/'):
                                        brand=brand)
         test_obj.log_result(result_flag,
                             positive='Successfully fetched car details of car : %s' % new_car,
-                            negative='Couldnt fetch car details of car :%s' % new_car,
-                            level="critical")
+                            negative='Couldnt fetch car details of car :%s' % new_car)
         
         # Register car
         customer_details = conf.customer_details
@@ -83,8 +78,7 @@ def test_api_example(api_url='http://35.167.62.251/'):
                                             brand=brand)
         test_obj.log_result(result_flag,
                             positive='Successfully registered new car %s with customer details %s' % (new_car, customer_details),
-                            negative='Couldnt register new car %s with cutomer details %s' % (new_car, customer_details),
-                            level="critical")
+                            negative='Couldnt register new car %s with cutomer details %s' % (new_car, customer_details))
         
         #Get Registered cars and check count
         result_flag = test_obj.get_registered_cars(auth_details)
@@ -94,24 +88,21 @@ def test_api_example(api_url='http://35.167.62.251/'):
                                                          auth_details=auth_details)
         test_obj.log_result(result_flag,
                             positive='Registered count matches expected value',
-                            negative='Registered car count doesnt match expected value',
-                            level="critical")
+                            negative='Registered car count doesnt match expected value')
         
         # Remove newly added car
         result_flag = test_obj.remove_car(auth_details=auth_details,
                                           car_name=update_car_name)
         test_obj.log_result(result_flag,
                             positive='Successfully deleted car %s' % update_car,
-                            negative='Could not delete car %s ' % update_car,
-                            level="critical")
+                            negative='Could not delete car %s ' % update_car)
         
         # validate if car is deleted
         result_flag = test_obj.verify_car_count(expected_count=initial_car_count,
                                                 auth_details=auth_details)
         test_obj.log_result(result_flag,
                             positive='Total car count matches expected count after deleting one car',
-                            negative='Total car count doesnt match expected count after deleting one car',
-                            level="critical")
+                            negative='Total car count doesnt match expected count after deleting one car')
         
         # Deleting registered car
         test_obj.delete_registered_car(auth_details)
@@ -121,17 +112,14 @@ def test_api_example(api_url='http://35.167.62.251/'):
 
         test_obj.log_result(not result['result_flag'],
                             positive=result['msg'],
-                            negative=result['msg'],
-                            level="critical")
+                            negative=result['msg'])
         
         # test for validation http error 401 when no authentication
         auth_details = None
         result = test_obj.check_validation_error(auth_details)
         test_obj.log_result(not result['result_flag'],
                             positive=result['msg'],
-                            negative=result['msg'],
-                            level="critical")
-                            
+                            negative=result['msg'])
         
         # test for validation http error 401 for invalid authentication
         # set invalid authentication details
@@ -141,8 +129,7 @@ def test_api_example(api_url='http://35.167.62.251/'):
         result = test_obj.check_validation_error(auth_details)
         test_obj.log_result(not result['result_flag'],
                             positive=result['msg'],
-                            negative=result['msg'],
-                            level="critical")
+                            negative=result['msg'])
         
         # write out test summary
         expected_pass = test_obj.total
@@ -159,4 +146,5 @@ def test_api_example(api_url='http://35.167.62.251/'):
 
 if __name__ == '__main__':
     test_api_example()
+   
    
