@@ -652,6 +652,7 @@ class Base_Page(Borg,unittest.TestCase):
         self.result_counter += 1
         self.failure_message_list.append(pre_format + msg)
         if level.lower() == 'critical':
+            self.driver.close()
             raise Stop_Test_Exception("Stopping test because: "+ msg)
         
 
