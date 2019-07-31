@@ -1,10 +1,6 @@
 """
 This script would copy the required framework files from the input source to the input destination given by the user.
-1. Copy files from POM to the newly created destination directory.
-2. Verify if the destination directory is created and create the sub-folder to copy files from POM\Conf.
-3. Verify if the destination directory is created and create the sub-folder to copy files from POM\Page_Objects.
-4. Verify if the destination directory is created and create the sub-folder to copy files from POM\Utils.
-
+Copy files from POM to the newly created destination directory. Create sub-folders for Conf, Page_Objects, Utils and copy files
 """
 import os,sys
 import shutil
@@ -29,8 +25,8 @@ def copy_framework_template(src_folder,dst_folder):
 	#2. Verify if the destination directory is created and create the sub-folder to copy files from POM\Conf.
 	#2a. Get details from conf file for Conf
 	src_conf_files_list = conf.src_conf_files_list
-	dst_folder_conf = conf.dst_folder_conf
-	
+	dst_folder_conf = os.path.abspath(os.path.join(dst_folder,'conf'))
+
 	#2b. Create the conf sub-folder
 	if os.path.exists(dst_folder):
 		os.mkdir(dst_folder_conf)
@@ -39,11 +35,12 @@ def copy_framework_template(src_folder,dst_folder):
 	if os.path.exists(dst_folder_conf):
 		for every_src_conf_file in src_conf_files_list:
 			shutil.copy2(every_src_conf_file,dst_folder_conf)
+		shutil.copy2(conf.src_conf_file5, os.path.abspath(os.path.join(dst_folder_conf,'locators_conf.py')))
 	
 	#3. Verify if the destination directory is created and create the sub-folder to copy files from POM\Page_Objects.
 	#3a. Get details from conf file for Page_Objects
 	src_page_objects_files_list = conf.src_page_objects_files_list
-	dst_folder_page_objects = conf.dst_folder_page_objects
+	dst_folder_page_objects = os.path.abspath(os.path.join(dst_folder,'page_objects'))
 
 	#3b. Create the page_object sub-folder
 	if os.path.exists(dst_folder):
@@ -53,11 +50,12 @@ def copy_framework_template(src_folder,dst_folder):
 	if os.path.exists(dst_folder_page_objects):
 		for every_src_page_objects_file in src_page_objects_files_list:
 			shutil.copy2(every_src_page_objects_file,dst_folder_page_objects)
+		shutil.copy2(conf.src_page_objects_file3, os.path.abspath(os.path.join(dst_folder_page_objects,'PageFactory.py')))
 	
 	#4. Verify if the destination directory is created and create the sub-folder to copy files from POM\Utils.
 	#4a. Get details from conf file for Utils folder
 	src_utils_files_list = conf.src_utils_files_list
-	dst_folder_utils = conf.dst_folder_utils
+	dst_folder_utils = os.path.abspath(os.path.join(dst_folder,'utils'))
 	
 	#4b. Create the utils destination directory
 	if os.path.exists(dst_folder):
@@ -67,13 +65,27 @@ def copy_framework_template(src_folder,dst_folder):
 	if os.path.exists(dst_folder_utils):
 		for every_src_utils_file in src_utils_files_list:
 			shutil.copy2(every_src_utils_file,dst_folder_utils)
+	
+	#5. Verify if the destination directory is created and create the sub-folder to copy files from POM\tests.
+	#4a. Get details from conf file for tests folder
+	src_tests_files_list = conf.src_tests_files_list
+	dst_folder_tests = os.path.abspath(os.path.join(dst_folder,'tests'))
+	
+	#4b. Create the tests destination directory
+	if os.path.exists(dst_folder):
+		os.mkdir(dst_folder_tests)
+		
+	#4c. Check if tests folder exists and then copy files
+	if os.path.exists(dst_folder_tests):
+		for every_src_tests_file in src_tests_files_list:
+			shutil.copy2(every_src_tests_file,dst_folder_tests)
 		
 #---START OF SCRIPT
 if __name__=='__main__':
 	#run the test	
 	parser=OptionParser()
 	parser.add_option("-s","--source",dest="src",help="The name of the source folder: ie, POM",default="POM")
-	parser.add_option("-d","--destination",dest="dst",help="The name of the destination folder: ie, client name",default="Myntra")
+	parser.add_option("-d","--destination",dest="dst",help="The name of the destination folder: ie, client name",default="Sample")
 	(options,args) = parser.parse_args()
 	
 	copy_framework_template(options.src,options.dst)
