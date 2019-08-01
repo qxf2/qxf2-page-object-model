@@ -15,8 +15,18 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def test_example_form(base_url, browser, browser_version, os_version, os_name, remote_flag,
-                      testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name):
+def test_example_form(
+        base_url,
+        browser,
+        browser_version,
+        os_version,
+        os_name,
+        remote_flag,
+        testrail_flag,
+        tesults_flag,
+        test_run_id,
+        remote_project_name,
+        remote_build_name):
     "Run the test"
     try:
         # Initalize flags for tests summary
@@ -59,9 +69,10 @@ def test_example_form(base_url, browser, browser_version, os_version, os_name, r
 
         # 5. Set name in form
         result_flag = test_obj.set_name(name)
-        test_obj.log_result(result_flag,
-                            positive="Name was successfully set to: %s\n" % name,
-                            negative="Failed to set name: %s \nOn url: %s\n" % (name, test_obj.get_current_url()))
+        test_obj.log_result(
+            result_flag, positive="Name was successfully set to: %s\n" %
+            name, negative="Failed to set name: %s \nOn url: %s\n" %
+            (name, test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n' %
                        (int(time.time() - start_time)))
         # Update TestRail
@@ -82,9 +93,10 @@ def test_example_form(base_url, browser, browser_version, os_version, os_name, r
 
         # 6. Set Email in form
         result_flag = test_obj.set_email(email)
-        test_obj.log_result(result_flag,
-                            positive="Email was successfully set to: %s\n" % email,
-                            negative="Failed to set Email: %s \nOn url: %s\n" % (email, test_obj.get_current_url()))
+        test_obj.log_result(
+            result_flag, positive="Email was successfully set to: %s\n" %
+            email, negative="Failed to set Email: %s \nOn url: %s\n" %
+            (email, test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n' %
                        (int(time.time() - start_time)))
         # Update TestRail
@@ -101,9 +113,10 @@ def test_example_form(base_url, browser, browser_version, os_version, os_name, r
                                   {'_Email': email})
         # 7. Set Phone number in form
         result_flag = test_obj.set_phone(phone)
-        test_obj.log_result(result_flag,
-                            positive="Phone number was successfully set for phone: %s\n" % phone,
-                            negative="Failed to set phone number: %s \nOn url: %s\n" % (phone, test_obj.get_current_url()))
+        test_obj.log_result(
+            result_flag, positive="Phone number was successfully set for phone: %s\n" %
+            phone, negative="Failed to set phone number: %s \nOn url: %s\n" %
+            (phone, test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n' %
                        (int(time.time() - start_time)))
         # Update TestRail
@@ -125,9 +138,10 @@ def test_example_form(base_url, browser, browser_version, os_version, os_name, r
 
         # 8. Set Gender in form
         result_flag = test_obj.set_gender(gender)
-        test_obj.log_result(result_flag,
-                            positive="Gender was successfully set to: %s\n" % gender,
-                            negative="Failed to set gender: %s \nOn url: %s\n" % (gender, test_obj.get_current_url()))
+        test_obj.log_result(
+            result_flag, positive="Gender was successfully set to: %s\n" %
+            gender, negative="Failed to set gender: %s \nOn url: %s\n" %
+            (gender, test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n' %
                        (int(time.time() - start_time)))
         # Update TestRail
@@ -145,9 +159,11 @@ def test_example_form(base_url, browser, browser_version, os_version, os_name, r
 
         # 9. Check the copyright
         result_flag = test_obj.check_copyright()
-        test_obj.log_result(result_flag,
-                            positive="Copyright check was successful\n",
-                            negative="Copyright looks wrong.\nObtained the copyright%s\n" % test_obj.get_copyright())
+        test_obj.log_result(
+            result_flag,
+            positive="Copyright check was successful\n",
+            negative="Copyright looks wrong.\nObtained the copyright%s\n" %
+            test_obj.get_copyright())
         test_obj.write('Script duration: %d seconds\n' %
                        (int(time.time() - start_time)))
         test_obj.add_tesults_case(
@@ -162,9 +178,11 @@ def test_example_form(base_url, browser, browser_version, os_version, os_name, r
         # 10. Set and submit the form in one go
 
         result_flag = test_obj.submit_form(name, email, phone, gender)
-        test_obj.log_result(result_flag,
-                            positive="Successfully submitted the form\n",
-                            negative="Failed to submit the form \nOn url: %s" % test_obj.get_current_url())
+        test_obj.log_result(
+            result_flag,
+            positive="Successfully submitted the form\n",
+            negative="Failed to submit the form \nOn url: %s" %
+            test_obj.get_current_url())
 
         # Update TestRail
         case_id = testrail_file.test_example_form
@@ -182,9 +200,10 @@ def test_example_form(base_url, browser, browser_version, os_version, os_name, r
         # Notice you don't need to create a new page object!
         if result_flag is True:
             result_flag = test_obj.check_heading()
-        test_obj.log_result(result_flag,
-                            positive="Heading on the redirect page checks out!\n",
-                            negative="Fail: Heading on the redirect page is incorrect!")
+        test_obj.log_result(
+            result_flag,
+            positive="Heading on the redirect page checks out!\n",
+            negative="Fail: Heading on the redirect page is incorrect!")
         test_obj.write('Script duration: %d seconds\n' %
                        (int(time.time() - start_time)))
         test_obj.add_tesults_case(

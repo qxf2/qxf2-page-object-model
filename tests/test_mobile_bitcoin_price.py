@@ -16,8 +16,19 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity,
-                              remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path):
+def test_mobile_bitcoin_price(
+        mobile_os_name,
+        mobile_os_version,
+        device_name,
+        app_package,
+        app_activity,
+        remote_flag,
+        device_flag,
+        testrail_flag,
+        tesults_flag,
+        test_run_id,
+        app_name,
+        app_path):
     "Run the test."
     try:
         # Initalize flags for tests summary.
@@ -61,9 +72,10 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
         # header name.
         result_flag = test_obj.click_on_real_time_price_button(
             expected_bitcoin_price_page_heading)
-        test_obj.log_result(result_flag,
-                            positive="Successfully visited the bitcoin real time price page.",
-                            negative="Failed to visit the bitcoin real time price page.")
+        test_obj.log_result(
+            result_flag,
+            positive="Successfully visited the bitcoin real time price page.",
+            negative="Failed to visit the bitcoin real time price page.")
         # Update TestRail
         case_id = testrail_file.test_bitcoin_price_page_header
         test_obj.report_to_testrail(case_id, test_run_id, result_flag)
@@ -73,9 +85,10 @@ def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, ap
         # 6. Verify bitcoin real time price is displayed.
         if result_flag is True:
             result_flag = test_obj.get_bitcoin_real_time_price()
-        test_obj.log_result(result_flag,
-                            positive="Successfully got the bitcoin real time price in usd.",
-                            negative="Failed to get the bitcoin real time price in usd.")
+        test_obj.log_result(
+            result_flag,
+            positive="Successfully got the bitcoin real time price in usd.",
+            negative="Failed to get the bitcoin real time price in usd.")
         # Update TestRail
         case_id = testrail_file.test_bitcoin_real_time_price
         test_obj.report_to_testrail(case_id, test_run_id, result_flag)

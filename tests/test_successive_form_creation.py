@@ -15,8 +15,18 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def test_succesive_form_creation(base_url, browser, browser_version, os_version, os_name,
-                                 remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name):
+def test_succesive_form_creation(
+        base_url,
+        browser,
+        browser_version,
+        os_version,
+        os_name,
+        remote_flag,
+        testrail_flag,
+        tesults_flag,
+        test_run_id,
+        remote_project_name,
+        remote_build_name):
     "Run the test"
     try:
         # Initalize flags for tests summary
@@ -67,9 +77,10 @@ def test_succesive_form_creation(base_url, browser, browser_version, os_version,
 
             # a. Set and submit the form in one go
             result_flag = test_obj.submit_form(name, email, phone, gender)
-            test_obj.log_result(result_flag,
-                                positive="Successfully submitted the form number %d\n" % form_number,
-                                negative="Failed to submit the form number %d \nOn url: %s" % (form_number, test_obj.get_current_url()))
+            test_obj.log_result(
+                result_flag, positive="Successfully submitted the form number %d\n" %
+                form_number, negative="Failed to submit the form number %d \nOn url: %s" %
+                (form_number, test_obj.get_current_url()))
             test_obj.write('Script duration: %d seconds\n' %
                            (int(time.time() - start_time)))
             test_obj.add_tesults_case(
@@ -90,9 +101,10 @@ def test_succesive_form_creation(base_url, browser, browser_version, os_version,
             # Notice you don't need to create a new page object!
             if result_flag is True:
                 result_flag = test_obj.check_heading()
-            test_obj.log_result(result_flag,
-                                positive="Heading on the redirect page checks out!\n",
-                                negative="Fail: Heading on the redirect page is incorrect!")
+            test_obj.log_result(
+                result_flag,
+                positive="Heading on the redirect page checks out!\n",
+                negative="Fail: Heading on the redirect page is incorrect!")
             test_obj.write('Script duration: %d seconds\n' %
                            (int(time.time() - start_time)))
             test_obj.add_tesults_case(
@@ -106,9 +118,11 @@ def test_succesive_form_creation(base_url, browser, browser_version, os_version,
 
             # c. Check the copyright
             result_flag = test_obj.check_copyright()
-            test_obj.log_result(result_flag,
-                                positive="Copyright check was successful\n",
-                                negative="Copyright looks wrong.\nObtained the copyright: %s\n" % test_obj.get_copyright())
+            test_obj.log_result(
+                result_flag,
+                positive="Copyright check was successful\n",
+                negative="Copyright looks wrong.\nObtained the copyright: %s\n" %
+                test_obj.get_copyright())
             test_obj.write('Script duration: %d seconds\n' %
                            (int(time.time() - start_time)))
             test_obj.add_tesults_case(
@@ -152,17 +166,18 @@ if __name__ == '__main__':
 
     # Run the test only if the options provided are valid
     if options_obj.check_options(options):
-        test_succesive_form_creation(base_url=options.url,
-                                     browser=options.browser,
-                                     browser_version=options.browser_version,
-                                     os_version=options.os_version,
-                                     os_name=options.os_name,
-                                     remote_flag=options.remote_flag,
-                                     testrail_flag=options.testrail_flag,
-                                     tesults_flag=options.tesults_flag,
-                                     test_run_id=options.test_run_id,
-                                     remote_project_name=options.remote_project_name,
-                                     remote_build_name=options.remote_build_name)
+        test_succesive_form_creation(
+            base_url=options.url,
+            browser=options.browser,
+            browser_version=options.browser_version,
+            os_version=options.os_version,
+            os_name=options.os_name,
+            remote_flag=options.remote_flag,
+            testrail_flag=options.testrail_flag,
+            tesults_flag=options.tesults_flag,
+            test_run_id=options.test_run_id,
+            remote_project_name=options.remote_project_name,
+            remote_build_name=options.remote_build_name)
     else:
         print('ERROR: Received incorrect comand line input arguments')
         print(options_obj.print_usage())

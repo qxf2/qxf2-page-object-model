@@ -17,8 +17,18 @@ import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
-def test_example_table(base_url, browser, browser_version, os_version, os_name, remote_flag,
-                       testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name):
+def test_example_table(
+        base_url,
+        browser,
+        browser_version,
+        os_version,
+        os_name,
+        remote_flag,
+        testrail_flag,
+        tesults_flag,
+        test_run_id,
+        remote_project_name,
+        remote_build_name):
     "Run the test"
     try:
         # Initalize flags for tests summary
@@ -66,9 +76,10 @@ def test_example_table(base_url, browser, browser_version, os_version, os_name, 
 
         # 6. Check if a name is present in the table
         result_flag = test_obj.check_name_present(name)
-        test_obj.log_result(result_flag,
-                            positive="Located the name %s in the table" % name,
-                            negative="The name %s is not present under name column on the Page with url: %s" % (name, test_obj.get_current_url()))
+        test_obj.log_result(
+            result_flag, positive="Located the name %s in the table" %
+            name, negative="The name %s is not present under name column on the Page with url: %s" %
+            (name, test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n' %
                        (int(time.time() - start_time)))
         # Update TestRail
