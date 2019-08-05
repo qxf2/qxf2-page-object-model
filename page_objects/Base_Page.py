@@ -677,7 +677,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.write(positive,level)
             self.mini_check_pass_counter += 1
         else:
-            self.write(negative,level)
+            self.write(negative,level='error')
         self.mini_check_counter += 1
 
 
