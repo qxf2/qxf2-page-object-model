@@ -167,4 +167,4 @@ if __name__=='__main__':
                         remote_build_name=options.remote_build_name) 
     else:
         print('ERROR: Received incorrect comand line input arguments')
-        print(option_obj.print_usage())
+        print(options_obj.print_usage())
