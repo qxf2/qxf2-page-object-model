@@ -320,6 +320,14 @@ class Base_Page(Borg,unittest.TestCase):
         "Get the current window handle"
         pass
 
+    def switch_frame(self,name=None,index=None,wait_time=2):
+        "switch to iframe"
+        self.wait(wait_time)
+        self.driver.switch_to.default_content()
+        if name is not None:
+            self.driver.switch_to.frame(name)
+        elif index is not None:
+            self.driver.switch_to.frame(self.driver.find_elements_by_tag_name("iframe")[index])
 
     def _get_locator(key):
         "fetches locator from the locator conf"
