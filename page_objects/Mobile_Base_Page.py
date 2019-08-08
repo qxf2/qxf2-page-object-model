@@ -441,7 +441,7 @@ class Mobile_Base_Page(Borg, unittest.TestCase):
         "Write out a success message"
         if level.lower() == 'critical':
             level = 'info'
-        self.log_obj.write(pre_format + msg,level)
+        self.log_obj.write(pre_format + msg, level)
         self.result_counter += 1
         self.pass_counter += 1
 
@@ -452,7 +452,7 @@ class Mobile_Base_Page(Borg, unittest.TestCase):
         self.failure_message_list.append(pre_format + msg)
         if level.lower() == 'critical':
             self.teardown()
-            raise Stop_Test_Exception("Stopping test because: "+ msg)
+            raise Stop_Test_Exception("Stopping test because: " + msg)
 
     def log_result(self, flag, positive, negative, level='info'):
         "Write out the result of the test"
