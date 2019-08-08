@@ -26,6 +26,7 @@ from utils import Tesults
 from conf import remote_credentials as Conf
 from utils.stop_test_exception_util import Stop_Test_Exception
 
+
 class Borg:
     # The borg design pattern is to share state
     # Src: http://code.activestate.com/recipes/66531/
@@ -249,7 +250,8 @@ class Base_Page(Borg, unittest.TestCase):
                     break
         self.driver.get_screenshot_as_file(
             self.screenshot_dir + os.sep + screenshot_name + '.png')
-        #self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
+        # self.conditional_write(flag=True,positive= screenshot_name +
+        # '.png',negative='', pre_format=pre_format)
         if self.browserstack_flag is True:
             self.append_latest_image(screenshot_name)
         if self.tesults_flag is True:
@@ -344,14 +346,15 @@ class Base_Page(Borg, unittest.TestCase):
         "Get the current window handle"
         pass
 
-    def switch_frame(self,name=None,index=None,wait_time=2):
+    def switch_frame(self, name=None, index=None, wait_time=2):
         "switch to iframe"
         self.wait(wait_time)
         self.driver.switch_to.default_content()
         if name is not None:
             self.driver.switch_to.frame(name)
         elif index is not None:
-            self.driver.switch_to.frame(self.driver.find_elements_by_tag_name("iframe")[index])
+            self.driver.switch_to.frame(
+    self.driver.find_elements_by_tag_name("iframe")[index])
 
     def _get_locator(key):
         "fetches locator from the locator conf"
@@ -704,13 +707,15 @@ class Base_Page(Borg, unittest.TestCase):
 
     def success(self, msg, level='info', pre_format='PASS: '):
         "Write out a success message"
-<<<<<<< HEAD
+
+
+<< << << < HEAD
         self.log_obj.write(pre_format + msg, level)
-=======
+== == == =
         if level.lower() == 'critical':
             level = 'info'
-        self.log_obj.write(pre_format + msg,level)
->>>>>>> master
+        self.log_obj.write(pre_format + msg, level)
+>>>>>> > master
         self.result_counter += 1
         self.pass_counter += 1
 
