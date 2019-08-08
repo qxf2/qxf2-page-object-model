@@ -707,15 +707,10 @@ class Base_Page(Borg, unittest.TestCase):
 
     def success(self, msg, level='info', pre_format='PASS: '):
         "Write out a success message"
-
-
-<< << << < HEAD
         self.log_obj.write(pre_format + msg, level)
-== == == =
         if level.lower() == 'critical':
             level = 'info'
         self.log_obj.write(pre_format + msg, level)
->>>>>> > master
         self.result_counter += 1
         self.pass_counter += 1
 
@@ -724,13 +719,10 @@ class Base_Page(Borg, unittest.TestCase):
         self.log_obj.write(pre_format + msg, level)
         self.result_counter += 1
         self.failure_message_list.append(pre_format + msg)
-<<<<<<< HEAD
-=======
         if level.lower() == 'critical':
             self.teardown()
             raise Stop_Test_Exception("Stopping test because: "+ msg)
         
->>>>>>> master
 
     def log_result(self, flag, positive, negative, level='info'):
         "Write out the result of the test"
