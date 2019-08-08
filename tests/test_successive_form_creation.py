@@ -75,27 +75,14 @@ def test_succesive_form_creation(
             msg = "\nReady to fill form number %d" % form_number
             test_obj.write(msg)
 
-            # a. Set and submit the form in one go
-            result_flag = test_obj.submit_form(name, email, phone, gender)
-            test_obj.log_result(
-                result_flag, positive="Successfully submitted the form number %d\n" %
-                form_number, negative="Failed to submit the form number %d \nOn url: %s" %
-                (form_number, test_obj.get_current_url()))
-            test_obj.write('Script duration: %d seconds\n' %
-                           (int(time.time() - start_time)))
-            test_obj.add_tesults_case(
-                "Set and submit form " +
-                str(form_number),
-                "Sets and submits the form in one go",
-                "test_successive_form_creation",
-                result_flag,
-                "Failed to submit the form number %d \nOn url: %s" %
-                (form_number,
-                 test_obj.get_current_url()),
-                [
-                    test_obj.log_obj.log_file_dir +
-                    os.sep +
-                    test_obj.log_obj.log_file_name])
+            #a. Set and submit the form in one go
+            result_flag = test_obj.submit_form(name,email,phone,gender)
+            test_obj.log_result(result_flag,
+                                positive="Successfully submitted the form number %d\n"%form_number,
+                                negative="Failed to submit the form number %d \nOn url: %s"%(form_number,test_obj.get_current_url()),
+                                level="critical")
+            test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+            test_obj.add_tesults_case("Set and submit form " + str(form_number), "Sets and submits the form in one go", "test_successive_form_creation", result_flag, "Failed to submit the form number %d \nOn url: %s"%(form_number,test_obj.get_current_url()), [test_obj.log_obj.log_file_dir + os.sep + test_obj.log_obj.log_file_name])
 
             # b. Check the heading on the redirect page
             # Notice you don't need to create a new page object!

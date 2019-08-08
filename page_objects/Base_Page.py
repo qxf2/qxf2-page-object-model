@@ -24,7 +24,7 @@ from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
-
+from utils.stop_test_exception_util import Stop_Test_Exception
 
 class Borg:
     # The borg design pattern is to share state
@@ -343,6 +343,15 @@ class Base_Page(Borg, unittest.TestCase):
     def get_current_window_handle(self):
         "Get the current window handle"
         pass
+
+    def switch_frame(self,name=None,index=None,wait_time=2):
+        "switch to iframe"
+        self.wait(wait_time)
+        self.driver.switch_to.default_content()
+        if name is not None:
+            self.driver.switch_to.frame(name)
+        elif index is not None:
+            self.driver.switch_to.frame(self.driver.find_elements_by_tag_name("iframe")[index])
 
     def _get_locator(key):
         "fetches locator from the locator conf"
@@ -695,7 +704,13 @@ class Base_Page(Borg, unittest.TestCase):
 
     def success(self, msg, level='info', pre_format='PASS: '):
         "Write out a success message"
+<<<<<<< HEAD
         self.log_obj.write(pre_format + msg, level)
+=======
+        if level.lower() == 'critical':
+            level = 'info'
+        self.log_obj.write(pre_format + msg,level)
+>>>>>>> master
         self.result_counter += 1
         self.pass_counter += 1
 
@@ -704,6 +719,13 @@ class Base_Page(Borg, unittest.TestCase):
         self.log_obj.write(pre_format + msg, level)
         self.result_counter += 1
         self.failure_message_list.append(pre_format + msg)
+<<<<<<< HEAD
+=======
+        if level.lower() == 'critical':
+            self.teardown()
+            raise Stop_Test_Exception("Stopping test because: "+ msg)
+        
+>>>>>>> master
 
     def log_result(self, flag, positive, negative, level='info'):
         "Write out the result of the test"
