@@ -167,5 +167,3 @@ def test_api_example(api_url='http://35.167.62.251/'):
 
 if __name__ == '__main__':
     test_api_example()
-   
-   

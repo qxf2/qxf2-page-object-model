@@ -6,7 +6,9 @@ TestRail integration:
 
 API reference: http://docs.gurock.com/testrail-api2/start
 """
-import dotenv,os,sys
+import dotenv
+import os
+import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils import testrail
 import conf.testrailenv_conf as conf_file
@@ -229,9 +231,9 @@ class Test_Rail:
         if ((run_id is not None) and (case_id != 'None')):
             try:
                 result = self.client.send_post(
-                    'add_result_for_case/%s/%s'%(run_id,case_id),
-                    {'status_id': status_id, 'comment': msg })
-                print (result)
+                    'add_result_for_case/%s/%s' % (run_id, case_id),
+                    {'status_id': status_id, 'comment': msg})
+                print(result)
             except Exception as e:
                 print('Exception in update_testrail() updating TestRail.')
                 print('PYTHON SAYS: ')

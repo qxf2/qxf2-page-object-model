@@ -14,8 +14,9 @@ import sys
 import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-def test_example_form(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
 
+def test_example_form(base_url, browser, browser_version, os_version, os_name, remote_flag,
+                      testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name):
     "Run the test"
     try:
         # Initalize flags for tests summary
@@ -66,16 +67,28 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
                        (int(time.time() - start_time)))
         # Update TestRail
         case_id = testrail_file.test_example_form_name
-        test_obj.report_to_testrail(case_id,test_run_id,result_flag)
-        test_obj.add_tesults_case("Set Name", "Sets the name in the form", "test_example_form", result_flag, "Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()), [test_obj.log_obj.log_file_dir + os.sep + test_obj.log_obj.log_file_name])
-        
-        #6. Set Email in form
-        result_flag = test_obj.set_email(email) 
+        test_obj.report_to_testrail(case_id, test_run_id, result_flag)
+        test_obj.add_tesults_case(
+            "Set Name",
+            "Sets the name in the form",
+            "test_example_form",
+            result_flag,
+            "Failed to set name: %s \nOn url: %s\n" %
+            (name,
+             test_obj.get_current_url()),
+            [
+                test_obj.log_obj.log_file_dir +
+                os.sep +
+                test_obj.log_obj.log_file_name])
+
+        # 6. Set Email in form
+        result_flag = test_obj.set_email(email)
         test_obj.log_result(result_flag,
-                            positive="Email was successfully set to: %s\n"%email,
-                            negative="Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()))                           
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        #Update TestRail
+                            positive="Email was successfully set to: %s\n" % email,
+                            negative="Failed to set Email: %s \nOn url: %s\n" % (email, test_obj.get_current_url()))
+        test_obj.write('Script duration: %d seconds\n' %
+                       (int(time.time() - start_time)))
+        # Update TestRail
         case_id = testrail_file.test_example_form_email
         test_obj.report_to_testrail(case_id, test_run_id, result_flag)
         test_obj.add_tesults_case("Set Email",
@@ -137,19 +150,27 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         result_flag = test_obj.check_copyright()
         test_obj.log_result(result_flag,
                             positive="Copyright check was successful\n",
-                            negative="Copyright looks wrong.\nObtained the copyright%s\n"%test_obj.get_copyright())
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        test_obj.add_tesults_case("Check copyright", "Checks the copyright", "test_example_form", result_flag, "Copyright looks wrong.\nObtained the copyright%s\n"%test_obj.get_copyright(), [])
+                            negative="Copyright looks wrong.\nObtained the copyright%s\n" % test_obj.get_copyright())
+        test_obj.write('Script duration: %d seconds\n' %
+                       (int(time.time() - start_time)))
+        test_obj.add_tesults_case(
+            "Check copyright",
+            "Checks the copyright",
+            "test_example_form",
+            result_flag,
+            "Copyright looks wrong.\nObtained the copyright%s\n" %
+            test_obj.get_copyright(),
+            [])
 
-        #10. Set and submit the form in one go
-        
-        result_flag = test_obj.submit_form(name,email,phone,gender)
+        # 10. Set and submit the form in one go
+
+        result_flag = test_obj.submit_form(name, email, phone, gender)
         test_obj.log_result(result_flag,
                             positive="Successfully submitted the form\n",
-                            negative="Failed to submit the form \nOn url: %s"%test_obj.get_current_url(),
+                            negative="Failed to submit the form \nOn url: %s" % test_obj.get_current_url(),
                             level="critical")
-                                                      
-        #Update TestRail
+
+        # Update TestRail
         case_id = testrail_file.test_example_form
         test_obj.report_to_testrail(case_id, test_run_id, result_flag)
         test_obj.add_tesults_case(
