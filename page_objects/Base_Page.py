@@ -236,6 +236,11 @@ class Base_Page(Borg,unittest.TestCase):
         "Get the current URL"
         return self.driver.current_url
 
+    def get_page_title(self):
+        "Get the current page title"
+        return self.driver.title
+    
+
 
     def get_page_paths(self,section):
         "Open configurations file,go to right sections,return section obj"
