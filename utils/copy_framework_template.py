@@ -36,7 +36,7 @@ def copy_framework_template(src_folder,dst_folder):
 	if os.path.exists(dst_folder_conf):
 		for every_src_conf_file in src_conf_files_list:
 			shutil.copy2(every_src_conf_file,dst_folder_conf)
-		shutil.copy2(conf.src_conf_file5, os.path.abspath(os.path.join(dst_folder_conf,'locators_conf.py')))
+		shutil.copy2(conf.src_conf_file7, os.path.abspath(os.path.join(dst_folder_conf,'locators_conf.py')))
 			
 	#3. Verify if the destination directory is created and create the sub-folder to copy files from POM\Page_Objects.
 	#3a. Get details from conf file for Page_Objects
