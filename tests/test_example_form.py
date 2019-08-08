@@ -25,7 +25,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj = PageFactory.get_page_object("Main Page",base_url=base_url)
 
         #2. Setup and register a driver
-        start_time = int(time.time())	#Set start_time with current time
+        test_execution_start_time = int(time.time())	#Set test_execution_start_time with current time
         test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
         
         #3. Setup TestRail reporting
@@ -50,7 +50,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.log_result(result_flag,
                             positive="Name was successfully set to: %s\n"%name,
                             negative="Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()))
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-test_execution_start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_form_name
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
@@ -61,7 +61,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.log_result(result_flag,
                             positive="Email was successfully set to: %s\n"%email,
                             negative="Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()))
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-test_execution_start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_form_email
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
@@ -71,7 +71,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.log_result(result_flag,
                             positive="Phone number was successfully set for phone: %s\n"%phone,
                             negative="Failed to set phone number: %s \nOn url: %s\n"%(phone,test_obj.get_current_url()))
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-test_execution_start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_form_phone
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
@@ -82,7 +82,7 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.log_result(result_flag,
                             positive= "Gender was successfully set to: %s\n"%gender,
                             negative="Failed to set gender: %s \nOn url: %s\n"%(gender,test_obj.get_current_url()))
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-test_execution_start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_form_gender
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
@@ -93,14 +93,14 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         test_obj.log_result(result_flag,
                             positive="Copyright check was successful\n",
                             negative="Copyright looks wrong.\nObtained the copyright%s\n"%test_obj.get_copyright())
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-test_execution_start_time)))
         test_obj.add_tesults_case("Check copyright", "Checks the copyright", "test_example_form", result_flag, "Copyright looks wrong.\nObtained the copyright%s\n"%test_obj.get_copyright(), [])
 
         #10. Set and submit the form in one go
         
         result_flag = test_obj.submit_form(name,email,phone,gender)
         test_obj.log_result(result_flag,
-                            positive="Successfully submitted the form\n",
+                            positive="Form submitted successfully. First Test Passed!\n",
                             negative="Failed to submit the form \nOn url: %s"%test_obj.get_current_url())
                             
         #Update TestRail
@@ -113,17 +113,17 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         if result_flag is True:
             result_flag = test_obj.check_heading()
         test_obj.log_result(result_flag,
-                            positive="Heading on the redirect page checks out!\n",
+                            positive="Heading on the redirect page is correct. Second Test Passed!\n",
                             negative="Fail: Heading on the redirect page is incorrect!")
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-test_execution_start_time)))
         test_obj.add_tesults_case("Check Heading", "Checks the heading on the redirect page", "test_example_form", result_flag,"Fail: Heading on the redirect page is incorrect!", [])
 
         #12. Visit the contact page and verify the link
         result_flag = test_obj.goto_footer_link('Contact > Get in touch!','contact')    
         test_obj.log_result(result_flag,
-                            positive="Successfully visited the Contact page\n",
+                            positive="Navigation successful to Contact page. Third Test Passed!\n",
                             negative="\nFailed to visit the Contact page\n")
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-test_execution_start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_form_footer_contact
         test_obj.report_to_testrail(case_id,test_run_id,result_flag)
