@@ -6,13 +6,13 @@ This is particularly useful when you want convert string to integer.
 '''
 
 class string_to_int():
-    def string_to_int(str_var)
+      
+    def string_to_int(str_var):
         try:
-            str_var = int(str_var)
+            int_var = int(str_var)
         except Exception as e:
-            self.write("Error type casting var to int",level="error")
-            self.write("Obtained the str_var %s"%str_var)
-            self.write("Python says: " + str(e))
+            print("Error type casting var to int")
+            print("Obtained the %s"%str_var)
+            print("Python says: " + str(e))
             return str_var
-
-    return string_to_int
+        return int_var
