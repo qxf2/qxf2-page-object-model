@@ -17,7 +17,7 @@ from utils.BrowserStack_Library import BrowserStack_Library
 from .DriverFactory import DriverFactory
 from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
-from utils import Tesults
+from utils import Tesults,Wrapit
 from conf import remote_credentials as Conf
 from utils.stop_test_exception_util import Stop_Test_Exception
 
@@ -77,6 +77,11 @@ class Base_Page(Borg,unittest.TestCase):
         self.screenshot_counter = 1
         self.exceptions = []
 
+    @Wrapit.Wrapit._bdd_step_implementor("This is a test step")
+    def print_hello(self):
+        "Print Hello"
+        print("BDD is cool!")
+        print("Hello Qxf2! I am BDD")
 
     def get_failure_message_list(self):
         "Return the failure message list"
