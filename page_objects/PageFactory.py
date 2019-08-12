@@ -17,10 +17,10 @@ from page_objects.bitcoin_price_page import Bitcoin_Price_Page
 from page_objects.bitcoin_main_page import Bitcoin_Main_Page
 from conf import base_url_conf as conf
 
-# Get the Base URL from the conf file
-base_url = conf.base_url
 
 class PageFactory():
+    # Get the Base URL from the conf file
+    base_url = conf.base_url
     "PageFactory uses the factory design pattern."
     def get_page_object(page_name,base_url,trailing_slash_flag=True):
         "Return the appropriate page object based on page_name"
