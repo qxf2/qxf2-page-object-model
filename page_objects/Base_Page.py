@@ -20,6 +20,7 @@ from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
 from utils.stop_test_exception_util import Stop_Test_Exception
+from conf import base_url_conf as conf
 
 class Borg:
     #The borg design pattern is to share state
@@ -36,11 +37,13 @@ class Borg:
 
         return result_flag
 
+# Get the Base URL from the conf file
+base_url = conf.base_url
 
 class Base_Page(Borg,unittest.TestCase):
     "Page class that all page models can inherit from"
 
-    def __init__(self,base_url='http://qxf2.com/',trailing_slash_flag=True):
+    def __init__(self,base_url,trailing_slash_flag=True):
         "Constructor"
         Borg.__init__(self)
         if self.is_first_time():
