@@ -19,10 +19,8 @@ from conf import base_url_conf as conf
 
 
 class PageFactory():
-    # Get the Base URL from the conf file
-    base_url = conf.base_url
     "PageFactory uses the factory design pattern."
-    def get_page_object(page_name,base_url,trailing_slash_flag=True):
+    def get_page_object(page_name,base_url=conf.base_url,trailing_slash_flag=True):
         "Return the appropriate page object based on page_name"
         test_obj = None
         page_name = page_name.lower()
