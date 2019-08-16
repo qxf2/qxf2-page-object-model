@@ -3,7 +3,7 @@ from conf import browser_os_name_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
-
+from conf import base_url_conf as conf
 
 @pytest.fixture
 def browser(request):
@@ -183,7 +183,7 @@ def pytest_addoption(parser):
                       help="Browser. Valid options are firefox, ie and chrome")                      
     parser.addoption("-U","--app_url",
                       dest="url",
-                      default="https://qxf2.com",
+                      default=conf.base_url,
                       help="The url of the application")
     parser.addoption("-A","--api_url",
                       dest="url",
