@@ -4,7 +4,7 @@ from conf import browser_os_name_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
-
+from conf import base_url_conf as conf
 
 @pytest.fixture
 def browser(request):
@@ -188,46 +188,46 @@ def pytest_generate_tests(metafunc):
 
 
 def pytest_addoption(parser):
-    parser.addoption("-B", "--browser",
-                     dest="browser",
-                     action="append",
-                     default=[],
-                     help="Browser. Valid options are firefox, ie and chrome")
-    parser.addoption("-U", "--app_url",
-                     dest="url",
-                     default="https://qxf2.com",
-                     help="The url of the application")
-    parser.addoption("-A", "--api_url",
-                     dest="url",
-                     default="http://35.167.62.251",
-                     help="The url of the api")
-    parser.addoption("-X", "--testrail_flag",
-                     dest="testrail_flag",
-                     default='N',
-                     help="Y or N. 'Y' if you want to report to TestRail")
-    parser.addoption("-R", "--test_run_id",
-                     dest="test_run_id",
-                     default=None,
-                     help="The test run id in TestRail")
-    parser.addoption("-M", "--remote_flag",
-                     dest="remote_flag",
-                     default="N",
-                     help="Run the test in Browserstack/Sauce Lab: Y or N")
-    parser.addoption("-O", "--os_version",
-                     dest="os_version",
-                     action="append",
-                     help="The operating system: xp, 7",
-                     default=[])
-    parser.addoption("-V", "--ver",
-                     dest="browser_version",
-                     action="append",
-                     help="The version of the browser: a whole number",
-                     default=[])
-    parser.addoption("-P", "--os_name",
-                     dest="os_name",
-                     action="append",
-                     help="The operating system: Windows 7, Linux",
-                     default=[])
+    parser.addoption("-B","--browser",
+                      dest="browser",
+                      action="append",
+                      default=[],
+                      help="Browser. Valid options are firefox, ie and chrome")                      
+    parser.addoption("-U","--app_url",
+                      dest="url",
+                      default=conf.base_url,
+                      help="The url of the application")
+    parser.addoption("-A","--api_url",
+                      dest="url",
+                      default="http://35.167.62.251",
+                      help="The url of the api")
+    parser.addoption("-X","--testrail_flag",
+                      dest="testrail_flag",
+                      default='N',
+                      help="Y or N. 'Y' if you want to report to TestRail")
+    parser.addoption("-R","--test_run_id",
+                      dest="test_run_id",
+                      default=None,
+                      help="The test run id in TestRail")
+    parser.addoption("-M","--remote_flag",
+                      dest="remote_flag",
+                      default="N",
+                      help="Run the test in Browserstack/Sauce Lab: Y or N")
+    parser.addoption("-O","--os_version",
+                      dest="os_version",
+                      action="append",
+                      help="The operating system: xp, 7",
+                      default=[])
+    parser.addoption("-V","--ver",
+                      dest="browser_version",
+                      action="append",
+                      help="The version of the browser: a whole number",
+                      default=[])
+    parser.addoption("-P","--os_name",
+                      dest="os_name",
+                      action="append",
+                      help="The operating system: Windows 7, Linux",
+                      default=[])
     parser.addoption("--remote_project_name",
                      dest="remote_project_name",
                      help="The project name if its run in BrowserStack",

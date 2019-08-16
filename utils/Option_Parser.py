@@ -4,6 +4,7 @@ Class to wrap around parsing command line options
 import os
 import sys
 import optparse
+from conf import base_url_conf as conf
 
 
 class Option_Parser:
@@ -18,111 +19,87 @@ class Option_Parser:
 
     def set_standard_options(self):
         "Set options shared by all tests over here"
-        self.parser.add_option(
-            "-B",
-            "--browser",
-            dest="browser",
-            default="firefox",
-            help="Browser. Valid options are firefox, ie and chrome")
-        self.parser.add_option("-U", "--app_url",
-                               dest="url",
-                               default="https://qxf2.com",
-                               help="The url of the application")
-        self.parser.add_option("-A", "--api_url",
-                               dest="api_url",
-                               default="http://35.167.62.251/",
-                               help="The url of the api")
-        self.parser.add_option(
-            "-X",
-            "--testrail_flag",
-            dest="testrail_flag",
-            default='N',
-            help="Y or N. 'Y' if you want to report to TestRail")
-        self.parser.add_option("-R", "--test_run_id",
-                               dest="test_run_id",
-                               default=None,
-                               help="The test run id in TestRail")
-        self.parser.add_option("-M", "--remote_flag",
-                               dest="remote_flag",
-                               default="N",
-                               help="Run the test in remote flag: Y or N")
-        self.parser.add_option("-O", "--os_version",
-                               dest="os_version",
-                               help="The operating system: xp, 7",
-                               default="7")
-        self.parser.add_option(
-            "-V",
-            "--ver",
-            dest="browser_version",
-            help="The version of the browser: a whole number",
-            default=45)
-        self.parser.add_option("-P", "--os_name",
-                               dest="os_name",
-                               help="The operating system: Windows , Linux",
-                               default="Windows")
-        self.parser.add_option(
-            "-G",
-            "--mobile_os_name",
-            dest="mobile_os_name",
-            help="Enter operating system of mobile. Ex: Android, iOS",
-            default="Android")
-        self.parser.add_option(
-            "-H",
-            "--mobile_os_version",
-            dest="mobile_os_version",
-            help="Enter version of operating system of mobile: 8.1.0",
-            default="6.0")
-        self.parser.add_option(
-            "-I",
-            "--device_name",
-            dest="device_name",
-            help="Enter device name. Ex: Emulator, physical device name",
-            default="Google Nexus 6")
-        self.parser.add_option(
-            "-J",
-            "--app_package",
-            dest="app_package",
-            help="Enter name of app package. Ex: bitcoininfo",
-            default="com.dudam.rohan.bitcoininfo")
-        self.parser.add_option(
-            "-K",
-            "--app_activity",
-            dest="app_activity",
-            help="Enter name of app activity. Ex: .MainActivity",
-            default=".MainActivity")
-        self.parser.add_option(
-            "-Q",
-            "--device_flag",
-            dest="device_flag",
-            help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
-            default="N")
-        self.parser.add_option(
-            "-D",
-            "--app_name",
-            dest="app_name",
-            help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
-            default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
-        self.parser.add_option(
-            "-T",
-            "--tesults_flag",
-            dest="tesults_flag",
-            help="Enter Y or N. 'Y' if you want to report results with Tesults",
-            default="N")
-        self.parser.add_option("-N", "--app_path",
-                               dest="app_path",
-                               help="Enter app path")
-        self.parser.add_option(
-            "--remote_project_name",
-            dest="remote_project_name",
-            help="The project name if its run in BrowserStack",
-            default=None)
-        self.parser.add_option(
-            "--remote_build_name",
-            dest="remote_build_name",
-            help="The build name if its run in BrowserStack",
-            default=None)
-
-    def add_option(self, option_letter, option_word, dest, help_text):
+        self.parser.add_option("-B","--browser",
+                            dest="browser",
+                            default="firefox",
+                            help="Browser. Valid options are firefox, ie and chrome")                      
+        self.parser.add_option("-U","--app_url",
+                            dest="url",
+                            default=conf.base_url,
+                            help="The url of the application")
+        self.parser.add_option("-A","--api_url",
+                            dest="api_url",
+                            default="http://35.167.62.251/",
+                            help="The url of the api")
+        self.parser.add_option("-X","--testrail_flag",
+                            dest="testrail_flag",
+                            default='N',
+                            help="Y or N. 'Y' if you want to report to TestRail")
+        self.parser.add_option("-R","--test_run_id",
+                            dest="test_run_id",
+                            default=None,
+                            help="The test run id in TestRail")
+        self.parser.add_option("-M","--remote_flag",
+                            dest="remote_flag",
+                            default="N",
+                            help="Run the test in remote flag: Y or N")
+        self.parser.add_option("-O","--os_version",
+                            dest="os_version",
+                            help="The operating system: xp, 7",
+                            default="7")
+        self.parser.add_option("-V","--ver",
+                            dest="browser_version",
+                            help="The version of the browser: a whole number",
+                            default=45)
+        self.parser.add_option("-P","--os_name",
+                            dest="os_name",
+                            help="The operating system: Windows , Linux",
+                            default="Windows")
+        self.parser.add_option("-G","--mobile_os_name",
+                            dest="mobile_os_name",
+                            help="Enter operating system of mobile. Ex: Android, iOS",
+                            default="Android")
+        self.parser.add_option("-H","--mobile_os_version",
+                            dest="mobile_os_version",
+                            help="Enter version of operating system of mobile: 8.1.0",
+                            default="6.0")
+        self.parser.add_option("-I","--device_name",
+                            dest="device_name",
+                            help="Enter device name. Ex: Emulator, physical device name",
+                            default="Google Nexus 6")
+        self.parser.add_option("-J","--app_package",
+                            dest="app_package",
+                            help="Enter name of app package. Ex: bitcoininfo",
+                            default="com.dudam.rohan.bitcoininfo")
+        self.parser.add_option("-K","--app_activity",
+                            dest="app_activity",
+                            help="Enter name of app activity. Ex: .MainActivity",
+                            default=".MainActivity")
+        self.parser.add_option("-Q","--device_flag",
+                            dest="device_flag",
+                            help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
+                            default="N")
+        self.parser.add_option("-D","--app_name",
+                            dest="app_name",
+                            help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
+                            default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
+        self.parser.add_option("-T","--tesults_flag",
+                            dest="tesults_flag",
+                            help="Enter Y or N. 'Y' if you want to report results with Tesults",
+                            default="N")
+        self.parser.add_option("-N","--app_path",
+                            dest="app_path",
+                            help="Enter app path")
+        self.parser.add_option("--remote_project_name",
+                            dest="remote_project_name",
+                            help="The project name if its run in BrowserStack",
+                            default=None)
+        self.parser.add_option("--remote_build_name",
+                            dest="remote_build_name",
+                            help="The build name if its run in BrowserStack",
+                            default=None)
+        
+    def add_option(self,option_letter,option_word,dest,help_text):
         "Add an option to our parser"
         self.parser.add(option_letter,
                         option_word,
