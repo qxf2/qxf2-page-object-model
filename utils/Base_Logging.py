@@ -7,6 +7,7 @@ import datetime
 import sys
 from loguru import logger
 
+
 class Base_Logging():
     "A plug-n-play class for logging"
     def __init__(self,log_file_name=None,level="DEBUG",format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module} | {message}"):
@@ -20,6 +21,7 @@ class Base_Logging():
         
     def set_log(self,log_file_name,level,format,test_module_name=None):
         "Add an handler sending log messages to a sink"
+        #stdout_handler = logger.StreamHandler(sys.stdout)
         if test_module_name is None:
             test_module_name = self.get_calling_module()              
         if not os.path.exists(self.log_file_dir):
@@ -30,7 +32,7 @@ class Base_Logging():
             log_file_name = self.log_file_dir + os.sep + log_file_name
         
         logger.add(log_file_name,level=level,format=format, 
-        rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
+        rotation="30 days", colorize=True, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
     def get_calling_module(self):
@@ -55,14 +57,14 @@ class Base_Logging():
         fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead        
         d = {'caller_func': fname}                    
         if level.lower()== 'debug': 
-            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                      
+            logger.opt(ansi=True).debug("{module} | {msg}",module=d['caller_func'],msg=msg)                      
         elif level.lower()== 'info':
-            logger.info("{module} | {msg}",module=d['caller_func'],msg=msg)           
+            logger.opt(ansi=True).info("{module} | {msg}",module=d['caller_func'],msg=msg)           
         elif level.lower()== 'warn' or level.lower()=='warning':           
-            logger.warning("{module} | {msg}",module=d['caller_func'],msg=msg)
+            logger.opt(ansi=True).warning("{module} | {msg}",module=d['caller_func'],msg=msg)
         elif level.lower()== 'error':
-            logger.error("{module} | {msg}",module=d['caller_func'],msg=msg)            
+            logger.opt(ansi=True).error("{module} | <blue>{msg}</blue>",module=d['caller_func'],msg=msg)            
         elif level.lower()== 'critical':   
-            logger.critical("{module} | {msg}",module=d['caller_func'],msg=msg)            
+            logger.opt(ansi=True).critical("{module} | <red>{msg}</red>",module=d['caller_func'],msg=msg)            
         else:
-            logger.critical("Unknown level passed for the msg: {}", msg)
+            logger.opt(ansi=True).critical("Unknown level passed for the msg: {}", msg)
