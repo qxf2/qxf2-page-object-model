@@ -25,11 +25,11 @@ class Form_Object:
     @Wrapit._exceptionHandler
     def set_name(self,name):
         "Set the name on the form"
-        result_flag = self.set_text(self.name_field,name)
+        result_flag = self.set_text(self.name_field,name1)
         self.conditional_write(result_flag,
             positive='Set the name to: %s'%name,
             negative='Failed to set the name in the form',
-            level='debug')
+            level='inverse')
 
         return result_flag 
 
@@ -42,7 +42,7 @@ class Form_Object:
         self.conditional_write(result_flag,
             positive='Set the email to: %s'%email,
             negative='Failed to set the email in the form',
-            level='debug')
+            level='inverse')
 
         return result_flag
 
@@ -55,7 +55,7 @@ class Form_Object:
         self.conditional_write(result_flag,
             positive='Set the phone to: %s'%phone,
             negative='Failed to set the phone in the form',
-            level='debug')
+            level='inverse')
 
         return result_flag
 
@@ -70,7 +70,7 @@ class Form_Object:
         self.conditional_write(result_flag,
             positive='Set the gender to: %s'%gender,
             negative='Failed to set the gender in the form',
-            level='debug')
+            level='inverse')
 
         return result_flag
 
@@ -83,7 +83,7 @@ class Form_Object:
         self.conditional_write(result_flag,
             positive='Clicked on the "click me" button',
             negative='Failed to click on "click me" button',
-            level='debug')
+            level='inverse')
 
         return result_flag
 
@@ -96,7 +96,7 @@ class Form_Object:
         self.conditional_write(result_flag,
             positive='Accepted the terms and conditions',
             negative='Failed to accept the terms and conditions',
-            level='debug')
+            level='inverse')
             
         return result_flag
 

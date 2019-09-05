@@ -47,8 +47,19 @@ class Base_API:
         "Post request"
         error = {}
         json_response = None
+        '''
         try:
             response = requests.post(url,params=params,json=json,headers=headers)
+            try:
+                json_response = response.json()
+            except:
+                json_response = None
+        '''
+        try:
+            if data is None:
+                response = requests.post(url,params=params,json=json,headers=headers)
+            else:
+                response = requests.post(url,data=data,headers=headers)
             try:
                 json_response = response.json()
             except:

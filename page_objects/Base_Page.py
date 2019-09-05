@@ -671,14 +671,24 @@ class Base_Page(Borg,unittest.TestCase):
             return log
 
 
-    def conditional_write(self,flag,positive,negative,level='debug'):
-        "Write out either the positive or the negative message based on flag"      
-        if flag is True:
-            self.write(positive,level='info')
-            self.mini_check_pass_counter += 1
+    def conditional_write(self,flag,positive,negative,level='info'):
+        "Write out either the positive or the negative message based on flag" 
+        
+        if level.lower() is 'inverse':     
+            if flag is True:
+                self.write(positive,level='error')
+                self.mini_check_pass_counter += 1
+            else:
+                self.write(negative,level='info')
+                self.mini_check_counter += 1
         else:
-            self.write(negative,level='error')
-        self.mini_check_counter += 1
+            if flag is True:
+                self.write(positive,level='info')
+                self.mini_check_pass_counter += 1
+            else:
+                self.write(negative,level='info')
+                self.mini_check_counter += 1
+
 
 
     def execute_javascript(self,js_script,*args):

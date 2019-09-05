@@ -65,6 +65,6 @@ class Base_Logging():
         elif level.lower()== 'error':
             logger.opt(ansi=True).error("{module} | <blue>{msg}</blue>",module=d['caller_func'],msg=msg)            
         elif level.lower()== 'critical':   
-            logger.opt(ansi=True).critical("{module} | <red>{msg}</red>",module=d['caller_func'],msg=msg)            
+            logger.opt(ansi=True).critical("{module} | <red>{msg}</red>",module=d['caller_func'],msg=msg) 
         else:
             logger.opt(ansi=True).critical("Unknown level passed for the msg: {}", msg)
