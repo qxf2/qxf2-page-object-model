@@ -25,7 +25,7 @@ class Form_Object:
     @Wrapit._exceptionHandler
     def set_name(self,name):
         "Set the name on the form"
-        result_flag = self.set_text(self.name_field,name1)
+        result_flag = self.set_text(self.name_field,name)
         self.conditional_write(result_flag,
             positive='Set the name to: %s'%name,
             negative='Failed to set the name in the form',
