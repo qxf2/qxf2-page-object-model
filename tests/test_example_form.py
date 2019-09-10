@@ -60,7 +60,8 @@ def test_example_form(base_url,browser,browser_version,os_version,os_name,remote
         result_flag = test_obj.set_email(email) 
         test_obj.log_result(result_flag,
                             positive="Email was successfully set to: %s\n"%email,
-                            negative="Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()))
+                            negative="Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()),
+                            level="inverse")
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_form_email
