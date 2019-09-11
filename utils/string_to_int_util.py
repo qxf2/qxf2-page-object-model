@@ -1,13 +1,13 @@
 '''
-This utility is for converting string to integer.
-
-a)string_to_int()
-This is particularly useful when you want convert string to integer.
+Qxf2 Services: This utility is for converting string to integer.
+string_to_int(): This is particularly useful when you want to convert any string to integer.
 '''
 
 class string_to_int():
+    "Class to convert string to integer"
       
-    def string_to_int(str_var):
+    def string_to_int(self,str_var):
+        "Method to convert string to integer"
         try:
             int_var = int(str_var)
         except Exception as e:
