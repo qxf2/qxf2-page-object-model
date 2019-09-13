@@ -3,7 +3,7 @@ Qxf2 Services: This utility is for converting string to integer.
 string_to_int(): This is particularly useful when you want to convert any string to integer.
 '''
 
-class string_to_int():
+class String_To_Int():
     "Class to convert string to integer"
       
     def string_to_int(self,str_var):
