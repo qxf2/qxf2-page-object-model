@@ -28,7 +28,8 @@ class Form_Object:
         result_flag = self.set_text(self.name_field,name)
         self.conditional_write(result_flag,
             positive='Set the name to: %s'%name,
-            negative='Failed to set the name in the form')
+            negative='Failed to set the name in the form',
+            level='debug')
 
         return result_flag 
 
@@ -40,7 +41,8 @@ class Form_Object:
         result_flag = self.set_text(self.email_field,email)
         self.conditional_write(result_flag,
             positive='Set the email to: %s'%email,
-            negative='Failed to set the email in the form')
+            negative='Failed to set the email in the form',
+            level='debug')
 
         return result_flag
 
@@ -52,7 +54,8 @@ class Form_Object:
         result_flag = self.set_text(self.phone_no_field,phone)
         self.conditional_write(result_flag,
             positive='Set the phone to: %s'%phone,
-            negative='Failed to set the phone in the form')
+            negative='Failed to set the phone in the form',
+            level='debug')
 
         return result_flag
 
@@ -66,7 +69,8 @@ class Form_Object:
         result_flag &= self.click_element(self.gender_option%gender)
         self.conditional_write(result_flag,
             positive='Set the gender to: %s'%gender,
-            negative='Failed to set the gender in the form')
+            negative='Failed to set the gender in the form',
+            level='debug')
 
         return result_flag
 
@@ -78,7 +82,8 @@ class Form_Object:
         result_flag = self.click_element(self.click_me_button)
         self.conditional_write(result_flag,
             positive='Clicked on the "click me" button',
-            negative='Failed to click on "click me" button')
+            negative='Failed to click on "click me" button',
+            level='debug')
 
         return result_flag
 
@@ -90,8 +95,8 @@ class Form_Object:
         result_flag = self.select_checkbox(self.tac_checkbox)
         self.conditional_write(result_flag,
             positive='Accepted the terms and conditions',
-            negative='Failed to accept the terms and conditions')
-            
+            negative='Failed to accept the terms and conditions',
+            level='debug')
         return result_flag
 
 

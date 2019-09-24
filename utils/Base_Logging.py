@@ -32,7 +32,7 @@ class Base_Logging():
             log_file_name = self.log_file_dir + os.sep + log_file_name
         
         logger.add(log_file_name,level=level,format=format, 
-        rotation="30 days", colorize=True, serialize=False, backtrace=True, enqueue=False, catch=True)
+        rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
     def get_calling_module(self):
@@ -57,14 +57,14 @@ class Base_Logging():
         fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead        
         d = {'caller_func': fname}                    
         if level.lower()== 'debug': 
-            logger.opt(ansi=True).debug("{module} | {msg}",module=d['caller_func'],msg=msg)                      
+            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                    
         elif level.lower()== 'info':
-            logger.opt(ansi=True).info("{module} | {msg}",module=d['caller_func'],msg=msg)           
+            logger.info("{module} | {msg}",module=d['caller_func'],msg=msg)           
         elif level.lower()== 'warn' or level.lower()=='warning':           
-            logger.opt(ansi=True).warning("{module} | {msg}",module=d['caller_func'],msg=msg)
+            logger.warning("{module} | {msg}",module=d['caller_func'],msg=msg)
         elif level.lower()== 'error':
-            logger.opt(ansi=True).error("{module} | <blue>{msg}</blue>",module=d['caller_func'],msg=msg)            
+            logger.error("{module} | {msg}",module=d['caller_func'],msg=msg)            
         elif level.lower()== 'critical':   
-            logger.opt(ansi=True).critical("{module} | <red>{msg}</red>",module=d['caller_func'],msg=msg) 
+            logger.critical("{module} | {msg}",module=d['caller_func'],msg=msg) 
         else:
-            logger.opt(ansi=True).critical("Unknown level passed for the msg: {}", msg)
+            logger.critical("Unknown level passed for the msg: {}", msg)

@@ -683,7 +683,6 @@ class Base_Page(Borg,unittest.TestCase):
         if level.lower() == "inverse":
             msg = positive
             if flag is True:
-                print(level)
                 positive = negative
                 self.write(positive,level='error')
                 self.mini_check_pass_counter += 1
