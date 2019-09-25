@@ -1,6 +1,5 @@
 """
 API EXAMPLE TEST
-
 1. Add new car - POST request(without url_params)
 2. Get all cars - GET request(without url_params)
 3. Verify car count
@@ -147,4 +146,5 @@ def test_api_example(api_url='http://35.167.62.251/'):
 
 if __name__ == '__main__':
     test_api_example()
+   
    
