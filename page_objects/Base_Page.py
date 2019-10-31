@@ -674,10 +674,16 @@ class Base_Page(Borg,unittest.TestCase):
 
     def log_result(self,flag,positive,negative,level='info'):
         "Write out the result of the test"
-        if flag is True:
-            self.success(positive,level=level)
-        else:            
-            self.failure(negative,level=level)        
+        if level.lower() == "inverse":
+            if flag is True:
+                self.failure(positive,level="error")
+            else:            	                
+                self.success(negative,level="info")
+        else:
+            if flag is True:
+                self.success(positive,level=level)
+            else:            
+                self.failure(negative,level=level)       
 
 
     def read_browser_console_log(self):
@@ -694,12 +700,23 @@ class Base_Page(Borg,unittest.TestCase):
 
     def conditional_write(self,flag,positive,negative,level='info'):
         "Write out either the positive or the negative message based on flag"      
-        if flag is True:
-            self.write(positive,level)
-            self.mini_check_pass_counter += 1
-        else:
-            self.write(negative,level)
-        self.mini_check_counter += 1
+        if level.lower() == "inverse":
+            msg = positive
+            if flag is True:
+                positive = negative
+                self.write(positive,level='error')
+                self.mini_check_pass_counter += 1
+            else:
+                negative = msg 
+                self.write(negative,level='info')
+                self.mini_check_counter += 1
+        else:	        	            
+            if flag is True:
+                self.write(positive,level='info')
+                self.mini_check_pass_counter += 1
+            else:
+                self.write(negative,level='info')
+                self.mini_check_counter += 1
 
 
     def execute_javascript(self,js_script,*args):
