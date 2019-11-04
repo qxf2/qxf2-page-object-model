@@ -8,7 +8,7 @@ from page_objects.tutorial_redirect_page import Tutorial_Redirect_Page
 from page_objects.contact_page import Contact_Page
 from page_objects.bitcoin_price_page import Bitcoin_Price_Page
 from page_objects.bitcoin_main_page import Bitcoin_Main_Page
-from conf import base_url_conf 
+import conf.base_url_conf as conf
 
 @pytest.fixture(scope="module")
 def get_page_object(request):
