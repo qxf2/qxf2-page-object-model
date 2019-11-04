@@ -3,7 +3,40 @@ from conf import browser_os_name_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
+from page_objects.tutorial_main_page import Tutorial_Main_Page
+from page_objects.tutorial_redirect_page import Tutorial_Redirect_Page
+from page_objects.contact_page import Contact_Page
+from page_objects.bitcoin_price_page import Bitcoin_Price_Page
+from page_objects.bitcoin_main_page import Bitcoin_Main_Page
+from conf import base_url_conf 
 
+@pytest.fixture(scope="module")
+def get_page_object(request):
+        "Return the appropriate page object based on page_name"
+        test_obj = None
+        print("I am inside fixture function now")
+        #page_name = request
+        print(request.param)
+        page_name = request.param[0]
+        base_url = request.param[1]
+        trailing_slash_flag = request.param[2]
+        print(page_name)
+        print(base_url)
+        print(trailing_slash_flag)
+        page_name = page_name.lower()
+        if page_name == "main page":
+            test_obj = Tutorial_Main_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
+        elif page_name == "redirect":
+            test_obj = Tutorial_Redirect_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
+        elif page_name == "contact page":
+            print("I am in if else condition")
+            test_obj = Contact_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
+        elif page_name == "bitcoin main page":
+            test_obj = Bitcoin_Main_Page()    
+        elif page_name == "bitcoin price page":
+            test_obj = Bitcoin_Price_Page()
+        print(test_obj)
+        return request.test_obj
 
 @pytest.fixture
 def browser(request):

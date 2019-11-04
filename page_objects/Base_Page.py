@@ -15,7 +15,7 @@ from utils.Base_Logging import Base_Logging
 from inspect import getargspec
 from utils.BrowserStack_Library import BrowserStack_Library
 from .DriverFactory import DriverFactory
-from page_objects import PageFactory
+#from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
