@@ -1,43 +1,45 @@
 import os,pytest
+from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
-from page_objects.tutorial_main_page import Tutorial_Main_Page
-from page_objects.tutorial_redirect_page import Tutorial_Redirect_Page
-from page_objects.contact_page import Contact_Page
-from page_objects.bitcoin_price_page import Bitcoin_Price_Page
-from page_objects.bitcoin_main_page import Bitcoin_Main_Page
-import conf.base_url_conf as conf
 
-@pytest.fixture(scope="module")
-def get_page_object(request):
-        "Return the appropriate page object based on page_name"
-        test_obj = None
-        print("I am inside fixture function now")
-        #page_name = request
-        print(request.param)
-        page_name = request.param[0]
-        base_url = request.param[1]
-        trailing_slash_flag = request.param[2]
-        print(page_name)
-        print(base_url)
-        print(trailing_slash_flag)
-        page_name = page_name.lower()
-        if page_name == "main page":
-            test_obj = Tutorial_Main_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
-        elif page_name == "redirect":
-            test_obj = Tutorial_Redirect_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
-        elif page_name == "contact page":
-            print("I am in if else condition")
-            test_obj = Contact_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
-        elif page_name == "bitcoin main page":
-            test_obj = Bitcoin_Main_Page()    
-        elif page_name == "bitcoin price page":
-            test_obj = Bitcoin_Price_Page()
-        print(test_obj)
-        return request.test_obj
+@pytest.fixture
+def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
+    
+    #Initalize flags for tests summary
+    expected_pass = 0
+    actual_pass = -1
 
+    "Return an instance of Base Page that knows about the third party integrations"
+    test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
+
+    #Setup and register a driver
+    test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
+
+    #Setup TestRail reporting
+    if testrail_flag.lower()=='y':
+        if test_run_id is None:
+            test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+            testrail_flag = 'N'   
+        if test_run_id is not None:
+            test_obj.register_testrail()
+            test_obj.set_test_run_id(test_run_id)
+
+    if tesults_flag.lower()=='y':
+        test_obj.register_tesults()
+    
+    yield test_obj
+    
+    #Teardown
+    test_obj.wait(3)
+    expected_pass = test_obj.result_counter
+    actual_pass = test_obj.pass_counter
+    test_obj.reset() 
+
+    assert expected_pass == actual_pass, "Test failed: %s"%__file__
+    
 @pytest.fixture
 def browser(request):
     "pytest fixture for browser"
