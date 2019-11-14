@@ -112,12 +112,17 @@ def test_example_form(test_obj):
         test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Contact page", "Visits the contact page and verifies the link", "test_example_form", result_flag,"\nFailed to visit the Contact page\n")
         
-        #13. Print out the results
+        #13. Print out the result
         test_obj.write_test_summary()
+        expected_pass = test_obj.result_counter
+        actual_pass = test_obj.pass_counter        
 
     except Exception as e:
-        print("Exception when trying to run test:%s"%__file__)
-        print("Python says:%s"%str(e)) 
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
+    
+    assert expected_pass == actual_pass, "Test failed: %s"%__file__
+
     
 #---START OF SCRIPT   
 if __name__=='__main__':
@@ -144,7 +149,12 @@ if __name__=='__main__':
 
         if options.tesults_flag.lower()=='y':
             test_obj.register_tesults()
-        test_example_form(test_obj) 
+
+        test_example_form(test_obj)
+                
+        #teardowm
+        test_obj.wait(3)
+        test_obj.teardown() 
     else:
         print('ERROR: Received incorrect comand line input arguments')
         print(option_obj.print_usage())
