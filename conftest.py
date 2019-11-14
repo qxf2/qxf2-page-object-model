@@ -8,10 +8,6 @@ from utils import Tesults
 @pytest.fixture
 def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
     
-    #Initalize flags for tests summary
-    expected_pass = 0
-    actual_pass = -1
-
     "Return an instance of Base Page that knows about the third party integrations"
     test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
 
@@ -34,11 +30,8 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
     
     #Teardown
     test_obj.wait(3)
-    expected_pass = test_obj.result_counter
-    actual_pass = test_obj.pass_counter
-    test_obj.reset() 
+    test_obj.teardown() 
 
-    assert expected_pass == actual_pass, "Test failed: %s"%__file__
     
 @pytest.fixture
 def browser(request):
