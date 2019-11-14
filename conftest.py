@@ -31,8 +31,7 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
     #Teardown
     test_obj.wait(3)
     test_obj.teardown() 
-
-    
+   
 @pytest.fixture
 def browser(request):
     "pytest fixture for browser"
