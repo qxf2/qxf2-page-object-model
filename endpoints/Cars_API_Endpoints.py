@@ -41,7 +41,29 @@ class Cars_API_Endpoints(Base_API):
 			'url':url,
 			'response':json_response['json_response']
 		}
+
+	def get_cars_filter_type(self,car_type,headers):
+		"gets car details based on the requested car type"
+		
+		url = self.cars_url('/filter/%s'%car_type)
+		print(url)
+		json_response = self.get(url,headers=headers)
+		return {
+			'url':url,
+			'response':json_response['json_response']
+		}
+
 	
+	def get_cars_filter_price(self,price_range,headers):
+		"gets car details based on the requested price range"
+		
+		url = self.cars_url('/filter/%s'%price_range)
+		print(url)
+		json_response = self.get(url,headers=headers)
+		return {
+			'url':url,
+			'response':json_response['json_response']
+		}
 
 	def update_car(self,car_name,json,headers):
 		"updates a given car"

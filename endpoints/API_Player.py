@@ -70,6 +70,27 @@ class API_Player(Results):
 
         return result_flag
 
+    #get the details of cars as per the requested car_type
+    def get_cars_filter_type(self, car_type, auth_details=None):
+        
+        headers = self.set_header_details(auth_details)
+        json_response = self.api_obj.get_cars_filter_type(car_type,
+                                                headers=headers)
+        json_response = json_response['response']
+        self.write(msg='Fetched car details for car type :%s %s' % (car_type, json_response))
+        return json_response
+    
+    #get the details of cars as per the requested price range
+    def get_cars_filter_price(self, price_range, auth_details=None):
+        
+        headers = self.set_header_details(auth_details)
+        json_response = self.api_obj.get_cars_filter_price(price_range,
+                                             headers=headers)
+        json_response = json_response['response']
+
+        self.write(msg='Fetched car details for price range :%s %s' % (price_range, json_response))
+        return json_response
+
     
     def add_car(self, car_details, auth_details=None):
         "adds a new car"

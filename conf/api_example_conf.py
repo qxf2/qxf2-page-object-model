@@ -7,6 +7,12 @@ car_details = {'name':'figo','brand':'ford','price_range':'5-8 lacs','car_type':
 car_name_1 = 'Swift'
 brand = 'Maruti'
 
+#get_car_details_based_on_car_type
+car_type = 'sedan'
+
+#get_car_details_based_on_price_range
+price_range = '3-5 lacs'
+
 #update
 car_name_2 = 'figo'
 update_car = {'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'hatchback'}

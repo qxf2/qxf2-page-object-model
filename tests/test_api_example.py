@@ -9,6 +9,8 @@ API EXAMPLE TEST
 7. Get list of registered cars -GET
 8. Verify registered cars count
 9. Delete newly added car -DELETE request
+10. Get the car details based on the car type - GET request(with url_params)
+11. Get the car details based on the price range - GET request( with params)
 """
 import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -71,6 +73,24 @@ def test_api_example(api_url='http://35.167.62.251/'):
                             positive='Successfully fetched car details of car : %s' % new_car,
                             negative='Couldnt fetch car details of car :%s' % new_car)
         
+        # Get details of cars based on the car_type
+        car_type = conf.car_type
+        result_flag = test_obj.get_cars_filter_type(auth_details=auth_details,
+                                          car_type=car_type)
+                                          
+        test_obj.log_result(result_flag,
+                            positive='Successfully fetched cars of type : %s' % car_type,
+                            negative='Couldnt fetch cars of type :%s' % car_type)
+
+        # Get details of cars based on the price_range
+        price_range = conf.price_range
+        result_flag = test_obj.get_cars_filter_price(auth_details=auth_details,
+                                       price_range=price_range)
+        test_obj.log_result(result_flag,
+                            positive='Successfully fetched car details as per price range : %s' % price_range,
+                            negative='Couldnt fetch details of car as per price range :%s' % price_range)
+        
+
         # Register car
         customer_details = conf.customer_details
         result_flag = test_obj.register_car(auth_details=auth_details,
