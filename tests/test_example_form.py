@@ -15,7 +15,10 @@ import conf.testrail_caseid_conf as testrail_file
 def test_example_form(test_obj):
     "Run the test"
     try:
-
+        #Initalize flags for tests summary
+        expected_pass = 0
+        actual_pass = -1
+        
         #1. Create a test object and fill the example form.
         test_obj = PageFactory.get_page_object("Main Page")
         #Set start_time with current time
@@ -140,10 +143,10 @@ if __name__=='__main__':
 
         #Setup TestRail reporting
         if options.testrail_flag.lower()=='y':
-            if options.test_obj.test_run_id is None:
+            if options.test_run_id is None:
                 test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
                 options.testrail_flag = 'N'   
-            if options.test_obj.test_run_id is not None:
+            if options.test_run_id is not None:
                 test_obj.register_testrail()
                 test_obj.set_test_run_id(options.test_run_id)
 
