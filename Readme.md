@@ -146,6 +146,8 @@ c)python tests/test_example_form.py -B Chrome (to run against chrome)
 
 d)python tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
 
+e)python tests/test_mobile_bitcoin_price -H (android version) -I (simulator) -N (.apk location on local) -M Y (to run Mobile test case on Broswestack)
+
 --------
 ISSUES?
 --------
