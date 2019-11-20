@@ -1,10 +1,11 @@
-![Python version](https://img.shields.io/badge/python-3.x-green)
-![GitHub](https://img.shields.io/github/license/qxf2/qxf2-page-object-model)
-![Maintenance](https://img.shields.io/maintenance/yes/2019)
+![Python version](https://img.shields.io/badge/python-3.x-green?color=brightgreen)
+![GitHub](https://img.shields.io/github/license/qxf2/qxf2-page-object-model?color=brightgreen)
+![Maintenance](https://img.shields.io/maintenance/yes/2019?color=brightgreen)
 [![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)](https://www.browserstack.com/automate/public-build/T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)
 ![GitHub stars](https://img.shields.io/github/stars/qxf2/qxf2-page-object-model)
 ![GitHub forks](https://img.shields.io/github/forks/qxf2/qxf2-page-object-model)
 ![GitHub repo size](https://img.shields.io/github/repo-size/qxf2/qxf2-page-object-model)
+![GitHub last commit](https://img.shields.io/github/last-commit/qxf2/qxf2-page-object-model)
 
 --------
 A Pythonic Selenium, Appium and API test automation framework
