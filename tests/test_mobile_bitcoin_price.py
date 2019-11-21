@@ -13,9 +13,8 @@ from utils.Option_Parser import Option_Parser
 import conf.mobile_bitcoin_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 import pytest
-@pytest.mark.mobile
 
-
+@pytest.mark.MOBILE
 def test_mobile_bitcoin_price(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path):
     "Run the test."
     try:
