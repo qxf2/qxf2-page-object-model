@@ -3,6 +3,7 @@ Class to wrap around parsing command line options
 """
 import os, sys
 import optparse
+from conf import base_url_conf as conf
 
 
 class Option_Parser:
@@ -23,7 +24,7 @@ class Option_Parser:
                             help="Browser. Valid options are firefox, ie and chrome")                      
         self.parser.add_option("-U","--app_url",
                             dest="url",
-                            default="https://qxf2.com",
+                            default=conf.base_url,
                             help="The url of the application")
         self.parser.add_option("-A","--api_url",
                             dest="api_url",

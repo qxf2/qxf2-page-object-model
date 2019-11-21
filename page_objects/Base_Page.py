@@ -20,6 +20,7 @@ from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from conf import remote_credentials as Conf
 from utils.stop_test_exception_util import Stop_Test_Exception
+from conf import base_url_conf as conf
 
 class Borg:
     #The borg design pattern is to share state
@@ -36,11 +37,13 @@ class Borg:
 
         return result_flag
 
+# Get the Base URL from the conf file
+base_url = conf.base_url
 
 class Base_Page(Borg,unittest.TestCase):
     "Page class that all page models can inherit from"
 
-    def __init__(self,base_url='http://qxf2.com/',trailing_slash_flag=True):
+    def __init__(self,base_url,trailing_slash_flag=True):
         "Constructor"
         Borg.__init__(self)
         if self.is_first_time():
@@ -241,6 +244,11 @@ class Base_Page(Borg,unittest.TestCase):
         "Get the current URL"
         return self.driver.current_url
 
+        
+    def get_page_title(self):
+        "Get the current page title"
+        return self.driver.title
+    
 
     def get_page_paths(self,section):
         "Open configurations file,go to right sections,return section obj"
@@ -671,10 +679,16 @@ class Base_Page(Borg,unittest.TestCase):
 
     def log_result(self,flag,positive,negative,level='info'):
         "Write out the result of the test"
-        if flag is True:
-            self.success(positive,level=level)
-        else:            
-            self.failure(negative,level=level)        
+        if level.lower() == "inverse":
+            if flag is True:
+                self.failure(positive,level="error")
+            else:            	                
+                self.success(negative,level="info")
+        else:
+            if flag is True:
+                self.success(positive,level=level)
+            else:            
+                self.failure(negative,level=level)       
 
 
     def read_browser_console_log(self):
@@ -691,12 +705,23 @@ class Base_Page(Borg,unittest.TestCase):
 
     def conditional_write(self,flag,positive,negative,level='info'):
         "Write out either the positive or the negative message based on flag"      
-        if flag is True:
-            self.write(positive,level)
-            self.mini_check_pass_counter += 1
-        else:
-            self.write(negative,level)
-        self.mini_check_counter += 1
+        if level.lower() == "inverse":
+            msg = positive
+            if flag is True:
+                positive = negative
+                self.write(positive,level='error')
+                self.mini_check_pass_counter += 1
+            else:
+                negative = msg 
+                self.write(negative,level='info')
+                self.mini_check_counter += 1
+        else:	        	            
+            if flag is True:
+                self.write(positive,level='info')
+                self.mini_check_pass_counter += 1
+            else:
+                self.write(negative,level='info')
+                self.mini_check_counter += 1
 
 
     def execute_javascript(self,js_script,*args):
