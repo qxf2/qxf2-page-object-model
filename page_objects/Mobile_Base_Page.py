@@ -15,7 +15,7 @@ from inspect import getargspec
 from utils.BrowserStack_Library import BrowserStack_Library
 from .DriverFactory import DriverFactory
 from utils.Test_Rail import Test_Rail
-from page_objects import PageFactory
+#from page_objects import PageFactory
 
 class Borg:
     #The borg design pattern is to share state
