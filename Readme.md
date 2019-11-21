@@ -7,6 +7,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/qxf2/qxf2-page-object-model)
 ![GitHub repo size](https://img.shields.io/github/repo-size/qxf2/qxf2-page-object-model)
 ![GitHub last commit](https://img.shields.io/github/last-commit/qxf2/qxf2-page-object-model)
+![CircleCI](https://img.shields.io/circleci/build/github/qxf2/qxf2-page-object-model/master)
 
 --------
 A Pythonic Selenium, Appium and API test automation framework
