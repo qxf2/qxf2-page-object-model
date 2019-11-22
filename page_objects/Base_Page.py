@@ -43,8 +43,7 @@ base_url = conf.base_url_conf
 class Base_Page(Borg,unittest.TestCase):
     "Page class that all page models can inherit from"
 
-    #def __init__(self,base_url,trailing_slash_flag=True):
-    def __init__(self,base_url,trailing_slash_flag=True):
+    def __init__(self,base_url):
         "Constructor"
         Borg.__init__(self)
         if self.is_first_time():
@@ -61,9 +60,6 @@ class Base_Page(Borg,unittest.TestCase):
 
             self.reset()
 
-        #We assume relative URLs start without a / in the beginning
-        if base_url[-1] != '/' and trailing_slash_flag is True: 
-            base_url += '/' 
         self.base_url = base_url
         self.driver_obj = DriverFactory()
         if self.driver is not None: 

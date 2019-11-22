@@ -19,17 +19,17 @@ import conf.base_url_conf
 
 
 class PageFactory():
-    "PageFactory uses the factory design pattern."
-    def get_page_object(page_name,base_url=conf.base_url_conf.base_url,trailing_slash_flag=True):
+
+    def get_page_object(page_name,base_url=conf.base_url_conf.base_url):
         "Return the appropriate page object based on page_name"
         test_obj = None
         page_name = page_name.lower()
         if page_name == "main page":
-            test_obj = Tutorial_Main_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
+            test_obj = Tutorial_Main_Page(base_url=base_url)
         elif page_name == "redirect":
-            test_obj = Tutorial_Redirect_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
+            test_obj = Tutorial_Redirect_Page(base_url=base_url)
         elif page_name == "contact page":
-            test_obj = Contact_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
+            test_obj = Contact_Page(base_url=base_url)
         elif page_name == "bitcoin main page":
             test_obj = Bitcoin_Main_Page()    
         elif page_name == "bitcoin price page":
