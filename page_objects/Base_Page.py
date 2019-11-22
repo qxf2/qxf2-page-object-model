@@ -20,7 +20,7 @@ from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials 
-import conf.base_url_conf 
+import conf.base_url_conf
 
 class Borg:
     #The borg design pattern is to share state
