@@ -11,7 +11,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 from utils.Option_Parser import Option_Parser
 import conf.successive_form_creation_conf as conf
+import pytest
 
+@pytest.mark.GUI
 def test_succesive_form_creation(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
     "Run the test"
     try:
