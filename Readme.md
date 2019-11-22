@@ -19,9 +19,11 @@ You can use this test automation framework to write:
 
 3. __API automation__ scripts to test endpoints of your web/mobile applications
 
+&nbsp;
 
 ![Qxf2 automation framework](https://qxf2.com/assets/img/framework_introduction.png)
 
+&nbsp;
 
 This GUI and API test automation framework is developed and maintained by [Qxf2 Services](https://qxf2.com). This framework is written in __Python__ and is based on the __Page Object Model__ - a design pattern that makes it easy to maintain and develop robust tests. We have also included our __API test automation framework__ based on the player-interface pattern in this repository. You can now write your API tests along with your Selenium and Appium tests. 
 
@@ -153,6 +155,9 @@ b)python tests/test_example_form.py (can also be used to run standalone test)
 c)python tests/test_example_form.py -B Chrome (to run against chrome)
 
 d)python tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
+
+e)python tests/test_mobile_bitcoin_price -H (android version) -I (simulator) -N (.apk location on local) -M Y (to run Mobile test case on Broswestack)remote_credentials.py
+NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to remote_credentials.py under conf.
 
 --------
 ISSUES?
