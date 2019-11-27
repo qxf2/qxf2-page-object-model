@@ -132,25 +132,25 @@ def app_name(request):
 
 
 @pytest.fixture
-def ud_id():
+def ud_id(request):
     "pytest fixture for iOS udid"
     return request.config.getoption("--ud_id")
 
 
 @pytest.fixture
-def org_id():
+def org_id(request):
     "pytest fixture for iOS team id"
     return request.config.getoption("--org_id")
 
 
 @pytest.fixture
-def signing_id():
+def signing_id(request):
     "pytest fixture for iOS signing id"
     return request.config.getoption("--signing_id")
 
 
 @pytest.fixture
-def no_reset_flag():
+def no_reset_flag(request):
     "pytest fixture for no_reset_flag"
     return request.config.getoption("--no_reset_flag")
 
