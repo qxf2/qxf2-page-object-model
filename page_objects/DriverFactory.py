@@ -202,8 +202,8 @@ class DriverFactory():
                     desired_capabilities['app'] = os.path.join(app_path,app_name)
                     desired_capabilities['bundleId'] = app_package
                     desired_capabilities['noReset'] = no_reset_flag
-                    if udid is not None:
-                        desired_capabilities['udid'] = udid
+                    if ud_id is not None:
+                        desired_capabilities['udid'] = ud_id
                         desired_capabilities['xcodeOrgId'] = org_id
                         desired_capabilities['xcodeSigningId'] = signing_id
 

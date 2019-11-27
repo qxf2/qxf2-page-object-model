@@ -134,7 +134,7 @@ def app_name(request):
 @pytest.fixture
 def ud_id():
     "pytest fixture for iOS udid"
-    return pytest.config.getoption("--udid")
+    return pytest.config.getoption("--ud_id")
 
 
 @pytest.fixture
@@ -288,8 +288,8 @@ def pytest_addoption(parser):
                       dest="app_name",
                       help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
                       default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
-    parser.addoption("--udid",
-                      dest="udid",
+    parser.addoption("--ud_id",
+                      dest="ud_id",
                       help="Enter your iOS device UDID which is required to run appium test in iOS device",
                       default=None)
     parser.addoption("--org_id",
