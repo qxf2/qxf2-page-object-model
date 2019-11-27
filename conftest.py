@@ -152,7 +152,7 @@ def signing_id():
 @pytest.fixture
 def no_reset_flag():
     "pytest fixture for no_reset_flag"
-    return pytest.config.getoption("--no_reset_flag")
+    return request.config.getoption("--no_reset_flag")
 
 
 @pytest.fixture
