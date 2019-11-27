@@ -134,19 +134,19 @@ def app_name(request):
 @pytest.fixture
 def ud_id():
     "pytest fixture for iOS udid"
-    return pytest.config.getoption("--ud_id")
+    return request.config.getoption("--ud_id")
 
 
 @pytest.fixture
 def org_id():
     "pytest fixture for iOS team id"
-    return pytest.config.getoption("--org_id")
+    return request.config.getoption("--org_id")
 
 
 @pytest.fixture
 def signing_id():
     "pytest fixture for iOS signing id"
-    return pytest.config.getoption("--signing_id")
+    return request.config.getoption("--signing_id")
 
 
 @pytest.fixture
