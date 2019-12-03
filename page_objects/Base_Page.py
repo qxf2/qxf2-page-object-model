@@ -58,9 +58,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.images = []
             self.browserstack_flag = False
             self.test_run_id = None
-
             self.reset()
-
         self.base_url = base_url
         self.driver_obj = DriverFactory()
         if self.driver is not None: 
@@ -231,6 +229,10 @@ class Base_Page(Borg,unittest.TestCase):
 
     def open(self,url,wait_time=2):
         "Visit the page base_url + url"
+        if self.base_url[-1] != '/' and url[0] != '/':
+            url = '/' + url
+        if self.base_url[-1] == '/' and url[0] == '/':
+            url = url[1:] 
         url = self.base_url + url
         if self.driver.current_url != url:
             self.driver.get(url)
