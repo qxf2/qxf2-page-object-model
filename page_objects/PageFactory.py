@@ -26,7 +26,7 @@ class PageFactory():
         test_obj = None
         page_name = page_name.lower()
         if page_name in ["zero","zero page","agent zero"]:
-            test_obj = Zero_Page(base_url=base_url,trailing_slash_flag=trailing_slash_flag)
+            test_obj = Zero_Page(base_url=base_url)
         elif page_name == "main page":
             test_obj = Tutorial_Main_Page(base_url=base_url)
         elif page_name == "redirect":
