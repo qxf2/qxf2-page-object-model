@@ -47,6 +47,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             self.window_structure = {}
             self.testrail_flag = False
             self.browserstack_flag = False
+            self.test_run_id = None
 
             self.reset()
 
@@ -99,8 +100,15 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.testrail_flag = True
         self.tr_obj = Test_Rail()
         self.write('Automation registered with TestRail',level='debug')
+    
+    def set_test_run_id(self,test_run_id):
+        "Set TestRail's test run id"
+        self.test_run_id = test_run_id
 
-        
+    def register_tesults(self):
+        "Register Tesults with Page"
+        self.tesults_flag = True
+
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
