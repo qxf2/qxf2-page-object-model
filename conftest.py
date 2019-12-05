@@ -40,7 +40,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
     test_mobile_obj = PageFactory.get_page_object("Zero mobile")
 
     #Setup and register a driver
-    test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path)
+    test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag)
 
     #3. Setup TestRail reporting
     if testrail_flag.lower()=='y':
