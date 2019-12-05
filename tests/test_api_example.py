@@ -1,4 +1,5 @@
 """
+
 API EXAMPLE TEST
 1. Add new car - POST request(without url_params)
 2. Get all cars - GET request(without url_params)
@@ -14,8 +15,9 @@ import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from endpoints.API_Player import API_Player
 from conf import api_example_conf as conf
+import pytest
 
-
+@pytest.mark.API
 def test_api_example(api_url='http://35.167.62.251/'):
     "Run api test"
     try:

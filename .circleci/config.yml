@@ -20,11 +20,11 @@ jobs:
       - run:
           name: Decrypt remote_credentials_enc.py using openssl
           command: |
-            openssl aes-256-cbc -d -md md5  -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY     
+            openssl aes-256-cbc -d -md sha256  -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY     
       - run:
           name: Run the API, Mobile and Selenium tests
           command: |           
-            python -m pytest -s -v -N "$app_path" -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native
+            python -m pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native
       - store_artifacts:
           path: ./screenshots
           destination: screenshots-file
