@@ -28,10 +28,10 @@ def test_mobile_bitcoin_price(test_mobile_obj):
         #2. Setup and register a driver
         start_time = int(time.time())
        
-        #4. Get expected bitcoin price page header name
+        #3. Get expected bitcoin price page header name
         expected_bitcoin_price_page_heading = conf.expected_bitcoin_price_page_heading
         
-        #5. Click on real time price page button and verify the price page header name.
+        #4. Click on real time price page button and verify the price page header name.
         result_flag = test_obj.click_on_real_time_price_button(expected_bitcoin_price_page_heading)
         test_obj.log_result(result_flag,
                     positive="Successfully visited the bitcoin real time price page.",
@@ -41,7 +41,7 @@ def test_mobile_bitcoin_price(test_mobile_obj):
         test_obj.report_to_testrail(case_id,test_mobile_obj.test_run_id,result_flag)
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         
-        #6. Verify bitcoin real time price is displayed.
+        #5. Verify bitcoin real time price is displayed.
         if result_flag is True:
             result_flag = test_obj.get_bitcoin_real_time_price()
         test_obj.log_result(result_flag,
@@ -52,11 +52,10 @@ def test_mobile_bitcoin_price(test_mobile_obj):
         test_obj.report_to_testrail(case_id,test_mobile_obj.test_run_id,result_flag)
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
 
-        #7. Print out the results.
+        #6. Print out the results.
         test_obj.write_test_summary()
 
-        #8. Teardown and Assertion.
-
+        #7. Teardown and Assertion.
         expected_pass = test_obj.result_counter
         actual_pass = test_obj.pass_counter
 
@@ -99,7 +98,6 @@ if __name__ == '__main__':
         #teardowm
         test_mobile_obj.wait(3)
         test_mobile_obj.teardown()
-
 
     else:
         print('ERROR: Received incorrect comand line input arguments')
