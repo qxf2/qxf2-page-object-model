@@ -24,7 +24,7 @@ jobs:
       - run:
           name: Run the API, Mobile and Selenium tests
           command: |           
-            python -m pytest -s -v --ignore=./tests/test_mobile_bitcoin_price.py -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native
+            python -m pytest -s -v -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native
       - store_artifacts:
           path: ./screenshots
           destination: screenshots-file
