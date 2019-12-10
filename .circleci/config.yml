@@ -16,6 +16,10 @@ jobs:
       - run:
           name: Mobile app
           command: |
+            cd bitcoin-info/ 
+      - run:
+          name: Mobile app
+          command: |
             git checkout b0f532ed42912d1fa269dffe1640c541e15efb37           
       - run:
           name: Set Environment Variables
