@@ -16,7 +16,11 @@ jobs:
       - run:
           name: Mobile app
           command: |
-            cd bitcoin-info/ 
+            cd bitcoin-info/
+      - run:
+          name: Mobile app
+          command: |
+            git fetch --depth=1000000 
       - run:
           name: Mobile app
           command: |
