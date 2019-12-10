@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Mobile app
           command: |
-            git fetch --depth=1000000 
+            git fetch --unshallow || true 
       - run:
           name: Mobile app
           command: |
