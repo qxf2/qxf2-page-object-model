@@ -21,6 +21,7 @@ from utils import Tesults
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials 
 import conf.base_url_conf
+from utils import Gif_Maker
 
 class Borg:
     #The borg design pattern is to share state
@@ -588,8 +589,10 @@ class Base_Page(Borg,unittest.TestCase):
 
     def teardown(self):
         "Tears down the driver"
+        gif_file_name = Gif_Maker.make_gif(self.screenshot_dir)
         self.driver.quit()
         self.reset()
+        self.write('\n****GIF path : %s'%gif_file_name)
 
 
     def write(self,msg,level='info'):
