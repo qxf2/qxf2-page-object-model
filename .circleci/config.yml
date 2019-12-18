@@ -14,18 +14,6 @@ jobs:
           command: |
             git clone https://github.com/qxf2/bitcoin-info.git
       - run:
-          name: Mobile app
-          command: |
-            cd bitcoin-info/
-      - run:
-          name: Mobile app
-          command: |
-            git fetch --depth=1000 
-      - run:
-          name: Mobile app
-          command: |
-            git checkout -f b0f532ed42912d1fa269dffe1640c541e15efb37           
-      - run:
           name: Set Environment Variables
           command: |                      
             echo 'export app_path=/home/circleci/project/bitcoin-info/app/' >> $BASH_ENV  
