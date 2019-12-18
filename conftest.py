@@ -318,7 +318,7 @@ def pytest_addoption(parser):
     parser.addoption("-I","--device_name",
                       dest="device_name",
                       help="Enter device name. Ex: Emulator, physical device name",
-                      default="Google Pixel")
+                      default="Samsung Galaxy S9")
     parser.addoption("-J","--app_package",
                       dest="app_package",
                       help="Enter name of app package. Ex: bitcoininfo",
