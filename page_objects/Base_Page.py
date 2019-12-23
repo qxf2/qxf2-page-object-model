@@ -68,6 +68,7 @@ class Base_Page(Borg,unittest.TestCase):
     def reset(self):
         "Reset the base page object"
         self.driver = None
+        self.calling_module = None
         self.result_counter = 0 #Increment whenever success or failure are called
         self.pass_counter = 0 #Increment everytime success is called
         self.mini_check_counter = 0 #Increment when conditional_write is called
@@ -118,28 +119,36 @@ class Base_Page(Borg,unittest.TestCase):
         "Set TestRail's test run id"
         self.test_run_id = test_run_id
 
-
     def register_tesults(self):
         "Register Tesults with Page"
         self.tesults_flag = True
-
 
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
         self.browserstack_obj = BrowserStack_Library()
-        
+
+    def set_calling_module(self,name):
+        "Set the test name"
+        self.calling_module = name
 
     def get_calling_module(self):
         "Get the name of the calling module"
-        calling_file = inspect.stack()[-1][1]
-        if 'runpy' or 'string' in calling_file:
-            calling_file = inspect.stack()[4][3]
-        calling_filename = calling_file.split(os.sep)
-        #This logic bought to you by windows + cygwin + git bash 
-        if len(calling_filename) == 1: #Needed for 
-            calling_filename = calling_file.split('/')
-        self.calling_module = calling_filename[-1].split('.')[0]
+        if self.calling_module is None:
+            #Try to intelligently figure out name of test when not using pytest
+            full_stack = inspect.stack()
+            index = -1
+            for stack_frame in full_stack:
+                print(stack_frame[1],stack_frame[3])
+                #stack_frame[1] -> file name
+                #stack_frame[3] -> method 
+                if 'test_' in stack_frame[1]:
+                    index = full_stack.index(stack_frame)
+                    break
+            test_file = full_stack[index][1]
+            test_file = test_file.split(os.sep)[-1]
+            testname = test_file.split('.py')[0]
+            self.set_calling_module(testname)
 
         return self.calling_module
     
@@ -178,7 +187,7 @@ class Base_Page(Borg,unittest.TestCase):
         if isinstance(os_name,list):
             windows_browser_combination = browser.lower() 
         else:
-            windows_browser_combination = os_name.lower() + '_' + str(os_version).lower() + '_' + browser.lower()+ '_' + str(browser_version)   
+            windows_browser_combination = os_name.lower() + '_' + str(os_version).lower() + '_' + browser.lower()+ '_' + str(browser_version)
         self.testname = self.get_calling_module()
         self.testname =self.testname.replace('<','')
         self.testname =self.testname.replace('>','')
