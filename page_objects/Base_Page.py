@@ -589,11 +589,10 @@ class Base_Page(Borg,unittest.TestCase):
 
     def teardown(self):
         "Tears down the driver"
-        gif_file_name = Gif_Maker.make_gif(self.screenshot_dir)
+        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir)
         self.driver.quit()
         self.reset()
-        self.write('\n****GIF path : %s'%gif_file_name)
-
+        
 
     def write(self,msg,level='info'):
         "Log the message"
@@ -753,6 +752,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
+        self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
         self.write('************************')
 
     def start(self):
