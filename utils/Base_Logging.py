@@ -52,8 +52,13 @@ class Base_Logging():
     
     def write(self,msg,level='info'):
         "Write out a message"
-        fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead        
-        d = {'caller_func': fname}                    
+        #fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead  
+        all_stack_frames = inspect.stack()
+        for stack_frame in all_stack_frames[1:]:
+            if 'Base_Page' not in stack_frame[1]:
+                break
+        fname = stack_frame[3]
+        d = {'caller_func': fname}                 
         if level.lower()== 'debug': 
             logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                      
         elif level.lower()== 'info':
