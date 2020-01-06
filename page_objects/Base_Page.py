@@ -598,7 +598,7 @@ class Base_Page(Borg,unittest.TestCase):
 
     def teardown(self):
         "Tears down the driver"
-        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir)
+        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
         self.driver.quit()
         self.reset()
         
