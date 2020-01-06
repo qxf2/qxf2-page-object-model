@@ -23,8 +23,8 @@ class Table_Object:
     COL_GENDER = 3
 
     @Wrapit._check_browser_console_log
-    @Wrapit._screenshot
     @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def get_all_text(self):
         "Get the text within the table"
         table_text = []
