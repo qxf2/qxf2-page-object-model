@@ -7,12 +7,12 @@ import os
 
 images = []
 
-def make_gif(screenshot_dir_path,name = "test_recap",suffix=".gif",duration=4):
+def make_gif(screenshot_dir_path,name = "test_recap",suffix=".gif"):
     "Creates gif of the screenshots"
     filenames = os.listdir(screenshot_dir_path)
     gif_name = os.path.join(screenshot_dir_path, name + suffix)
-
+    
     for files in filenames: 
         images.append(imageio.imread(os.path.join(screenshot_dir_path, files)))
-    imageio.mimwrite(gif_name, images,duration)
+    imageio.mimwrite(gif_name, images,duration=2)
     return gif_name        
