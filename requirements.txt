@@ -8,3 +8,4 @@ pytest-rerunfailures==4.1
 pillow>=6.2.0
 tesults
 loguru
+imageio
