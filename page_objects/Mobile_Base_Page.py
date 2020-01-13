@@ -17,7 +17,6 @@ from .DriverFactory import DriverFactory
 from utils.Test_Rail import Test_Rail
 from page_objects import PageFactory
 
-
 class Borg:
     #The borg design pattern is to share state
     #Src: http://code.activestate.com/recipes/66531/
@@ -48,6 +47,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             self.window_structure = {}
             self.testrail_flag = False
             self.browserstack_flag = False
+            self.test_run_id = None
 
             self.reset()
 
@@ -77,9 +77,9 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name).__class__
 
 
-    def register_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path):
+    def register_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag):
         "Register the mobile driver"
-        self.driver = self.driver_obj.run_mobile(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path)
+        self.driver = self.driver_obj.run_mobile(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag)
         self.set_screenshot_dir() # Create screenshot directory
         self.set_log_file() 
         self.start()
@@ -100,8 +100,15 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.testrail_flag = True
         self.tr_obj = Test_Rail()
         self.write('Automation registered with TestRail',level='debug')
+    
+    def set_test_run_id(self,test_run_id):
+        "Set TestRail's test run id"
+        self.test_run_id = test_run_id
 
-        
+    def register_tesults(self):
+        "Register Tesults with Page"
+        self.tesults_flag = True
+
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
@@ -422,6 +429,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
 
     def success(self,msg,level='info',pre_format='PASS: '):
         "Write out a success message"
+        if level.lower() == 'critical':
+            level = 'info'
         self.log_obj.write(pre_format + msg,level)
         self.result_counter += 1
         self.pass_counter += 1
@@ -432,6 +441,9 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.log_obj.write(pre_format + msg,level)
         self.result_counter += 1
         self.failure_message_list.append(pre_format + msg)
+        if level.lower() == 'critical':
+            self.teardown()
+            raise Stop_Test_Exception("Stopping test because: "+ msg)
 
 
     def log_result(self,flag,positive,negative,level='info'):

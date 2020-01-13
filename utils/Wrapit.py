@@ -27,6 +27,8 @@ class Wrapit():
 
     def _screenshot(func):
         "Decorator for taking screenshots"
+        #Usage: Make this the first decorator to a method (right above the 'def function_name' line)
+        #Otherwise, we cannot name the screenshot with the name of the function that called it
         def wrapper(*args,**kwargs):
             result = func(*args,**kwargs)
             screenshot_name = '%003d'%args[0].screenshot_counter + '_' + func.__name__

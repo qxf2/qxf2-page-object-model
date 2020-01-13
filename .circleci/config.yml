@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Mobile app
           command: |
-            git clone https://github.com/qxf2/bitcoin-info.git           
+            git clone https://github.com/qxf2/bitcoin-info.git
       - run:
           name: Set Environment Variables
           command: |                      
@@ -20,7 +20,7 @@ jobs:
       - run:
           name: Decrypt remote_credentials_enc.py using openssl
           command: |
-            openssl aes-256-cbc -d -md md5  -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY     
+            openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY     
       - run:
           name: Run the API, Mobile and Selenium tests
           command: |           

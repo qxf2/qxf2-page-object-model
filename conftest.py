@@ -1,8 +1,72 @@
 import os,pytest
+from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
+from conf import base_url_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
+
+@pytest.fixture
+def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname):
+    "Return an instance of Base Page that knows about the third party integrations"
+    test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
+    test_obj.set_calling_module(testname)
+    #Setup and register a driver
+    test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
+
+    #Setup TestRail reporting
+    if testrail_flag.lower()=='y':
+        if test_run_id is None:
+            test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+            testrail_flag = 'N'   
+        if test_run_id is not None:
+            test_obj.register_testrail()
+            test_obj.set_test_run_id(test_run_id)
+
+    if tesults_flag.lower()=='y':
+        test_obj.register_tesults()
+    
+    yield test_obj
+    
+    #Teardown
+    test_obj.wait(3)
+    test_obj.teardown() 
+   
+@pytest.fixture
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path):
+    
+    "Return an instance of Base Page that knows about the third party integrations"
+    test_mobile_obj = PageFactory.get_page_object("Zero mobile")
+
+    #Setup and register a driver
+    test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag)
+
+    #3. Setup TestRail reporting
+    if testrail_flag.lower()=='y':
+        if test_run_id is None:
+            test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+            testrail_flag = 'N'   
+        if test_run_id is not None:
+            test_mobile_obj.register_testrail()
+            test_mobile_obj.set_test_run_id(test_run_id)
+
+    if tesults_flag.lower()=='y':
+        test_mobile_obj.register_tesults()
+
+    yield test_mobile_obj
+    
+    #Teardown
+    test_mobile_obj.wait(3)
+    test_mobile_obj.teardown() 
+
+
+@pytest.fixture
+def testname(request):
+    "pytest fixture for testname"
+    name_of_test = request.node.name
+    name_of_test = name_of_test.split('[')[0]
+
+    return name_of_test
 
 
 @pytest.fixture
@@ -132,6 +196,30 @@ def app_name(request):
 
 
 @pytest.fixture
+def ud_id(request):
+    "pytest fixture for iOS udid"
+    return request.config.getoption("--ud_id")
+
+
+@pytest.fixture
+def org_id(request):
+    "pytest fixture for iOS team id"
+    return request.config.getoption("--org_id")
+
+
+@pytest.fixture
+def signing_id(request):
+    "pytest fixture for iOS signing id"
+    return request.config.getoption("--signing_id")
+
+
+@pytest.fixture
+def no_reset_flag(request):
+    "pytest fixture for no_reset_flag"
+    return request.config.getoption("--no_reset_flag")
+
+
+@pytest.fixture
 def app_path(request):
     "pytest fixture for app path"
     return request.config.getoption("-N")    
@@ -183,7 +271,7 @@ def pytest_addoption(parser):
                       help="Browser. Valid options are firefox, ie and chrome")                      
     parser.addoption("-U","--app_url",
                       dest="url",
-                      default="https://qxf2.com",
+                      default=base_url_conf.base_url,
                       help="The url of the application")
     parser.addoption("-A","--api_url",
                       dest="url",
@@ -239,7 +327,7 @@ def pytest_addoption(parser):
     parser.addoption("-I","--device_name",
                       dest="device_name",
                       help="Enter device name. Ex: Emulator, physical device name",
-                      default="Google Pixel")
+                      default="Samsung Galaxy S9")
     parser.addoption("-J","--app_package",
                       dest="app_package",
                       help="Enter name of app package. Ex: bitcoininfo",
@@ -264,6 +352,22 @@ def pytest_addoption(parser):
                       dest="app_name",
                       help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
                       default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
+    parser.addoption("--ud_id",
+                      dest="ud_id",
+                      help="Enter your iOS device UDID which is required to run appium test in iOS device",
+                      default=None)
+    parser.addoption("--org_id",
+                      dest="org_id",
+                      help="Enter your iOS Team ID which is required to run appium test in iOS device",
+                      default=None)
+    parser.addoption("--signing_id",
+                      dest="signing_id",
+                      help="Enter your iOS app signing id which is required to run appium test in iOS device",
+                      default="iPhone Developer")
+    parser.addoption("--no_reset_flag",
+                      dest="no_reset_flag",
+                      help="Pass false if you want to reset app eveytime you run app else false",
+                      default="true")
     parser.addoption("-N","--app_path",
                       dest="app_path",
                       help="Enter app path")
