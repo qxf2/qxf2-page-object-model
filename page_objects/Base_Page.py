@@ -58,7 +58,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.tesults_flag = False
             self.images = []
             self.browserstack_flag = False
-            self.highlight_flag = False # When set to True, webelement being operated upon will be highlighted
+            self.highlight_flag = False 
             self.test_run_id = None
             self.reset()
         self.base_url = base_url
@@ -79,6 +79,13 @@ class Base_Page(Borg,unittest.TestCase):
         self.screenshot_counter = 1
         self.exceptions = []
 
+    def turn_on_highlight(self):
+        "Highlight the elements being operated upon"
+        self.highlight_flag = True
+
+    def turn_off_highlight(self):
+        "Turn off the highlighting feature"
+        self.highlight_flag = False
 
     def get_failure_message_list(self):
         "Return the failure message list"
