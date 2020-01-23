@@ -3,6 +3,7 @@ Class to wrap around parsing command line options
 """
 import os, sys
 import optparse
+from conf import base_url_conf as conf
 
 
 class Option_Parser:
@@ -23,7 +24,7 @@ class Option_Parser:
                             help="Browser. Valid options are firefox, ie and chrome")                      
         self.parser.add_option("-U","--app_url",
                             dest="url",
-                            default="https://qxf2.com",
+                            default=conf.base_url,
                             help="The url of the application")
         self.parser.add_option("-A","--api_url",
                             dest="api_url",
@@ -85,6 +86,22 @@ class Option_Parser:
                             dest="tesults_flag",
                             help="Enter Y or N. 'Y' if you want to report results with Tesults",
                             default="N")
+        self.parser.add_option("--ud_id",
+                      dest="ud_id",
+                      help="Enter your iOS device UDID which is required to run appium test in iOS device",
+                      default=None)
+        self.parser.add_option("--org_id",
+                        dest="org_id",
+                        help="Enter your iOS Team ID which is required to run appium test in iOS device",
+                        default=None)
+        self.parser.add_option("--signing_id",
+                        dest="signing_id",
+                        help="Enter your iOS app signing id which is required to run appium test in iOS device",
+                        default="iPhone Developer")
+        self.parser.add_option("--no_reset_flag",
+                        dest="no_reset_flag",
+                        help="Pass false if you want to reset app eveytime you run app else false",
+                        default="true")
         self.parser.add_option("-N","--app_path",
                             dest="app_path",
                             help="Enter app path")

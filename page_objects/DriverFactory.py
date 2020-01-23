@@ -124,8 +124,8 @@ class DriverFactory():
 
         return local_driver
 
-
-    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path):
+    
+    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag):
         "Setup mobile device"
         #Get the remote credentials from remote_credentials file
         USERNAME = remote_credentials.USERNAME
@@ -134,44 +134,88 @@ class DriverFactory():
         desired_capabilities['platformName'] = mobile_os_name
         desired_capabilities['platformVersion'] = mobile_os_version
         desired_capabilities['deviceName'] = device_name
+        
+        if mobile_os_name in 'Android':
+            if (remote_flag.lower() == 'y'):
+                desired_capabilities['idleTimeout'] = 300
+                desired_capabilities['name'] = 'Appium Python Test'
+                try:
+                    if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
+                        self.sauce_upload(app_path,app_name) #Saucelabs expects the app to be uploaded to Sauce storage everytime the test is run
+                        #Checking if the app_name is having spaces and replacing it with blank
+                        if ' ' in app_name:
+                            app_name = app_name.replace(' ','')
+                            print ("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)                                          
+                        desired_capabilities['app'] = 'sauce-storage:'+app_name
+                        desired_capabilities['autoAcceptAlert']= 'true'                      
+                        driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
+                            desired_capabilities= desired_capabilities)
+                    else:
+                        desired_capabilities['realMobile'] = 'true'                   
+                        desired_capabilities['app'] = self.browser_stack_upload(app_name,app_path) #upload the application to the Browserstack Storage                                      
+                        driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
+                            desired_capabilities= desired_capabilities)
+                except Exception as e:
+                    print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
+                    print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
+                    print ('\033[92m'+"SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"+'\033[0m')
+            else:
+                try:
+                    desired_capabilities['appPackage'] = app_package
+                    desired_capabilities['appActivity'] = app_activity
+                    if device_flag.lower() == 'y':
+                        driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
+                    else:                    
+                        desired_capabilities['app'] = os.path.join(app_path,app_name)
+                        driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
+                except Exception as e:
+                    print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
+                    print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
+                    print ('\033[92m'+"SOLUTION: It looks like you are trying to run test cases with Local Appium Setup. \nPlease make sure to run Appium Server and try again.\n"+'\033[0m')
 
-        if (remote_flag.lower() == 'y'):
-            desired_capabilities['idleTimeout'] = 300
-            desired_capabilities['name'] = 'Appium Python Test'
-            try:
-                if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
-                    self.sauce_upload(app_path,app_name) #Saucelabs expects the app to be uploaded to Sauce storage everytime the test is run
-                    #Checking if the app_name is having spaces and replacing it with blank
-                    if ' ' in app_name:
-                        app_name = app_name.replace(' ','')                        
-                    desired_capabilities['app'] = 'sauce-storage:'+app_name
-                    desired_capabilities['autoAcceptAlert']= 'true'                      
-                    driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
-                        desired_capabilities= desired_capabilities)
-                else:
-                    desired_capabilities['realMobile'] = 'true'                   
-                    desired_capabilities['app'] = self.browser_stack_upload(app_name,app_path) #upload the application to the Browserstack Storage                                      
-                    driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
-                        desired_capabilities= desired_capabilities)
-            except Exception as e:
-                print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
-                print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
-                print ('\033[92m'+"SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"+'\033[0m')
-        else:
-            try:
-                desired_capabilities['appPackage'] = app_package
-                desired_capabilities['appActivity'] = app_activity
-                if device_flag.lower() == 'y':
-                    driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-                else:                    
+        elif mobile_os_name=='iOS':
+            if (remote_flag.lower() == 'y'):
+                desired_capabilities['idleTimeout'] = 300
+                desired_capabilities['name'] = 'Appium Python Test'
+                try:
+                    if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
+                        self.sauce_upload(app_path,app_name) #Saucelabs expects the app to be uploaded to Sauce storage everytime the test is run
+                        #Checking if the app_name is having spaces and replacing it with blank
+                        if ' ' in app_name:
+                            app_name = app_name.replace(' ','')
+                            print ("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)                                          
+                        desired_capabilities['app'] = 'sauce-storage:'+app_name
+                        desired_capabilities['autoAcceptAlert']= 'true'                      
+                        driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
+                            desired_capabilities= desired_capabilities)
+                    else:
+                        desired_capabilities['realMobile'] = 'true'                   
+                        desired_capabilities['app'] = self.browser_stack_upload(app_name,app_path) #upload the application to the Browserstack Storage                                      
+                        driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
+                            desired_capabilities= desired_capabilities)
+                except Exception as e:
+                    print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
+                    print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
+                    print ('\033[92m'+"SOLUTION: It looks like you are trying to use a cloud service provider (BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag.\n"+'\033[0m')
+            else:            
+                try:
                     desired_capabilities['app'] = os.path.join(app_path,app_name)
-                    driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
-            except Exception as e:
-                print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
-                print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
-                print ('\033[92m'+"SOLUTION: It looks like you are trying to run test cases with Local Appium Setup. \nPlease make sure to run Appium Server and try again.\n"+'\033[0m')
+                    desired_capabilities['bundleId'] = app_package
+                    desired_capabilities['noReset'] = no_reset_flag
+                    if ud_id is not None:
+                        desired_capabilities['udid'] = ud_id
+                        desired_capabilities['xcodeOrgId'] = org_id
+                        desired_capabilities['xcodeSigningId'] = signing_id
 
-        return driver	
+                    driver = mobile_webdriver.Remote('http://localhost:4723/wd/hub', desired_capabilities)
+                except Exception as e:
+                    print ('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
+                    print ('\033[91m'+"Python says:%s"%str(e)+'\033[0m')
+                    print ('\033[92m'+"SOLUTION: It looks like you are trying to run test cases with Local Appium Setup. \nPlease make sure to run Appium Server or set it up properly and try again.\n"+'\033[0m')
+
+
+        return driver       
+        
 
 
     def sauce_upload(self,app_path,app_name):  

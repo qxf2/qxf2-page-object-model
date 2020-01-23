@@ -18,9 +18,9 @@ from .DriverFactory import DriverFactory
 from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
-from conf import remote_credentials as Conf
-import pytest
-
+from utils.stop_test_exception_util import Stop_Test_Exception
+import conf.remote_credentials 
+import conf.base_url_conf
 
 class Borg:
     #The borg design pattern is to share state
@@ -37,11 +37,13 @@ class Borg:
 
         return result_flag
 
+# Get the Base URL from the conf file
+base_url = conf.base_url_conf
 
 class Base_Page(Borg,unittest.TestCase):
     "Page class that all page models can inherit from"
 
-    def __init__(self,base_url='http://qxf2.com/',trailing_slash_flag=True):
+    def __init__(self,base_url):
         "Constructor"
         Borg.__init__(self)
         if self.is_first_time():
@@ -55,12 +57,8 @@ class Base_Page(Borg,unittest.TestCase):
             self.tesults_flag = False
             self.images = []
             self.browserstack_flag = False
-
+            self.test_run_id = None
             self.reset()
-
-        #We assume relative URLs start without a / in the beginning
-        if base_url[-1] != '/' and trailing_slash_flag is True: 
-            base_url += '/' 
         self.base_url = base_url
         self.driver_obj = DriverFactory()
         if self.driver is not None: 
@@ -97,7 +95,7 @@ class Base_Page(Borg,unittest.TestCase):
         self.driver.implicitly_wait(5) 
         self.driver.maximize_window()
         
-        if Conf.REMOTE_BROWSER_PLATFORM == 'BS' and remote_flag.lower() == 'y':
+        if conf.remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS' and remote_flag.lower() == 'y':
             self.register_browserstack()
             self.session_url = self.browserstack_obj.get_session_url()
             self.browserstack_msg = 'BrowserStack session URL:'
@@ -115,6 +113,10 @@ class Base_Page(Borg,unittest.TestCase):
         "Register TestRail with Page"
         self.testrail_flag = True
         self.tr_obj = Test_Rail()
+    
+    def set_test_run_id(self,test_run_id):
+        "Set TestRail's test run id"
+        self.test_run_id = test_run_id
 
 
     def register_tesults(self):
@@ -251,6 +253,10 @@ class Base_Page(Borg,unittest.TestCase):
 
     def open(self,url,wait_time=2):
         "Visit the page base_url + url"
+        if self.base_url[-1] != '/' and url[0] != '/':
+            url = '/' + url
+        if self.base_url[-1] == '/' and url[0] == '/':
+            url = url[1:] 
         url = self.base_url + url
         if self.driver.current_url != url:
             self.driver.get(url)
@@ -261,6 +267,11 @@ class Base_Page(Borg,unittest.TestCase):
         "Get the current URL"
         return self.driver.current_url
 
+        
+    def get_page_title(self):
+        "Get the current page title"
+        return self.driver.title
+    
 
     def get_page_paths(self,section):
         "Open configurations file,go to right sections,return section obj"
@@ -345,6 +356,14 @@ class Base_Page(Borg,unittest.TestCase):
         "Get the current window handle"
         pass
 
+    def switch_frame(self,name=None,index=None,wait_time=2):
+        "switch to iframe"
+        self.wait(wait_time)
+        self.driver.switch_to.default_content()
+        if name is not None:
+            self.driver.switch_to.frame(name)
+        elif index is not None:
+            self.driver.switch_to.frame(self.driver.find_elements_by_tag_name("iframe")[index])
 
     def _get_locator(key):
         "fetches locator from the locator conf"
@@ -664,6 +683,8 @@ class Base_Page(Borg,unittest.TestCase):
 
     def success(self,msg,level='info',pre_format='PASS: '):
         "Write out a success message"
+        if level.lower() == 'critical':
+            level = 'info'
         self.log_obj.write(pre_format + msg,level)
         self.result_counter += 1
         self.pass_counter += 1
@@ -674,14 +695,23 @@ class Base_Page(Borg,unittest.TestCase):
         self.log_obj.write(pre_format + msg,level)
         self.result_counter += 1
         self.failure_message_list.append(pre_format + msg)
+        if level.lower() == 'critical':
+            self.teardown()
+            raise Stop_Test_Exception("Stopping test because: "+ msg)
         
 
     def log_result(self,flag,positive,negative,level='info'):
         "Write out the result of the test"
-        if flag is True:
-            self.success(positive,level=level)
-        else:            
-            self.failure(negative,level=level)        
+        if level.lower() == "inverse":
+            if flag is True:
+                self.failure(positive,level="error")
+            else:            	                
+                self.success(negative,level="info")
+        else:
+            if flag is True:
+                self.success(positive,level=level)
+            else:            
+                self.failure(negative,level=level)       
 
 
     def read_browser_console_log(self):
@@ -698,12 +728,23 @@ class Base_Page(Borg,unittest.TestCase):
 
     def conditional_write(self,flag,positive,negative,level='info'):
         "Write out either the positive or the negative message based on flag"      
-        if flag is True:
-            self.write(positive,level)
-            self.mini_check_pass_counter += 1
-        else:
-            self.write(negative,level)
-        self.mini_check_counter += 1
+        if level.lower() == "inverse":
+            msg = positive
+            if flag is True:
+                positive = negative
+                self.write(positive,level='error')
+                self.mini_check_pass_counter += 1
+            else:
+                negative = msg 
+                self.write(negative,level='info')
+                self.mini_check_counter += 1
+        else:	        	            
+            if flag is True:
+                self.write(positive,level='info')
+                self.mini_check_pass_counter += 1
+            else:
+                self.write(negative,level='info')
+                self.mini_check_counter += 1
 
 
     def execute_javascript(self,js_script,*args):
