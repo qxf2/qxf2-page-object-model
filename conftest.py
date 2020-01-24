@@ -7,11 +7,10 @@ from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
 
 @pytest.fixture
-def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
-    
+def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname):
     "Return an instance of Base Page that knows about the third party integrations"
     test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
-
+    test_obj.set_calling_module(testname)
     #Setup and register a driver
     test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
 
@@ -59,7 +58,17 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
     #Teardown
     test_mobile_obj.wait(3)
     test_mobile_obj.teardown() 
-   
+
+
+@pytest.fixture
+def testname(request):
+    "pytest fixture for testname"
+    name_of_test = request.node.name
+    name_of_test = name_of_test.split('[')[0]
+
+    return name_of_test
+
+
 @pytest.fixture
 def browser(request):
     "pytest fixture for browser"
@@ -345,7 +354,7 @@ def pytest_addoption(parser):
     parser.addoption("-I","--device_name",
                       dest="device_name",
                       help="Enter device name. Ex: Emulator, physical device name",
-                      default="Google Pixel")
+                      default="Samsung Galaxy S9")
     parser.addoption("-J","--app_package",
                       dest="app_package",
                       help="Enter name of app package. Ex: bitcoininfo",

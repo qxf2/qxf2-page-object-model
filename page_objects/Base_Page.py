@@ -21,6 +21,7 @@ from utils import Tesults
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials 
 import conf.base_url_conf
+from utils import Gif_Maker
 
 class Borg:
     #The borg design pattern is to share state
@@ -57,6 +58,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.tesults_flag = False
             self.images = []
             self.browserstack_flag = False
+            self.highlight_flag = False 
             self.test_run_id = None
             self.reset()
         self.base_url = base_url
@@ -68,6 +70,7 @@ class Base_Page(Borg,unittest.TestCase):
     def reset(self):
         "Reset the base page object"
         self.driver = None
+        self.calling_module = None
         self.result_counter = 0 #Increment whenever success or failure are called
         self.pass_counter = 0 #Increment everytime success is called
         self.mini_check_counter = 0 #Increment when conditional_write is called
@@ -76,6 +79,13 @@ class Base_Page(Borg,unittest.TestCase):
         self.screenshot_counter = 1
         self.exceptions = []
 
+    def turn_on_highlight(self):
+        "Highlight the elements being operated upon"
+        self.highlight_flag = True
+
+    def turn_off_highlight(self):
+        "Turn off the highlighting feature"
+        self.highlight_flag = False
 
     def get_failure_message_list(self):
         "Return the failure message list"
@@ -118,28 +128,36 @@ class Base_Page(Borg,unittest.TestCase):
         "Set TestRail's test run id"
         self.test_run_id = test_run_id
 
-
     def register_tesults(self):
         "Register Tesults with Page"
         self.tesults_flag = True
-
 
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
         self.browserstack_obj = BrowserStack_Library()
-        
+
+    def set_calling_module(self,name):
+        "Set the test name"
+        self.calling_module = name
 
     def get_calling_module(self):
         "Get the name of the calling module"
-        calling_file = inspect.stack()[-1][1]
-        if 'runpy' or 'string' in calling_file:
-            calling_file = inspect.stack()[4][3]
-        calling_filename = calling_file.split(os.sep)
-        #This logic bought to you by windows + cygwin + git bash 
-        if len(calling_filename) == 1: #Needed for 
-            calling_filename = calling_file.split('/')
-        self.calling_module = calling_filename[-1].split('.')[0]
+        if self.calling_module is None:
+            #Try to intelligently figure out name of test when not using pytest
+            full_stack = inspect.stack()
+            index = -1
+            for stack_frame in full_stack:
+                print(stack_frame[1],stack_frame[3])
+                #stack_frame[1] -> file name
+                #stack_frame[3] -> method 
+                if 'test_' in stack_frame[1]:
+                    index = full_stack.index(stack_frame)
+                    break
+            test_file = full_stack[index][1]
+            test_file = test_file.split(os.sep)[-1]
+            testname = test_file.split('.py')[0]
+            self.set_calling_module(testname)
 
         return self.calling_module
     
@@ -178,7 +196,7 @@ class Base_Page(Borg,unittest.TestCase):
         if isinstance(os_name,list):
             windows_browser_combination = browser.lower() 
         else:
-            windows_browser_combination = os_name.lower() + '_' + str(os_version).lower() + '_' + browser.lower()+ '_' + str(browser_version)   
+            windows_browser_combination = os_name.lower() + '_' + str(os_version).lower() + '_' + browser.lower()+ '_' + str(browser_version)
         self.testname = self.get_calling_module()
         self.testname =self.testname.replace('<','')
         self.testname =self.testname.replace('>','')
@@ -378,13 +396,42 @@ class Base_Page(Borg,unittest.TestCase):
 
         return value
 
+    def get_element_attribute_value(self,element,attribute_name):
+        "Return the elements attribute value if present"
+        attribute_value = None
+        if (hasattr(element,attribute_name)):
+            attribute_value = element.get_attribute(attribute_name) 
+        
+        return attribute_value
 
+    def highlight_element(self,element,wait_seconds=3):
+        "Highlights a Selenium webdriver element"
+        original_style = self.get_element_attribute_value(element,'style')
+        self.apply_style_to_element(element,"border: 4px solid #F6F7AD;")
+        self.wait(wait_seconds)
+        self.apply_style_to_element(element,original_style)
+      
+    def highlight_elements(self,elements,wait_seconds=3):
+        "Highlights a group of elements"
+        original_styles = []
+        for element in elements:
+            original_styles.append(self.get_element_attribute_value(element,'style'))
+            self.apply_style_to_element(element,"border: 4px solid #F6F7AD;")
+        self.wait(wait_seconds)
+        for style,element in zip(original_styles, elements) :
+            self.apply_style_to_element(element,style)
+
+    def apply_style_to_element(self,element,element_style):
+        self.driver.execute_script("arguments[0].setAttribute('style', arguments[1])", element, element_style)
+       
     def get_element(self,locator,verbose_flag=True):
         "Return the DOM element of the path or 'None' if the element is not found "
         dom_element = None
         try:            
             locator = self.split_locator(locator)            
-            dom_element = self.driver.find_element(*locator)            
+            dom_element = self.driver.find_element(*locator)  
+            if self.highlight_flag is True:
+                self.highlight_element(dom_element)           
         except Exception as e:            
             if verbose_flag is True:
                 self.write(str(e),'debug')
@@ -412,6 +459,8 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             locator = self.split_locator(locator)
             dom_elements = self.driver.find_elements(*locator)
+            if self.highlight_flag is True:
+                self.highlight_elements(dom_elements)
         except Exception as e:
             if msg_flag==True:
                 self.write(str(e),'debug')
@@ -612,9 +661,10 @@ class Base_Page(Borg,unittest.TestCase):
 
     def teardown(self):
         "Tears down the driver"
+        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
         self.driver.quit()
         self.reset()
-
+        
 
     def write(self,msg,level='info'):
         "Log the message"
@@ -727,24 +777,20 @@ class Base_Page(Borg,unittest.TestCase):
 
 
     def conditional_write(self,flag,positive,negative,level='info'):
-        "Write out either the positive or the negative message based on flag"      
+        "Write out either the positive or the negative message based on flag"  
+        self.mini_check_counter += 1
         if level.lower() == "inverse":
-            msg = positive
             if flag is True:
-                positive = negative
                 self.write(positive,level='error')
-                self.mini_check_pass_counter += 1
             else:
-                negative = msg 
                 self.write(negative,level='info')
-                self.mini_check_counter += 1
+                self.mini_check_pass_counter += 1
         else:	        	            
             if flag is True:
                 self.write(positive,level='info')
                 self.mini_check_pass_counter += 1
             else:
-                self.write(negative,level='info')
-                self.mini_check_counter += 1
+                self.write(negative,level='error')
 
 
     def execute_javascript(self,js_script,*args):
@@ -774,6 +820,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
+        self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
         self.write('************************')
 
     def start(self):

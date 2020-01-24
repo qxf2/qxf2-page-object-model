@@ -27,6 +27,9 @@ def test_example_form(test_obj):
         test_obj = PageFactory.get_page_object("Main Page")
         #Set start_time with current time
         start_time = int(time.time())	
+
+        # Turn on the highlighting feature
+        test_obj.turn_on_highlight()
                 
         #4. Get the test details from the conf file
         name = conf.name
@@ -97,6 +100,9 @@ def test_example_form(test_obj):
         test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Submit Form", "Submits the form", "test_example_form", result_flag,"Failed to submit the form \nOn url: %s"%test_obj.get_current_url(), [])
 
+        #Turn off the highlighting feature
+        test_obj.turn_off_highlight()
+        
         #11. Check the heading on the redirect page
         #Notice you don't need to create a new page object!
         if result_flag is True:
@@ -106,6 +112,9 @@ def test_example_form(test_obj):
                             negative="Fail: Heading on the redirect page is incorrect!")
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         test_obj.add_tesults_case("Check Heading", "Checks the heading on the redirect page", "test_example_form", result_flag,"Fail: Heading on the redirect page is incorrect!", [])
+
+         # Turn on the highlighting feature
+        test_obj.turn_on_highlight()
 
         #12. Visit the contact page and verify the link
         result_flag = test_obj.goto_footer_link('Contact > Get in touch!','contact')    
