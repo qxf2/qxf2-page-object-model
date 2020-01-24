@@ -28,6 +28,7 @@ def test_example_form(test_obj):
         #Set start_time with current time
         start_time = int(time.time())	
 
+
         # Turn on the highlighting feature
         test_obj.turn_on_highlight()
                 
