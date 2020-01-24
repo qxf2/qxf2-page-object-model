@@ -240,10 +240,10 @@ def pytest_configure(config):
     if_reportportal =config.getoption('--reportportal')
     
     try:
-        config._inicache["rp_uuid"]="831f90e7-df37-43d9-a53f-d141a8b08c68"
+        config._inicache["rp_uuid"]="34ec4436-1a3c-4079-9ca0-e177e530fa47"
         config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
-        config._inicache["rp_project"]="nilaya123_personal"
-        config._inicache["rp_launch"]="nilaya123_TEST_EXAMPLE" 
+        config._inicache["rp_project"]="personal"
+        config._inicache["rp_launch"]="TEST_EXAMPLE" 
  
     except Exception as e:
         print (str(e)) 
