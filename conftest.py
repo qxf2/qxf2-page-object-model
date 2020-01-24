@@ -225,6 +225,30 @@ def app_path(request):
     return request.config.getoption("-N")    
 
 
+def pytest_addoption(parser):
+    # Method to add the option to ini
+    parser.addini("rp_uuid",'help',type="pathlist")
+    parser.addini("rp_endpoint",'help',type="pathlist")
+    parser.addini("rp_project",'help',type="pathlist")
+    parser.addini("rp_launch",'help',type="pathlist")  
+
+
+@pytest.hookimpl()
+def pytest_configure(config):
+    # Sets the launch name based on the marker selected.
+    global if_reportportal
+    if_reportportal =config.getoption('--reportportal')
+    
+    try:
+        config._inicache["rp_uuid"]="34ec4436-1a3c-4079-9ca0-e177e530fa47"
+        config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
+        config._inicache["rp_project"]="personal"
+        config._inicache["rp_launch"]="TEST_EXAMPLE" 
+ 
+    except Exception as e:
+        print (str(e)) 
+
+
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
     if  terminalreporter.config.getoption("-S").lower() == 'y':
@@ -237,7 +261,8 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
 
     if  terminalreporter.config.getoption("--tesults").lower() == 'y':
         Tesults.post_results_to_tesults()
-        
+
+
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
 
@@ -261,7 +286,9 @@ def pytest_generate_tests(metafunc):
                 metafunc.parametrize("browser",browser_os_name_conf.default_browser)
             else:
                 config_list_local = [(metafunc.config.getoption("-B")[0])]
-                metafunc.parametrize("browser", config_list_local)          
+                metafunc.parametrize("browser", config_list_local)
+
+
 
 def pytest_addoption(parser):
     parser.addoption("-B","--browser",
@@ -371,6 +398,7 @@ def pytest_addoption(parser):
     parser.addoption("-N","--app_path",
                       dest="app_path",
                       help="Enter app path")
+
 
 
 

@@ -5,7 +5,9 @@ This class wraps around Python's loguru module.
 import os, inspect
 import datetime
 import sys
+import pytest,logging
 from loguru import logger
+from pytest_reportportal import RPLogger, RPLogHandler
 
 class Base_Logging():
     "A plug-n-play class for logging"
@@ -48,8 +50,26 @@ class Base_Logging():
         self.calling_module = calling_filename[-1].split('.')[0]
 
         return self.calling_module
+
+
+    def setup_rp_logging(self):
+        "Setup reportportal logging"
+        try:
+            # Setting up a logging.
+            logging.setLoggerClass(RPLogger)
+            rp_logger = logging.getLogger(__name__)
+            rp_logger.setLevel(logging.INFO)
+            # Create handler for Report Portal.
+            rp_handler = RPLogHandler(pytest.config._config.py_test_service)
+            # Set INFO level for Report Portal handler.
+            rp_handler.setLevel(logging.INFO)
+            return rp_logger
+        except Exception as e:
+            self.write("Exception when trying to set rplogger")
+            self.write(str(e))
+            self.exceptions.append("Error when setting up the reportportal logger")
     
-    
+
     def write(self,msg,level='info'):
         "Write out a message"
         #fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead  
@@ -58,9 +78,26 @@ class Base_Logging():
             if 'Base_Page' not in stack_frame[1]:
                 break
         fname = stack_frame[3]
-        d = {'caller_func': fname}                 
+        d = {'caller_func': fname}   
+        if hasattr(pytest,'config'):  
+            if pytest.config._config.getoption('--reportportal'):
+                rp_logger = self.setup_rp_logging()
+                if level.lower()== 'debug': 
+                    rp_logger.debug(msg=msg)                
+                elif level.lower()== 'info':
+                    rp_logger.info(msg)           
+                elif level.lower()== 'warn' or level.lower()=='warning':           
+                    rp_logger.warning(msg)
+                elif level.lower()== 'error':
+                    rp_logger.error(msg)            
+                elif level.lower()== 'critical':   
+                    rp_logger.critical(msg)            
+                else:
+                    rp_logger.critical(msg)
+                return 
+
         if level.lower()== 'debug': 
-            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                      
+            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                
         elif level.lower()== 'info':
             logger.info("{module} | {msg}",module=d['caller_func'],msg=msg)           
         elif level.lower()== 'warn' or level.lower()=='warning':           

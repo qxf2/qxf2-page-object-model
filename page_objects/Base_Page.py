@@ -10,7 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains 
-import unittest,time,logging,os,inspect,utils.Test_Rail
+import unittest,time,logging,os,inspect,utils.Test_Rail,pytest
 from utils.Base_Logging import Base_Logging
 from inspect import getargspec
 from utils.BrowserStack_Library import BrowserStack_Library
@@ -226,7 +226,27 @@ class Base_Page(Borg,unittest.TestCase):
         image_dict['name'] = screenshot_name
         image_dict['url'] = screenshot_url
         self.image_url_list.append(image_dict)
-        
+
+
+    def save_screenshot_reportportal(self,image_name):
+        "Method to save image to ReportPortal"
+        try:            
+            rp_logger = self.log_obj.setup_rp_logging()
+            with open(image_name, "rb") as fh:
+                image = fh.read()
+ 
+            rp_logger.info(
+                image_name,
+                attachment={
+                    "data": image,
+                    "mime": "application/octet-stream"
+                },
+            )
+        except Exception as e:
+            self.write("Exception when trying to get rplogger")
+            self.write(str(e))
+            self.exceptions.append("Error when trying to get reportportal logger")
+
 
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"
@@ -237,8 +257,12 @@ class Base_Page(Borg,unittest.TestCase):
                 else:
                     os.rename(self.screenshot_dir + os.sep +screenshot_name+'.png',self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png')
                     break
-        self.driver.get_screenshot_as_file(self.screenshot_dir + os.sep+ screenshot_name+'.png')
-	#self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
+        screenshot_name = self.screenshot_dir + os.sep + screenshot_name+'.png'
+        self.driver.get_screenshot_as_file(screenshot_name)
+	    #self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
+        if hasattr(pytest,'config'):
+            if pytest.config._config.getoption('--reportportal'):
+                self.save_screenshot_reportportal(screenshot_name)
         if self.browserstack_flag is True:
             self.append_latest_image(screenshot_name)
         if self.tesults_flag is True:
