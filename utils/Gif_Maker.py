@@ -11,11 +11,10 @@ def make_gif(screenshot_dir_path,name = "test_recap",suffix=".gif",duration=2):
     gif_name = None
     images = []
     filenames = os.listdir(screenshot_dir_path)
-    gif_name = os.path.join(screenshot_dir_path, name + suffix)
     if len(filenames) != 0:
+        gif_name = os.path.join(screenshot_dir_path, name + suffix)
         for files in sorted(filenames):
             images.append(imageio.imread(os.path.join(screenshot_dir_path, files)))            
         imageio.mimwrite(gif_name, images, duration=duration)
-        return gif_name
-    else:
-        return None
+    
+    return gif_name
