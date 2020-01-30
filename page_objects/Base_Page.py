@@ -78,6 +78,8 @@ class Base_Page(Borg,unittest.TestCase):
         self.failure_message_list = []
         self.screenshot_counter = 1
         self.exceptions = []
+        self.gif_file_name = None
+        
 
     def turn_on_highlight(self):
         "Highlight the elements being operated upon"
@@ -661,7 +663,6 @@ class Base_Page(Borg,unittest.TestCase):
 
     def teardown(self):
         "Tears down the driver"
-        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
         self.driver.quit()
         self.reset()
         
@@ -706,6 +707,12 @@ class Base_Page(Borg,unittest.TestCase):
             for key, value in custom.items():
                 caseObj[key] = str(value)
             Tesults.add_test_case(caseObj)
+    
+    def make_gif(self):
+        "Create a gif of all the screenshots within the screenshots directory"
+        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
+
+        return self.gif_file_name
         
 
     def wait(self,wait_seconds=5,locator=None):
@@ -820,8 +827,10 @@ class Base_Page(Borg,unittest.TestCase):
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
-        self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
-        self.write('************************')
+        self.make_gif()
+        if self.gif_file_name is not None:
+            self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
+            self.write('************************')
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
