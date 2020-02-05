@@ -2,23 +2,32 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: circleci/python:3.8
-    
-    dependencies:
-      override:
-        - sudo pip install tox tox-pyenv
-        - pyenv local 3.6.0 3.7.0 3.8.0
-    
+      - image: themattrix/docker-tox
     steps:
       - checkout
       - run:
-          name: Run tox
+          name: run Tox
           command: |
-             tox
-
-    - store_artifacts:
-        path: ./screenshots
-        destination: screenshots-file
-    - store_artifacts:
-        path: ./log
-        destination: logs-file
+            tox
+      - run:
+          name: Mobile app
+          command: |
+            git clone https://github.com/qxf2/bitcoin-info.git
+      - run:
+          name: Set Environment Variables
+          command: |                      
+            echo 'export app_path=/home/circleci/project/bitcoin-info/app/' >> $BASH_ENV  
+      - run:
+          name: Decrypt remote_credentials_enc.py using openssl
+          command: |
+            openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY     
+      - run:
+          name: Run the API, Mobile and Selenium tests
+          command: |           
+            python -m pytest -s -v -N "$app_path" -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native
+      - store_artifacts:
+          path: ./screenshots
+          destination: screenshots-file
+      - store_artifacts:
+          path: ./log
+          destination: logs-file
