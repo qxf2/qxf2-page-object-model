@@ -6,9 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install tox
+          name: Run tox
           command: |
-            sudo pip install tox && tox
+             tox
 
       - store_artifacts:
           path: ./screenshots
