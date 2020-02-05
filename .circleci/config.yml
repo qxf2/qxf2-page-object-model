@@ -9,7 +9,12 @@ jobs:
         - sudo pip install tox tox-pyenv
         - pyenv local 3.6.0 3.7.0 3.8.0
     
-
+    steps:
+      - checkout
+      - run:
+          name: Run tox
+          command: |
+             tox
 
     - store_artifacts:
         path: ./screenshots
