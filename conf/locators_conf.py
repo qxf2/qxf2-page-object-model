@@ -12,49 +12,25 @@
 #XPATH
 ###########################################
 
-#Locators for the footer object(footer_object.py)
+# Locators for search buses object
+source = "xpath,//input[contains(@id,'txtSource')]"
+destination = "xpath,//input[contains(@id,'txtDestination')]"
+onward_date = "xpath,//input[contains(@id,'txtOnwardCalendar')]"
+return_date = "xpath,//input[contains(@id,'txtReturnCalendar')]"
+search_buses_button ="xpath,//button[contains(text(),'Search Buses')]"
 
-footer_menu = "xpath,//ul[contains(@class,'nav-justified')]/descendant::a[text()='%s']"
-copyright_text = "xpath,//p[contains(@class,'qxf2_copyright')]"
-#----
+#Locators for the redBus header object(redBus_header_object.py)
+header_logo = "xpath,//a[contains(@class,'redbus-logo home-redirect')]"
+#bus_tickets = "xpath,//a[contains(@class,'selectedBus site-links')]"
+header_menu = "xpath,//nav[contains(@class,'product-nav fl')]/descendant::a[contains(text(),'%s')]"
 
-#Locators for the form object(form_object.py)
-name_field = "id,name"       
-email_field = "name,email"
-phone_no_field = "css selector,#phone"
-click_me_button = "xpath,//button[text()='Click me!']"
-gender_dropdown = "xpath,//button[@data-toggle='dropdown']"
-gender_option = "xpath,//a[text()='%s']"
-tac_checkbox = "xpath,//input[@type='checkbox']"
-#----
+#Locators for the redBus footer object(redBus_footer_object.py)
+footer_menu_headings ="xpath,//h6[contains(text(),'%s')]"
+foorter_logo = "xpath,//div[contains(@class,'logo')]"
+footer_copyright_text = "xpath,//div[contains(@class,'copyright')]"
 
-#Locators for hamburger menu object(hamburg_menu_object.py)
-menu_icon = "xpath,//img[@alt='Menu']"
-menu_link = "xpath,//ul[contains(@class,'dropdown-menu')]/descendant::a[text()='%s']"
-menu_item = "xpath,//ul[contains(@class,'dropdown-menu')]/descendant::a[@data-toggle='dropdown' and text()='%s']"
-#----
+#Locators for redirect of redBus Main Page i.e view buses page 
+#govt_buses_option = "xpath,//span[contains(text(),'Book your choice of bus on RTC')]"
+source_location_in_view_buses_page = "xpath,//span[contains(@class,'src') and contains(@title,'%s')]"
+destination_location_in_view_buses_page ="xpath,//span[contains(@class,'dst') and contains(@title,'%s')]"
 
-#Locators for header object(header_object.py)
-qxf2_logo = "xpath,//img[contains(@src,'qxf2_logo.png')]"
-qxf2_tagline_part1 = "xpath,//h1[contains(@class,'banner-brown') and text()='SOFTWARE TESTING SERVICES']"
-qxf2_tagline_part2 = "xpath,//h1[contains(@class,'banner-grey') and text()='for startups']"
-#----
-
-#Locators for table object(table_object.py)
-table_xpath = "xpath,//table[@name='Example Table']"
-rows_xpath = "xpath,//table[@name='Example Table']//tbody/descendant::tr"
-cols_xpath = "xpath,//table[@name='Example Table']//tbody/descendant::td"
-cols_relative_xpath = "xpath,//table[@name='Example Table']//tbody/descendant::tr[%d]/descendant::td"
-cols_header = "xpath,//table[@name='Example Table']//thead/descendant::th"
-#----
-
-#Locators for tutorial redirect page(tutorial_redirect_page.py)
-heading = "xpath,//h2[contains(@class,'grey_text') and text()='Selenium for beginners: Practice page 2']"
-
-#Locators for Contact Object(contact_object.py)
-contact_name_field = "id,name"
-
-#Locators for mobile application - Bitcoin Info(bitcoin_price_page.py)
-bitcoin_real_time_price_button = "xpath,//android.widget.TextView[@resource-id='com.dudam.rohan.bitcoininfo:id/current_price']"
-bitcoin_price_page_heading = "xpath,//android.widget.TextView[@text='Real Time Price of Bitcoin']"
-bitcoin_price_in_usd = "xpath,//android.widget.TextView[@resource-id='com.dudam.rohan.bitcoininfo:id/doller_value']"
