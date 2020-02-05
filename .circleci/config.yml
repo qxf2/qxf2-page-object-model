@@ -2,17 +2,18 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: themattrix/tox
-    steps:
-      - checkout
-      - run:
-          name: Run tox
-          command: |
-             tox
+      - image: circleci/python:3.8
+    
+    dependencies:
+      override:
+        - sudo pip install tox tox-pyenv
+        - pyenv local 3.6.0 3.7.0 3.8.0
+    
 
-      - store_artifacts:
-          path: ./screenshots
-          destination: screenshots-file
-      - store_artifacts:
-          path: ./log
-          destination: logs-file
+
+    - store_artifacts:
+        path: ./screenshots
+        destination: screenshots-file
+    - store_artifacts:
+        path: ./log
+        destination: logs-file
