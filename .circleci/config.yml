@@ -5,10 +5,10 @@ jobs:
       - image: circleci/python:3.6.4
     environment:
       TOXENV: circleci
-dependencies:
-    pre:
-     - pip install tox  
-test:
+    dependencies:
+       pre:
+         - pip install tox  
+
     steps:
       - checkout
       - run:
@@ -30,6 +30,6 @@ test:
       - store_artifacts:
           path: ./log
           destination: logs-file
-test:
-   override:
-     -tox
+    steps:
+        override:
+           -tox
