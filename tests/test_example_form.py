@@ -5,7 +5,7 @@ Our automated test will do the following:
     #Fill the example form.
     #Click on Click me! button and check if its working fine.
 """
-import os,sys,time
+import os,sys,time,pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 from utils.Option_Parser import Option_Parser
@@ -28,6 +28,7 @@ def test_example_form(test_obj):
         #Set start_time with current time
         start_time = int(time.time())	
 
+
         # Turn on the highlighting feature
         test_obj.turn_on_highlight()
                 
@@ -47,7 +48,6 @@ def test_example_form(test_obj):
         case_id = testrail_file.test_example_form_name
         test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Set Name", "Sets the name in the form", "test_example_form", result_flag, "Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()), [test_obj.log_obj.log_file_dir + os.sep + test_obj.log_obj.log_file_name])
-        
         #6. Set Email in form
         result_flag = test_obj.set_email(email) 
         test_obj.log_result(result_flag,
