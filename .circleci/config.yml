@@ -1,32 +1,11 @@
-version: 2.0
-jobs:
-  build:
-    docker:
-      - image: circleci/python:3.8
-    environment:
-      TOXENV: circleci
+machine:
 
-    steps:
-      - checkout
-      - run:
-          name: Mobile app
-          command: |
-            git clone https://github.com/qxf2/bitcoin-info.git
-      - run:
-          name: Set Environment Variables
-          command: |                      
-            echo 'export app_path=/home/circleci/project/bitcoin-info/app/' >> $BASH_ENV  
-      - run:
-          name: Decrypt remote_credentials_enc.py using openssl
-          command: |
-            openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY     
+  docker:
+    - image: circleci/python:3.8
 
-      - store_artifacts:
-          path: ./screenshots
-          destination: screenshots-file
-      - store_artifacts:
-          path: ./log
-          destination: logs-file
+  environment:
+    TOXENV: circleci
+
 dependencies:
   override:
     - pip install -U pip setuptools tox
@@ -35,6 +14,11 @@ dependencies:
   cache_directories :
     - "~/.cache/pip"
 
-jobs:
+
+test:
   override:
     - tox
+
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/pytest
+    - mv .junit.xml $CIRCLE_TEST_REPORTS/pytest/junit.xml
