@@ -1,24 +1,22 @@
-machine:
+version: 2
 
-  docker:
-    - image: circleci/python:3.8
+jobs:
 
-  environment:
-    TOXENV: circleci
+  # using tox
+  toxify:
 
-dependencies:
-  override:
-    - pip install -U pip setuptools tox
-    - tox --notes
+      docker:
+        - image: python:3.6
 
-  cache_directories :
-    - "~/.cache/pip"
+      steps:
 
+        - checkout
 
-test:
-  override:
-    - tox
+        - run: pip install tox && tox
 
-  post:
-    - mkdir -p $CIRCLE_TEST_REPORTS/pytest
-    - mv .junit.xml $CIRCLE_TEST_REPORTS/pytest/junit.xml
+workflows:
+  version: 2
+
+  myproj:
+    jobs:
+      - toxify
