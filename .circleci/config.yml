@@ -7,10 +7,16 @@ jobs:
 
       docker:
         - image: circleci/python:3.8.0
-
+  
       steps:
 
         - checkout
+
+        - run: git clone https://github.com/qxf2/bitcoin-info.git
+
+        - run: echo 'export app_path=/home/circleci/project/bitcoin-info/app/' >> $BASH_ENV
+
+        - run: openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY
 
         - run: sudo pip install tox && tox
 
