@@ -1,9 +1,12 @@
 """
-This is an automated test to verify bus ticket booking facility of redBus
-    #Open redBus.in and get navigated to bus-tickets main page
+This is an automated test to verify the following features under bus ticket booking facility of redBus
+    #Open redBus.in/bus-tickets/
     #Set source,destination, onward date, return date on Search Buses form 
-    #Click on Search Buses and check if redirected correctly
-    #Verify source and destination fields in the view buses page  
+    #Click on Search Buses and submit the search information 
+    #check if redirected correctly to Search results page
+    #Verify source and destination fields are present in the search results page
+    #Click on view seats under the first available bus
+    #Verify if the seat selection message appears
 """
 import os,sys,time,pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -23,7 +26,7 @@ def test_redBus_ticket_booking(test_obj):
         expected_pass = 0
         actual_pass = -1
         
-        #1. Create a test object and fill the example form.
+        #1. Create a test object and fill the Search Buses form.
         test_obj = PageFactory.get_page_object("redBus Main Page")
         #Set start_time with current time
         start_time = int(time.time())	
@@ -31,28 +34,52 @@ def test_redBus_ticket_booking(test_obj):
         # Turn on the highlighting feature
         test_obj.turn_on_highlight()
                 
-        #4. Get the test details from the conf file
+        #2. Get the test details from the conf file
         source = booking_conf.source
         destination = booking_conf.destination
         onward_date = booking_conf.onward_date
         return_date = booking_conf.return_date
         
-        #6. Set and submit the search buses form 
+        #3. Set search data fields and submit the search buses form
         result_flag = test_obj.submit_form(source,destination,onward_date,return_date)
         test_obj.log_result(result_flag,
                             positive="Successfully submitted the form\n",
                             negative="Failed to submit the form \nOn url: %s"%test_obj.get_current_url(),
                             level="critical")
 
-        #7. Check the source and destination locations on the redirect page
+        #4. Verify if re-directed to the correct page i.e search results page
         if result_flag is True:
-            result_flag = test_obj.check_source_and_destination(source,destination)
+            result_flag = test_obj.check_redirect(source,destination)
         test_obj.log_result(result_flag,
-                            positive="Source and destination locations found on the redirect page!!\n",
-                            negative="Fail: Source and destination locations mismatch on the redirect page!")
+                            positive="Redirected correctly to the Search Results page!!\n",
+                            negative="Fail: Redirection to the Search Results page failed!")
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         
-        #<tbd>. Print out the result
+        #5. Check if the source and destination elements are present on the redirect page i.e search results page
+        if result_flag is True:
+            result_flag = test_obj.check_source_and_destination()
+        test_obj.log_result(result_flag,
+                            positive="Source and destination elements found on the redirect page!!\n",
+                            negative="Fail: Source and destination elements NOT found on the redirect page!")
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+
+        #6. Click on view seats under the first available bus
+        if result_flag is True:
+            result_flag = test_obj.click_on_view_seats_button()
+        test_obj.log_result(result_flag,
+                            positive="Clicked on the View Seats button\n",
+                            negative="Failed to click on View Seats button")
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        
+        #7. Verify if the seat selection message appears
+        if result_flag is True:
+            result_flag = test_obj.check_seat_selection_msg()
+        test_obj.log_result(result_flag,
+                            positive="Seat selection message appears on click of view seats!\n",
+                            negative="Fail: Seat selection message does not appear on click of view seats!")
+        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+    
+        #8. Print out the result
         test_obj.write_test_summary()
         expected_pass = test_obj.result_counter
         actual_pass = test_obj.pass_counter        
@@ -78,19 +105,7 @@ if __name__=='__main__':
 
         #Setup and register a driver
         test_obj.register_driver(options.remote_flag,options.os_name,options.os_version,options.browser,options.browser_version,options.remote_project_name,options.remote_build_name)
-
-        #Setup TestRail reporting
-        if options.testrail_flag.lower()=='y':
-            if options.test_run_id is None:
-                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
-                options.testrail_flag = 'N'   
-            if options.test_run_id is not None:
-                test_obj.register_testrail()
-                test_obj.set_test_run_id(options.test_run_id)
-
-        if options.tesults_flag.lower()=='y':
-            test_obj.register_tesults()
-
+        
         test_redBus_ticket_booking(test_obj)
                 
         #teardowm

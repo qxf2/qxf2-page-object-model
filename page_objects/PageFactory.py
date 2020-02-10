@@ -11,7 +11,7 @@ Pages implemented:
 from page_objects.zero_mobile_page import Zero_Mobile_Page
 from page_objects.zero_page import Zero_Page
 from page_objects.redBus_main_page import redBus_Main_Page
-from page_objects.redBus_view_buses_page import redBus_View_Buses_Page
+from page_objects.redBus_search_results_page import redBus_Search_Results_Page
 import conf.base_url_conf
 
 
@@ -27,8 +27,8 @@ class PageFactory():
             test_obj = Zero_Mobile_Page()
         elif page_name == "redbus main page":
             test_obj = redBus_Main_Page(base_url=base_url)
-        elif page_name == "redbus view buses page":
-            test_obj = redBus_View_Buses_Page(base_url=base_url)
+        elif page_name == "redbus search results page":
+            test_obj = redBus_Search_Results_Page(base_url=base_url)
         return test_obj
 
     get_page_object = staticmethod(get_page_object)

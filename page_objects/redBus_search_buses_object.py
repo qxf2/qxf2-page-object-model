@@ -5,10 +5,11 @@ The form consists of two dropdown fields, two date selection calendars and a but
 
 from .Base_Page import Base_Page
 import conf.locators_conf as locators
+import re, time
 from utils.Wrapit import Wrapit
 
 
-class redBus_Search_Buses_Object:
+class redBus_Search_Buses_Object():
     "Page object for the Search Buses Form"
     
     #locators
@@ -71,7 +72,9 @@ class redBus_Search_Buses_Object:
     @Wrapit._screenshot
     def click_on_search_buses(self):
         "Click on 'Search Buses' button"
+        
         result_flag = self.click_element(self.search_buses_button)
+        time.sleep(5)
         self.conditional_write(result_flag,
             positive='Clicked on the "Search Buses" button',
             negative='Failed to click on "Search Buses" button',
@@ -88,18 +91,18 @@ class redBus_Search_Buses_Object:
         result_flag &= self.set_onward_date(onward_date)
         result_flag &= self.set_return_date(return_date)
         result_flag &= self.click_on_search_buses()
-        result_flag &= self.check_redirect(source,destination)
-
+              
         return result_flag
         
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
     def check_redirect(self, source, destination):
-        "Check if redirected to the view buses page"
+        "Check if redirected to the search results page"
+        time.sleep(5)
         result_flag = False
-        
-        if (source.split(', ')[0] in self.driver.title) and (destination.split(', ')[0] in self.driver.title):
+                
+        if (re.split('[, ]', source)[0] in self.driver.current_url) and (re.split('[, ]', source)[0] in self.driver.current_url):
             result_flag = True
-            self.switch_page("view buses")
-
+            self.switch_page("redbus search results page")
+            
         return result_flag
