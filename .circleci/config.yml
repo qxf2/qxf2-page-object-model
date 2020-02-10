@@ -6,13 +6,13 @@ jobs:
   toxify:
 
       docker:
-        - image: circleci/python:3.7.0
+        - image: circleci/python:3.8.0
 
       steps:
 
         - checkout
 
-        - run: pip install tox && tox
+        - run: sudo pip install tox && tox
 
 workflows:
   version: 2
