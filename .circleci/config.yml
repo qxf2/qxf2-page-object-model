@@ -2,12 +2,9 @@ version: 2.0
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.4
+      - image: circleci/python:3.8
     environment:
       TOXENV: circleci
-    dependencies:
-       pre:
-         - pip install tox  
 
     steps:
       - checkout
@@ -30,6 +27,14 @@ jobs:
       - store_artifacts:
           path: ./log
           destination: logs-file
-    steps:
-        override:
-           -tox
+dependencies:
+  override:
+    - pip install -U pip setuptools tox
+    - tox --notes
+
+  cache_directories :
+    - "~/.cache/pip"
+
+jobs:
+  override:
+    - tox
