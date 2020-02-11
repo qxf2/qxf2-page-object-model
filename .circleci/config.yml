@@ -18,10 +18,11 @@ jobs:
 
   
   toxify:
+      steps:
 
-      - checkout
+        - checkout
 
-      - run: sudo pip install tox && tox
+        - run: sudo pip install tox && tox
 
 workflows:
   version: 2
