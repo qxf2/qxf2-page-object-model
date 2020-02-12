@@ -11,7 +11,6 @@ def make_gif(screenshot_dir_path,name = "test_recap",suffix=".gif",duration=2):
     gif_name = None
     images = []
 
-    #If the execution is from root directory using python command. The calling module name would include 'tests/test_---'. The below condition is used to avoid the additional directory name 'tests'
     if "/" in name:
         name=name.split("/")[-1]
 
