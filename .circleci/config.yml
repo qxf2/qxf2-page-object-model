@@ -6,13 +6,13 @@ jobs:
   toxify:
 
       docker:
-        - image: circleci/python:3.7.0
+        - image: themattrix/tox
   
       steps:
         
         - checkout
 
-        - run: sudo pip install tox
+        - run: pip install tox
 
         - run: git clone https://github.com/qxf2/bitcoin-info.git
 
