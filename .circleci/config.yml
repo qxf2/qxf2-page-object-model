@@ -6,7 +6,9 @@ jobs:
 
       docker:
         - image: themattrix/tox
-  
+      
+      parallelism: 3
+      
       steps:
         
         - checkout
