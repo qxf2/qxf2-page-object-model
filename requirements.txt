@@ -5,7 +5,7 @@ python_dotenv==0.8.2
 Appium_Python_Client==0.28
 pytest-xdist==1.22
 pytest-rerunfailures==4.1
-pytest_reportportal==1.0.8
+pytest_reportportal==1.10.0
 pillow>=6.2.0
 tesults
 loguru
