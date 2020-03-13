@@ -14,12 +14,6 @@ class Footer_Object:
     "Page object for the footer class"
 
     #locators
-
-
-class Footer_Object:
-    "Page object for the footer class"
-
-    #locators
     footer_menu = locators.footer_menu
     copyright_text = locators.copyright_text
     copyright_start_year = "2013"
