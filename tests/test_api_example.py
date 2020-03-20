@@ -13,7 +13,6 @@ API EXAMPLE TEST
 
 import os
 import sys
-import time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from endpoints.API_Player import API_Player
 from conf import api_example_conf as conf
