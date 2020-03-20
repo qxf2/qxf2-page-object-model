@@ -6,10 +6,10 @@ TestRail integration:
 
 API reference: http://docs.gurock.com/testrail-api2/start
 """
-
-import dotenv,os,testrail
+import dotenv,os,sys
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from utils import testrail
 import conf.testrailenv_conf as conf_file
-
 
 class Test_Rail:
     "Wrapper around TestRail's API"
@@ -83,10 +83,10 @@ class Test_Rail:
         project_id = self.get_project_id(project_name)
         try:
             test_runs = self.client.send_get('get_runs/%s'%(project_id))
-        except Exception,e:
-            print 'Exception in update_testrail() updating TestRail.'
-            print 'PYTHON SAYS: '
-            print e
+        except Exception as e:
+            print('Exception in update_testrail() updating TestRail.')
+            print('PYTHON SAYS: ')
+            print(e)
         else:
             for test_run in test_runs:
                  if test_run['name'] == test_run_name:
@@ -107,14 +107,14 @@ class Test_Rail:
                             'description':milestone_description}
                     result = self.client.send_post('add_milestone/%s'%str(project_id),
                                                    data)
-                except Exception,e:
-                    print 'Exception in create_new_project() creating new project.'
-                    print 'PYTHON SAYS: '
-                    print e
+                except Exception as e:
+                    print('Exception in create_new_project() creating new project.')
+                    print('PYTHON SAYS: ')
+                    print(e)
                 else:
-                    print 'Created the milestone: %s'%milestone_name
+                    print('Created the milestone: %s'%milestone_name)
         else:
-            print "Milestone '%s' already exists"%milestone_name
+            print("Milestone '%s' already exists"%milestone_name)
 
 
     def create_new_project(self,new_project_name,project_description,show_announcement,suite_mode):
@@ -127,12 +127,12 @@ class Test_Rail:
                                                 'announcement': project_description,
                                                 'show_announcement': show_announcement,
                                                 'suite_mode': suite_mode,})
-            except Exception,e:
-                print 'Exception in create_new_project() creating new project.'
-                print 'PYTHON SAYS: '
-                print e
+            except Exception as e:
+                print('Exception in create_new_project() creating new project.')
+                print('PYTHON SAYS: ')
+                print(e)
         else:
-            print "Project already exists %s"%new_project_name
+            print("Project already exists %s"%new_project_name)
 
 
     def create_test_run(self,project_name,test_run_name,milestone_name=None,description="",suite_name=None,case_ids=[],assigned_to=None):
@@ -162,17 +162,17 @@ class Test_Rail:
 
             try:
                 result = self.client.send_post('add_run/%s'%(project_id),data)
-            except Exception,e:
-                print 'Exception in create_test_run() Creating Test Run.'
-                print 'PYTHON SAYS: '
-                print e
+            except Exception as e:
+                print('Exception in create_test_run() Creating Test Run.')
+                print('PYTHON SAYS: ')
+                print(e)
             else:
-                print 'Created the test run: %s'%test_run_name
+                print('Created the test run: %s'%test_run_name)
         else:
             if project_id is None:
-                print "Cannot add test run %s because Project %s was not found"%(test_run_name,project_name)
+                print("Cannot add test run %s because Project %s was not found"%(test_run_name,project_name))
             elif test_run_id is not None:
-                print "Test run '%s' already exists"%test_run_name
+                print("Test run '%s' already exists"%test_run_name)
             
 
     def delete_project(self,new_project_name,project_description):
@@ -181,12 +181,12 @@ class Test_Rail:
         if project_id is not None:
             try:
                 result = self.client.send_post('delete_project/%s'%(project_id),project_description)
-            except Exception,e:
-                print 'Exception in delete_project() deleting project.'
-                print 'PYTHON SAYS: '
-                print e
+            except Exception as e:
+                print('Exception in delete_project() deleting project.')
+                print('PYTHON SAYS: ')
+                print(e)
         else:
-            print 'Cant delete the project given project name: %s'%(new_project_name)
+            print('Cant delete the project given project name: %s'%(new_project_name))
     
 
     def delete_test_run(self,test_run_name,project_name):
@@ -195,12 +195,12 @@ class Test_Rail:
         if run_id is not None:
             try:
                 result = self.client.send_post('delete_run/%s'%(run_id),test_run_name)
-            except Exception,e:
-                print 'Exception in update_testrail() updating TestRail.'
-                print 'PYTHON SAYS: '
-                print e
+            except Exception as e:
+                print('Exception in update_testrail() updating TestRail.')
+                print('PYTHON SAYS: ')
+                print(e)
         else:
-            print 'Cant delete the test run for given project and test run name: %s , %s'%(project_name,test_run_name)
+            print('Cant delete the test run for given project and test run name: %s , %s'%(project_name,test_run_name))
 
 
     def update_testrail(self,case_id,run_id,result_flag,msg=""):
@@ -217,11 +217,12 @@ class Test_Rail:
                 result = self.client.send_post(
                     'add_result_for_case/%s/%s'%(run_id,case_id),
                     {'status_id': status_id, 'comment': msg })
-            except Exception,e:
-                print 'Exception in update_testrail() updating TestRail.'
-                print 'PYTHON SAYS: '
-                print e
+                print (result)
+            except Exception as e:
+                print('Exception in update_testrail() updating TestRail.')
+                print('PYTHON SAYS: ')
+                print(e)
             else:
-                print 'Updated test result for case: %s in test run: %s\n'%(case_id,run_id)
+                print('Updated test result for case: %s in test run: %s\n'%(case_id,run_id))
     
         return update_flag

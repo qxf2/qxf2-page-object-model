@@ -2,7 +2,7 @@
 Class to hold miscellaneous but useful decorators for our framework
 """
 
-from inspect import getargspec
+from inspect import getfullargspec
 from page_objects.Base_Page import Base_Page
 
 
@@ -11,20 +11,24 @@ class Wrapit():
     "Wrapit class to hold decorator functions"	
     def _exceptionHandler(f):
         "Decorator to handle exceptions"
-        argspec = getargspec(f)
+        argspec = getfullargspec(f)
         def inner(*args,**kwargs):
             try:
                 return f(*args,**kwargs)
-            except Exception,e:
+            except Exception as e:                
                 args[0].write('You have this exception')
                 args[0].write('Exception in method: %s'%str(f.__name__))
                 args[0].write('PYTHON SAYS: %s'%str(e))
-
+                #we denote None as failure case
+                return None
+                
         return inner
 
 
     def _screenshot(func):
         "Decorator for taking screenshots"
+        #Usage: Make this the first decorator to a method (right above the 'def function_name' line)
+        #Otherwise, we cannot name the screenshot with the name of the function that called it
         def wrapper(*args,**kwargs):
             result = func(*args,**kwargs)
             screenshot_name = '%003d'%args[0].screenshot_counter + '_' + func.__name__

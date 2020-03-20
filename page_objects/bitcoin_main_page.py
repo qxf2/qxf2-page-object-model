@@ -1,13 +1,12 @@
 """
 Page object for Bitcoin main Page.
 """
-
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
-from Mobile_Base_Page import Mobile_Base_Page
+from .Mobile_Base_Page import Mobile_Base_Page
 
 
 class Bitcoin_Main_Page(Mobile_Base_Page):
@@ -34,7 +33,7 @@ class Bitcoin_Main_Page(Mobile_Base_Page):
                 negative='Failed to click on the bitcoin real time price page button.',
                 level='debug')
 
-        except Exception,e:
+        except Exception as e:
             self.write("Exception while clicking on the bitcoin real time price button.")  
             self.write(str(e))
 
@@ -46,7 +45,7 @@ class Bitcoin_Main_Page(Mobile_Base_Page):
         "This method is to check if we have been redirected to the bitcoin real time price page."
         result_flag = False
         bitcoin_price_page_heading = self.get_text_by_locator(self.bitcoin_price_page_heading)
-        if bitcoin_price_page_heading == expected_bitcoin_price_page_heading:
+        if bitcoin_price_page_heading.decode('utf-8') == expected_bitcoin_price_page_heading:
             result_flag = True
             self.switch_page("bitcoin price page")
         

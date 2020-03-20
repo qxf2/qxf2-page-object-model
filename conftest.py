@@ -1,151 +1,268 @@
-import pytest
-import os
+import os,pytest
+from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
+from conf import base_url_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
 
+@pytest.fixture
+def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname):
+    "Return an instance of Base Page that knows about the third party integrations"
+    test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
+    test_obj.set_calling_module(testname)
+    #Setup and register a driver
+    test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
+
+    #Setup TestRail reporting
+    if testrail_flag.lower()=='y':
+        if test_run_id is None:
+            test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+            testrail_flag = 'N'   
+        if test_run_id is not None:
+            test_obj.register_testrail()
+            test_obj.set_test_run_id(test_run_id)
+
+    if tesults_flag.lower()=='y':
+        test_obj.register_tesults()
+    
+    yield test_obj
+    
+    #Teardown
+    test_obj.wait(3)
+    test_obj.teardown() 
+   
+@pytest.fixture
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path):
+    
+    "Return an instance of Base Page that knows about the third party integrations"
+    test_mobile_obj = PageFactory.get_page_object("Zero mobile")
+
+    #Setup and register a driver
+    test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag)
+
+    #3. Setup TestRail reporting
+    if testrail_flag.lower()=='y':
+        if test_run_id is None:
+            test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+            testrail_flag = 'N'   
+        if test_run_id is not None:
+            test_mobile_obj.register_testrail()
+            test_mobile_obj.set_test_run_id(test_run_id)
+
+    if tesults_flag.lower()=='y':
+        test_mobile_obj.register_tesults()
+
+    yield test_mobile_obj
+    
+    #Teardown
+    test_mobile_obj.wait(3)
+    test_mobile_obj.teardown() 
+
 
 @pytest.fixture
-def browser():
+def testname(request):
+    "pytest fixture for testname"
+    name_of_test = request.node.name
+    name_of_test = name_of_test.split('[')[0]
+
+    return name_of_test
+
+
+@pytest.fixture
+def browser(request):
     "pytest fixture for browser"
-    return pytest.config.getoption("-B")
+    return request.config.getoption("-B")
 
 
 @pytest.fixture
-def base_url():
+def base_url(request):
     "pytest fixture for base url"
-    return pytest.config.getoption("-U")
+    return request.config.getoption("-U")
+
 
 @pytest.fixture
-def api_url():
+def api_url(request):
     "pytest fixture for base url"
-    return pytest.config.getoption("-A")
+    return request.config.getoption("-A")
+    
 
 @pytest.fixture
-def test_run_id():
+def test_run_id(request):
     "pytest fixture for test run id"
-    return pytest.config.getoption("-R")
+    return request.config.getoption("-R")
 
 
 @pytest.fixture
-def testrail_flag():
+def testrail_flag(request):
     "pytest fixture for test rail flag"
-    return pytest.config.getoption("-X")
+    return request.config.getoption("-X")
 
 
 @pytest.fixture
-def remote_flag():
+def remote_flag(request):
     "pytest fixture for browserstack/sauce flag"
-    return pytest.config.getoption("-M")
+    return request.config.getoption("-M")
 
 
 @pytest.fixture
-def browser_version():
+def browser_version(request):
     "pytest fixture for browser version"
-    return pytest.config.getoption("-V") 
+    return request.config.getoption("-V") 
 
 
 @pytest.fixture
-def os_name():
+def os_name(request):
     "pytest fixture for os_name"
-    return pytest.config.getoption("-P") 
+    return request.config.getoption("-P") 
 
 
 @pytest.fixture
-def os_version():
+def os_version(request):
     "pytest fixture for os version"
-    return pytest.config.getoption("-O")
+    return request.config.getoption("-O")
 
 
 @pytest.fixture
-def remote_project_name():
+def remote_project_name(request):
     "pytest fixture for browserStack project name"
-    return pytest.config.getoption("--remote_project_name")
+    return request.config.getoption("--remote_project_name")
 
 
 @pytest.fixture
-def remote_build_name():
+def remote_build_name(request):
     "pytest fixture for browserStack build name"
-    return pytest.config.getoption("--remote_build_name")
+    return request.config.getoption("--remote_build_name")
 
 
 @pytest.fixture
-def slack_flag():
+def slack_flag(request):
     "pytest fixture for sending reports on slack"
-    return pytest.config.getoption("-S")
+    return request.config.getoption("-S")
+
 
 @pytest.fixture
-def tesults_flag():
+def tesults_flag(request):
     "pytest fixture for sending results to tesults"
-    return pytest.config.getoption("--tesults")
+    return request.config.getoption("--tesults")
+
 
 @pytest.fixture
-def mobile_os_name():
+def mobile_os_name(request):
     "pytest fixture for mobile os name"
-    return pytest.config.getoption("-G")
+    return request.config.getoption("-G")
 
 
 @pytest.fixture
-def mobile_os_version():
+def mobile_os_version(request):
     "pytest fixture for mobile os version"
-    return pytest.config.getoption("-H")
+    return request.config.getoption("-H")
 
 
 @pytest.fixture
-def device_name():
+def device_name(request):
     "pytest fixture for device name"
-    return pytest.config.getoption("-I")
+    return request.config.getoption("-I")
 
 
 @pytest.fixture
-def app_package():
+def app_package(request):
     "pytest fixture for app package"
-    return pytest.config.getoption("-J")
+    return request.config.getoption("-J")
 
 
 @pytest.fixture
-def app_activity():
+def app_activity(request):
     "pytest fixture for app activity"
-    return pytest.config.getoption("-K")
+    return request.config.getoption("-K")
 
 
 @pytest.fixture
-def device_flag():
+def device_flag(request):
     "pytest fixture for device flag"
-    return pytest.config.getoption("-Q")
+    return request.config.getoption("-Q")
 
 
 @pytest.fixture
-def email_pytest_report():
+def email_pytest_report(request):
     "pytest fixture for device flag"
-    return pytest.config.getoption("--email_pytest_report")
+    return request.config.getoption("--email_pytest_report")
 
 
 @pytest.fixture
-def app_name():
+def app_name(request):
     "pytest fixture for app name"
-    return pytest.config.getoption("-D")
+    return request.config.getoption("-D")
+
 
 @pytest.fixture
-def app_path():
+def ud_id(request):
+    "pytest fixture for iOS udid"
+    return request.config.getoption("--ud_id")
+
+
+@pytest.fixture
+def org_id(request):
+    "pytest fixture for iOS team id"
+    return request.config.getoption("--org_id")
+
+
+@pytest.fixture
+def signing_id(request):
+    "pytest fixture for iOS signing id"
+    return request.config.getoption("--signing_id")
+
+
+@pytest.fixture
+def no_reset_flag(request):
+    "pytest fixture for no_reset_flag"
+    return request.config.getoption("--no_reset_flag")
+
+
+@pytest.fixture
+def app_path(request):
     "pytest fixture for app path"
-    return pytest.config.getoption("-N")    
+    return request.config.getoption("-N")    
+
+
+def pytest_addoption(parser):
+    # Method to add the option to ini
+    parser.addini("rp_uuid",'help',type="pathlist")
+    parser.addini("rp_endpoint",'help',type="pathlist")
+    parser.addini("rp_project",'help',type="pathlist")
+    parser.addini("rp_launch",'help',type="pathlist")  
+
+
+@pytest.hookimpl()
+def pytest_configure(config):
+    # Sets the launch name based on the marker selected.
+    global if_reportportal
+    if_reportportal =config.getoption('--reportportal')
+    
+    try:
+        config._inicache["rp_uuid"]="34ec4436-1a3c-4079-9ca0-e177e530fa47"
+        config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
+        config._inicache["rp_project"]="personal"
+        config._inicache["rp_launch"]="TEST_EXAMPLE" 
+ 
+    except Exception as e:
+        print (str(e)) 
 
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
-    if pytest.config.getoption("-S").lower() == 'y':
+    if  terminalreporter.config.getoption("-S").lower() == 'y':
         post_test_reports_to_slack.post_reports_to_slack()
-    elif pytest.config.getoption("--email_pytest_report").lower() == 'y':
+    elif terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
         #Initialize the Email_Pytest_Report object
         email_obj = Email_Pytest_Report()
         # Send html formatted email body message with pytest report as an attachment
         email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path= 'default')
 
-    if pytest.config.getoption("--tesults").lower() == 'y':
+    if  terminalreporter.config.getoption("--tesults").lower() == 'y':
         Tesults.post_results_to_tesults()
-        
+
+
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
 
@@ -169,7 +286,9 @@ def pytest_generate_tests(metafunc):
                 metafunc.parametrize("browser",browser_os_name_conf.default_browser)
             else:
                 config_list_local = [(metafunc.config.getoption("-B")[0])]
-                metafunc.parametrize("browser", config_list_local)          
+                metafunc.parametrize("browser", config_list_local)
+
+
 
 def pytest_addoption(parser):
     parser.addoption("-B","--browser",
@@ -179,8 +298,12 @@ def pytest_addoption(parser):
                       help="Browser. Valid options are firefox, ie and chrome")                      
     parser.addoption("-U","--app_url",
                       dest="url",
-                      default="https://qxf2.com",
+                      default=base_url_conf.base_url,
                       help="The url of the application")
+    parser.addoption("-A","--api_url",
+                      dest="url",
+                      default="http://35.167.62.251",
+                      help="The url of the api")
     parser.addoption("-X","--testrail_flag",
                       dest="testrail_flag",
                       default='N',
@@ -227,11 +350,11 @@ def pytest_addoption(parser):
     parser.addoption("-H","--mobile_os_version",
                       dest="mobile_os_version",
                       help="Enter version of operating system of mobile: 8.1.0",
-                      default="6.0")
+                      default="8.0")
     parser.addoption("-I","--device_name",
                       dest="device_name",
                       help="Enter device name. Ex: Emulator, physical device name",
-                      default="Google Nexus 6")
+                      default="Samsung Galaxy S9")
     parser.addoption("-J","--app_package",
                       dest="app_package",
                       help="Enter name of app package. Ex: bitcoininfo",
@@ -256,9 +379,26 @@ def pytest_addoption(parser):
                       dest="app_name",
                       help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
                       default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
+    parser.addoption("--ud_id",
+                      dest="ud_id",
+                      help="Enter your iOS device UDID which is required to run appium test in iOS device",
+                      default=None)
+    parser.addoption("--org_id",
+                      dest="org_id",
+                      help="Enter your iOS Team ID which is required to run appium test in iOS device",
+                      default=None)
+    parser.addoption("--signing_id",
+                      dest="signing_id",
+                      help="Enter your iOS app signing id which is required to run appium test in iOS device",
+                      default="iPhone Developer")
+    parser.addoption("--no_reset_flag",
+                      dest="no_reset_flag",
+                      help="Pass false if you want to reset app eveytime you run app else false",
+                      default="true")
     parser.addoption("-N","--app_path",
                       dest="app_path",
                       help="Enter app path")
+
 
 
 

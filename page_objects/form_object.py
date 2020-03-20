@@ -3,7 +3,7 @@ This class models the form on the Selenium tutorial page
 The form consists of some input fields, a dropdown, a checkbox and a button
 """
 
-from Base_Page import Base_Page
+from .Base_Page import Base_Page
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 
@@ -21,8 +21,8 @@ class Form_Object:
     tac_checkbox = locators.tac_checkbox
     redirect_title = "redirect"    
 
-    @Wrapit._screenshot
     @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def set_name(self,name):
         "Set the name on the form"
         result_flag = self.set_text(self.name_field,name)
@@ -34,8 +34,8 @@ class Form_Object:
         return result_flag 
 
 
-    @Wrapit._screenshot
     @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def set_email(self,email):
         "Set the email on the form"
         result_flag = self.set_text(self.email_field,email)
@@ -47,8 +47,8 @@ class Form_Object:
         return result_flag
 
 
-    @Wrapit._screenshot
     @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def set_phone(self,phone):
         "Set the phone on the form"
         result_flag = self.set_text(self.phone_no_field,phone)
@@ -60,8 +60,8 @@ class Form_Object:
         return result_flag
 
 
-    @Wrapit._screenshot
     @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def set_gender(self,gender,wait_seconds=1):
         "Set the gender on the form"
         result_flag = self.click_element(self.gender_dropdown)
@@ -75,8 +75,8 @@ class Form_Object:
         return result_flag
 
 
-    @Wrapit._screenshot
     @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def click_me(self):
         "Click on 'Click Me' button"
         result_flag = self.click_element(self.click_me_button)
@@ -88,8 +88,8 @@ class Form_Object:
         return result_flag
 
 
-    @Wrapit._screenshot
     @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def accept_terms(self):
         "Accept the terms and conditions"
         result_flag = self.select_checkbox(self.tac_checkbox)
@@ -101,8 +101,8 @@ class Form_Object:
         return result_flag
 
 
-    @Wrapit._screenshot
     @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def check_redirect(self):
         "Check if we have been redirected to the redirect page"
         result_flag = False
@@ -113,8 +113,8 @@ class Form_Object:
         return result_flag
 
 
-    @Wrapit._screenshot
     @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def submit_form(self,username,email,phone,gender):
         "Submit the form"
         result_flag = self.set_name(username)

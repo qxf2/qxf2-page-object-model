@@ -1,4 +1,12 @@
+![Python version](https://img.shields.io/badge/python-3.x-green?color=brightgreen)
+![GitHub](https://img.shields.io/github/license/qxf2/qxf2-page-object-model?color=brightgreen)
+![Maintenance](https://img.shields.io/maintenance/yes/2019?color=brightgreen)
+[![CircleCI](https://circleci.com/gh/qxf2/qxf2-page-object-model.svg?style=shield)](https://circleci.com/gh/qxf2/qxf2-page-object-model)
 [![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)](https://www.browserstack.com/automate/public-build/T0U0cC9VRmk3RnZ3NHdhc3lYMHlqbEtIV0VvWXFuN25DeGhEdnhqTHJXVT0tLUMzQmV3cWVRaCtVSFhjZWtCeUdlOGc9PQ==--7a8a46022a744ab14de93e4d8970f7fbe520bec3)
+![GitHub stars](https://img.shields.io/github/stars/qxf2/qxf2-page-object-model)
+![GitHub forks](https://img.shields.io/github/forks/qxf2/qxf2-page-object-model)
+![GitHub repo size](https://img.shields.io/github/repo-size/qxf2/qxf2-page-object-model)
+![GitHub last commit](https://img.shields.io/github/last-commit/qxf2/qxf2-page-object-model)
 
 --------
 A Pythonic Selenium, Appium and API test automation framework
@@ -11,9 +19,17 @@ You can use this test automation framework to write:
 
 3. __API automation__ scripts to test endpoints of your web/mobile applications
 
+&nbsp;
+
+![Qxf2 automation framework](https://qxf2.com/assets/img/framework_introduction.png)
+
+&nbsp;
+
 This GUI and API test automation framework is developed and maintained by [Qxf2 Services](https://qxf2.com). This framework is written in __Python__ and is based on the __Page Object Model__ - a design pattern that makes it easy to maintain and develop robust tests. We have also included our __API test automation framework__ based on the player-interface pattern in this repository. You can now write your API tests along with your Selenium and Appium tests. 
 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too! 
+
+If you end up using our framework, please let us know by giving us a star on GitHub and/or dropping an email to __mak@qxf2.com__
 
 ------
 Setup 
@@ -30,9 +46,9 @@ The setup has four parts:
 
 __1. Prerequisites__
 
-a) Install Python 2.x
+a) Install Python 3.x
 
-b) Add Python 2.x to your PATH environment variable
+b) Add Python 3.x to your PATH environment variable
 
 c) If you do not have it already, get pip (NOTE: Most recent Python distributions come with pip)
 
@@ -54,9 +70,9 @@ a) Get setup with your browser driver. If you don't know how to, please try:
 
 __If your setup goes well__, you should be to run a simple test with this command:
 
-1. Chrome: `pytest -k example_form -B Chrome` 
+1. Chrome: `python -m pytest -k example_form -B Chrome` 
 
-2. Firefox: `pytest -k example_form -B Firefox`
+2. Firefox: `python -m pytest -k example_form -B Firefox`
 
 __Optional steps__ for integrating with third-party tools: 
 
@@ -81,7 +97,7 @@ d) [Install the appium Python client library](https://pypi.python.org/pypi/Appiu
 pip install Appium-Python-Client
 
 __If your setup goes well__, you should be to run a simple mobile test with this command after starting the Appium and Android emulator:
-`pytest -k mobile_bitcoin_price -H $Emulator_OS_Version -I $Emulator_Name`
+`python -m pytest -k mobile_bitcoin_price -H $Emulator_OS_Version -I $Emulator_Name`
 
 __Optional steps__ for more details on setting up appium and running tests on Android or iOS refer to below links:
 * [Get started with mobile automation: Appium & Python](https://qxf2.com/blog/appium-mobile-automation/)
@@ -123,16 +139,16 @@ COMMANDS FOR RUNNING TESTS
 
 a)py.test [options]
 
-	-s	used to display the output on the screen			E.g: py.test -s (This will run all the tests in the directory and subdirectories)
-	-U  	used to run against specific URL				E.g: py.test -U http://YOUR_localhost_URL (This will run against your local instance)
-	-M  	used to run tests on Browserstack/Sauce Lab			E.g: py.test -s -M Y -U https://qxf2.com	
-	-B all	used to run the test against multiple browser 			E.g: py.test -B all(This will run each test against the list of browsers specified in the conftest.py file,firefox and chrome in our case)
-	-V/-O	used to run against different browser versions/os versions	E.g: py.test -V 44 -O 8 (This will run each test 4 times in different browser version(default=45 & 44) and OS(default=7 & 8) combination)
-	-h	help for more options 						E.g: py.test -h
-	-k      used to run tests which match the given substring expresion 	E.g: py.test -k table  (This will trigger test_example_table.py test)
-	-S	used to post pytest reports on the Slack channel		E.g: py.test -S Y -v > log/pytest_report.log
-	-n 	used to run tests in parallel					E.g: py.test -n 3 -v (This will run three tests in parallel)
-	--tesults 	used to report test results to tesults			E.g: py.test test_example_form.py --tesults Y(This will report test report to tesults)
+	-s	used to display the output on the screen			E.g: python -m pytest -s (This will run all the tests in the directory and subdirectories)
+	-U  	used to run against specific URL				E.g: python -m pytest -U http://YOUR_localhost_URL (This will run against your local instance)
+	-M  	used to run tests on Browserstack/Sauce Lab			E.g: python -m pytest -s -M Y -U https://qxf2.com	
+	-B all	used to run the test against multiple browser 			E.g:python -m pytest -B all(This will run each test against the list of browsers specified in the conftest.py file,firefox and chrome in our case)
+	-V/-O	used to run against different browser versions/os versions	E.g: python -m pytest -V 44 -O 8 (This will run each test 4 times in different browser version(default=45 & 44) and OS(default=7 & 8) combination)
+	-h	help for more options 						E.g: python -m pytest -h
+	-k      used to run tests which match the given substring expresion 	E.g: python -m pytest -k table  (This will trigger test_example_table.py test)
+	-S	used to post pytest reports on the Slack channel		E.g: python -m pytest -S Y -v > log/pytest_report.log
+	-n 	used to run tests in parallel					E.g: python -m pytest -n 3 -v (This will run three tests in parallel)
+	--tesults 	used to report test results to tesults			E.g: python -m pytest test_example_form.py --tesults Y(This will report test report to tesults)
 
 b)python tests/test_example_form.py (can also be used to run standalone test) 	
 
@@ -140,11 +156,14 @@ c)python tests/test_example_form.py -B Chrome (to run against chrome)
 
 d)python tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
 
+e)python tests/test_mobile_bitcoin_price -H (android version) -I (simulator) -N (.apk location on local) -M Y (to run Mobile test case on Broswestack)remote_credentials.py
+NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to remote_credentials.py under conf.
+
 --------
 ISSUES?
 --------
 
-a) If Python complains about an "Import" exception, please 'pip install $module_name'
+a) If Python complains about an "Import" exception, please 'pip3 install $module_name'
 
 b) If you don't have drivers set up for the web browsers, you will see a helpful error from Selenium telling you where to go and get them
 

@@ -3,7 +3,6 @@ Qxf2 Services: Utility script to compare images
 * Compare two images(actual and expected) smartly and generate a resultant image
 * Get the sum of colors in an image
 """
-
 from PIL import Image, ImageChops
 import math,operator,os
 
@@ -20,10 +19,10 @@ def is_equal(img_actual,img_expected,result):
     result_flag = False
 
     if not os.path.exists(img_actual):
-        print 'Could not locate the generated image: %s'%img_actual
+        print('Could not locate the generated image: %s'%img_actual)
 
     if not os.path.exists(img_expected):
-        print 'Could not locate the baseline image: %s'%img_expected
+        print('Could not locate the baseline image: %s'%img_expected)
 
     if os.path.exists(img_actual) and os.path.exists(img_expected):
         actual = Image.open(img_actual)
@@ -40,11 +39,11 @@ def is_equal(img_actual,img_expected,result):
             #Let's do some interesting processing now
             result_flag = analyze_difference_smartly(result)
             if result_flag is False:
-                print "Since there is a difference in pixel value of both images, we are checking the threshold value to pass the images with minor difference"
+                print("Since there is a difference in pixel value of both images, we are checking the threshold value to pass the images with minor difference")
                 #Now with threshhold!
                 result_flag = True if rmsdiff(actual,expected) < 958 else False
             #For temporary debug purposes
-            print 'RMS diff score: ',rmsdiff(actual,expected)
+            print('RMS diff score: ',rmsdiff(actual,expected))
 
     return result_flag
 
@@ -53,14 +52,14 @@ def analyze_difference_smartly(img):
     "Make an evaluation of a difference image"
     result_flag = False
     if not os.path.exists(img):
-        print 'Could not locate the image to analyze the difference smartly: %s'%img
+        print('Could not locate the image to analyze the difference smartly: %s'%img)
     else:
         my_image = Image.open(img)   
         #Not an ideal line, but we dont have any enormous images
         pixels = list(my_image.getdata())
         pixels = [1 for x in pixels if x!=0]
         num_different_pixels = sum(pixels)
-        print 'Number of different pixels in the result image: %d'%num_different_pixels
+        print('Number of different pixels in the result image: %d'%num_different_pixels)
         #Rule 1: If the number of different pixels is <10, then pass the image
         #This is relatively safe since all changes to objects will be more than 10 different pixels
         if num_different_pixels < 10:
@@ -73,7 +72,7 @@ def get_color_sum(img):
     "Get the sum of colors in an image"
     sum_color_pixels = -1
     if not os.path.exists(img):
-        print 'Could not locate the image to sum the colors: %s'%actual
+        print('Could not locate the image to sum the colors: %s'%actual)
     else:
         my_image = Image.open(img)   
         color_matrix = ([0] + ([255] * 255))
@@ -82,7 +81,7 @@ def get_color_sum(img):
         #Not an ideal line, but we don't have any enormous images
         pixels = list(my_image.getdata())
         sum_color_pixels = sum(pixels)
-        print 'Sum of colors in the image %s is %d'%(img,sum_color_pixels)
+        print('Sum of colors in the image %s is %d'%(img,sum_color_pixels))
 
     return sum_color_pixels
 
@@ -97,9 +96,9 @@ if __name__=='__main__':
     # Compare images and generate a resultant difference image
     result_flag = is_equal(img1,img2,result_img)
     if (result_flag == True):
-        print "Both images are matching"
+        print("Both images are matching")
     else:
-        print "Images are not matching"
+        print("Images are not matching")
 
     # Get the sum of colors in an image
     get_color_sum(img1)

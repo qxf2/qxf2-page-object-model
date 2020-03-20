@@ -1,15 +1,17 @@
 """
 Qxf2 Services: A plug-n-play class for logging.
-This class wraps around Python's logging module.
+This class wraps around Python's loguru module.
 """
-
-import logging, os, inspect
+import os, inspect
 import datetime
 import sys
+import pytest,logging
+from loguru import logger
+from pytest_reportportal import RPLogger, RPLogHandler
 
 class Base_Logging():
     "A plug-n-play class for logging"
-    def __init__(self,log_file_name=None,level=logging.DEBUG,format='%(asctime)s|%(caller_func)s|%(levelname)s| %(message)s'):
+    def __init__(self,log_file_name=None,level="DEBUG",format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module} | {message}"):
         "Constructor for the logging class"
         self.log_file_name=log_file_name
         self.log_file_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
@@ -19,27 +21,23 @@ class Base_Logging():
         
         
     def set_log(self,log_file_name,level,format,test_module_name=None):
-        "Set logging: 1 stream handler, one file handler"
+        "Add an handler sending log messages to a sink"
         if test_module_name is None:
-            test_module_name = self.get_calling_module()
-        log = logging.getLogger(test_module_name)
-        self.reset_log(log)
-        self.set_log_level(log,level)
-        self.add_stream_handler(log,level,format)        
+            test_module_name = self.get_calling_module()              
         if not os.path.exists(self.log_file_dir):
             os.makedirs(self.log_file_dir)
         if log_file_name is None:
             log_file_name = self.log_file_dir + os.sep + test_module_name + '.log'
         else:
             log_file_name = self.log_file_dir + os.sep + log_file_name
-        self.add_file_handler(log,level,format,log_file_name)
+        
+        logger.add(log_file_name,level=level,format=format, 
+        rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
-        return log
-    
 
     def get_calling_module(self):
         "Get the name of the calling module"        
-        calling_file = inspect.stack()[-1][1]
+        calling_file = inspect.stack()[-1][1]                  
         if 'runpy' in calling_file:
             calling_file = inspect.stack()[4][1]
         
@@ -53,89 +51,60 @@ class Base_Logging():
 
         return self.calling_module
 
-    
-    def reset_log(self,log):
-        "Reset the log handlers if they exist"
+
+    def setup_rp_logging(self):
+        "Setup reportportal logging"
         try:
-            log.handlers = []
-        except Exception,e:
-            print 'Failed to close the logger object'
-            print 'Exception', e
-            
-
-    def set_log_level(self,log,level=logging.INFO):
-        "Set the logging level"
-        log.setLevel(level)
-        
-
-    def set_stream_handler_level(self,streamHandler,level):
-        "Set the stream handler level"
-        streamHandler.setLevel(level)
-
-
-    def set_stream_handler_formatter(self,streamHandler,formatter):
-        "Set the stream handler format"
-        streamHandler.setFormatter('')
-
-
-    def add_stream_handler(self,log,handlerLevel,handlerFormat):
-        "Add a stream handler"
-        streamHandler = logging.StreamHandler()
-        self.set_stream_handler_level(streamHandler,handlerLevel)
-        self.set_stream_handler_formatter(streamHandler,handlerFormat)
-        log.addHandler(streamHandler)
-
-
-    def set_file_handler_level(self,fileHandler,level):
-        "Set the file handler level"
-        fileHandler.setLevel(level)
-
-
-    def set_file_handler_formatter(self,fileHandler,formatter):
-        "Set the filehandler formatter"
-        fileHandler.setFormatter(formatter)
-
-
-    def add_file_handler(self,log,handlerLevel,handlerFormat,log_file_name):
-        "Add a file handler"
-        fileHandler = logging.FileHandler(log_file_name)
-        self.set_file_handler_level(fileHandler,handlerLevel)
-        formatter = logging.Formatter(handlerFormat)
-        self.set_file_handler_formatter(fileHandler,formatter)
-        log.addHandler(fileHandler)
-
-
-    def getStreamHandler(self):
-        "Get a stream handler"
-        for handler in self.log.handlers:
-            if isinstance(handler,logging.StreamHandler):
-                return handler
-
-
-    def getFileHandler(self):
-        "Get file handler"
-        for handler in self.log.handlers:
-            if isinstance(handler,logging.FileHandler):
-                return handler
-
+            # Setting up a logging.
+            logging.setLoggerClass(RPLogger)
+            rp_logger = logging.getLogger(__name__)
+            rp_logger.setLevel(logging.INFO)
+            # Create handler for Report Portal.
+            rp_handler = RPLogHandler(pytest.config._config.py_test_service)
+            # Set INFO level for Report Portal handler.
+            rp_handler.setLevel(logging.INFO)
+            return rp_logger
+        except Exception as e:
+            self.write("Exception when trying to set rplogger")
+            self.write(str(e))
+            self.exceptions.append("Error when setting up the reportportal logger")
+    
 
     def write(self,msg,level='info'):
         "Write out a message"
-        fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead
-        d = {'caller_func': fname}
-        if level.lower()== 'debug':
-            self.log.debug(msg, extra=d)
-        elif level.lower()== 'info':
-            self.log.info(msg, extra=d)    
-        elif level.lower()== 'warn' or level.lower()=='warning':
-            self.log.warn(msg, extra=d)
-        elif level.lower()== 'error':
-            self.log.error(msg, extra=d)
-        elif level.lower()== 'critical':
-            self.log.critical(msg, extra=d)
-        else:
-            self.log.critical("Unknown level passed for the msg: %s", msg, extra=d)
-        
-    
+        #fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead  
+        all_stack_frames = inspect.stack()
+        for stack_frame in all_stack_frames[1:]:
+            if 'Base_Page' not in stack_frame[1]:
+                break
+        fname = stack_frame[3]
+        d = {'caller_func': fname}   
+        if hasattr(pytest,'config'):  
+            if pytest.config._config.getoption('--reportportal'):
+                rp_logger = self.setup_rp_logging()
+                if level.lower()== 'debug': 
+                    rp_logger.debug(msg=msg)                
+                elif level.lower()== 'info':
+                    rp_logger.info(msg)           
+                elif level.lower()== 'warn' or level.lower()=='warning':           
+                    rp_logger.warning(msg)
+                elif level.lower()== 'error':
+                    rp_logger.error(msg)            
+                elif level.lower()== 'critical':   
+                    rp_logger.critical(msg)            
+                else:
+                    rp_logger.critical(msg)
+                return 
 
-    
+        if level.lower()== 'debug': 
+            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)                
+        elif level.lower()== 'info':
+            logger.info("{module} | {msg}",module=d['caller_func'],msg=msg)           
+        elif level.lower()== 'warn' or level.lower()=='warning':           
+            logger.warning("{module} | {msg}",module=d['caller_func'],msg=msg)
+        elif level.lower()== 'error':
+            logger.error("{module} | {msg}",module=d['caller_func'],msg=msg)            
+        elif level.lower()== 'critical':   
+            logger.critical("{module} | {msg}",module=d['caller_func'],msg=msg)            
+        else:
+            logger.critical("Unknown level passed for the msg: {}", msg)
