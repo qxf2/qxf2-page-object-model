@@ -108,7 +108,7 @@ def remote_flag(request):
 @pytest.fixture
 def browser_version(request):
     "pytest fixture for browser version"
-    return request.config.getoption("--ver") 
+    return request.config.getoption("--ver")
 
 
 @pytest.fixture
