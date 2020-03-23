@@ -108,7 +108,7 @@ def remote_flag(request):
 @pytest.fixture
 def browser_version(request):
     "pytest fixture for browser version"
-    return request.config.getoption("-V") 
+    return request.config.getoption("--ver")
 
 
 @pytest.fixture
@@ -275,7 +275,7 @@ def pytest_generate_tests(metafunc):
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
                                     browser_os_name_conf.default_config_list) 
             else:
-                config_list = [(metafunc.config.getoption("-B")[0],metafunc.config.getoption("-V")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
+                config_list = [(metafunc.config.getoption("-B")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
                 metafunc.parametrize("browser,browser_version,os_name,os_version", 
                                     config_list) 
         if metafunc.config.getoption("-M").lower() !='y':
@@ -321,7 +321,7 @@ def pytest_addoption(parser):
                       action="append",
                       help="The operating system: xp, 7",
                       default=[])
-    parser.addoption("-V","--ver",
+    parser.addoption("--ver",
                       dest="browser_version",
                       action="append",
                       help="The version of the browser: a whole number",
