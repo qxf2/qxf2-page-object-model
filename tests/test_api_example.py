@@ -11,6 +11,9 @@ API EXAMPLE TEST
 8. Verify registered cars count
 9. Delete newly added car -DELETE request
 """
+
+import os
+import sys
 import os,sys,time,pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from endpoints.API_Player import API_Player
