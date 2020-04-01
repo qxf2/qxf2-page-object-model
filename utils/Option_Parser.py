@@ -46,7 +46,7 @@ class Option_Parser:
                             dest="os_version",
                             help="The operating system: xp, 7",
                             default="7")
-        self.parser.add_option("-V","--ver",
+        self.parser.add_option("--ver",
                             dest="browser_version",
                             help="The version of the browser: a whole number",
                             default=45)
@@ -172,7 +172,7 @@ class Option_Parser:
                 result_flag &= True
             else:
                 result_flag = False
-                print("Browser version cannot be None. Use -V to specify a browser version")
+                print("Browser version cannot be None. Use --ver to specify a browser version")
             if options.os_name is not None:
                 result_flag &= True
             else:
