@@ -371,11 +371,6 @@ class Base_Page(Borg,unittest.TestCase):
         "Get the window handles"
         return self.driver.window_handles
 
-
-    def get_current_window_handle(self):
-        "Get the current window handle"
-        pass
-
     def switch_frame(self,name=None,index=None,wait_time=2):
         "switch to iframe"
         self.wait(wait_time)
