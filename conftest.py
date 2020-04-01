@@ -225,14 +225,6 @@ def app_path(request):
     return request.config.getoption("-N")    
 
 
-def pytest_addoption(parser):
-    # Method to add the option to ini
-    parser.addini("rp_uuid",'help',type="pathlist")
-    parser.addini("rp_endpoint",'help',type="pathlist")
-    parser.addini("rp_project",'help',type="pathlist")
-    parser.addini("rp_launch",'help',type="pathlist")  
-
-
 @pytest.hookimpl()
 def pytest_configure(config):
     # Sets the launch name based on the marker selected.
@@ -291,6 +283,12 @@ def pytest_generate_tests(metafunc):
 
 
 def pytest_addoption(parser):
+    # Method to add the option to ini
+    parser.addini("rp_uuid",'help',type="pathlist")
+    parser.addini("rp_endpoint",'help',type="pathlist")
+    parser.addini("rp_project",'help',type="pathlist")
+    parser.addini("rp_launch",'help',type="pathlist")
+    
     parser.addoption("-B","--browser",
                       dest="browser",
                       action="append",
