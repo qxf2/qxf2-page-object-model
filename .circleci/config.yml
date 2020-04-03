@@ -14,13 +14,13 @@ jobs:
 
         - run: pip install tox
 
-        - run: pip install detox
+        - run: pip install retox
 
         - run: git clone https://github.com/qxf2/bitcoin-info.git
 
         - run: openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY
 
-        - run: detox 
+        - run: retox 
 
         - store_artifacts:
             path: ./screenshots
