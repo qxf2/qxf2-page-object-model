@@ -6,7 +6,8 @@ jobs:
 
       docker:
         - image: themattrix/tox
-      
+
+      parallelism: 3
 
       steps:
         
@@ -14,11 +15,13 @@ jobs:
 
         - run: pip install tox
 
+        -run: pip install pytest-circleci-parallelized
+
         - run: git clone https://github.com/qxf2/bitcoin-info.git
 
         - run: openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY
 
-        - run: tox --parallel--safe-build -vve $tox_env
+        - run: tox --parallel--safe-build 
 
         - store_artifacts:
             path: ./screenshots
