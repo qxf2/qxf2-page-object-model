@@ -15,7 +15,7 @@ jobs:
 
         - run: pip install tox
 
-        -run: pip install pytest-circleci-parallelized
+        - run: pip install pytest-circleci-parallelized
 
         - run: git clone https://github.com/qxf2/bitcoin-info.git
 
