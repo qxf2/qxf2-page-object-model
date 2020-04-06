@@ -18,7 +18,7 @@ jobs:
 
         - run: openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY
 
-        - run: tox --parallel--safe-build
+        - run: tox --parallel--safe-build -vve $tox_env
 
         - store_artifacts:
             path: ./screenshots
