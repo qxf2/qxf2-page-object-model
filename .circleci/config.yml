@@ -21,7 +21,9 @@ jobs:
 
         - run: openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY
 
-        - run: if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py36 ; fi
+        - run: 
+            command: |
+               if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py36 ; fi
                if [ $CIRCLE_NODE_INDEX == "1" ] ; then tox -e py37 ; fi
                if [ $CIRCLE_NODE_INDEX == "2" ] ; then tox -e py38 ; fi
 
