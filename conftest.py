@@ -283,7 +283,7 @@ def pytest_generate_tests(metafunc):
 
 
 def pytest_addoption(parser):
-    "Method to add the option to ini"
+    "Method to add the option to ini."
     parser.addini("rp_uuid",'help',type="pathlist")
     parser.addini("rp_endpoint",'help',type="pathlist")
     parser.addini("rp_project",'help',type="pathlist")
