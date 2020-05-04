@@ -18,6 +18,13 @@ footer_menu = "xpath,//ul[contains(@class,'nav-justified')]/descendant::a[text()
 copyright_text = "xpath,//p[contains(@class,'qxf2_copyright')]"
 #----
 
+#Locators for the login object(form_object.py)
+username_field = "xpath,//input[@id = 'username']"
+password_field = "xpath,//input[@id='userpassword']"
+login_button = "xpath,//*[@id='loginButton']"
+signup_button = "xpath,//*[@id='signupButton']"
+
+'''
 #Locators for the form object(form_object.py)
 name_field = "id,name"       
 email_field = "name,email"
@@ -58,3 +65,6 @@ contact_name_field = "id,name"
 bitcoin_real_time_price_button = "xpath,//android.widget.TextView[@resource-id='com.dudam.rohan.bitcoininfo:id/current_price']"
 bitcoin_price_page_heading = "xpath,//android.widget.TextView[@text='Real Time Price of Bitcoin']"
 bitcoin_price_in_usd = "xpath,//android.widget.TextView[@resource-id='com.dudam.rohan.bitcoininfo:id/doller_value']"
+'''
+
+

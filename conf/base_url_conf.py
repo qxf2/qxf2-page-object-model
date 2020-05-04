@@ -1,5 +1,5 @@
 """
 Conf file for base_url
 """
-base_url = "https://qxf2.com/"
+base_url = "http://3.219.215.68/"
 
