@@ -24,7 +24,6 @@ def test_example_form(test_obj):
         actual_pass = -1
         
         #1. Create a test object and fill the example form.
-        print(test_obj)
         test_obj = PageFactory.get_page_object("Main Page")
         #Set start_time with current time
         start_time = int(time.time())	
