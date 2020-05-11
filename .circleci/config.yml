@@ -1,33 +1,43 @@
-version: 2.0
+version: 2
+
 jobs:
-  build:
-    docker:
-      - image: circleci/python:3.6.4
-    steps:
-      - checkout
-      - run:
-          name: Install requests
-          command: |
-            sudo pip install -r requirements.txt
-      - run:
-          name: Mobile app
-          command: |
-            git clone https://github.com/qxf2/bitcoin-info.git
-      - run:
-          name: Set Environment Variables
-          command: |                      
-            echo 'export app_path=/home/circleci/project/bitcoin-info/app/' >> $BASH_ENV  
-      - run:
-          name: Decrypt remote_credentials_enc.py using openssl
-          command: |
-            openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY     
-      - run:
-          name: Run the API, Mobile and Selenium tests
-          command: |           
-            python -m pytest -s -v -N "$app_path" -M Y --remote_project_name Qxf2_Selenium_POM --remote_build_name Selenium_Tutorial --junitxml=test-reports/junit.xml --tb=native
-      - store_artifacts:
-          path: ./screenshots
-          destination: screenshots-file
-      - store_artifacts:
-          path: ./log
-          destination: logs-file
+
+  toxify:
+
+      docker:
+        - image: themattrix/tox
+
+      parallelism: 3
+
+      steps:
+        
+        - checkout
+
+        - run: pip install tox
+
+        - run: git clone https://github.com/qxf2/bitcoin-info.git
+
+        - run: openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY
+
+        - run: 
+            name: Run different Tox environments on different Containers
+            command: |
+               if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py36 ; fi
+               if [ $CIRCLE_NODE_INDEX == "1" ] ; then tox -e py37 ; fi
+               if [ $CIRCLE_NODE_INDEX == "2" ] ; then tox -e py38 ; fi
+
+        - store_artifacts:
+            path: ./screenshots
+            destination: screenshots-file
+
+        - store_artifacts:
+            path: ./log
+            destination: logs-file
+        
+
+workflows:
+  version: 2
+
+  myproj:
+    jobs:
+      - toxify
