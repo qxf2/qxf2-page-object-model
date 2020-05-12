@@ -251,7 +251,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
         # Send html formatted email body message with pytest report as an attachment
         email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
     elif terminalreporter.config.getoption("--tesults").lower() == 'y':
-        Tesults.post_results_to_tesults()     
+        Tesults.post_results_to_tesults()
 
 
 def pytest_generate_tests(metafunc):
