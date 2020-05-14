@@ -57,6 +57,5 @@ def delete_files_used_in_example():
 
 #----START OF SCRIPT
 if __name__ == "__main__":
-    "Running the utility to delete file"
     print("Running utility to delete the files")
     delete_files_used_in_example()   
