@@ -1,5 +1,4 @@
-"""
-The Qxf2 automation repository ships with example tests.
+"""The Qxf2 automation repository ships with example tests.
 Run this file to delete all the example files and start fresh with your example.
 After this script runs, you will need to edit a few files to configure them to suit your own repository
 Usage: python clean_up_repo.py
@@ -36,7 +35,7 @@ TEST_FILES_DELETE = ['test_example_table.py',
     'test_example_form.py']
 
 def delete_file(filename):
-    "Delete a file if it exists"
+    "Delete a file if it exists."
     if os.path.exists(filename):
         os.remove(filename)
         print("File deleted")
@@ -44,12 +43,12 @@ def delete_file(filename):
         print("File does not exist")
 
 def delete_files_in_dir(directory, files):
-    "Delete specific files in the directory"
+    "Delete specific files in the directory."
     for filename in files:
         delete_file(os.path.join(directory,filename))
 
 def delete_files_used_in_example():
-    "Delete files used in example from the template"
+    "Delete files used in example from the template."
     delete_files_in_dir(CONF_DIR, CONF_FILES_DELETE)
     delete_files_in_dir(ENDPOINTS_DIR, ENDPOINTS_FILES_DELETE)
     delete_files_in_dir(PAGE_OBJECTS_DIR, PAGE_OBJECTS_FILES_DELETE)
