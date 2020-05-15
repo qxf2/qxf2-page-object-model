@@ -718,7 +718,7 @@ class Base_Page(Borg,unittest.TestCase):
             time.sleep(wait_seconds)
 
 
-    def smart_wait(self,wait_seconds,locator):
+    def smart_wait(self,wait_seconds=5,locator):
         "Performs an explicit wait for a particular element"
         result_flag = False
         try:
