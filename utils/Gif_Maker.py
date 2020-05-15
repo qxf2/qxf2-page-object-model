@@ -18,7 +18,7 @@ def make_gif(screenshot_dir_path,name = "test_recap",suffix=".gif",duration=2):
     if len(filenames) != 0:
         gif_name = os.path.join(screenshot_dir_path, name + suffix)
         for files in sorted(filenames):
-            images.append(imageio.imread(os.path.join(screenshot_dir_path, files)))            
+            images.append(imageio.imread(os.path.join(screenshot_dir_path, files)))
         imageio.mimwrite(gif_name, images, duration=duration)
-    
+
     return gif_name

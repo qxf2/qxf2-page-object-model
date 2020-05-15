@@ -7,21 +7,21 @@ from page_objects.Base_Page import Base_Page
 
 
 class Wrapit():
-    
-    "Wrapit class to hold decorator functions"	
+
+    "Wrapit class to hold decorator functions"
     def _exceptionHandler(f):
         "Decorator to handle exceptions"
         argspec = getfullargspec(f)
         def inner(*args,**kwargs):
             try:
                 return f(*args,**kwargs)
-            except Exception as e:                
+            except Exception as e:
                 args[0].write('You have this exception')
                 args[0].write('Exception in method: %s'%str(f.__name__))
                 args[0].write('PYTHON SAYS: %s'%str(e))
                 #we denote None as failure case
                 return None
-                
+
         return inner
 
 
@@ -36,17 +36,17 @@ class Wrapit():
             args[0].save_screenshot(screenshot_name)
 
             return result
-        
+
         return wrapper
-	
+
 
     def _check_browser_console_log(func):
         "Decorator to check the browser's console log for errors"
         def wrapper(*args,**kwargs):
             #As IE driver does not support retrieval of any logs,
-            #we are bypassing the read_browser_console_log() method 
+            #we are bypassing the read_browser_console_log() method
             result = func(*args, **kwargs)
-            if "ie" not in str(args[0].driver): 
+            if "ie" not in str(args[0].driver):
                 result = func(*args, **kwargs)
                 log_errors = []
                 new_errors = []
@@ -64,9 +64,9 @@ class Wrapit():
 
                     if len(new_errors)>0:
                         args[0].failure("\nBrowser console error on url: %s\nMethod: %s\nConsole error(s):%s"%(args[0].get_current_url(),func.__name__,'\n----'.join(new_errors)))
-                        
+
             return result
-     
+
         return wrapper
 
 

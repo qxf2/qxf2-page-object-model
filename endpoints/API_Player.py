@@ -2,7 +2,7 @@
 API_Player class does the following:
 a) serves as an interface between the test and API_Interface
 b) contains several useful wrappers around commonly used combination of actions
-c) maintains the test context/state 
+c) maintains the test context/state
 """
 from base64 import b64encode
 from .API_Interface import API_Interface
@@ -16,20 +16,20 @@ from conf import api_example_conf as conf
 
 class API_Player(Results):
     "The class that maintains the test context/state"
-    
+
     def __init__(self, url, log_file_path=None):
         "Constructor"
         super(API_Player, self).__init__(
             level=logging.DEBUG, log_file_path=log_file_path)
         self.api_obj = API_Interface(url=url)
-        
+
 
     def set_auth_details(self, username, password):
         "encode auth details"
         user = username
         password = password
         b64login = b64encode(bytes('%s:%s' %(user, password),"utf-8"))
-        
+
         return b64login.decode('utf-8')
 
 
@@ -42,7 +42,7 @@ class API_Player(Results):
 
         return headers
 
-    
+
     def get_cars(self, auth_details=None):
         "get available cars "
         headers = self.set_header_details(auth_details)
@@ -56,7 +56,7 @@ class API_Player(Results):
 
         return json_response
 
-    
+
     def get_car(self, car_name, brand, auth_details=None):
         "gets a given car details"
         url_params = {'car_name': car_name, 'brand': brand}
@@ -70,7 +70,7 @@ class API_Player(Results):
 
         return result_flag
 
-    
+
     def add_car(self, car_details, auth_details=None):
         "adds a new car"
         data = car_details
@@ -78,10 +78,10 @@ class API_Player(Results):
         json_response = self.api_obj.add_car(data=data,
                 headers=headers)
         result_flag = True if json_response['response']['successful'] == True else False
-  
+
         return result_flag
 
-    
+
     def register_car(self, car_name, brand, auth_details=None):
         "register car"
         url_params = {'car_name': car_name, 'brand': brand}
@@ -93,11 +93,11 @@ class API_Player(Results):
                                                   json=data,
                                                   headers=headers)
         response = (json_response['response'])
-        result_flag = True if response['registered_car']['successful'] == True else False        
-        
+        result_flag = True if response['registered_car']['successful'] == True else False
+
         return result_flag
-    
-    
+
+
     def update_car(self, car_details, car_name='figo', auth_details=None):
         "updates a car"
         data = {'name': car_details['name'],
@@ -113,8 +113,8 @@ class API_Player(Results):
         result_flag = True if json_response['response']['successful'] == True else False
 
         return result_flag
-    
-    
+
+
     def remove_car(self, car_name, auth_details=None):
         "deletes a car entry"
         headers = self.set_header_details(auth_details)
@@ -123,7 +123,7 @@ class API_Player(Results):
         result_flag = True if json_response['response']['successful'] == True else False
 
         return result_flag
-    
+
 
     def get_registered_cars(self, auth_details=None):
         "gets registered cars"
@@ -148,12 +148,12 @@ class API_Player(Results):
                                positive='Successfully deleted registered cars',
                                negative='Could not delete registered car')
 
-   
+
     def get_car_count(self,auth_details=None):
         "Verify car count at the start"
         self.write('\n*****Verifying car count******')
         car_count = self.get_cars(auth_details)
-        car_count = len(car_count['cars_list']) 
+        car_count = len(car_count['cars_list'])
 
         return car_count
 
@@ -170,12 +170,12 @@ class API_Player(Results):
         "Verify car count"
         self.write('\n*****Verifying car count******')
         car_count = self.get_cars(auth_details)
-        car_count = len(car_count['cars_list']) 
+        car_count = len(car_count['cars_list'])
         result_flag = True if car_count == expected_count else False
 
         return result_flag
-    
-    
+
+
     def verify_registration_count(self, expected_count, auth_details=None):
         "Verify registered car count"
         self.write('\n******Verifying registered car count********')
@@ -205,7 +205,7 @@ class API_Player(Results):
         except (TypeError, AttributeError) as e:
             raise e
 
-        return {'user_list': result['user_list'], 'response_code': result['response']}    
+        return {'user_list': result['user_list'], 'response_code': result['response']}
 
     def check_validation_error(self, auth_details=None):
         "verify validatin error 403"
@@ -233,4 +233,3 @@ class API_Player(Results):
             msg = "unknown reason"
 
         return {'result_flag': result_flag, 'msg': msg}
-    

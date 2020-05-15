@@ -22,16 +22,16 @@ def test_example_form(test_obj):
         #Initalize flags for tests summary
         expected_pass = 0
         actual_pass = -1
-        
+
         #1. Create a test object and fill the example form.
         test_obj = PageFactory.get_page_object("Main Page")
         #Set start_time with current time
-        start_time = int(time.time())	
+        start_time = int(time.time())
 
 
         # Turn on the highlighting feature
         test_obj.turn_on_highlight()
-                
+
         #4. Get the test details from the conf file
         name = conf.name
         email = conf.email
@@ -39,7 +39,7 @@ def test_example_form(test_obj):
         gender = conf.gender
 
         #5. Set name in form
-        result_flag = test_obj.set_name(name) 
+        result_flag = test_obj.set_name(name)
         test_obj.log_result(result_flag,
                             positive="Name was successfully set to: %s\n"%name,
                             negative="Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()))
@@ -49,16 +49,16 @@ def test_example_form(test_obj):
         test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Set Name", "Sets the name in the form", "test_example_form", result_flag, "Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()), [test_obj.log_obj.log_file_dir + os.sep + test_obj.log_obj.log_file_name])
         #6. Set Email in form
-        result_flag = test_obj.set_email(email) 
+        result_flag = test_obj.set_email(email)
         test_obj.log_result(result_flag,
                             positive="Email was successfully set to: %s\n"%email,
-                            negative="Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()))                           
+                            negative="Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         #Update TestRail
         case_id = testrail_file.test_example_form_email
         test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Set Email", "Sets the email in the form", "test_example_form", result_flag, "Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()), [], {'Email': email}, {'_Email': email})
-        
+
         #7. Set Phone number in form
         result_flag = test_obj.set_phone(phone)
         test_obj.log_result(result_flag,
@@ -95,7 +95,7 @@ def test_example_form(test_obj):
                             positive="Successfully submitted the form\n",
                             negative="Failed to submit the form \nOn url: %s"%test_obj.get_current_url(),
                             level="critical")
-                                                      
+
         #Update TestRail
         case_id = testrail_file.test_example_form
         test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
@@ -103,7 +103,7 @@ def test_example_form(test_obj):
 
         #Turn off the highlighting feature
         test_obj.turn_off_highlight()
-        
+
         #11. Check the heading on the redirect page
         #Notice you don't need to create a new page object!
         if result_flag is True:
@@ -118,7 +118,7 @@ def test_example_form(test_obj):
         test_obj.turn_on_highlight()
 
         #12. Visit the contact page and verify the link
-        result_flag = test_obj.goto_footer_link('Contact > Get in touch!','contact')    
+        result_flag = test_obj.goto_footer_link('Contact > Get in touch!','contact')
         test_obj.log_result(result_flag,
                             positive="Successfully visited the Contact page\n",
                             negative="\nFailed to visit the Contact page\n")
@@ -127,28 +127,28 @@ def test_example_form(test_obj):
         case_id = testrail_file.test_example_form_footer_contact
         test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Contact page", "Visits the contact page and verifies the link", "test_example_form", result_flag,"\nFailed to visit the Contact page\n")
-        
+
         #13. Print out the result
         test_obj.write_test_summary()
         expected_pass = test_obj.result_counter
-        actual_pass = test_obj.pass_counter        
+        actual_pass = test_obj.pass_counter
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-    
+
     assert expected_pass == actual_pass, "Test failed: %s"%__file__
 
-    
-#---START OF SCRIPT   
+
+#---START OF SCRIPT
 if __name__=='__main__':
     print("Start of %s"%__file__)
     #Creating an instance of the class
     options_obj = Option_Parser()
     options = options_obj.get_options()
-                
+
     #Run the test only if the options provided are valid
-    if options_obj.check_options(options): 
+    if options_obj.check_options(options):
         test_obj = PageFactory.get_page_object("Zero",base_url=options.url)
 
         #Setup and register a driver
@@ -158,7 +158,7 @@ if __name__=='__main__':
         if options.testrail_flag.lower()=='y':
             if options.test_run_id is None:
                 test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
-                options.testrail_flag = 'N'   
+                options.testrail_flag = 'N'
             if options.test_run_id is not None:
                 test_obj.register_testrail()
                 test_obj.set_test_run_id(options.test_run_id)
@@ -167,10 +167,10 @@ if __name__=='__main__':
             test_obj.register_tesults()
 
         test_example_form(test_obj)
-                
+
         #teardowm
         test_obj.wait(3)
-        test_obj.teardown() 
+        test_obj.teardown()
     else:
         print('ERROR: Received incorrect comand line input arguments')
         print(option_obj.print_usage())

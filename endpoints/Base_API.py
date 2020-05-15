@@ -18,7 +18,7 @@ class Base_API:
 
     def get(self, url, headers={}):
         "Get request"
-        json_response = None 
+        json_response = None
         error = {}
         try:
             response = requests.get(url=url,headers=headers)
@@ -38,7 +38,7 @@ class Base_API:
             else:
                 print(e.reason.args)
                 # bubble error back up after printing relevant details
-                raise e # We raise error only when unknown errors occurs (other than HTTP error and url open error 10061) 
+                raise e # We raise error only when unknown errors occurs (other than HTTP error and url open error 10061)
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
@@ -68,7 +68,7 @@ class Base_API:
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
-    
+
     def delete(self, url,headers={}):
         "Delete request"
         response = False
@@ -79,7 +79,7 @@ class Base_API:
                 json_response = response.json()
             except:
                 json_response = None
-        
+
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):

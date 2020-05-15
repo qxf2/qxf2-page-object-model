@@ -8,7 +8,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains 
+from selenium.webdriver.common.action_chains import ActionChains
 import sys,unittest,time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from inspect import getargspec
@@ -52,9 +52,9 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             self.reset()
 
         self.driver_obj = DriverFactory()
-        if self.driver is not None: 
+        if self.driver is not None:
             self.start() #Visit and initialize xpaths for the appropriate page
-            
+
 
     def reset(self):
         "Reset the base page object"
@@ -70,7 +70,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
     def get_failure_message_list(self):
         "Return the failure message list"
         return self.failure_message_list
-            
+
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
@@ -81,12 +81,12 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         "Register the mobile driver"
         self.driver = self.driver_obj.run_mobile(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag)
         self.set_screenshot_dir() # Create screenshot directory
-        self.set_log_file() 
+        self.set_log_file()
         self.start()
 
 
     def get_current_driver(self):
-        "Return current driver"        
+        "Return current driver"
         return self.driver
 
 
@@ -100,7 +100,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.testrail_flag = True
         self.tr_obj = Test_Rail()
         self.write('Automation registered with TestRail',level='debug')
-    
+
     def set_test_run_id(self,test_run_id):
         "Set TestRail's test run id"
         self.test_run_id = test_run_id
@@ -121,14 +121,14 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         if 'runpy' or 'string' in calling_file:
             calling_file = inspect.stack()[4][3]
         calling_filename = calling_file.split(os.sep)
-        #This logic bought to you by windows + cygwin + git bash 
-        if len(calling_filename) == 1: #Needed for 
+        #This logic bought to you by windows + cygwin + git bash
+        if len(calling_filename) == 1: #Needed for
             calling_filename = calling_file.split('/')
-        
+
         self.calling_module = calling_filename[-1].split('.')[0]
 
         return self.calling_module
-    
+
 
     def set_directory_structure(self):
         "Setup the required directory structure if it is not already present"
@@ -176,7 +176,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         'set the log file'
         self.log_name = self.testname + '.log'
         self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
-            
+
 
     def append_latest_image(self,screenshot_name):
         "Get image url list from Browser Stack"
@@ -185,12 +185,12 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         image_dict['name'] = screenshot_name
         image_dict['url'] = screenshot_url
         self.image_url_list.append(image_dict)
-        
+
 
     def save_screenshot(self,screenshot_name):
         "Take a screenshot"
         if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
-            for i in range(1,100): 
+            for i in range(1,100):
                 if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
                     continue
                 else:
@@ -199,7 +199,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         self.driver.get_screenshot_as_file(self.screenshot_dir + os.sep+ screenshot_name+'.png')
         if self.browserstack_flag is True:
             self.append_latest_image(screenshot_name)
-            
+
 
     def open(self,wait_time=2):
         "Visit the page base_url + url"
@@ -209,7 +209,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
     def get_page_paths(self,section):
         "Open configurations file,go to right sections,return section obj"
         pass
-    
+
 
     def get_element(self,locator,verbose_flag=True):
         "Return the DOM element of the path or 'None' if the element is not found "
@@ -247,7 +247,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             if msg_flag==True:
                 self.write(e,'debug')
                 self.write("Check your locator-'%s' in the conf/locators.conf file"%locator)
-        
+
         return dom_elements
 
 
@@ -266,7 +266,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
                 return True
 
         return False
-    
+
 
     def set_text(self,locator,value,clear_flag=True):
         "Set the value of the text field"
@@ -286,8 +286,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             self.write(str(e),'debug')
 
         return result_flag
-          
-          
+
+
     def get_text(self,locator):
         "Return the text for a given xpath or the 'None' object if the element is not found"
         text = ''
@@ -299,7 +299,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         else:
             return text.encode('utf-8')
     get_text_by_locator = get_text #alias the method
-        
+
 
     def get_dom_text(self,dom_element):
         "Return the text of a given DOM element or the 'None' object if the element has no attribute called text"
@@ -309,7 +309,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             text = text.encode('utf-8')
         except Exception as e:
             self.write(e)
-        
+
         return text
 
 
@@ -372,7 +372,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
                 result_flag = True
 
         return result_flag
-    
+
 
     def teardown(self):
         "Tears down the driver"
@@ -423,7 +423,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
                     self.conditional_write(result_flag,
                     positive='Located the element: %s'%locator,
                     negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_time))
-            
+
         return result_flag
 
 

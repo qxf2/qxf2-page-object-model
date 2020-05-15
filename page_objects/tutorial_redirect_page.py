@@ -21,7 +21,7 @@ class Tutorial_Redirect_Page(Base_Page,Header_Object,Footer_Object):
         url = 'selenium-tutorial-redirect'
         self.open(url)
 
-    @Wrapit._exceptionHandler    
+    @Wrapit._exceptionHandler
     def check_heading(self):
         "Check if the heading exists"
         result_flag = self.check_element_present(self.heading)

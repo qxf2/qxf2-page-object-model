@@ -14,7 +14,7 @@ class Bitcoin_Main_Page(Mobile_Base_Page):
 
     #Locators of the mobile page elements.
     bitcoin_real_time_price_button = locators.bitcoin_real_time_price_button
-    bitcoin_price_page_heading = locators.bitcoin_price_page_heading 
+    bitcoin_price_page_heading = locators.bitcoin_price_page_heading
 
 
     @Wrapit._screenshot
@@ -26,7 +26,7 @@ class Bitcoin_Main_Page(Mobile_Base_Page):
             if self.click_element(self.bitcoin_real_time_price_button):
                 result_flag = True
             else:
-                result_flag = False    
+                result_flag = False
 
             self.conditional_write(result_flag,
                 positive='Click on the bitcoin real time price page button.',
@@ -34,7 +34,7 @@ class Bitcoin_Main_Page(Mobile_Base_Page):
                 level='debug')
 
         except Exception as e:
-            self.write("Exception while clicking on the bitcoin real time price button.")  
+            self.write("Exception while clicking on the bitcoin real time price button.")
             self.write(str(e))
 
         return result_flag
@@ -48,7 +48,7 @@ class Bitcoin_Main_Page(Mobile_Base_Page):
         if bitcoin_price_page_heading.decode('utf-8') == expected_bitcoin_price_page_heading:
             result_flag = True
             self.switch_page("bitcoin price page")
-        
+
         return result_flag
 
 
@@ -62,15 +62,15 @@ class Bitcoin_Main_Page(Mobile_Base_Page):
 
 
 
-            
 
-    
 
-            
 
-        
-        
-       
+
+
+
+
+
+
 
 
 
