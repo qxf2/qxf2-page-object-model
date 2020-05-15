@@ -1,6 +1,6 @@
 
 """
-API endpoints for Registration 
+API endpoints for Registration
 """
 
 from .Base_API import Base_API

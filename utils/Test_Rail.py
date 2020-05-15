@@ -1,7 +1,7 @@
 """
 TestRail integration:
 * limited to what we need at this time
-* we assume TestRail operates in single suite mode 
+* we assume TestRail operates in single suite mode
   i.e., the default, reccomended mode
 
 API reference: http://docs.gurock.com/testrail-api2/start
@@ -14,14 +14,14 @@ import conf.testrailenv_conf as conf_file
 class Test_Rail:
     "Wrapper around TestRail's API"
 
-    def __init__(self):        
+    def __init__(self):
         "Initialize the TestRail objects"
         self.set_testrail_conf()
 
 
     def set_testrail_conf(self):
         "Set the TestRail URL and username, password"
-  
+
         #Set the TestRail URL
         self.testrail_url = conf_file.testrail_url
         self.client = testrail.APIClient(self.testrail_url)
@@ -36,7 +36,7 @@ class Test_Rail:
         project_id=None
         projects = self.client.send_get('get_projects')
         for project in projects:
-            if project['name'] == project_name: 
+            if project['name'] == project_name:
                 project_id = project['id']
                 break
         return project_id
@@ -75,7 +75,7 @@ class Test_Rail:
                 user_id = user['id']
                 break
         return user_id
-        
+
 
     def get_run_id(self,project_name,test_run_name):
         "Get the run ID using test name and project name"
@@ -92,7 +92,7 @@ class Test_Rail:
                  if test_run['name'] == test_run_name:
                      run_id = test_run['id']
                      break
-        
+
         return run_id
 
 
@@ -173,7 +173,7 @@ class Test_Rail:
                 print("Cannot add test run %s because Project %s was not found"%(test_run_name,project_name))
             elif test_run_id is not None:
                 print("Test run '%s' already exists"%test_run_name)
-            
+
 
     def delete_project(self,new_project_name,project_description):
         "Delete an existing project"
@@ -187,7 +187,7 @@ class Test_Rail:
                 print(e)
         else:
             print('Cant delete the project given project name: %s'%(new_project_name))
-    
+
 
     def delete_test_run(self,test_run_name,project_name):
         "Delete an existing test run"
@@ -207,8 +207,8 @@ class Test_Rail:
         "Update TestRail for a given run_id and case_id"
         update_flag = False
 
-        #Update the result in TestRail using send_post function. 
-        #Parameters for add_result_for_case is the combination of runid and case id. 
+        #Update the result in TestRail using send_post function.
+        #Parameters for add_result_for_case is the combination of runid and case id.
         #status_id is 1 for Passed, 2 For Blocked, 4 for Retest and 5 for Failed
         status_id = 1 if result_flag is True else 5
 
@@ -224,5 +224,5 @@ class Test_Rail:
                 print(e)
             else:
                 print('Updated test result for case: %s in test run: %s\n'%(case_id,run_id))
-    
+
         return update_flag

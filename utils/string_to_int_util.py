@@ -5,7 +5,7 @@ string_to_int(): This is particularly useful when you want to convert any string
 
 class String_To_Int():
     "Class to convert string to integer"
-      
+
     def string_to_int(self,str_var):
         "Method to convert string to integer"
         try:

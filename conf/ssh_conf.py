@@ -1,8 +1,8 @@
 """
-This config file would have the credentials of remote server, 
+This config file would have the credentials of remote server,
 the commands to execute, upload and download file path details.
 """
-#Server credential details needed for ssh 
+#Server credential details needed for ssh
 HOST='Enter your host details here'
 USERNAME='Enter your username here'
 PASSWORD='Enter your password here'

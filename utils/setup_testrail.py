@@ -55,7 +55,7 @@ def save_new_test_run_details(filename,test_run_name,test_run_id):
 def setup_testrail(project_name='POM DEMO',milestone_name=None,test_run_name=None,test_cases_conf=None,description=None,name_override_flag='N',case_ids_list=None):
     "Setup TestRail for an automated run"
     #1. Get project id
-    #2. if milestone_name is not None 
+    #2. if milestone_name is not None
     #   create the milestone if it does not already exist
     #3. if test_run_name is not None
     #   create the test run if it does not already exist
@@ -140,7 +140,7 @@ if __name__=='__main__':
                       dest="case_ids_list",
                       default=None,
                       help="Pass all case ids with comma separated you want to add in test run")
-    
+
     (options,args) = parser.parse_args()
 
     #Run the script only if the options are valid
@@ -155,4 +155,4 @@ if __name__=='__main__':
     else:
         print('ERROR: Received incorrect input arguments')
         print(parser.print_usage())
-        
+
