@@ -14,7 +14,7 @@ def delete_file(filename):
         os.remove(filename)
         print("File deleted")
     else:
-        print("Files does not exist")
+        print("All the files related to the sample example from Page Object Model have been removed from tests, conf, page_objects, endpoints folder. For next steps, please refer to the 'edit files' section of this blog post:https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/")
         sys.exit()
 
 def delete_files_in_dir(directory, files):
