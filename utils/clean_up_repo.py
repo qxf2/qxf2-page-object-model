@@ -13,8 +13,6 @@ def delete_file(filename):
     if os.path.exists(filename):
         os.remove(filename)
         print(f'{filename} deleted')
-    else:
-        print(f'{filename} has been already deleted')
 
 def delete_files_in_dir(directory, files):
     "Delete specific files in the directory"
