@@ -12,7 +12,7 @@ def delete_file(filename):
     "Delete a file if it exists."
     if os.path.exists(filename):
         os.remove(filename)
-        print(f'{filname} deleted')
+        print(f'{filename} deleted')
     else:
         print(f'{filename} has been already deleted')
 
