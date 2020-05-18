@@ -58,4 +58,5 @@ def delete_files_used_in_example():
 #----START OF SCRIPT
 if __name__ == "__main__":
     print("Running utility to delete the files")
-    delete_files_used_in_example()   
+    delete_files_used_in_example()
+    print("All the files related to the sample example from Page Object Model have been removed from tests, conf, page_objects, endpoints folder. For next steps, please refer to the 'edit files' section of this blog post:https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/")
