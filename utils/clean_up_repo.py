@@ -12,9 +12,9 @@ def delete_file(filename):
     "Delete a file if it exists."
     if os.path.exists(filename):
         os.remove(filename)
-        print("File deleted")
+        print(f'{filename}deleted')
     else:
-        print("All the files related to the sample example from Page Object Model have been already removed from tests, conf, page_objects, endpoints folder. For next steps, please refer to the 'edit files' section of this blog post:https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/")
+        print(f'{filename} has been already deleted')
 
 def delete_files_in_dir(directory, files):
     "Delete specific files in the directory"
