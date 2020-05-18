@@ -1,4 +1,5 @@
-"""The Qxf2 automation repository ships with example tests.
+"""
+The Qxf2 automation repository ships with example tests.
 Run this file to delete all the example files and start fresh with your example.
 After this script runs, you will need to edit a few files to configure them to suit your own repository
 Usage: python clean_up_repo.py

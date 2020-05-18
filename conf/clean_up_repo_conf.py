@@ -1,4 +1,4 @@
-"""This file will have relative paths for dir and respective files which clean_up_repo.py will delete
+"""The file will have relative paths for dir and respective files which clean_up_repo.py will delete
 """
 import os
 
