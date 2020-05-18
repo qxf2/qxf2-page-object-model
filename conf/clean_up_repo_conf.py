@@ -1,18 +1,20 @@
 """
 This file will have relative paths for dir and respective files which clean_up_repo.py will delete
-
 """
 import os
+
+# Declaring directories as directory list
+# dir_list : list
 
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 CONF_DIR = os.path.join(REPO_DIR, 'conf')
 ENDPOINTS_DIR = os.path.join(REPO_DIR, 'endpoints')
 PAGE_OBJECTS_DIR = os.path.join(REPO_DIR, 'page_objects')
 TEST_DIR = os.path.join(REPO_DIR, 'tests')
-
-# Declaring directories as directory list
-# dir_list : list
 dir_list = [CONF_DIR, ENDPOINTS_DIR, PAGE_OBJECTS_DIR, TEST_DIR]
+
+# declaring files as file_list
+# file_list : list
 
 CONF_FILES_DELETE = ['api_example_conf.py',
     'example_form_conf.py',
@@ -39,6 +41,4 @@ TEST_FILES_DELETE = ['test_example_table.py',
     'test_successive_form_creation.py',
     'test_example_form.py']
 
-# declaring files as file_list
-# file_list : list
 file_list = [CONF_FILES_DELETE, ENDPOINTS_FILES_DELETE, PAGE_OBJECTS_FILES_DELETE, TEST_FILES_DELETE]
