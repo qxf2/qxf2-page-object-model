@@ -13,7 +13,7 @@ PAGE_OBJECTS_DIR = os.path.join(REPO_DIR, 'page_objects')
 TEST_DIR = os.path.join(REPO_DIR, 'tests')
 dir_list = [CONF_DIR, ENDPOINTS_DIR, PAGE_OBJECTS_DIR, TEST_DIR]
 
-# declaring files as file_list
+# Declaring files as file_list
 # file_list : list
 
 CONF_FILES_DELETE = ['api_example_conf.py',
@@ -42,3 +42,8 @@ TEST_FILES_DELETE = ['test_example_table.py',
     'test_example_form.py']
 
 file_list = [CONF_FILES_DELETE, ENDPOINTS_FILES_DELETE, PAGE_OBJECTS_FILES_DELETE, TEST_FILES_DELETE]
+
+# Declaring combination of directory and file_list
+# files_to_delete = [(directory, file_list)]
+
+FILES_TO_DELETE = [(CONF_DIR, CONF_FILES_DELETE), (ENDPOINTS_DIR, ENDPOINTS_FILES_DELETE), (PAGE_OBJECTS_DIR, PAGE_OBJECTS_FILES_DELETE), (TEST_DIR, TEST_FILES_DELETE)]
