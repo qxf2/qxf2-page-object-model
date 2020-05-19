@@ -42,8 +42,3 @@ TEST_FILES_DELETE = ['test_example_table.py',
     'test_example_form.py']
 
 file_list = [CONF_FILES_DELETE, ENDPOINTS_FILES_DELETE, PAGE_OBJECTS_FILES_DELETE, TEST_FILES_DELETE]
-
-# Declaring combination of directory and file_list
-# files_to_delete = [(directory, file_list)]
-
-FILES_TO_DELETE = [(CONF_DIR, CONF_FILES_DELETE), (ENDPOINTS_DIR, ENDPOINTS_FILES_DELETE), (PAGE_OBJECTS_DIR, PAGE_OBJECTS_FILES_DELETE), (TEST_DIR, TEST_FILES_DELETE)]
