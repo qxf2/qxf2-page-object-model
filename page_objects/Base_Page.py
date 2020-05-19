@@ -100,7 +100,7 @@ class Base_Page(Borg,unittest.TestCase):
 
 
     def register_driver(self,remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name):
-        "Register the driver with Page"
+        "Register the driver with Page."
         self.set_screenshot_dir(os_name,os_version,browser,browser_version) # Create screenshot directory
         self.set_log_file()
         self.driver = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
@@ -117,7 +117,7 @@ class Base_Page(Borg,unittest.TestCase):
 
 
     def get_current_driver(self):
-        "Return current driver"
+        "Return current driver."
         return self.driver
 
 
