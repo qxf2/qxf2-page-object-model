@@ -22,11 +22,6 @@ def delete_files_in_dir(directory, files):
 def delete_files_used_in_example():
     # The method will delete files mentioned in the blog
     # Blog URL: https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/
-    """
-    for every_dir_list in conf.dir_list:
-            for every_file_list in conf.file_list:
-                    delete_files_in_dir(every_dir_list,every_file_list)
-    """
     for every_dir_list, every_file_list in zip(conf.dir_list,conf.file_list):
         delete_files_in_dir(every_dir_list, every_file_list)
 
@@ -34,4 +29,4 @@ def delete_files_used_in_example():
 if __name__ == "__main__":
     print("Running utility to delete the files")
     delete_files_used_in_example()
-    print("All the files related to the sample example from Page Object Model have been removed from tests, conf, page_objects, endpoints folder.\n For next steps, please refer to the 'edit files' section of this blog post: https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/")
+    print(f'All the files related to the sample example from Page Object Model have been removed from {conf.dir_list} folders.\n For next steps, please refer to the edit files section of this blog post: https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/')
