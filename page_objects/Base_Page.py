@@ -713,7 +713,7 @@ class Base_Page(Borg,unittest.TestCase):
     def wait(self,wait_seconds=5,locator=None):
         "Performs wait for time provided"
         if locator is not None:
-            self.smart_wait(locator,wait_seconds=5)
+            self.smart_wait(locator,wait_seconds=wait_seconds)
         else:
             time.sleep(wait_seconds)
 
