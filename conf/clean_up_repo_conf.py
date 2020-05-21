@@ -5,7 +5,6 @@ import os
 
 # Declaring directories as directory list
 # dir_list : list
-
 REPO_DIR = os.path.dirname(os.path.dirname(__file__))
 CONF_DIR = os.path.join(REPO_DIR, 'conf')
 ENDPOINTS_DIR = os.path.join(REPO_DIR, 'endpoints')
@@ -15,7 +14,6 @@ dir_list = [CONF_DIR, ENDPOINTS_DIR, PAGE_OBJECTS_DIR, TEST_DIR]
 
 # Declaring files as file_list
 # file_list : list
-
 CONF_FILES_DELETE = ['api_example_conf.py',
     'example_form_conf.py',
     'example_table_conf.py',
