@@ -141,7 +141,7 @@ class Gmail():
         box = self.mailbox(mailbox_name)
         return box.mail(**kwargs)
 
-    
+
     def copy(self, uid, to_mailbox, from_mailbox=None):
         if from_mailbox:
             self.use_mailbox(from_mailbox)

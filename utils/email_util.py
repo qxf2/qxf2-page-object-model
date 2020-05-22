@@ -7,7 +7,7 @@ A simple IMAP util that will help us with account activation
 * Filter based on sender and subject
 * Return text of recent messages
 
-[TO DO](not in any particular order) 
+[TO DO](not in any particular order)
 1. Extend to POP3 servers
 2. Add a try catch decorator
 3. Enhance get_latest_email_uid to make all parameters optional
@@ -23,7 +23,7 @@ class Email_Util:
     def connect(self,imap_host):
         "Connect with the host"
         self.mail = imaplib.IMAP4_SSL(imap_host)
-        
+
         return self.mail
 
 
@@ -75,14 +75,14 @@ class Email_Util:
         if subject is not None and sender is not None:
             search_string = '(FROM "{sender}" SUBJECT "{subject}")'.format(sender=sender,subject=subject)
 
-        print("  - Automation will be in search/wait mode for max %s seconds"%wait_time) 
+        print("  - Automation will be in search/wait mode for max %s seconds"%wait_time)
         while (time_elapsed < wait_time and uid is None):
             time.sleep(time_delta)
             result,data = self.mail.uid('search',None,str(search_string))
 
             if data[0].strip() != '': #Check for an empty set
                 uid = data[0].split()[-1]
-                
+
             time_elapsed += time_delta
 
         return uid
@@ -98,13 +98,13 @@ class Email_Util:
             email_body = self.get_email_body(email_msg)
 
         return email_body
-        
-    
+
+
     def get_email_body(self,email_msg):
         "Parse out the text of the email message. Handle multipart messages"
         email_body = []
         maintype = email_msg.get_content_maintype()
-        if maintype == 'multipart': 
+        if maintype == 'multipart':
             for part in email_msg.get_payload():
                 if part.get_content_maintype() == 'text':
                     email_body.append(part.get_payload())
@@ -136,7 +136,7 @@ if __name__=='__main__':
 
     #Connect to the IMAP host
     email_obj.connect(imap_host)
-    
+
     #Login
     if email_obj.login(username,password):
         print("PASS: Successfully logged in.")
@@ -144,9 +144,9 @@ if __name__=='__main__':
         print("FAIL: Failed to login")
 
     #Get a list of folder
-    folders = email_obj.get_folders() 
+    folders = email_obj.get_folders()
     if folders != None or []:
-        print("PASS: Email folders:", email_obj.get_folders()) 
+        print("PASS: Email folders:", email_obj.get_folders())
 
     else:
         print("FAIL: Didn't get folder details")
@@ -156,19 +156,19 @@ if __name__=='__main__':
         print("PASS: Successfully selected the folder: Inbox")
     else:
         print("FAIL: Failed to select the folder: Inbox")
-    
+
     #Get the latest email's unique id
     uid = email_obj.get_latest_email_uid(wait_time=300)
     if uid != None:
         print("PASS: Unique id of the latest email is: ",uid)
     else:
         print("FAIL: Didn't get unique id of latest email")
-    
+
     #A. Look for an Email from provided sender, print uid and check it's contents
     uid = email_obj.get_latest_email_uid(sender="Andy from Google",wait_time=300)
     if uid != None:
         print("PASS: Unique id of the latest email with given sender is: ",uid)
-        
+
         #Check the text of the latest email id
         email_body = email_obj.fetch_email_body(uid)
         data_flag = False
@@ -177,7 +177,7 @@ if __name__=='__main__':
             line = line.replace('=','')
             line = line.replace('<','')
             line = line.replace('>','')
-            
+
             if "Hi Email_Util" and "This email was sent to you" in line:
                 data_flag = True
                 break
@@ -185,10 +185,10 @@ if __name__=='__main__':
             print("PASS: Automation provided correct Email details. Email contents matched with provided data.")
         else:
             print("FAIL: Provided data not matched with Email contents. Looks like automation provided incorrect Email details")
-            
+
     else:
         print("FAIL: After wait of 5 mins, looks like there is no email present with given sender")
-    
+
     #B. Look for an Email with provided subject, print uid, find Qxf2 POM address and compare with expected address
     uid = email_obj.get_latest_email_uid(subject="Qxf2 Services: Public POM Link",wait_time=300)
     if uid != None:
@@ -207,15 +207,15 @@ if __name__=='__main__':
                     pom_url = element
                     data_flag = True
                     break
-                
+
             if data_flag == True:
                 break
-            
+
         if data_flag == True and expected_pom_url == pom_url:
             print("PASS: Automation provided correct mail details. Got correct Qxf2 POM url from mail body. URL: %s"%pom_url)
         else:
             print("FAIL: Actual POM url not matched with expected pom url. Actual URL got from email: %s"%pom_url)
-            
+
     else:
         print("FAIL: After wait of 5 mins, looks like there is no email present with given subject")
 
@@ -232,4 +232,4 @@ if __name__=='__main__':
         print("FAIL: Unique id of the latest email with non-existant subject and non-existant sender is: ",uid)
     else:
         print("PASS: After wait of 2 mins, looks like there is no email present with given non-existant subject and non-existant sender")
-    
+

@@ -2,7 +2,7 @@
 This is an example automated test to help you learn Qxf2's framework
 Our automated test will do the following:
     #Open Qxf2 selenium-tutorial-main page.
-    #Print out the entire table 
+    #Print out the entire table
     #Verify if a certain name is present in the table
 """
 
@@ -24,12 +24,12 @@ def test_example_table(test_obj):
         #Initalize flags for tests summary
         expected_pass = 0
         actual_pass = -1
-        
+
         #1. Create a example table page object
-        test_obj = PageFactory.get_page_object("Main Page")    
+        test_obj = PageFactory.get_page_object("Main Page")
 
         #Set start_time with current time
-        start_time = int(time.time())	
+        start_time = int(time.time())
 
         #2. Get the test details from the conf file
         name = conf.name
@@ -40,7 +40,7 @@ def test_example_table(test_obj):
                             positive="Completed printing table text",
                             negative="Unable to print the table text")
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        
+
         #4. Check if a name is present in the table
         result_flag = test_obj.check_name_present(name)
         test_obj.log_result(result_flag,
@@ -51,16 +51,16 @@ def test_example_table(test_obj):
         case_id = testrail_file.test_example_table
         test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Example table", "Verify if a certain name is present in the table", "test_example_table", result_flag,"\nFailed to Verify if a certain name is present in the table\n")
-     
+
         #5. Print out the result
         test_obj.write_test_summary()
         expected_pass = test_obj.result_counter
-        actual_pass = test_obj.pass_counter        
+        actual_pass = test_obj.pass_counter
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-    
+
     assert expected_pass == actual_pass, "Test failed: %s"%__file__
 
 #---START OF SCRIPT
@@ -69,9 +69,9 @@ if __name__=='__main__':
     #Creating an instance of the class
     options_obj = Option_Parser()
     options=options_obj.get_options()
-                        
+
     #Run the test only if the options provided are valid
-    if options_obj.check_options(options): 
+    if options_obj.check_options(options):
         test_obj = PageFactory.get_page_object("Zero",base_url=options.url)
 
         #Setup and register a driver
@@ -80,16 +80,16 @@ if __name__=='__main__':
         if options.testrail_flag.lower()=='y':
             if options.test_run_id is None:
                 test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
-                options.testrail_flag = 'N'   
+                options.testrail_flag = 'N'
             if options.test_run_id is not None:
                 test_obj.register_testrail()
                 test_obj.set_test_run_id(options.test_run_id)
 
         if options.tesults_flag.lower()=='y':
             test_obj.register_tesults()
-        
-        test_example_table(test_obj) 
-        
+
+        test_example_table(test_obj)
+
         #teardowm
         test_obj.wait(3)
         test_obj.teardown()

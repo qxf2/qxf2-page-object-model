@@ -26,19 +26,19 @@ def test_succesive_form_creation(test_obj):
         test_obj = PageFactory.get_page_object("Main Page")
 
         #Set start_time with current time
-        start_time = int(time.time())	
-     
+        start_time = int(time.time())
+
         #2. Get the test details from the conf file and fill the forms
         form_list = conf.form_list
         form_number = 1		#Initalize form counter
-    
+
         #3.Collect form data
-        for form in form_list:      
+        for form in form_list:
             name = form['NAME']
             email = form['EMAIL']
             phone = form['PHONE_NO']
             gender = form['GENDER']
-    
+
             msg ="\nReady to fill form number %d"%form_number
             test_obj.write(msg)
 
@@ -67,7 +67,7 @@ def test_succesive_form_creation(test_obj):
             test_obj.add_tesults_case("Check redirect heading "  + str(form_number), "Check the heading on the redirect page", "test_successive_form_creation", result_flag, "Fail: Heading on the redirect page is incorrect!", [])
 
             #c. Check the copyright
-            result_flag = test_obj.check_copyright() 
+            result_flag = test_obj.check_copyright()
             test_obj.log_result(result_flag,
                                 positive="Copyright check was successful\n",
                                 negative="Copyright looks wrong.\nObtained the copyright: %s\n"%test_obj.get_copyright())
@@ -79,7 +79,7 @@ def test_succesive_form_creation(test_obj):
             #d. Visit main page again
             test_obj = PageFactory.get_page_object("Main Page")
             form_number = form_number + 1
-            
+
         #4.Print out the results
         test_obj.write_test_summary()
         expected_pass = test_obj.result_counter
@@ -88,10 +88,10 @@ def test_succesive_form_creation(test_obj):
     except Exception as e:
         print("Exception when trying to run test :%s"%__file__)
         print("Python says:%s"%str(e))
-     
+
     assert expected_pass == actual_pass ,"Test failed: %s"%__file__
 
-    
+
 #---START OF SCRIPT
 
 if __name__=='__main__':
@@ -101,7 +101,7 @@ if __name__=='__main__':
     options=options_obj.get_options()
 
     #Run the test only if the options provided are valid
-    if options_obj.check_options(options): 
+    if options_obj.check_options(options):
         test_obj = PageFactory.get_page_object("Zero",base_url=options.url)
 
         #Setup and register a driver
@@ -110,16 +110,16 @@ if __name__=='__main__':
         if options.testrail_flag.lower()=='y':
             if options.test_run_id is None:
                 test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
-                options.testrail_flag = 'N'   
+                options.testrail_flag = 'N'
             if options.test_run_id is not None:
                 test_obj.register_testrail()
                 test_obj.set_test_run_id(options.test_run_id)
 
         if options.tesults_flag.lower()=='y':
             test_obj.register_tesults()
-        
-        test_succesive_form_creation(test_obj) 
-        
+
+        test_succesive_form_creation(test_obj)
+
         #teardowm
         test_obj.wait(3)
         test_obj.teardown()

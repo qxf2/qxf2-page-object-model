@@ -5,7 +5,7 @@ Qxf2 Services: Utility script to compare two excel files using openxl module
 import openpyxl
 import os
 
-class Excel_Compare():    
+class Excel_Compare():
     def is_equal(self,xl_actual,xl_expected):
         "Method to compare the Actual and Expected xl file"
         result_flag = True
@@ -32,7 +32,7 @@ class Excel_Compare():
             for row in xl_sheet.iter_rows(min_row=1, max_col=xl_sheet.max_column, max_row=xl_sheet.max_row):
                 for cell in row:
                     exp_file.append(cell.value)
-            
+
             #If there is row and column mismatch result_flag = False
             if (len(actual_file)!= len(exp_file)):
                 result_flag = False
@@ -48,7 +48,7 @@ class Excel_Compare():
                         result_flag =  False
 
             return result_flag
-        
+
 
 #---USAGE EXAMPLES
 if __name__=='__main__':
@@ -56,7 +56,7 @@ if __name__=='__main__':
     # Enter the path details of the xl files here
     file1 = 'Add path to the first xl file'
     file2 = 'Add path to the second xl file'
-  
+
     #Initialize the excel object
     xl_obj = Excel_Compare()
 

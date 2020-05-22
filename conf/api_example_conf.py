@@ -15,7 +15,7 @@ update_car = {'name':'figo','brand':'Ford','price_range':'2-3lacs','car_type':'h
 customer_details = {'customer_name':'Rohan','city':'Ponda'}
 
 #authentication details
-user_name = 'eric' 
+user_name = 'eric'
 password = 'testqxf2'
 
 #invalid auth details

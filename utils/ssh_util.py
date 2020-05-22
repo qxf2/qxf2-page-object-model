@@ -9,12 +9,12 @@ Qxf2 Services: Utility script to ssh into a remote server
 import paramiko
 import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from conf import ssh_conf as conf_file   
+from conf import ssh_conf as conf_file
 import socket
 
 class Ssh_Util:
-    "Class to connect to remote server" 
-    
+    "Class to connect to remote server"
+
     def __init__(self):
         self.ssh_output = None
         self.ssh_error = None
@@ -30,7 +30,7 @@ class Ssh_Util:
         self.uploadlocalfilepath = conf_file.UPLOADLOCALFILEPATH
         self.downloadremotefilepath = conf_file.DOWNLOADREMOTEFILEPATH
         self.downloadlocalfilepath = conf_file.DOWNLOADLOCALFILEPATH
-       
+
     def connect(self):
         "Login to the remote server"
         try:
@@ -45,7 +45,7 @@ class Ssh_Util:
                 self.client.connect(hostname=self.host, port=self.port, username=self.username,pkey=private_key ,timeout=self.timeout, allow_agent=False, look_for_keys=False)
                 print("Connected to the server",self.host)
             else:
-                self.client.connect(hostname=self.host, port=self.port,username=self.username,password=self.password,timeout=self.timeout, allow_agent=False, look_for_keys=False)    
+                self.client.connect(hostname=self.host, port=self.port,username=self.username,password=self.password,timeout=self.timeout, allow_agent=False, look_for_keys=False)
                 print("Connected to the server",self.host)
         except paramiko.AuthenticationException:
             print("Authentication failed, please verify your credentials")
@@ -63,9 +63,9 @@ class Ssh_Util:
             self.client.close()
         else:
             result_flag = True
-        
-        return result_flag    
-  
+
+        return result_flag
+
 
     def execute_command(self,commands):
         """Execute a command on the remote host.Return a tuple containing
@@ -83,21 +83,21 @@ class Ssh_Util:
                     if self.ssh_error:
                         print("Problem occurred while running command:"+ command + " The error is " + self.ssh_error)
                         result_flag = False
-                    else:    
+                    else:
                         print("Command execution completed successfully",command)
                     self.client.close()
             else:
                 print("Could not establish SSH connection")
-                result_flag = False   
+                result_flag = False
         except socket.timeout as e:
             print("Command timed out.", command)
             self.client.close()
-            result_flag = False                
+            result_flag = False
         except paramiko.SSHException:
             print("Failed to execute the command!",command)
             self.client.close()
-            result_flag = False    
-                      
+            result_flag = False
+
         return result_flag
 
 
@@ -108,18 +108,18 @@ class Ssh_Util:
             if self.connect():
                 ftp_client= self.client.open_sftp()
                 ftp_client.put(uploadlocalfilepath,uploadremotefilepath)
-                ftp_client.close() 
+                ftp_client.close()
                 self.client.close()
             else:
                 print("Could not establish SSH connection")
-                result_flag = False  
+                result_flag = False
         except Exception as e:
             print('\nUnable to upload the file to the remote server',uploadremotefilepath)
             print('PYTHON SAYS:',e)
             result_flag = False
             ftp_client.close()
             self.client.close()
-        
+
         return result_flag
 
 
@@ -130,25 +130,25 @@ class Ssh_Util:
             if self.connect():
                 ftp_client= self.client.open_sftp()
                 ftp_client.get(downloadremotefilepath,downloadlocalfilepath)
-                ftp_client.close()  
+                ftp_client.close()
                 self.client.close()
             else:
                 print("Could not establish SSH connection")
-                result_flag = False  
+                result_flag = False
         except Exception as e:
             print('\nUnable to download the file from the remote server',downloadremotefilepath)
             print('PYTHON SAYS:',e)
             result_flag = False
             ftp_client.close()
             self.client.close()
-        
+
         return result_flag
 
 
 #---USAGE EXAMPLES
 if __name__=='__main__':
     print("Start of %s"%__file__)
-     
+
     #Initialize the ssh object
     ssh_obj = Ssh_Util()
 
@@ -156,17 +156,16 @@ if __name__=='__main__':
     if ssh_obj.execute_command(ssh_obj.commands) is True:
         print("Commands executed successfully\n")
     else:
-        print ("Unable to execute the commands" )   
-    
+        print ("Unable to execute the commands" )
+
     #Sample code to upload a file to the server
     if ssh_obj.upload_file(ssh_obj.uploadlocalfilepath,ssh_obj.uploadremotefilepath) is True:
         print ("File uploaded successfully", ssh_obj.uploadremotefilepath)
     else:
         print  ("Failed to upload the file")
-    
+
     #Sample code to download a file from the server
     if ssh_obj.download_file(ssh_obj.downloadremotefilepath,ssh_obj.downloadlocalfilepath) is True:
         print ("File downloaded successfully", ssh_obj.downloadlocalfilepath)
     else:
         print  ("Failed to download the file")
-    

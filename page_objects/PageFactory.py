@@ -1,5 +1,5 @@
 """
-PageFactory uses the factory design pattern. 
+PageFactory uses the factory design pattern.
 get_page_object() returns the appropriate page object.
 Add elif clauses as and when you implement new pages.
 Pages implemented so far:
@@ -37,7 +37,7 @@ class PageFactory():
         elif page_name == "contact page":
             test_obj = Contact_Page(base_url=base_url)
         elif page_name == "bitcoin main page":
-            test_obj = Bitcoin_Main_Page()    
+            test_obj = Bitcoin_Main_Page()
         elif page_name == "bitcoin price page":
             test_obj = Bitcoin_Price_Page()
         return test_obj

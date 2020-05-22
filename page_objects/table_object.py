@@ -8,7 +8,7 @@ from utils.Wrapit import Wrapit
 
 class Table_Object:
     "Page Object for the table"
-    
+
     #locators
     table_xpath = locators.table_xpath
     rows_xpath  = locators.rows_xpath
@@ -35,10 +35,10 @@ class Table_Object:
             for cell_dom in cell_doms:
                 row_text.append(self.get_dom_text(cell_dom).decode('utf-8'))
             table_text.append(row_text)
-            
+
         return table_text
 
-    
+
     def get_num_rows(self):
         "Get the total number of rows in the table"
         #NOTE: We do not count the header row
@@ -91,10 +91,10 @@ class Table_Object:
         result_flag = False
         if column_name == 'all':
             table_text = self.get_all_text()
-           
+
         else:
             table_text = [self.get_column_text(column_name)]
-            
+
         for row in table_text:
             for col in row:
                 if col == text:
@@ -109,7 +109,7 @@ class Table_Object:
     def check_name_present(self,name):
         "Check if the supplied name is present anywhere in the table"
         return self.check_cell_text_present(name,column_name='name')
-   
+
 
     @Wrapit._exceptionHandler
     def print_table_text(self):
@@ -122,5 +122,5 @@ class Table_Object:
             for row in table_text:
                 self.write('|'.join(row))
             result_flag = True
-                
+
         return result_flag

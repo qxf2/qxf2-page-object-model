@@ -10,7 +10,7 @@ jobs:
       parallelism: 3
 
       steps:
-        
+
         - checkout
 
         - run: pip install tox
@@ -19,7 +19,7 @@ jobs:
 
         - run: openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY
 
-        - run: 
+        - run:
             name: Run different Tox environments on different Containers
             command: |
                if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py36 ; fi
@@ -33,7 +33,7 @@ jobs:
         - store_artifacts:
             path: ./log
             destination: logs-file
-        
+
 
 workflows:
   version: 2

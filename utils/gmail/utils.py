@@ -1,6 +1,6 @@
 
 
-from .gmail import Gmail 
+from .gmail import Gmail
 
 def login(username, password):
     gmail = Gmail()

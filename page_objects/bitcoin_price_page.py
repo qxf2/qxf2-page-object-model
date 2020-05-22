@@ -13,7 +13,7 @@ class Bitcoin_Price_Page(Mobile_Base_Page):
     "Page object for real time prices of bitcoin page."
 
     # Locators of the bitcoin real time price page elements.
-    bitcoin_price_in_usd = locators.bitcoin_price_in_usd  
+    bitcoin_price_in_usd = locators.bitcoin_price_in_usd
 
 
     @Wrapit._screenshot
@@ -27,7 +27,7 @@ class Bitcoin_Price_Page(Mobile_Base_Page):
             if bitcoin_price_in_usd is not None:
                 result_flag = True
             else:
-                result_flag = False    
+                result_flag = False
 
             self.conditional_write(result_flag,
                 positive='Get the bitcoin real time price in usd.',
@@ -35,22 +35,22 @@ class Bitcoin_Price_Page(Mobile_Base_Page):
                 level='debug')
 
         except Exception as e:
-            self.write("Exception while getting real time price of the bitcoin.")  
+            self.write("Exception while getting real time price of the bitcoin.")
             self.write(str(e))
 
         return result_flag
 
 
 
-    	   	
 
-    
 
-    		
 
-        
-        
-       
+
+
+
+
+
+
 
 
 
