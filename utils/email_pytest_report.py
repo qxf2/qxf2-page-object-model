@@ -29,10 +29,10 @@ class Email_Pytest_Report:
     "Class to email pytest report"
 
     def __init__(self):
-        self.smtp_ssl_host = conf_file.smtp_ssl_host  
+        self.smtp_ssl_host = conf_file.smtp_ssl_host
         self.smtp_ssl_port = conf_file.smtp_ssl_port
         self.username = conf_file.username
-        self.password = conf_file.app_password 
+        self.password = conf_file.app_password
         self.sender = conf_file.sender
         self.targets = conf_file.targets
 
@@ -50,14 +50,14 @@ class Email_Pytest_Report:
         #check file exist or not
         if not os.path.exists(test_report_file):
             raise Exception("File '%s' does not exist. Please provide valid file"%test_report_file)
-            
+
         with open(test_report_file, "r") as in_file:
             testdata = ""
             for line in in_file:
                 testdata = testdata + '\n' + line
 
         return testdata
-                
+
 
     def get_attachment(self,attachment_file_path = 'default'):
         "Get attachment and attach it to mail"
@@ -74,7 +74,7 @@ class Email_Pytest_Report:
         ctype, encoding = mimetypes.guess_type(attachment_report_file)
         if ctype is None or encoding is not None:
             ctype = 'application/octet-stream'  # Use a binary type as guess couldn't made
-            
+
         maintype, subtype = ctype.split('/', 1)
         if maintype == 'text':
             fp = open(attachment_report_file)
@@ -99,17 +99,17 @@ class Email_Pytest_Report:
         attachment.add_header('Content-Disposition',
                    'attachment',
                    filename=os.path.basename(attachment_report_file))
-        
+
         return attachment
 
-    
+
     def send_test_report_email(self,html_body_flag = True,attachment_flag = False,report_file_path = 'default'):
         "send test report email"
         #1. Get html formatted email body data from report_file_path file (log/pytest_report.html) and do not add it as an attachment
         if html_body_flag == True and attachment_flag == False:
             testdata = self.get_test_report_data(html_body_flag,report_file_path) #get html formatted test report data from log/pytest_report.html
             message = MIMEText(testdata,"html") # Add html formatted test data to email
-            
+
         #2. Get text formatted email body data from report_file_path file (log/pytest_report.log) and do not add it as an attachment
         elif html_body_flag == False and attachment_flag == False:
             testdata = self.get_test_report_data(html_body_flag,report_file_path) #get html test report data from log/pytest_report.log
@@ -127,7 +127,7 @@ class Email_Pytest_Report:
             #add attachment to email
             attachment = self.get_attachment(report_file_path)
             message.attach(attachment)
-            
+
         #4. Add text formatted email body message along with an attachment file
         else:
             message = MIMEMultipart()
@@ -138,7 +138,7 @@ class Email_Pytest_Report:
             #add attachment to email
             attachment = self.get_attachment(report_file_path)
             message.attach(attachment)
-        
+
         message['From'] = self.sender
         message['To'] = ', '.join(self.targets)
         message['Subject'] = 'Script generated test report' # Update email subject here
@@ -148,20 +148,20 @@ class Email_Pytest_Report:
         server.login(self.username, self.password)
         server.sendmail(self.sender, self.targets, message.as_string())
         server.quit()
-            
+
 
 #---USAGE EXAMPLES
 if __name__=='__main__':
     print("Start of %s"%__file__)
-     
+
     #Initialize the Email_Pytest_Report object
     email_obj = Email_Pytest_Report()
     #1. Send html formatted email body message with pytest report as an attachment
     #Here log/pytest_report.html is a default file. To generate pytest_report.html file use following command to the test e.g. py.test --html = log/pytest_report.html
-    email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path= 'default') 
+    email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path= 'default')
 
     #Note: We commented below code to avoid sending multiple emails, you can try the other cases one by one to know more about email_pytest_report util.
-    
+
     '''
     #2. Send html formatted pytest report
     email_obj.send_test_report_email(html_body_flag=True,attachment_flag=False,report_file_path= 'default')
@@ -176,4 +176,4 @@ if __name__=='__main__':
     image_file = ("C:\\Users\\Public\\Pictures\\Sample Pictures\\Koala.jpg") # add attachment file here
     email_obj.send_test_report_email(html_body_flag=False,attachment_flag=True,report_file_path= image_file)
     '''
-    
+

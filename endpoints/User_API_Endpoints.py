@@ -1,5 +1,5 @@
 """
-API endpoints for Registration 
+API endpoints for Registration
 """
 
 from .Base_API import Base_API
@@ -23,7 +23,7 @@ class User_API_Endpoints(Base_API):
 				'user_list':json_response['json_response']
                 }
 
- 
 
 
- 
+
+

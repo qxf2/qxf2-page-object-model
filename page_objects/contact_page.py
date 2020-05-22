@@ -11,7 +11,7 @@ from utils.Wrapit import Wrapit
 
 class Contact_Page(Base_Page,Contact_Form_Object,Header_Object,Footer_Object):
     "Page Object for the contact page"
-    
+
     def start(self):
         "Use this method to go to specific URL -- if needed"
         url = 'contact'

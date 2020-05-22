@@ -8,7 +8,7 @@ from conf import base_url_conf as conf
 
 class Option_Parser:
     "The option parser class"
-    
+
     def __init__(self,usage="\n----\n%prog -b <OPTIONAL: Browser> -c <OPTIONAL: configuration_file> -u <OPTIONAL: APP URL> -a <OPTIONAL: API URL> -r <Test Run Id> -t <OPTIONAL: testrail_configuration_file> -s <OPTIONAL: sauce flag>\n----\nE.g.: %prog -b FF -c .conf -u http://qxf2.com -r 2 -t testrail.conf -s Y\n---"
 ):
         "Class initializer"
@@ -21,7 +21,7 @@ class Option_Parser:
         self.parser.add_option("-B","--browser",
                             dest="browser",
                             default="firefox",
-                            help="Browser. Valid options are firefox, ie and chrome")                      
+                            help="Browser. Valid options are firefox, ie and chrome")
         self.parser.add_option("-U","--app_url",
                             dest="url",
                             default=conf.base_url,
@@ -113,7 +113,7 @@ class Option_Parser:
                             dest="remote_build_name",
                             help="The build name if its run in BrowserStack",
                             default=None)
-        
+
     def add_option(self,option_letter,option_word,dest,help_text):
         "Add an option to our parser"
         self.parser.add(option_letter,
@@ -128,7 +128,7 @@ class Option_Parser:
 
         return options
 
-    
+
     def check_file_exists(self,file_path):
         "Check if the config file exists and is a file"
         self.conf_flag = True
@@ -223,7 +223,7 @@ class Option_Parser:
 
         return  result_flag
 
-    
+
     def print_usage(self):
         "Print the option parser's usage string"
         print(self.parser.print_usage())

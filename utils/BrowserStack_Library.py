@@ -20,7 +20,7 @@ class BrowserStack_Library():
         self.browserstack_url = "https://www.browserstack.com/automate/"
         self.auth = self.get_auth()
 
-    
+
     def get_auth(self):
         "Set up the auth object for the Requests library"
         USERNAME = remote_credentials.USERNAME
@@ -35,7 +35,7 @@ class BrowserStack_Library():
         self.build_url = self.browserstack_url + "builds.json"
         builds = requests.get(self.build_url, auth=self.auth).json()
         build_id =  builds[0]['automation_build']['hashed_id']
-        
+
         return build_id
 
 
@@ -52,11 +52,11 @@ class BrowserStack_Library():
         session_id = None
         sessions = self.get_sessions()
         for session in sessions:
-            #Get session id of the first session with status = running 
+            #Get session id of the first session with status = running
             if session['automation_session']['status']=='running':
                 session_id = session['automation_session']['hashed_id']
                 break
-                
+
         return session_id
 
 
@@ -81,7 +81,7 @@ class BrowserStack_Library():
     def get_latest_screenshot_url(self):
         "Get the URL of the latest screenshot"
         session_log = self.get_session_logs()
-        
+
         #Process the text to locate the URL of the last screenshot
         #Extract the https://s2.amazonaws from example lines:
         #2016-2-9 4:42:39:52 RESPONSE {"state":"success","sessionId":"f77e1de6e4f42a72e6a6ecfd80ed07b95036ca35","hCode":29018101,"value":"https://s3.amazonaws.com/testautomation/f77e1de6e4f42a72e6a6ecfd80ed07b95036ca35/screenshot-selenium-b14d4ec62a.png","class":"org.openqa.selenium.remote.Response","status":0}
@@ -93,5 +93,5 @@ class BrowserStack_Library():
         image_url = response_result.split('https://')[-1]
         image_url = image_url.split('.png')[0]
         screenshot_url = 'https://' + image_url + '.png'
-        
+
         return screenshot_url

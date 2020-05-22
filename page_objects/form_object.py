@@ -10,7 +10,7 @@ from utils.Wrapit import Wrapit
 
 class Form_Object:
     "Page object for the Form"
-    
+
     #locators
     name_field = locators.name_field
     email_field = locators.email_field
@@ -19,7 +19,7 @@ class Form_Object:
     gender_dropdown = locators.gender_dropdown
     gender_option = locators.gender_option
     tac_checkbox = locators.tac_checkbox
-    redirect_title = "redirect"    
+    redirect_title = "redirect"
 
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
@@ -31,7 +31,7 @@ class Form_Object:
             negative='Failed to set the name in the form',
             level='debug')
 
-        return result_flag 
+        return result_flag
 
 
     @Wrapit._exceptionHandler
@@ -97,7 +97,7 @@ class Form_Object:
             positive='Accepted the terms and conditions',
             negative='Failed to accept the terms and conditions',
             level='debug')
-            
+
         return result_flag
 
 
@@ -109,7 +109,7 @@ class Form_Object:
         if self.redirect_title in self.driver.title:
             result_flag = True
             self.switch_page("redirect")
-        
+
         return result_flag
 
 

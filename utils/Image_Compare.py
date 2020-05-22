@@ -54,7 +54,7 @@ def analyze_difference_smartly(img):
     if not os.path.exists(img):
         print('Could not locate the image to analyze the difference smartly: %s'%img)
     else:
-        my_image = Image.open(img)   
+        my_image = Image.open(img)
         #Not an ideal line, but we dont have any enormous images
         pixels = list(my_image.getdata())
         pixels = [1 for x in pixels if x!=0]
@@ -74,7 +74,7 @@ def get_color_sum(img):
     if not os.path.exists(img):
         print('Could not locate the image to sum the colors: %s'%actual)
     else:
-        my_image = Image.open(img)   
+        my_image = Image.open(img)
         color_matrix = ([0] + ([255] * 255))
         my_image = my_image.convert('L')
         my_image = my_image.point(color_matrix)
@@ -88,7 +88,7 @@ def get_color_sum(img):
 
 #--START OF SCRIPT
 if __name__=='__main__':
-    # Please update below img1, img2, result_img values before running this script 
+    # Please update below img1, img2, result_img values before running this script
     img1 = r'Add path of first image'
     img2 = r'Add path of second image'
     result_img= r'Add path of result image' #please add path along with resultant image name which you want

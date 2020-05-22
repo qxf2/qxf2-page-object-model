@@ -48,7 +48,7 @@ if __name__=='__main__':
     #Fill in the file1 and file2 paths
     file1 = 'Add path for the first file here'
     file2 = 'Add path for the second file here'
-    
+
     #Initialize the csv object
     csv_obj = Csv_Compare()
 
@@ -56,4 +56,4 @@ if __name__=='__main__':
     if csv_obj.is_equal(file1,file2) is True:
         print("Data matched in both the csv files\n")
     else:
-        print("Data mismatch between the actual and expected csv files")    
+        print("Data mismatch between the actual and expected csv files")
