@@ -22,7 +22,8 @@ def delete_files_in_dir(directory, files):
 
 
 def delete_files_used_in_example():
-    "The method will delete files mentioned in the blog post: https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/"
+    "The method will delete set of files"
+    #Files mentioned are in the blog post: https://qxf2.com/bloghow-to-start-using-the-qxf2-framework-with-a-new-project/"
     for every_dir_list, every_file_list in zip(conf.dir_list, conf.file_list):
         delete_files_in_dir(every_dir_list, every_file_list)
 
