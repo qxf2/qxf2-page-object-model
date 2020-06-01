@@ -193,8 +193,6 @@ class API_Player(Results):
         self.write("Request & Response:\n%s\n" % str(result))
         user_list = {}
         response_code = None
-
-        """if userlist result is none then return http error code"""
         try:
             response = result
             if response is not None:
@@ -214,8 +212,6 @@ class API_Player(Results):
         response_code = result['response_code']
         result_flag = False
         msg = ''
-
-        "verify result based on user list and response code"
         if  response_code == 403:
             msg = "403 FORBIDDEN: Authentication successful but no access for non admin users"
 
