@@ -7,10 +7,8 @@ c) maintains the test context/state
 from base64 import b64encode
 from .API_Interface import API_Interface
 from utils.results import Results
-import json
 import urllib.parse
 import logging
-from utils.__init__ import get_dict_item
 from conf import api_example_conf as conf
 
 
