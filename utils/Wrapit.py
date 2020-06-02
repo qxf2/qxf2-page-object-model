@@ -3,7 +3,6 @@ Class to hold miscellaneous but useful decorators for our framework
 """
 
 from inspect import getfullargspec
-from page_objects.Base_Page import Base_Page
 
 
 class Wrapit():

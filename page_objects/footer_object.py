@@ -5,7 +5,6 @@ We model it as two parts:
 2. The copyright
 """
 from datetime import datetime
-from .Base_Page import Base_Page
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 

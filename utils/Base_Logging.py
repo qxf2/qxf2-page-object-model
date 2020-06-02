@@ -3,8 +3,6 @@ Qxf2 Services: A plug-n-play class for logging.
 This class wraps around Python's loguru module.
 """
 import os, inspect
-import datetime
-import sys
 import pytest,logging
 from loguru import logger
 from pytest_reportportal import RPLogger, RPLogHandler
