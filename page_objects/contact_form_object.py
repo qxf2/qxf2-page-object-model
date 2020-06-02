@@ -2,8 +2,6 @@
 This class models the form on contact page
 The form consists of some input fields.
 """
-
-from .Base_Page import Base_Page
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 

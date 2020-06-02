@@ -3,7 +3,6 @@ API endpoints for Cars
 """
 
 from .Base_API import Base_API
-import json
 
 class Cars_API_Endpoints(Base_API):
 	"Class for cars endpoints"
