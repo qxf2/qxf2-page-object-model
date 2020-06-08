@@ -22,7 +22,7 @@ import pytest
 
 
 @pytest.mark.API
-def test_api_example(api_url='http://35.167.62.251/'):
+def test_api_example(api_url='http://127.0.0.1:5000'):
     "Run api test"
     try:
         # Create test object
