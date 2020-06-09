@@ -54,9 +54,8 @@ src_utils_file2 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','u
 src_utils_file3 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','utils','Option_Parser.py'))
 src_utils_file4 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','utils','setup_testrail.py'))
 src_utils_file5 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','utils','Test_Rail.py'))
-src_utils_file6 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','utils','Test_Runner_Class.py'))
-src_utils_file7 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','utils','testrail.py'))
-src_utils_file8 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','utils','Wrapit.py'))
+src_utils_file6 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','utils','testrail.py'))
+src_utils_file7 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','utils','Wrapit.py'))
 
 #files for dst Utils:
 #dst_utils_file1 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..','..','clients','Myntra','utils','Base_Logging.py'))
@@ -69,7 +68,7 @@ src_utils_file8 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','u
 #dst_utils_file8 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','..','..','clients','Myntra','utils','Wrapit.py'))
 
 #src utils file list:
-src_utils_files_list = [src_utils_file1,src_utils_file2,src_utils_file3,src_utils_file4,src_utils_file5,src_utils_file6,src_utils_file7,src_utils_file8]
+src_utils_files_list = [src_utils_file1,src_utils_file2,src_utils_file3,src_utils_file4,src_utils_file5,src_utils_file6,src_utils_file7]
 
 #dst utils file list:
 #dst_utils_files_list = [dst_utils_file1,dst_utils_file2,dst_utils_file3,dst_utils_file4,dst_utils_file5,dst_utils_file6,dst_utils_file7,dst_utils_file8]
