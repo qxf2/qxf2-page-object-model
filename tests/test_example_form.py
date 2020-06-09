@@ -5,7 +5,7 @@ Our automated test will do the following:
     #Fill the example form.
     #Click on Click me! button and check if its working fine.
 """
-import os,sys,time,pytest
+import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 from utils.Option_Parser import Option_Parser

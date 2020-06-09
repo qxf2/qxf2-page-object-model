@@ -1,7 +1,6 @@
 """
 Class to wrap around parsing command line options
 """
-import os, sys
 import optparse
 from conf import base_url_conf as conf
 
