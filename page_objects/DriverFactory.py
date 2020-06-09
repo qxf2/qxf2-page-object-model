@@ -7,9 +7,7 @@ NOTE: Change this class as you add support for:
 import dotenv,os,sys,requests,json
 from datetime import datetime
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from selenium.webdriver.chrome import service
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from conf import remote_credentials
