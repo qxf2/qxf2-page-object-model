@@ -107,6 +107,7 @@ class Test_Rail:
                             'description':milestone_description}
                     result = self.client.send_post('add_milestone/%s'%str(project_id),
                                                    data)
+                    print(result)
                 except Exception as e:
                     print('Exception in create_new_project() creating new project.')
                     print('PYTHON SAYS: ')
@@ -127,6 +128,7 @@ class Test_Rail:
                                                 'announcement': project_description,
                                                 'show_announcement': show_announcement,
                                                 'suite_mode': suite_mode,})
+                print(result)
             except Exception as e:
                 print('Exception in create_new_project() creating new project.')
                 print('PYTHON SAYS: ')
@@ -162,6 +164,7 @@ class Test_Rail:
 
             try:
                 result = self.client.send_post('add_run/%s'%(project_id),data)
+                print(result)
             except Exception as e:
                 print('Exception in create_test_run() Creating Test Run.')
                 print('PYTHON SAYS: ')
@@ -181,6 +184,7 @@ class Test_Rail:
         if project_id is not None:
             try:
                 result = self.client.send_post('delete_project/%s'%(project_id),project_description)
+                print(result)
             except Exception as e:
                 print('Exception in delete_project() deleting project.')
                 print('PYTHON SAYS: ')
@@ -195,6 +199,7 @@ class Test_Rail:
         if run_id is not None:
             try:
                 result = self.client.send_post('delete_run/%s'%(run_id),test_run_name)
+                print(result)
             except Exception as e:
                 print('Exception in update_testrail() updating TestRail.')
                 print('PYTHON SAYS: ')

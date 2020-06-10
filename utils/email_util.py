@@ -78,7 +78,7 @@ class Email_Util:
         print("  - Automation will be in search/wait mode for max %s seconds"%wait_time)
         while (time_elapsed < wait_time and uid is None):
             time.sleep(time_delta)
-            result,data = self.mail.uid('search',None,str(search_string))
+            data = self.mail.uid('search',None,str(search_string))
 
             if data[0].strip() != '': #Check for an empty set
                 uid = data[0].split()[-1]
@@ -92,7 +92,7 @@ class Email_Util:
         "Fetch the email body for a given uid"
         email_body = []
         if uid is not None:
-            result,data = self.mail.uid('fetch',uid,'(RFC822)')
+            data = self.mail.uid('fetch',uid,'(RFC822)')
             raw_email = data[0][1]
             email_msg = email.message_from_string(raw_email)
             email_body = self.get_email_body(email_msg)
@@ -117,7 +117,7 @@ class Email_Util:
     def logout(self):
         "Logout"
         result_flag = False
-        response, data = self.mail.logout()
+        response = self.mail.logout()
         if response == 'BYE':
             result_flag = True
 

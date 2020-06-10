@@ -8,8 +8,7 @@ from conf import base_url_conf as conf
 class Option_Parser:
     "The option parser class"
 
-    def __init__(self,usage="\n----\n%prog -b <OPTIONAL: Browser> -c <OPTIONAL: configuration_file> -u <OPTIONAL: APP URL> -a <OPTIONAL: API URL> -r <Test Run Id> -t <OPTIONAL: testrail_configuration_file> -s <OPTIONAL: sauce flag>\n----\nE.g.: %prog -b FF -c .conf -u http://qxf2.com -r 2 -t testrail.conf -s Y\n---"
-):
+    def __init__(self,usage="\n----\n%prog -b <OPTIONAL: Browser> -c <OPTIONAL: configuration_file> -u <OPTIONAL: APP URL> -a <OPTIONAL: API URL> -r <Test Run Id> -t <OPTIONAL: testrail_configuration_file> -s <OPTIONAL: sauce flag>\n----\nE.g.: %prog -b FF -c .conf -u http://qxf2.com -r 2 -t testrail.conf -s Y\n---"):
         "Class initializer"
         self.usage=usage
         self.parser=optparse.OptionParser()
@@ -123,7 +122,7 @@ class Option_Parser:
 
     def get_options(self):
         "Get the command line arguments passed into the script"
-        (options,args)=self.parser.parse_args()
+        options=self.parser.parse_args()
 
         return options
 
