@@ -2,12 +2,9 @@
 A wrapper around Requests to make Restful API calls
 """
 
-import json
 import requests
-from requests.auth import HTTPBasicAuth
 from urllib.error import HTTPError
 from urllib.error import URLError
-from conf import api_example_conf as conf
 
 class Base_API:
     "Main base class for Requests based scripts"

@@ -1,7 +1,7 @@
 """
 This conf file would have the relative paths of the files & folders.
 """
-import os,sys
+import os
 
 #POM
 #Files from src POM:

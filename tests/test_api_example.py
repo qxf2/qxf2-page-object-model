@@ -14,12 +14,10 @@ API EXAMPLE TEST
 
 import os
 import sys
-import os,sys,time,pytest
+import pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from endpoints.API_Player import API_Player
 from conf import api_example_conf as conf
-import pytest
-
 
 @pytest.mark.API
 def test_api_example(api_url='http://127.0.0.1:5000'):
