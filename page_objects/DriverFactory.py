@@ -132,7 +132,7 @@ class DriverFactory():
         desired_capabilities['platformName'] = mobile_os_name
         desired_capabilities['platformVersion'] = mobile_os_version
         desired_capabilities['deviceName'] = device_name
-        desired_capabilities['automationName'] = "UiAutomator2"
+        
 
         if mobile_os_name in 'Android':
             if (remote_flag.lower() == 'y'):
@@ -150,6 +150,7 @@ class DriverFactory():
                         driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
                             desired_capabilities= desired_capabilities)
                     else:
+                        desired_capabilities['browserstack.appium_version'] = '1.17.0'
                         desired_capabilities['realMobile'] = 'true'
                         desired_capabilities['app'] = self.browser_stack_upload(app_name,app_path) #upload the application to the Browserstack Storage
                         driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
