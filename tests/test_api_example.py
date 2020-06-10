@@ -20,7 +20,7 @@ from endpoints.API_Player import API_Player
 from conf import api_example_conf as conf
 
 @pytest.mark.API
-def test_api_example(api_url='http://35.167.62.251/'):
+def test_api_example(api_url='http://127.0.0.1:5000'):
     "Run api test"
     try:
         # Create test object
@@ -141,8 +141,12 @@ def test_api_example(api_url='http://35.167.62.251/'):
         test_obj.write_test_summary()
 
     except Exception as e:
-        test_obj.write("Exception when trying to run test:%s" % __file__)
-        test_obj.write("Python says:%s" % str(e))
+        if api_url=='http://127.0.0.1:5000':
+            test_obj.write("Please set the api_url to 'http://35.167.62.251/' in test_api_example.py when running the test locally")
+        
+        else:
+            test_obj.write("Exception when trying to run test:%s" % __file__)
+            test_obj.write("Python says:%s" % str(e))
 
     # Assertion
     assert expected_pass == actual_pass,"Test failed: %s"%__file__
