@@ -132,6 +132,7 @@ class DriverFactory():
         desired_capabilities['platformName'] = mobile_os_name
         desired_capabilities['platformVersion'] = mobile_os_version
         desired_capabilities['deviceName'] = device_name
+        desired_capabilities['automationName'] = "UiAutomator2"
 
         if mobile_os_name in 'Android':
             if (remote_flag.lower() == 'y'):
