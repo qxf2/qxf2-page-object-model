@@ -91,7 +91,6 @@ class Ssh_Util:
                 result_flag = False
         except socket.timeout as e:
             self.write(str(e),'debug')
-            self.write(str(e),'debug')
             self.client.close()
             result_flag = False
         except paramiko.SSHException:
