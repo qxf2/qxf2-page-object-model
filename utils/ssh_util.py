@@ -90,7 +90,6 @@ class Ssh_Util:
                 print("Could not establish SSH connection")
                 result_flag = False
         except socket.timeout as e:
-            print("Command timed out.", command)
             self.write(str(e),'debug')
             self.client.close()
             result_flag = False

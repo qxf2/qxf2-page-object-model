@@ -189,8 +189,6 @@ class API_Player(Results):
         headers = self.set_header_details(auth_details)
         result = self.api_obj.get_user_list(headers=headers)
         self.write("Request & Response:\n%s\n" % str(result))
-        user_list = {}
-        response_code = None
 
         try:
             response = result
@@ -207,7 +205,6 @@ class API_Player(Results):
     def check_validation_error(self, auth_details=None):
         "verify validatin error 403"
         result = self.get_user_list(auth_details)
-        user_list = result['user_list']
         response_code = result['response_code']
         result_flag = False
         msg = ''

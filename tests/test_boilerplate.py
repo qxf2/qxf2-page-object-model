@@ -17,12 +17,8 @@ def test_boilerplate(test_obj):
         expected_pass = 0
         actual_pass = -1
 
-        #Set start_time with current time
-        start_time = int(time.time())
-
         #This is the test object, you can change it to the desired page with relevance to the page factory
         test_obj = PageFactory.get_page_object("main page")
-
 
         #13. Print out the result
         test_obj.write_test_summary()
