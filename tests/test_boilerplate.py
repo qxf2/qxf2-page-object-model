@@ -20,7 +20,7 @@ def test_boilerplate(test_obj):
         #This is the test object, you can change it to the desired page with relevance to the page factory
         test_obj = PageFactory.get_page_object("main page")
 
-        #13. Print out the result
+        #Print out the result
         test_obj.write_test_summary()
         expected_pass = test_obj.result_counter
         actual_pass = test_obj.pass_counter
