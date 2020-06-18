@@ -161,8 +161,7 @@ class Test_Rail:
                 data['include_all'] = False
 
             try:
-                result = self.client.send_post('add_run/%s'%(project_id),data)
-                print(result)
+                self.client.send_post('add_run/%s'%(project_id),data)
             except Exception as e:
                 print('Exception in create_test_run() Creating Test Run.')
                 print('PYTHON SAYS: ')
