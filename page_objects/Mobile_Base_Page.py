@@ -229,6 +229,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         try:
             result = tuple(locator.split(',',1))
         except Exception as e:
+            self.write(str(e),'debug')
             self.write("Error while parsing locator")
 
         return result

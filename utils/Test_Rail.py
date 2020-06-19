@@ -105,7 +105,7 @@ class Test_Rail:
                 try:
                     data = {'name':milestone_name,
                             'description':milestone_description}
-                    result = self.client.send_post('add_milestone/%s'%str(project_id),
+                    self.client.send_post('add_milestone/%s'%str(project_id),
                                                    data)
                 except Exception as e:
                     print('Exception in create_new_project() creating new project.')
@@ -122,7 +122,7 @@ class Test_Rail:
         project_id = self.get_project_id(new_project_name)
         if project_id is None:
             try:
-                result = self.client.send_post('add_project',
+                self.client.send_post('add_project',
                                                {'name': new_project_name,
                                                 'announcement': project_description,
                                                 'show_announcement': show_announcement,
@@ -161,7 +161,7 @@ class Test_Rail:
                 data['include_all'] = False
 
             try:
-                result = self.client.send_post('add_run/%s'%(project_id),data)
+                self.client.send_post('add_run/%s'%(project_id),data)
             except Exception as e:
                 print('Exception in create_test_run() Creating Test Run.')
                 print('PYTHON SAYS: ')
@@ -180,7 +180,7 @@ class Test_Rail:
         project_id = self.get_project_id(new_project_name)
         if project_id is not None:
             try:
-                result = self.client.send_post('delete_project/%s'%(project_id),project_description)
+                self.client.send_post('delete_project/%s'%(project_id),project_description)
             except Exception as e:
                 print('Exception in delete_project() deleting project.')
                 print('PYTHON SAYS: ')
@@ -194,7 +194,7 @@ class Test_Rail:
         run_id = self.get_run_id(test_run_name,project_name)
         if run_id is not None:
             try:
-                result = self.client.send_post('delete_run/%s'%(run_id),test_run_name)
+                self.client.send_post('delete_run/%s'%(run_id),test_run_name)
             except Exception as e:
                 print('Exception in update_testrail() updating TestRail.')
                 print('PYTHON SAYS: ')
@@ -214,10 +214,9 @@ class Test_Rail:
 
         if ((run_id is not None) and (case_id != 'None')) :
             try:
-                result = self.client.send_post(
+                self.client.send_post(
                     'add_result_for_case/%s/%s'%(run_id,case_id),
                     {'status_id': status_id, 'comment': msg })
-                print (result)
             except Exception as e:
                 print('Exception in update_testrail() updating TestRail.')
                 print('PYTHON SAYS: ')
