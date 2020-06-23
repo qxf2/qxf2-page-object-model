@@ -122,7 +122,7 @@ class DriverFactory():
         return local_driver
 
 
-    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag):
+    def run_mobile(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version):
         "Setup mobile device"
         #Get the remote credentials from remote_credentials file
         USERNAME = remote_credentials.USERNAME
@@ -149,7 +149,7 @@ class DriverFactory():
                         driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
                             desired_capabilities= desired_capabilities)
                     else:
-                        desired_capabilities['browserstack.appium_version'] = '1.17.0'
+                        desired_capabilities['browserstack.appium_version'] = appium_version
                         desired_capabilities['realMobile'] = 'true'
                         desired_capabilities['app'] = self.browser_stack_upload(app_name,app_path) #upload the application to the Browserstack Storage
                         driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(USERNAME,PASSWORD),
