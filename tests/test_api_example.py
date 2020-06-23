@@ -142,7 +142,9 @@ def test_api_example(api_url='http://127.0.0.1:5000'):
 
     except Exception as e:
         if api_url=='http://127.0.0.1:5000':
-            test_obj.write("Please set the api_url to 'http://35.167.62.251/' in test_api_example.py when running the test locally")
+            test_obj.write("Please run the test against http://35.167.62.251/ by changing the api_url in test_api_example.py")  
+            test_obj.write("OR")
+            test_obj.write("Clone the repo 'https://github.com/qxf2/cars-api.git' and run the cars_app inorder to run the test against your system")
         
         else:
             test_obj.write("Exception when trying to run test:%s" % __file__)

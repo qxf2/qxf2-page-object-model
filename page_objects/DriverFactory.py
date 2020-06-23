@@ -105,7 +105,6 @@ class DriverFactory():
         elif browser.lower() == "chrome":
             local_driver = webdriver.Chrome()
         elif browser.lower() == "opera":
-            opera_options = None
             try:
                 opera_browser_location = opera_browser_conf.location
                 options = webdriver.ChromeOptions()

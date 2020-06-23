@@ -77,7 +77,7 @@ class Ssh_Util:
             if self.connect():
                 for command in commands:
                     print("Executing command --> {}".format(command))
-                    stdin, stdout, stderr = self.client.exec_command(command,timeout=10)
+                    stdout, stderr = self.client.exec_command(command,timeout=10)
                     self.ssh_output = stdout.read()
                     self.ssh_error = stderr.read()
                     if self.ssh_error:
@@ -90,7 +90,7 @@ class Ssh_Util:
                 print("Could not establish SSH connection")
                 result_flag = False
         except socket.timeout as e:
-            print("Command timed out.", command)
+            self.write(str(e),'debug')
             self.client.close()
             result_flag = False
         except paramiko.SSHException:
