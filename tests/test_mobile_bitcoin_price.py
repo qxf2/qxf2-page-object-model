@@ -79,7 +79,7 @@ if __name__ == '__main__':
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
 
         #Setup and register a driver
-        test_mobile_obj.register_driver(options.mobile_os_name,options.mobile_os_version,options.device_name,options.app_package,options.app_activity,options.remote_flag,options.device_flag,options.app_name,options.app_path,options.ud_id,options.org_id,options.signing_id,options.no_reset_flag)
+        test_mobile_obj.register_driver(options.mobile_os_name,options.mobile_os_version,options.device_name,options.app_package,options.app_activity,options.remote_flag,options.device_flag,options.app_name,options.app_path,options.ud_id,options.org_id,options.signing_id,options.no_reset_flag,options.appium_version)
 
         #Setup TestRail reporting
         if options.testrail_flag.lower()=='y':
