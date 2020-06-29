@@ -34,13 +34,13 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
     test_obj.teardown()
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path):
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version):
 
     "Return an instance of Base Page that knows about the third party integrations"
     test_mobile_obj = PageFactory.get_page_object("Zero mobile")
 
     #Setup and register a driver
-    test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag)
+    test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version)
 
     #3. Setup TestRail reporting
     if testrail_flag.lower()=='y':
@@ -212,6 +212,11 @@ def org_id(request):
 def signing_id(request):
     "pytest fixture for iOS signing id"
     return request.config.getoption("--signing_id")
+
+@pytest.fixture
+def appium_version(request):
+    "pytest fixture for app name"
+    return request.config.getoption("--appium_version")
 
 
 @pytest.fixture
@@ -396,6 +401,10 @@ def pytest_addoption(parser):
     parser.addoption("-N","--app_path",
                       dest="app_path",
                       help="Enter app path")
+    parser.addoption("--appium_version",
+                      dest="appium_version",
+                      help="The appium version if its run in BrowserStack",
+                      default="1.17.0")
 
 
 
