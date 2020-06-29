@@ -21,8 +21,8 @@ class Base_API:
             response = requests.get(url=url,headers=headers)
             try:
                 json_response = response.json()
-            except:
-                json_response = None
+            except requests.exceptions.RequestException:
+                raise Exception('Failed to connect to %s' % url) from None
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -48,8 +48,8 @@ class Base_API:
             response = requests.post(url,params=params,json=json,headers=headers)
             try:
                 json_response = response.json()
-            except:
-                json_response = None
+            except requests.exceptions.RequestException:
+                raise Exception('Failed to connect to %s' % url) from None
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError,URLError):
@@ -74,9 +74,9 @@ class Base_API:
             response = requests.delete(url,headers = headers)
             try:
                 json_response = response.json()
-            except:
+            except requests.exceptions.RequestException:
+                raise Exception('Failed to connect to %s' % url) from None
                 json_response = None
-
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -101,10 +101,8 @@ class Base_API:
             response = requests.put(url,json=json,headers=headers)
             try:
                 json_response = response.json()
-            except:
-                json_response = None
-
-
+            except requests.exceptions.RequestException:
+                raise Exception('Failed to connect to %s' % url) from None
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
