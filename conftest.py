@@ -73,19 +73,19 @@ def testname(request):
 @pytest.fixture
 def browser(request):
     "pytest fixture for browser"
-    return request.config.getoption("-B")
+    return request.config.getoption("--browser")
 
 
 @pytest.fixture
 def base_url(request):
     "pytest fixture for base url"
-    return request.config.getoption("-U")
+    return request.config.getoption("--app_url")
 
 
 @pytest.fixture
 def api_url(request):
     "pytest fixture for base url"
-    return request.config.getoption("-A")
+    return request.config.getoption("--api_url")
 
 
 @pytest.fixture
@@ -265,24 +265,24 @@ def pytest_generate_tests(metafunc):
 
     if 'browser' in metafunc.fixturenames:
         if metafunc.config.getoption("-M").lower() == 'y':
-            if metafunc.config.getoption("-B") == ["all"]:
+            if metafunc.config.getoption("--browser") == ["all"]:
                 metafunc.parametrize("browser,browser_version,os_name,os_version",
                                     browser_os_name_conf.cross_browser_cross_platform_config)
-            elif metafunc.config.getoption("-B") == []:
+            elif metafunc.config.getoption("--browser") == []:
                 metafunc.parametrize("browser,browser_version,os_name,os_version",
                                     browser_os_name_conf.default_config_list)
             else:
-                config_list = [(metafunc.config.getoption("-B")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
+                config_list = [(metafunc.config.getoption("--browser")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
                 metafunc.parametrize("browser,browser_version,os_name,os_version",
                                     config_list)
         if metafunc.config.getoption("-M").lower() !='y':
-            if metafunc.config.getoption("-B") == ["all"]:
+            if metafunc.config.getoption("--browser") == ["all"]:
                 metafunc.config.option.browser = browser_os_name_conf.local_browsers
                 metafunc.parametrize("browser", metafunc.config.option.browser)
-            elif metafunc.config.getoption("-B") == []:
+            elif metafunc.config.getoption("--browser") == []:
                 metafunc.parametrize("browser",browser_os_name_conf.default_browser)
             else:
-                config_list_local = [(metafunc.config.getoption("-B")[0])]
+                config_list_local = [(metafunc.config.getoption("--browser")[0])]
                 metafunc.parametrize("browser", config_list_local)
 
 
@@ -294,16 +294,16 @@ def pytest_addoption(parser):
     parser.addini("rp_project",'help',type="pathlist")
     parser.addini("rp_launch",'help',type="pathlist")
 
-    parser.addoption("-B","--browser",
+    parser.addoption("--browser",
                       dest="browser",
                       action="append",
                       default=[],
                       help="Browser. Valid options are firefox, ie and chrome")
-    parser.addoption("-U","--app_url",
+    parser.addoption("--app_url",
                       dest="url",
                       default=base_url_conf.base_url,
                       help="The url of the application")
-    parser.addoption("-A","--api_url",
+    parser.addoption("--api_url",
                       dest="url",
                       default="http://35.167.62.251",
                       help="The url of the api")
