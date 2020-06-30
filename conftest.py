@@ -139,7 +139,7 @@ def remote_build_name(request):
 @pytest.fixture
 def slack_flag(request):
     "pytest fixture for sending reports on slack"
-    return request.config.getoption("-S")
+    return request.config.getoption("--slack_flag")
 
 
 @pytest.fixture
@@ -249,7 +249,7 @@ def pytest_configure(config):
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
-    if  terminalreporter.config.getoption("-S").lower() == 'y':
+    if  terminalreporter.config.getoption("--slack_flag").lower() == 'y':
         post_test_reports_to_slack.post_reports_to_slack()
     if terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
         #Initialize the Email_Pytest_Report object
@@ -342,7 +342,7 @@ def pytest_addoption(parser):
                       dest="remote_build_name",
                       help="The build name if its run in BrowserStack",
                       default=None)
-    parser.addoption("-S","--slack_flag",
+    parser.addoption("--slack_flag",
                       dest="slack_flag",
                       default="N",
                       help="Post the test report on slack channel: Y or N")
