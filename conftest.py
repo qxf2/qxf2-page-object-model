@@ -169,13 +169,13 @@ def device_name(request):
 @pytest.fixture
 def app_package(request):
     "pytest fixture for app package"
-    return request.config.getoption("-J")
+    return request.config.getoption("--app_package")
 
 
 @pytest.fixture
 def app_activity(request):
     "pytest fixture for app activity"
-    return request.config.getoption("-K")
+    return request.config.getoption("--app_activity")
 
 
 @pytest.fixture
@@ -358,11 +358,11 @@ def pytest_addoption(parser):
                       dest="device_name",
                       help="Enter device name. Ex: Emulator, physical device name",
                       default="Samsung Galaxy S9")
-    parser.addoption("-J","--app_package",
+    parser.addoption("--app_package",
                       dest="app_package",
                       help="Enter name of app package. Ex: bitcoininfo",
                       default="com.dudam.rohan.bitcoininfo")
-    parser.addoption("-K","--app_activity",
+    parser.addoption("--app_activity",
                       dest="app_activity",
                       help="Enter name of app activity. Ex: .MainActivity",
                       default=".MainActivity")
