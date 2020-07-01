@@ -103,7 +103,7 @@ def testrail_flag(request):
 @pytest.fixture
 def remote_flag(request):
     "pytest fixture for browserstack/sauce flag"
-    return request.config.getoption("-M")
+    return request.config.getoption("--remote_flag")
 
 
 @pytest.fixture
@@ -151,19 +151,19 @@ def tesults_flag(request):
 @pytest.fixture
 def mobile_os_name(request):
     "pytest fixture for mobile os name"
-    return request.config.getoption("-G")
+    return request.config.getoption("--mobile_os_name")
 
 
 @pytest.fixture
 def mobile_os_version(request):
     "pytest fixture for mobile os version"
-    return request.config.getoption("-H")
+    return request.config.getoption("--mobile_os_version")
 
 
 @pytest.fixture
 def device_name(request):
     "pytest fixture for device name"
-    return request.config.getoption("-I")
+    return request.config.getoption("--device_name")
 
 
 @pytest.fixture
@@ -181,7 +181,7 @@ def app_activity(request):
 @pytest.fixture
 def device_flag(request):
     "pytest fixture for device flag"
-    return request.config.getoption("-Q")
+    return request.config.getoption("--device_flag")
 
 
 @pytest.fixture
@@ -228,7 +228,7 @@ def no_reset_flag(request):
 @pytest.fixture
 def app_path(request):
     "pytest fixture for app path"
-    return request.config.getoption("-N")
+    return request.config.getoption("--app_path")
 
 
 @pytest.hookimpl()
@@ -264,7 +264,7 @@ def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
 
     if 'browser' in metafunc.fixturenames:
-        if metafunc.config.getoption("-M").lower() == 'y':
+        if metafunc.config.getoption("--remote_flag").lower() == 'y':
             if metafunc.config.getoption("--browser") == ["all"]:
                 metafunc.parametrize("browser,browser_version,os_name,os_version",
                                     browser_os_name_conf.cross_browser_cross_platform_config)
@@ -275,7 +275,7 @@ def pytest_generate_tests(metafunc):
                 config_list = [(metafunc.config.getoption("--browser")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
                 metafunc.parametrize("browser,browser_version,os_name,os_version",
                                     config_list)
-        if metafunc.config.getoption("-M").lower() !='y':
+        if metafunc.config.getoption("--remote_flag").lower() !='y':
             if metafunc.config.getoption("--browser") == ["all"]:
                 metafunc.config.option.browser = browser_os_name_conf.local_browsers
                 metafunc.parametrize("browser", metafunc.config.option.browser)
@@ -315,7 +315,7 @@ def pytest_addoption(parser):
                       dest="test_run_id",
                       default=None,
                       help="The test run id in TestRail")
-    parser.addoption("-M","--remote_flag",
+    parser.addoption("--remote_flag",
                       dest="remote_flag",
                       default="N",
                       help="Run the test in Browserstack/Sauce Lab: Y or N")
@@ -346,15 +346,15 @@ def pytest_addoption(parser):
                       dest="slack_flag",
                       default="N",
                       help="Post the test report on slack channel: Y or N")
-    parser.addoption("-G","--mobile_os_name",
+    parser.addoption("--mobile_os_name",
                       dest="mobile_os_name",
                       help="Enter operating system of mobile. Ex: Android, iOS",
                       default="Android")
-    parser.addoption("-H","--mobile_os_version",
+    parser.addoption("--mobile_os_version",
                       dest="mobile_os_version",
                       help="Enter version of operating system of mobile: 8.1.0",
                       default="8.0")
-    parser.addoption("-I","--device_name",
+    parser.addoption("--device_name",
                       dest="device_name",
                       help="Enter device name. Ex: Emulator, physical device name",
                       default="Samsung Galaxy S9")
@@ -366,7 +366,7 @@ def pytest_addoption(parser):
                       dest="app_activity",
                       help="Enter name of app activity. Ex: .MainActivity",
                       default=".MainActivity")
-    parser.addoption("-Q","--device_flag",
+    parser.addoption("--device_flag",
                       dest="device_flag",
                       help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
                       default="N")
@@ -398,7 +398,7 @@ def pytest_addoption(parser):
                       dest="no_reset_flag",
                       help="Pass false if you want to reset app eveytime you run app else false",
                       default="true")
-    parser.addoption("-N","--app_path",
+    parser.addoption("--app_path",
                       dest="app_path",
                       help="Enter app path")
     parser.addoption("--appium_version",
