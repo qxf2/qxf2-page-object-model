@@ -268,7 +268,7 @@ def pytest_generate_tests(metafunc):
             if metafunc.config.getoption("--browser") == ["all"]:
                 metafunc.parametrize("browser,browser_version,os_name,os_version",
                                     browser_os_name_conf.cross_browser_cross_platform_config)
-            elif metafunc.config.getoption("--browser") == []:
+            elif metafunc.config.getoption("--browser") == ["Chrome"]:
                 metafunc.parametrize("browser,browser_version,os_name,os_version",
                                     browser_os_name_conf.default_config_list)
             else:
@@ -297,7 +297,7 @@ def pytest_addoption(parser):
     parser.addoption("--browser",
                       dest="browser",
                       action="append",
-                      default=[],
+                      default=['Chrome'],
                       help="Browser. Valid options are firefox, ie and chrome")
     parser.addoption("--app_url",
                       dest="url",
