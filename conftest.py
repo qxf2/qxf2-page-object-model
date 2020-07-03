@@ -193,7 +193,7 @@ def email_pytest_report(request):
 @pytest.fixture
 def app_name(request):
     "pytest fixture for app name"
-    return request.config.getoption("-D")
+    return request.config.getoption("--app_name")
 
 
 @pytest.fixture
@@ -272,7 +272,7 @@ def pytest_generate_tests(metafunc):
                 metafunc.parametrize("browser,browser_version,os_name,os_version",
                                     browser_os_name_conf.default_config_list)
             else:
-                config_list = [(metafunc.config.getoption("--browser")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
+                config_list = [(metafunc.config.getoption("--browser")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("--os_name")[0],metafunc.config.getoption("--os_version")[0])]
                 metafunc.parametrize("browser,browser_version,os_name,os_version",
                                     config_list)
         if metafunc.config.getoption("--remote_flag").lower() !='y':
@@ -378,7 +378,7 @@ def pytest_addoption(parser):
                       dest="tesults_flag",
                       default='N',
                       help="Y or N. 'Y' if you want to report results with Tesults")
-    parser.addoption("-D","--app_name",
+    parser.addoption("--app_name",
                       dest="app_name",
                       help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
                       default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
