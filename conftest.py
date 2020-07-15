@@ -246,6 +246,11 @@ def pytest_configure(config):
     except Exception as e:
         print (str(e))
 
+    "Registering custom markers to supress warnings"
+    config.addinivalue_line("markers", "GUI: mark a test as part of the GUI regression suite.")
+    config.addinivalue_line("markers", "API: mark a test as part of the GUI regression suite.")
+    config.addinivalue_line("markers", "MOBILE: mark a test as part of the GUI regression suite.")
+
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
