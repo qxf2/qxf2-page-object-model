@@ -19,10 +19,7 @@ class Base_API:
         error = {}
         try:
             response = requests.get(url=url,headers=headers)
-            try:
-                json_response = response.json()
-            except:
-                json_response = None
+            json_response = response.json()
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -36,6 +33,9 @@ class Base_API:
                 print(e.reason.args)
                 # bubble error back up after printing relevant details
                 raise e # We raise error only when unknown errors occurs (other than HTTP error and url open error 10061)
+        except Exception as e:
+            print("Python says:%s" % str(e))
+            json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
@@ -46,10 +46,7 @@ class Base_API:
         json_response = None
         try:
             response = requests.post(url,params=params,json=json,headers=headers)
-            try:
-                json_response = response.json()
-            except:
-                json_response = None
+            json_response = response.json()
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError,URLError):
@@ -62,6 +59,9 @@ class Base_API:
                 print(e.reason.args)
                 # bubble error back up after printing relevant details
             raise e
+        except Exception as e:
+            print("Python says:%s" % str(e))
+            json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
@@ -72,11 +72,7 @@ class Base_API:
         error = {}
         try:
             response = requests.delete(url,headers = headers)
-            try:
-                json_response = response.json()
-            except:
-                json_response = None
-
+            json_response = response.json()
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -89,6 +85,9 @@ class Base_API:
                 print(str(e.reason.args))
             # bubble error back up after printing relevant details
             raise e
+        except Exception as e:
+            print("Python says:%s" % str(e))
+            json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
@@ -99,12 +98,7 @@ class Base_API:
         response = False
         try:
             response = requests.put(url,json=json,headers=headers)
-            try:
-                json_response = response.json()
-            except:
-                json_response = None
-
-
+            json_response = response.json()
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -117,6 +111,9 @@ class Base_API:
                 print(str(e.reason.args))
             # bubble error back up after printing relevant details
             raise e
+        except Exception as e:
+            print("Python says:%s" % str(e))
+            json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
