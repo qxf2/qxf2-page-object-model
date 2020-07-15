@@ -93,7 +93,7 @@ class Email_Util:
         email_body = []
         if uid is not None:
             data = self.mail.uid('fetch',uid,'(RFC822)')
-            raw_email = data[0][1]
+            raw_email = data[0][1].decode('utf-8')
             email_msg = email.message_from_string(raw_email)
             email_body = self.get_email_body(email_msg)
 
