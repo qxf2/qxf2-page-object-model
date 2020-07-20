@@ -13,6 +13,8 @@ import conf.testrailenv_conf as conf_file
 
 class Test_Rail:
     "Wrapper around TestRail's API"
+    # Added below to fix PytestCollectionWarning
+    __test__ = False
 
     def __init__(self):
         "Initialize the TestRail objects"
