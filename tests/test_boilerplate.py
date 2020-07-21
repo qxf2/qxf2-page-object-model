@@ -1,7 +1,7 @@
 """
 This test file will help you get started in writing a new test using our framework
 """
-import os,sys,time
+import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 from utils.Option_Parser import Option_Parser

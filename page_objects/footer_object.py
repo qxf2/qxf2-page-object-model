@@ -37,12 +37,12 @@ class Footer_Object:
     @Wrapit._exceptionHandler
     def get_copyright(self):
         "Get the current copyright"
-        copyright = str(self.get_text(self.copyright_text))
-        copyright = copyright.strip()
+        copyright_slug = str(self.get_text(self.copyright_text))
+        copyright_slug = copyright_slug.strip()
         #NOTE: We strip out the special '&copy;
-        copyright = 'Qxf2' + copyright[:-1].split('Qxf2')[-1]
+        copyright_slug = 'Qxf2' + copyright_slug[:-1].split('Qxf2')[-1]
 
-        return copyright
+        return copyright_slug
 
 
     def get_current_year(self):
