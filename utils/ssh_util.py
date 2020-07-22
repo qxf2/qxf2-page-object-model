@@ -7,7 +7,7 @@ Qxf2 Services: Utility script to ssh into a remote server
 """
 
 import paramiko
-import os,sys,time
+import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from conf import ssh_conf as conf_file
 import socket

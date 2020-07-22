@@ -10,7 +10,6 @@ class Wrapit():
     "Wrapit class to hold decorator functions"
     def _exceptionHandler(f):
         "Decorator to handle exceptions"
-        argspec = getfullargspec(f)
         def inner(*args,**kwargs):
             try:
                 return f(*args,**kwargs)

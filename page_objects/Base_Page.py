@@ -6,7 +6,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-import unittest,time,logging,os,inspect,utils.Test_Rail,pytest
+import unittest,time,logging,os,inspect,pytest
 from utils.Base_Logging import Base_Logging
 from utils.BrowserStack_Library import BrowserStack_Library
 from .DriverFactory import DriverFactory
@@ -312,9 +312,9 @@ class Base_Page(Borg,unittest.TestCase):
     def get_window_by_name(self,window_name):
         "Return window handle id based on name"
         window_handle_id = None
-        for id,name in self.window_structure.iteritems():
+        for window_id,name in self.window_structure.iteritems():
             if name == window_name:
-                window_handle_id = id
+                window_handle_id = window_id
                 break
 
         return window_handle_id
@@ -721,7 +721,7 @@ class Base_Page(Borg,unittest.TestCase):
             path = self.split_locator(locator)
             WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
             result_flag =True
-        except Exception as e:
+        except Exception:
 	        self.conditional_write(result_flag,
                     positive='Located the element: %s'%locator,
                     negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))

@@ -2,11 +2,8 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
 import unittest,time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from utils.BrowserStack_Library import BrowserStack_Library
@@ -417,7 +414,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
             path = self.split_locator(locator)
             WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
             result_flag =True
-        except Exception as e:
+        except Exception:
                     self.conditional_write(result_flag,
                     positive='Located the element: %s'%locator,
                     negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_time))

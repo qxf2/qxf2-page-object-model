@@ -195,8 +195,6 @@ class API_Player(Results):
             if response is not None:
                 user_list = result['user_list']
                 error = result['response']
-            if error is not None:
-                response_code = error
         except (TypeError, AttributeError) as e:
             raise e
 

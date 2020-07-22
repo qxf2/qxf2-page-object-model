@@ -1,7 +1,6 @@
 """
 This class models the table on the Selenium tutorial page
 """
-from .Base_Page import Base_Page
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 
@@ -29,7 +28,7 @@ class Table_Object:
         "Get the text within the table"
         table_text = []
         row_doms = self.get_elements(self.rows_xpath)
-        for index,row_dom in enumerate(row_doms):
+        for index in range(0,len(row_doms)):
             row_text = []
             cell_doms = self.get_elements(self.cols_relative_xpath%(index+1))
             for cell_dom in cell_doms:
