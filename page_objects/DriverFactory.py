@@ -8,6 +8,7 @@ import os,sys,requests,json
 from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from conf import remote_credentials
@@ -91,8 +92,7 @@ class DriverFactory():
         desired_capabilities['platform'] = os_name + ' '+os_version
 
 
-        return webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),
-                desired_capabilities= desired_capabilities)
+        return webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(USERNAME,PASSWORD),desired_capabilities= desired_capabilities)
 
 
     def run_local(self,os_name,os_version,browser,browser_version):
@@ -118,6 +118,26 @@ class DriverFactory():
                      print("SOLUTION: It looks like you are trying to use Opera Browser. Please update Opera Browser location under conf/opera_browser_conf.\n")
         elif browser.lower() == "safari":
             local_driver = webdriver.Safari()
+        elif browser.lower() == "headless-chrome":
+            local_driver = self.get_headless_chrome_options()
+
+        return local_driver
+
+    def get_headless_chrome_options(self):
+        "Setting up healess chrom driver options"
+        options = Options()
+        options.headless = True
+        options.add_argument("--window-size=1920,1080")
+        options.add_argument("--disable-extensions")
+        options.add_argument("--proxy-server='direct://'")
+        options.add_argument("--proxy-bypass-list=*")
+        options.add_argument("--start-maximized")
+        options.add_argument('--headless')
+        options.add_argument('--disable-gpu')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--ignore-certificate-errors')
+        local_driver = webdriver.Chrome(options=options)
 
         return local_driver
 
@@ -294,4 +314,3 @@ class DriverFactory():
         set_pref('pdfjs.disabled',True)
 
         return profile
-
