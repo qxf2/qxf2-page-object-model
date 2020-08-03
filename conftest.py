@@ -90,7 +90,7 @@ def testname(request):
 def browser(request):
     "pytest fixture for browser"
     try:
-       return request.config.getoption("-B")
+       return request.config.getoption("--browser")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -101,7 +101,7 @@ def browser(request):
 def base_url(request):
     "pytest fixture for base url"
     try:
-        return request.config.getoption("-U")
+        return request.config.getoption("--app_url")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -112,7 +112,7 @@ def base_url(request):
 def api_url(request):
     "pytest fixture for base url"
     try:
-        return request.config.getoption("-A")
+        return request.config.getoption("--api_url")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -123,7 +123,7 @@ def api_url(request):
 def test_run_id(request):
     "pytest fixture for test run id"
     try:
-        return request.config.getoption("-R")
+        return request.config.getoption("--test_run_id")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -134,7 +134,7 @@ def test_run_id(request):
 def testrail_flag(request):
     "pytest fixture for test rail flag"
     try:
-        return request.config.getoption("-X")
+        return request.config.getoption("--testrail_flag")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -145,7 +145,7 @@ def testrail_flag(request):
 def remote_flag(request):
     "pytest fixture for browserstack/sauce flag"
     try:
-        return request.config.getoption("-M")
+        return request.config.getoption("--remote_flag")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -167,7 +167,7 @@ def browser_version(request):
 def os_name(request):
     "pytest fixture for os_name"
     try:
-        return request.config.getoption("-P")
+        return request.config.getoption("--os_name")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -178,7 +178,7 @@ def os_name(request):
 def os_version(request):
     "pytest fixture for os version"
     try:
-        return request.config.getoption("-O")
+        return request.config.getoption("--os_version")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -211,7 +211,7 @@ def remote_build_name(request):
 def slack_flag(request):
     "pytest fixture for sending reports on slack"
     try:
-        return request.config.getoption("-S")
+        return request.config.getoption("--slack_flag")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -233,7 +233,7 @@ def tesults_flag(request):
 def mobile_os_name(request):
     "pytest fixture for mobile os name"
     try:
-        return request.config.getoption("-G")
+        return request.config.getoption("--mobile_os_name")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -244,7 +244,7 @@ def mobile_os_name(request):
 def mobile_os_version(request):
     "pytest fixture for mobile os version"
     try:
-        return request.config.getoption("-H")
+        return request.config.getoption("--mobile_os_version")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -255,7 +255,7 @@ def mobile_os_version(request):
 def device_name(request):
     "pytest fixture for device name"
     try:
-        return request.config.getoption("-I")
+        return request.config.getoption("--device_name")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -266,7 +266,7 @@ def device_name(request):
 def app_package(request):
     "pytest fixture for app package"
     try:
-        return request.config.getoption("-J")
+        return request.config.getoption("--app_package")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -277,7 +277,7 @@ def app_package(request):
 def app_activity(request):
     "pytest fixture for app activity"
     try:
-        return request.config.getoption("-K")
+        return request.config.getoption("--app_activity")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -288,7 +288,7 @@ def app_activity(request):
 def device_flag(request):
     "pytest fixture for device flag"
     try:
-        return request.config.getoption("-Q")
+        return request.config.getoption("--device_flag")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -310,7 +310,7 @@ def email_pytest_report(request):
 def app_name(request):
     "pytest fixture for app name"
     try:
-        return request.config.getoption("-D")
+        return request.config.getoption("--app_name")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -372,7 +372,7 @@ def no_reset_flag(request):
 def app_path(request):
     "pytest fixture for app path"
     try:
-        return request.config.getoption("-N")
+        return request.config.getoption("--app_path")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -394,11 +394,16 @@ def pytest_configure(config):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
+    #Registering custom markers to supress warnings
+    config.addinivalue_line("markers", "GUI: mark a test as part of the GUI regression suite.")
+    config.addinivalue_line("markers", "API: mark a test as part of the GUI regression suite.")
+    config.addinivalue_line("markers", "MOBILE: mark a test as part of the GUI regression suite.")
+
 
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
     try:
-        if  terminalreporter.config.getoption("-S").lower() == 'y':
+        if  terminalreporter.config.getoption("--slack_flag").lower() == 'y':
             post_test_reports_to_slack.post_reports_to_slack()
         if terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
             #Initialize the Email_Pytest_Report object
@@ -417,30 +422,31 @@ def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
     try:
         if 'browser' in metafunc.fixturenames:
-            if metafunc.config.getoption("-M").lower() == 'y':
-                if metafunc.config.getoption("-B") == ["all"]:
+            if metafunc.config.getoption("--remote_flag").lower() == 'y':
+                if metafunc.config.getoption("--browser") == ["all"]:
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
                                         browser_os_name_conf.cross_browser_cross_platform_config)
-                elif metafunc.config.getoption("-B") == []:
+                elif metafunc.config.getoption("--browser") == []:
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
                                         browser_os_name_conf.default_config_list)
                 else:
-                    config_list = [(metafunc.config.getoption("-B")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("-P")[0],metafunc.config.getoption("-O")[0])]
+                    config_list = [(metafunc.config.getoption("--browser")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("--os_name")[0],metafunc.config.getoption("--os_version")[0])]
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
                                         config_list)
-            if metafunc.config.getoption("-M").lower() !='y':
-                if metafunc.config.getoption("-B") == ["all"]:
+            if metafunc.config.getoption("--remote_flag").lower() !='y':
+                if metafunc.config.getoption("--browser") == ["all"]:
                     metafunc.config.option.browser = browser_os_name_conf.local_browsers
                     metafunc.parametrize("browser", metafunc.config.option.browser)
-                elif metafunc.config.getoption("-B") == []:
+                elif metafunc.config.getoption("--browser") == []:
                     metafunc.parametrize("browser",browser_os_name_conf.default_browser)
                 else:
-                    config_list_local = [(metafunc.config.getoption("-B")[0])]
+                    config_list_local = [(metafunc.config.getoption("--browser")[0])]
                     metafunc.parametrize("browser", config_list_local)
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+
 
 
 
@@ -452,122 +458,118 @@ def pytest_addoption(parser):
         parser.addini("rp_project",'help',type="pathlist")
         parser.addini("rp_launch",'help',type="pathlist")
 
-        parser.addoption("-B","--browser",
-                        dest="browser",
-                        action="append",
-                        default=[],
-                        help="Browser. Valid options are firefox, ie and chrome")
-        parser.addoption("-U","--app_url",
-                        dest="url",
-                        default=base_url_conf.base_url,
-                        help="The url of the application")
-        parser.addoption("-A","--api_url",
-                        dest="url",
-                        default="http://35.167.62.251",
-                        help="The url of the api")
-        parser.addoption("-X","--testrail_flag",
-                        dest="testrail_flag",
-                        default='N',
-                        help="Y or N. 'Y' if you want to report to TestRail")
-        parser.addoption("-R","--test_run_id",
-                        dest="test_run_id",
-                        default=None,
-                        help="The test run id in TestRail")
-        parser.addoption("-M","--remote_flag",
-                        dest="remote_flag",
-                        default="N",
-                        help="Run the test in Browserstack/Sauce Lab: Y or N")
-        parser.addoption("-O","--os_version",
-                        dest="os_version",
-                        action="append",
-                        help="The operating system: xp, 7",
-                        default=[])
+        parser.addoption("--browser",
+                            dest="browser",
+                            action="append",
+                            default=[],
+                            help="Browser. Valid options are firefox, ie and chrome")
+        parser.addoption("--app_url",
+                            dest="url",
+                            default=base_url_conf.base_url,
+                            help="The url of the application")
+        parser.addoption("--api_url",
+                            dest="url",
+                            default="http://35.167.62.251",
+                            help="The url of the api")
+        parser.addoption("--testrail_flag",
+                            dest="testrail_flag",
+                            default='N',
+                            help="Y or N. 'Y' if you want to report to TestRail")
+        parser.addoption("--test_run_id",
+                            dest="test_run_id",
+                            default=None,
+                            help="The test run id in TestRail")
+        parser.addoption("--remote_flag",
+                            dest="remote_flag",
+                            default="N",
+                            help="Run the test in Browserstack/Sauce Lab: Y or N")
+        parser.addoption("--os_version",
+                            dest="os_version",
+                            action="append",
+                            help="The operating system: xp, 7",
+                            default=[])
         parser.addoption("--ver",
-                        dest="browser_version",
-                        action="append",
-                        help="The version of the browser: a whole number",
-                        default=[])
-        parser.addoption("-P","--os_name",
-                        dest="os_name",
-                        action="append",
-                        help="The operating system: Windows 7, Linux",
-                        default=[])
+                            dest="browser_version",
+                            action="append",
+                            help="The version of the browser: a whole number",
+                            default=[])
+        parser.addoption("--os_name",
+                            dest="os_name",
+                            action="append",
+                            help="The operating system: Windows 7, Linux",
+                            default=[])
         parser.addoption("--remote_project_name",
-                        dest="remote_project_name",
-                        help="The project name if its run in BrowserStack",
-                        default=None)
+                            dest="remote_project_name",
+                            help="The project name if its run in BrowserStack",
+                            default=None)
         parser.addoption("--remote_build_name",
-                        dest="remote_build_name",
-                        help="The build name if its run in BrowserStack",
-                        default=None)
-        parser.addoption("-S","--slack_flag",
-                        dest="slack_flag",
-                        default="N",
-                        help="Post the test report on slack channel: Y or N")
-        parser.addoption("-G","--mobile_os_name",
-                        dest="mobile_os_name",
-                        help="Enter operating system of mobile. Ex: Android, iOS",
-                        default="Android")
-        parser.addoption("-H","--mobile_os_version",
-                        dest="mobile_os_version",
-                        help="Enter version of operating system of mobile: 8.1.0",
-                        default="8.0")
-        parser.addoption("-I","--device_name",
-                        dest="device_name",
-                        help="Enter device name. Ex: Emulator, physical device name",
-                        default="Samsung Galaxy S9")
-        parser.addoption("-J","--app_package",
-                        dest="app_package",
-                        help="Enter name of app package. Ex: bitcoininfo",
-                        default="com.dudam.rohan.bitcoininfo")
-        parser.addoption("-K","--app_activity",
-                        dest="app_activity",
-                        help="Enter name of app activity. Ex: .MainActivity",
-                        default=".MainActivity")
-        parser.addoption("-Q","--device_flag",
-                        dest="device_flag",
-                        help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
-                        default="N")
+                            dest="remote_build_name",
+                            help="The build name if its run in BrowserStack",
+                            default=None)
+        parser.addoption("--slack_flag",
+                            dest="slack_flag",
+                            default="N",
+                            help="Post the test report on slack channel: Y or N")
+        parser.addoption("--mobile_os_name",
+                            dest="mobile_os_name",
+                            help="Enter operating system of mobile. Ex: Android, iOS",
+                            default="Android")
+        parser.addoption("--mobile_os_version",
+                            dest="mobile_os_version",
+                            help="Enter version of operating system of mobile: 8.1.0",
+                            default="8.0")
+        parser.addoption("--device_name",
+                            dest="device_name",
+                            help="Enter device name. Ex: Emulator, physical device name",
+                            default="Samsung Galaxy S9")
+        parser.addoption("--app_package",
+                            dest="app_package",
+                            help="Enter name of app package. Ex: bitcoininfo",
+                            default="com.dudam.rohan.bitcoininfo")
+        parser.addoption("--app_activity",
+                            dest="app_activity",
+                            help="Enter name of app activity. Ex: .MainActivity",
+                            default=".MainActivity")
+        parser.addoption("--device_flag",
+                            dest="device_flag",
+                            help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
+                            default="N")
         parser.addoption("--email_pytest_report",
-                        dest="email_pytest_report",
-                        help="Email pytest report: Y or N",
-                        default="N")
+                            dest="email_pytest_report",
+                            help="Email pytest report: Y or N",
+                            default="N")
         parser.addoption("--tesults",
-                        dest="tesults_flag",
-                        default='N',
-                        help="Y or N. 'Y' if you want to report results with Tesults")
-        parser.addoption("-D","--app_name",
-                        dest="app_name",
-                        help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
-                        default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
+                            dest="tesults_flag",
+                            default='N',
+                            help="Y or N. 'Y' if you want to report results with Tesults")
+        parser.addoption("--app_name",
+                            dest="app_name",
+                            help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
+                            default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
         parser.addoption("--ud_id",
-                        dest="ud_id",
-                        help="Enter your iOS device UDID which is required to run appium test in iOS device",
-                        default=None)
+                            dest="ud_id",
+                            help="Enter your iOS device UDID which is required to run appium test in iOS device",
+                            default=None)
         parser.addoption("--org_id",
-                        dest="org_id",
-                        help="Enter your iOS Team ID which is required to run appium test in iOS device",
-                        default=None)
+                            dest="org_id",
+                            help="Enter your iOS Team ID which is required to run appium test in iOS device",
+                            default=None)
         parser.addoption("--signing_id",
-                        dest="signing_id",
-                        help="Enter your iOS app signing id which is required to run appium test in iOS device",
-                        default="iPhone Developer")
+                            dest="signing_id",
+                            help="Enter your iOS app signing id which is required to run appium test in iOS device",
+                            default="iPhone Developer")
         parser.addoption("--no_reset_flag",
-                        dest="no_reset_flag",
-                        help="Pass false if you want to reset app eveytime you run app else false",
-                        default="true")
-        parser.addoption("-N","--app_path",
-                        dest="app_path",
-                        help="Enter app path")
+                            dest="no_reset_flag",
+                            help="Pass false if you want to reset app eveytime you run app else false",
+                            default="true")
+        parser.addoption("--app_path",
+                            dest="app_path",
+                            help="Enter app path")
         parser.addoption("--appium_version",
-                        dest="appium_version",
-                        help="The appium version if its run in BrowserStack",
-                        default="1.17.0")
+                            dest="appium_version",
+                            help="The appium version if its run in BrowserStack",
+                            default="1.17.0")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
-
-
-

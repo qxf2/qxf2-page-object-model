@@ -4,7 +4,7 @@ Qxf2 Services: Utility script to compare images
 * Get the sum of colors in an image
 """
 from PIL import Image, ImageChops
-import math,operator,os
+import math, os
 
 def rmsdiff(im1,im2):
     "Calculate the root-mean-square difference between two images"
