@@ -29,19 +29,6 @@ class Results(object):
         self.logger.write(msg, level)
 
 
-    def record(self, condition, msg, level='debug', indent=1):
-        """ Write out either the positive or the negative message based on flag """
-        if condition:
-            self.written_passed += 1
-
-        prefix = ''
-        for i in range(indent if indent > 0 else 0):
-            prefix = prefix + '    '
-
-        self.written += 1
-        self.write(prefix + msg + (' False' if condition else ' True'), level)
-
-
     def conditional_write(self, condition, positive, negative, level='info', pre_format="  - "):
         """ Write out either the positive or the negative message based on flag """
         if condition:
