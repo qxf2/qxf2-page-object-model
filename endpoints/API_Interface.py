@@ -11,7 +11,7 @@ from .User_API_Endpoints import User_API_Endpoints
 class API_Interface(Base_API,Cars_API_Endpoints,Registration_API_Endpoints,User_API_Endpoints):
 	"A composed interface for the API objects"
 
-	def __init__(self, url, session_flag = False):
+	def __init__(self, url, session_flag=False):
 		"Constructor"
 		# make base_url available to all API endpoints
 		self.request_obj = requests
