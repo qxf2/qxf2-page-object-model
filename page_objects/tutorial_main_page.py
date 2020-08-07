@@ -8,7 +8,6 @@ from .form_object import Form_Object
 from .header_object import Header_Object
 from .table_object import Table_Object
 from .footer_object import Footer_Object
-from utils.Wrapit import Wrapit
 
 
 class Tutorial_Main_Page(Base_Page,Form_Object,Header_Object,Table_Object,Footer_Object):

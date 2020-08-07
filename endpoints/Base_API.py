@@ -32,6 +32,9 @@ class Base_API:
                 print(e.reason.args)
                 # bubble error back up after printing relevant details
                 raise e # We raise error only when unknown errors occurs (other than HTTP error and url open error 10061)
+        except Exception as e:
+            print("Python says:%s" % str(e))
+            json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
@@ -58,6 +61,9 @@ class Base_API:
                 print(e.reason.args)
                 # bubble error back up after printing relevant details
             raise e
+        except Exception as e:
+            print("Python says:%s" % str(e))
+            json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
@@ -85,6 +91,9 @@ class Base_API:
                 print(str(e.reason.args))
             # bubble error back up after printing relevant details
             raise e
+        except Exception as e:
+            print("Python says:%s" % str(e))
+            json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
@@ -113,6 +122,9 @@ class Base_API:
                 print(str(e.reason.args))
             # bubble error back up after printing relevant details
             raise e
+        except Exception as e:
+            print("Python says:%s" % str(e))
+            json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
