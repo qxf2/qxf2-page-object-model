@@ -2,8 +2,8 @@
 #SET REMOTE_BROWSER_PLATFORM TO SL TO RUN ON SAUCE LABS
 REMOTE_BROWSER_PLATFORM = "BS"
 
-USERNAME = "qxf1"
-ACCESS_KEY = "QvYCJs7nx8znxTZUskic"
+USERNAME = "Enter your username"
+ACCESS_KEY = "Enter your access key"
 
 
 
