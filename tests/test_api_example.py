@@ -24,7 +24,7 @@ def test_api_example(api_url='http://127.0.0.1:5000'):
     "Run api test"
     try:
         # Create test object
-        test_obj = API_Player(url=api_url, session_flag=False)
+        test_obj = API_Player(url=api_url, session_flag=True)
         expected_pass = 0
         actual_pass = -1
 
