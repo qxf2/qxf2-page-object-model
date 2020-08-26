@@ -9,16 +9,17 @@ from urllib.error import URLError
 class Base_API:
     "Main base class for Requests based scripts"
 
+    def __init__(self, url=None):
+        pass
+
+
     def get(self, url, headers={}):
         "Get request"
         json_response = None
         error = {}
         try:
-            response = self.request_obj.get(url=url,headers=headers)
-            try:
-                json_response = response.json()
-            except:
-                json_response = None
+            response = requests.get(url=url,headers=headers)
+            json_response = response.json()
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -44,11 +45,8 @@ class Base_API:
         error = {}
         json_response = None
         try:
-            response = self.request_obj.post(url,params=params,json=json,headers=headers)
-            try:
-                json_response = response.json()
-            except:
-                json_response = None
+            response = requests.post(url,params=params,json=json,headers=headers)
+            json_response = response.json()
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError,URLError):
@@ -73,12 +71,8 @@ class Base_API:
         response = False
         error = {}
         try:
-            response = self.request_obj.delete(url,headers = headers)
-            try:
-                json_response = response.json()
-            except:
-                json_response = None
-
+            response = requests.delete(url,headers = headers)
+            json_response = response.json()
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):
@@ -103,13 +97,8 @@ class Base_API:
         error = {}
         response = False
         try:
-            response = self.request_obj.put(url,json=json,headers=headers)
-            try:
-                json_response = response.json()
-            except:
-                json_response = None
-
-
+            response = requests.put(url,json=json,headers=headers)
+            json_response = response.json()
         except (HTTPError,URLError) as e:
             error = e
             if isinstance(e,HTTPError):

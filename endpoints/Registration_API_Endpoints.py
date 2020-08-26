@@ -3,7 +3,9 @@
 API endpoints for Registration
 """
 
-class Registration_API_Endpoints:
+from .Base_API import Base_API
+
+class Registration_API_Endpoints(Base_API):
 	"Class for registration endpoints"
 
 	def registration_url(self,suffix=''):

@@ -2,7 +2,9 @@
 API endpoints for Registration
 """
 
-class User_API_Endpoints:
+from .Base_API import Base_API
+
+class User_API_Endpoints(Base_API):
 	"Class for user endpoints"
 
 	def user_url(self,suffix=''):
