@@ -9,7 +9,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import unittest,time,logging,os,inspect,pytest
 from utils.Base_Logging import Base_Logging
 from utils.BrowserStack_Library import BrowserStack_Library
-from .DriverFactory import DriverFactory
+from .driverfactory import DriverFactory
 from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
