@@ -2,9 +2,7 @@
 API endpoints for Cars
 """
 
-from .Base_API import Base_API
-
-class Cars_API_Endpoints(Base_API):
+class Cars_API_Endpoints:
 	"Class for cars endpoints"
 
 	def cars_url(self,suffix=''):

@@ -24,7 +24,7 @@ def test_api_example(api_url='http://127.0.0.1:5000'):
     "Run api test"
     try:
         # Create test object
-        test_obj = API_Player(url=api_url)
+        test_obj = API_Player(url=api_url, session_flag=True)
         expected_pass = 0
         actual_pass = -1
 
@@ -141,11 +141,12 @@ def test_api_example(api_url='http://127.0.0.1:5000'):
         test_obj.write_test_summary()
 
     except Exception as e:
+        print(e)
         if api_url=='http://127.0.0.1:5000':
-            test_obj.write("Please run the test against http://35.167.62.251/ by changing the api_url in test_api_example.py")  
+            test_obj.write("Please run the test against http://35.167.62.251/ by changing the api_url in test_api_example.py")
             test_obj.write("OR")
             test_obj.write("Clone the repo 'https://github.com/qxf2/cars-api.git' and run the cars_app inorder to run the test against your system")
-        
+
         else:
             test_obj.write("Exception when trying to run test:%s" % __file__)
             test_obj.write("Python says:%s" % str(e))

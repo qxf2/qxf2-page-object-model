@@ -15,11 +15,11 @@ from conf import api_example_conf as conf
 class API_Player(Results):
     "The class that maintains the test context/state"
 
-    def __init__(self, url, log_file_path=None):
+    def __init__(self, url, log_file_path=None, session_flag=False):
         "Constructor"
         super(API_Player, self).__init__(
             level=logging.DEBUG, log_file_path=log_file_path)
-        self.api_obj = API_Interface(url=url)
+        self.api_obj = API_Interface(url=url, session_flag=session_flag)
 
 
     def set_auth_details(self, username, password):
