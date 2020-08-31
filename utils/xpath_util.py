@@ -28,51 +28,50 @@ class Xpath_Util:
     def generate_xpath(self,soup):
         "generate the xpath and assign the variable names"
         result_flag = False
-        try:
-            for guessable_element in self.guessable_elements:
-                self.elements = soup.find_all(guessable_element)
-                for element in self.elements:
-                    if (not element.has_attr("type")) or (element.has_attr("type") and element['type'] != "hidden"):
-                        for attr in self.known_attribute_list:
-                            if element.has_attr(attr):
-                                locator = self.guess_xpath(guessable_element,attr,element)
-                                if len(driver.find_elements_by_xpath(locator))==1:
-                                    result_flag = True
-                                    variable_name = self.get_variable_names(element)
-                                    # checking for the unique variable names
-                                    if variable_name != '' and variable_name not in self.variable_names:
-                                        self.variable_names.append(variable_name)
-                                        print ("%s_%s = %s"%(guessable_element, variable_name.encode('utf-8'), locator.encode('utf-8')))
-                                        break
-                                    else:
-                                        print (locator.encode('utf-8') + "----> Couldn't generate appropriate variable name for this xpath")
-                                        break
-                            elif guessable_element == 'button' and element.getText():
-                                button_text = element.getText()
-                                if element.getText() == button_text.strip():
-                                    locator = xpath_obj.guess_xpath_button(guessable_element,"text()",element.getText())
-                                else:
-                                    locator = xpath_obj.guess_xpath_using_contains(guessable_element,"text()",button_text.strip())
-                                if len(driver.find_elements_by_xpath(locator))==1:
-                                    result_flag = True
-                                    #Check for ascii characters in the button_text
-                                    matches = re.search(r"[^\x00-\x7F]",button_text)
-                                    if button_text.lower() not in self.button_text_lists:
-                                        self.button_text_lists.append(button_text.lower())
-                                        if not matches:
-                                            # Striping and replacing characters before printing the variable name
-                                            print ("%s_%s = %s"%(guessable_element,button_text.strip().strip("!?.").encode('utf-8').lower().replace(" + ","_").replace(" & ","_").replace(" ","_"), locator.encode('utf-8')))
-                                        else:
-                                            # printing the variable name with ascii characters along with language counter
-                                            print ("%s_%s_%s = %s"%(guessable_element,"foreign_language",self.language_counter, locator.encode('utf-8')) + "---> Foreign language found, please change the variable name appropriately")
-                                            self.language_counter +=1
-                                    else:
-                                        # if the variable name is already taken
-                                        print (locator.encode('utf-8') + "----> Couldn't generate appropriate variable name for this xpath")
+        for guessable_element in self.guessable_elements:
+            self.elements = soup.find_all(guessable_element)
+            for element in self.elements:
+                if (not element.has_attr("type")) or (element.has_attr("type") and element['type'] != "hidden"):
+                    for attr in self.known_attribute_list:
+                        if element.has_attr(attr):
+                            locator = self.guess_xpath(guessable_element,attr,element)
+                            if len(driver.find_elements_by_xpath(locator))==1:
+                                result_flag = True
+                                variable_name = self.get_variable_names(element)
+                                # checking for the unique variable names
+                                if  variable_name != '' and variable_name not in self.variable_names:
+                                    self.variable_names.append(variable_name)
+                                    print ("%s_%s = %s"%(guessable_element, variable_name.encode('utf-8').decode('latin-1'), locator.encode('utf-8').decode('latin-1')))
                                     break
-        except Exception as e:
-            print ("Exception when trying to generate xpath for:%s"%guessable_element)
-            print ("Python says:%s"%str(e))
+                                else:
+                                    print (locator.encode('utf-8').decode('latin-1') + "----> Couldn't generate appropriate variable name for this xpath")
+                        elif guessable_element == 'button' and element.getText():
+                            button_text = element.getText()
+                            if element.getText() == button_text.strip():
+                                locator = xpath_obj.guess_xpath_button(guessable_element,"text()",element.getText())
+                            else:
+                                locator = xpath_obj.guess_xpath_using_contains(guessable_element,"text()",button_text.strip())
+                            if len(driver.find_elements_by_xpath(locator))==1:
+                                result_flag = True
+                                #Check for utf-8 characters in the button_text
+                                matches = re.search(r"[^\x00-\x7F]",button_text)
+                                if button_text.lower() not in self.button_text_lists:
+                                    self.button_text_lists.append(button_text.lower())
+                                    if not matches:
+                                        # Striping and replacing characters before printing the variable name
+                                        print ("%s_%s = %s"%(guessable_element,button_text.strip().strip("!?.").encode('utf-8').decode('latin-1').lower().replace(" + ","_").replace(" & ","_").replace(" ","_"), locator.encode('utf-8').decode('latin-1')))
+                                    else:
+                                        # printing the variable name with utf-8 characters along with language counter
+                                        print ("%s_%s_%s = %s"%(guessable_element,"foreign_language",self.language_counter, locator.encode('utf-8').decode('latin-1')) + "---> Foreign language found, please change the variable name appropriately")
+                                        self.language_counter +=1
+                                else:
+                                    # if the variable name is already taken
+                                    print (locator.encode('utf-8').decode('latin-1') + "----> Couldn't generate appropriate variable name for this xpath")
+                                break
+
+                        elif not guessable_element in self.guessable_elements:
+                            print("We are not supporting this gussable element")
+
 
         return result_flag
 
@@ -102,7 +101,7 @@ class Xpath_Util:
             self.variable_name = element['name'].strip("_")
         # condition to check if the "placeholder" attribute exists and is not having any numerics in it.
         elif element.has_attr('placeholder') and bool(re.search(r'\d', element['placeholder'])) == False:
-            self.variable_name = element['placeholder'].strip("_?*.").encode('ascii',errors='ignore')
+            self.variable_name = element['placeholder']
         # condition to check if the "type" attribute exists and not in text','radio','button','checkbox','search'
         # and printing the variable name
         elif (element.has_attr('type')) and (element['type'] not in ('text','button','radio','checkbox','search')):
@@ -121,11 +120,12 @@ class Xpath_Util:
         replace("[","_").replace("]","").replace(",","").replace("__","_").replace(".com","").strip("_")
 
 
+
     def guess_xpath(self,tag,attr,element):
         "Guess the xpath based on the tag,attr,element[attr]"
         #Class attribute returned as a unicodeded list, so removing 'u from the list and joining back
         if type(element[attr]) is list:
-            element[attr] = [i.encode('utf-8') for i in element[attr]]
+            element[attr] = [i.encode('utf-8').decode('latin-1') for i in element[attr]]
             element[attr] = ' '.join(element[attr])
         self.xpath = "//%s[@%s='%s']"%(tag,attr,element[attr])
 
@@ -160,7 +160,7 @@ if __name__ == "__main__":
     driver.get(url)
 
     #Parsing the HTML page with BeautifulSoup
-    page = driver.execute_script("return document.body.innerHTML").encode('utf-8') #returns the inner HTML as a string
+    page = driver.execute_script("return document.body.innerHTML").encode('utf-8').decode('latin-1') #returns the inner HTML as a string
     soup = BeautifulSoup(page, 'html.parser')
 
     #execute generate_xpath

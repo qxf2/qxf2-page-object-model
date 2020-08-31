@@ -127,4 +127,3 @@ class Base_API:
             json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
-
