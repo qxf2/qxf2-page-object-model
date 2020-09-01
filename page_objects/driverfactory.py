@@ -21,10 +21,10 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         self.browser_version = browser_version
         self.os_name = os_name
 
+
     def get_web_driver(self, remote_flag, os_name, os_version, browser,
                        browser_version, remote_project_name, remote_build_name):
         "Return the appropriate driver"
-
         if remote_flag.lower() == 'y':
             web_driver = self.select_remote_platform(remote_flag, os_name, os_version,
                                                      browser, browser_version, remote_project_name,
@@ -35,9 +35,9 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         return web_driver
 
+
     def get_browser(self, browser, browser_version):
         "select the browser"
-
         try:
             if browser.lower() == 'ff' or browser.lower() == 'firefox':
                 desired_capabilities = self.firefox(browser_version)
@@ -49,15 +49,16 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                 desired_capabilities = self.opera(browser_version)
             elif browser.lower() == 'safari':
                 desired_capabilities = self.safari(browser_version)
-            return desired_capabilities
 
         except Exception as exception:
-            print("\nDriverFactory does not know the browser\t%s\n"%browser)
+            print("\n%s\nDriverFactory does not know the browser\t%s\n"%(exception,browser))
+
+        return desired_capabilities
+
 
     def select_remote_platform(self, remote_flag, os_name, os_version, browser,
                                browser_version, remote_project_name, remote_build_name):
         "Select the remote platform to run the test when the remote_flag is Y"
-
         try:
             if remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS':
                 web_driver = self.run_browserstack(os_name, os_version, browser, browser_version,
@@ -65,10 +66,11 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
             else:
                 web_driver = self.run_sauce_lab(os_name, os_version, browser, browser_version)
 
-            return web_driver
-
         except Exception as exception:
             self.print_exception(exception, remote_flag)
+
+        return web_driver
+
 
     def run_browserstack(self, os_name, os_version, browser, browser_version,
                          remote_project_name, remote_build_name):
@@ -94,6 +96,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         return webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"%(username, password), resolve_ip=False),
                                 desired_capabilities=desired_capabilities)
 
+
     def run_sauce_lab(self, os_name, os_version, browser, browser_version):
         "Run the test in sauce labs when remote flag is 'Y'"
 
@@ -110,9 +113,9 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         return webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(username, password),
                                 desired_capabilities=desired_capabilities)
 
+
     def run_local(self, browser):
         "Run the test on local system"
-
         local_driver = None
         if browser.lower() == "ff" or browser.lower() == 'firefox':
             local_driver = self.firefox_local()
@@ -129,6 +132,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         return local_driver
 
+
     def run_mobile(self, mobile_os_name, mobile_os_version, device_name, app_package,
                    app_activity, remote_flag, device_flag, app_name, app_path,
                    ud_id, org_id, signing_id, no_reset_flag, appium_version):
@@ -143,25 +147,17 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         #Check wether the OS is android or iOS and get the mobile driver
         if mobile_os_name in 'Android':
-            driver = self.android(remote_flag, desired_capabilities, app_path, app_name,
+            mobile_driver = self.android(remote_flag, desired_capabilities, app_path, app_name,
                                   appium_version, app_package, app_activity, username,
                                   password, device_flag)
 
         elif mobile_os_name == 'iOS':
-            driver = self.ios(remote_flag, desired_capabilities, app_path, app_name,
+            mobile_driver = self.ios(remote_flag, desired_capabilities, app_path, app_name,
                               username, password, app_package, no_reset_flag, ud_id,
                               org_id, signing_id, appium_version)
 
-        return driver
+        return mobile_driver
 
-    def set_mobile_device(self, mobile_os_name, mobile_os_version, device_name):
-        "Setup the mobile device"
-
-        desired_capabilities = {}
-        desired_capabilities['platformName'] = mobile_os_name
-        desired_capabilities['platformVersion'] = mobile_os_version
-        desired_capabilities['deviceName'] = device_name
-        return desired_capabilities
 
     def android(self, remote_flag, desired_capabilities, app_path, app_name,
                 appium_version, app_package, app_activity, username, password,
@@ -170,7 +166,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         #Get the driver when test is run on a remote platform
         if remote_flag.lower() == 'y':
-            driver = self.remote_platform_mobile(remote_flag, app_path, app_name, desired_capabilities,
+            mobile_driver = self.remote_platform_mobile(remote_flag, app_path, app_name, desired_capabilities,
                                                  username, password, appium_version)
 
         #Get the driver when test is run on local setup
@@ -179,16 +175,17 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                 desired_capabilities['appPackage'] = app_package
                 desired_capabilities['appActivity'] = app_activity
                 if device_flag.lower() == 'y':
-                    driver = mobile_webdriver.Remote('http://localhost:%s/wd/hub'%ports_conf.port,
+                    mobile_driver = mobile_webdriver.Remote('http://localhost:%s/wd/hub'%ports_conf.port,
                                                      desired_capabilities)
                 else:
                     desired_capabilities['app'] = os.path.join(app_path, app_name)
-                    driver = mobile_webdriver.Remote('http://localhost:%s/wd/hub'%ports_conf.port,
+                    mobile_driver = mobile_webdriver.Remote('http://localhost:%s/wd/hub'%ports_conf.port,
                                                      desired_capabilities)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
-        return driver
+        return mobile_driver
+
 
     def ios(self, remote_flag, desired_capabilities, app_path, app_name, username,
             password, app_package, no_reset_flag, ud_id, org_id, signing_id,
@@ -197,7 +194,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         #Get the driver when test is run on a remote platform
         if remote_flag.lower() == 'y':
-            driver = self.remote_platform_mobile(remote_flag, app_path, app_name,
+            mobile_driver = self.remote_platform_mobile(remote_flag, app_path, app_name,
                                                  desired_capabilities, username,
                                                  password, appium_version)
 
@@ -212,37 +209,37 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                     desired_capabilities['xcodeOrgId'] = org_id
                     desired_capabilities['xcodeSigningId'] = signing_id
 
-                driver = mobile_webdriver.Remote('http://localhost:%s/wd/hub'%ports_conf.port,
+                mobile_driver = mobile_webdriver.Remote('http://localhost:%s/wd/hub'%ports_conf.port,
                                                  desired_capabilities)
 
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
-        return driver
+        return mobile_driver
+
 
     def remote_platform_mobile(self, remote_flag, app_path, app_name, desired_capabilities,
                                username, password, appium_version):
         "Checks wether the test is to be run on either browserstack or saucelab and gets the remote mobile driver"
-
         desired_capabilities['idleTimeout'] = 300
         desired_capabilities['name'] = 'Appium Python Test'
         try:
             #Gets driver when test is run on Saucelab
             if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
-                driver = self.saucelab_mobile(app_path, app_name, desired_capabilities,
+                mobile_driver = self.saucelab_mobile(app_path, app_name, desired_capabilities,
                                               username, password)
             #Gets driver when test is run on Browserstack
             else:
-                driver = self.browserstack_mobile(app_path, app_name, desired_capabilities,
+                mobile_driver = self.browserstack_mobile(app_path, app_name, desired_capabilities,
                                                   username, password, appium_version)
         except Exception as exception:
             self.print_exception(exception, remote_flag)
 
-        return driver
+        return mobile_driver
+
 
     def saucelab_mobile(self, app_path, app_name, desired_capabilities, username, password):
         "Setup mobile driver to run the test in Saucelab"
-
         self.sauce_upload(app_path, app_name) #Saucelabs expects the app to be uploaded to Sauce storage everytime the test is run
 
         #Checking if the app_name is having spaces and replacing it with blank
@@ -251,26 +248,26 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
             print("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)
         desired_capabilities['app'] = 'sauce-storage:'+app_name
         desired_capabilities['autoAcceptAlert'] = 'true'
-        driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(username, password),
+        mobile_driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(username, password),
                                          desired_capabilities=desired_capabilities)
 
-        return driver
+        return mobile_driver
+
 
     def browserstack_mobile(self, app_path, app_name, desired_capabilities,
                             username, password, appium_version):
         "Setup mobile driver to run the test in Browserstack"
-
         desired_capabilities['browserstack.appium_version'] = appium_version
         desired_capabilities['realMobile'] = 'true'
         desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
-        driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(username, password),
+        mobile_driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"%(username, password),
                                          desired_capabilities=desired_capabilities)
 
-        return driver
+        return mobile_driver
+
 
     def print_exception(self, exception, remote_flag):
         "Print out the exception message and suggest the solution based on the remote flag"
-
         if remote_flag.lower() == 'y':
             solution = "It looks like you are trying to use a cloud service provider(BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag"
         else:
@@ -283,19 +280,18 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
     def get_firefox_driver(self):
         "Return the Firefox driver"
-
         driver = webdriver.Firefox(firefox_profile=self.get_firefox_profile())
 
         return driver
 
+
     def get_firefox_profile(self):
         "Return a firefox profile"
-
         return self.set_firefox_profile()
+
 
     def set_firefox_profile(self):
         "Setup firefox with the right preferences and return a profile"
-
         try:
             self.download_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'downloads'))
             if not os.path.exists(self.download_dir):
