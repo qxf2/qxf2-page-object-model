@@ -93,8 +93,10 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         if remote_build_name is not None:
             desired_capabilities = self.remote_build_name(desired_capabilities, remote_build_name)
 
-        return webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"%(username, password), resolve_ip=False),
+        web_driver = webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"%(username, password), resolve_ip=False),
                                 desired_capabilities=desired_capabilities)
+
+        return web_driver
 
 
     def run_sauce_lab(self, os_name, os_version, browser, browser_version):
@@ -110,8 +112,10 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         #set saucelab platform
         desired_capabilities = self.saucelab_platform(desired_capabilities, os_name, os_version)
 
-        return webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(username, password),
+        web_driver = webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"%(username, password),
                                 desired_capabilities=desired_capabilities)
+
+        return web_driver
 
 
     def run_local(self, browser):
