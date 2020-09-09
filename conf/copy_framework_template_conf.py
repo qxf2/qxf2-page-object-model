@@ -33,7 +33,7 @@ dst_folder_conf = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','.
 #Page_Objects
 #files from src page_objects:
 src_page_objects_file1 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','page_objects','Base_Page.py'))
-src_page_objects_file2 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','page_objects','DriverFactory.py'))
+src_page_objects_file2 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','page_objects','driverfactory.py'))
 src_page_objects_file3 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','page_objects','PageFactory.py'))
 src_page_objects_file4 = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','page_objects','__init__.py'))
 
