@@ -6,33 +6,33 @@ from selenium.webdriver.chrome.options import Options
 import sys
 from selenium import webdriver
 
-class LocalBrowsers:
+class LocalBrowsers():
 
     "Class contains methods for getting webfrivers for various browsers"
 
     def firefox_local(self):
-        """Get webdriver for firefox"""
+        """Get webdriver for firefox."""
         local_driver = webdriver.Firefox()
 
         return local_driver
 
 
     def explorer_local(self):
-        """Get webdriver for internet explorer"""
+        """Get webdriver for internet explorer."""
         local_driver = webdriver.Ie()
 
         return local_driver
 
 
     def chrome_local(self):
-        """Get webdriver for chrome"""
+        """Get webdriver for chrome."""
         local_driver = webdriver.Chrome()
 
         return local_driver
 
 
     def opera_local(self):
-        """Get webdriver for opera"""
+        """Get webdriver for opera."""
         try:
             opera_browser_location = opera_browser_conf.location
             options = webdriver.ChromeOptions()
@@ -49,14 +49,14 @@ class LocalBrowsers:
 
 
     def safari_local(self):
-        """Get webdriver for safari"""
+        """Get webdriver for safari."""
         local_driver = webdriver.Safari()
 
         return local_driver
 
 
     def headless_chrome(self):
-        """Set up headless chrome driver options and get webdriver for headless chrome"""
+        """Set up headless chrome driver options and get webdriver for headless chrome."""
         options = Options()
         options.headless = True
         options.add_argument("--window-size=1920,1080")
