@@ -1,5 +1,5 @@
 """
-Get the webrivers for local browsers
+Get the webrivers for local browsers.
 """
 from conf import opera_browser_conf
 from selenium.webdriver.chrome.options import Options
@@ -7,8 +7,7 @@ import sys
 from selenium import webdriver
 
 class LocalBrowsers():
-
-    """Class contains methods for getting webfrivers for various browsers"""
+    """Class contains methods for getting webfrivers for various browsers."""
 
     def firefox_local(self):
         """Get webdriver for firefox."""
