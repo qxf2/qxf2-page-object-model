@@ -15,7 +15,6 @@ from conf import ports_conf
 localhost_url = 'http://localhost:%s/wd/hub'%ports_conf.port #Set the url of localhost
 
 class DriverFactory(RemoteOptions, LocalBrowsers):
-
     """Class contains methods for getting web drivers and setting up remote testing platforms."""
 
     def __init__(self, browser='ff', browser_version=None, os_name=None):
