@@ -10,7 +10,7 @@ from datetime import datetime
 
 class RemoteOptions():
 
-    "Class contains methods for various remote options for browserstack and saucelab"
+    """Class contains methods for various remote options for browserstack and saucelab"""
 
     def firefox(self, browser_version):
         """Set web browser as firefox"""
