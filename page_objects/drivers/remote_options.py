@@ -9,10 +9,11 @@ import json
 from datetime import datetime
 
 class RemoteOptions():
+
     "Class contains methods for various remote options for browserstack and saucelab"
 
     def firefox(self, browser_version):
-        "Set web browser as firefox"
+        """Set web browser as firefox"""
         desired_capabilities = DesiredCapabilities.FIREFOX
         desired_capabilities['browser_version'] = browser_version
 
@@ -20,7 +21,7 @@ class RemoteOptions():
 
 
     def explorer(self, browser_version):
-        "Set web browser as Explorer"
+        """Set web browser as Explorer"""
         desired_capabilities = DesiredCapabilities.INTERNETEXPLORER
         desired_capabilities['browser_version'] = browser_version
 
@@ -28,7 +29,7 @@ class RemoteOptions():
 
 
     def chrome(self, browser_version):
-        "Set web browser as Chrome"
+        """Set web browser as Chrome"""
         desired_capabilities = DesiredCapabilities.CHROME
         desired_capabilities['browser_version'] = browser_version
 
@@ -36,7 +37,7 @@ class RemoteOptions():
 
 
     def opera(self, browser_version):
-        "Set web_browser as Opera"
+        """Set web_browser as Opera"""
         desired_capabilities = DesiredCapabilities.OPERA
         desired_capabilities['browser_version'] = browser_version
 
@@ -44,7 +45,7 @@ class RemoteOptions():
 
 
     def safari(self, browser_version):
-        "Set web browser as Safari"
+        """Set web browser as Safari"""
         desired_capabilities = DesiredCapabilities.SAFARI
         desired_capabilities['browser_version'] = browser_version
 
@@ -52,7 +53,7 @@ class RemoteOptions():
 
 
     def set_os(self, desired_capabilities, os_name, os_version):
-        "Set os name and os_version"
+        """Set os name and os_version"""
         desired_capabilities['os'] = os_name
         desired_capabilities['os_version'] = os_version
 
@@ -60,28 +61,28 @@ class RemoteOptions():
 
 
     def remote_project_name(self, desired_capabilities, remote_project_name):
-        "Set remote project name for browserstack"
+        """Set remote project name for browserstack"""
         desired_capabilities['project'] = remote_project_name
 
         return desired_capabilities
 
 
     def remote_build_name(self, desired_capabilities, remote_build_name):
-        "Set remote build name for browserstack"
+        """Set remote build name for browserstack"""
         desired_capabilities['build'] = remote_build_name+"_"+str(datetime.now().strftime("%c"))
 
         return desired_capabilities
 
 
     def saucelab_platform(self, desired_capabilities, os_name, os_version):
-        "Set platform for saucelab"
+        """Set platform for saucelab"""
         desired_capabilities['platform'] = os_name + ' '+os_version
 
         return desired_capabilities
 
 
     def set_mobile_device(self, mobile_os_name, mobile_os_version, device_name):
-        "Setup the mobile device"
+        """Setup the mobile device"""
         desired_capabilities = {}
         desired_capabilities['platformName'] = mobile_os_name
         desired_capabilities['platformVersion'] = mobile_os_version
@@ -91,7 +92,7 @@ class RemoteOptions():
 
 
     def sauce_upload(self, app_path, app_name):
-        "Upload the apk to the sauce temperory storage"
+        """Upload the apk to the sauce temperory storage"""
         username = remote_credentials.USERNAME
         password = remote_credentials.ACCESS_KEY
         result_flag = False
@@ -118,7 +119,7 @@ class RemoteOptions():
 
 
     def browser_stack_upload(self, app_name, app_path):
-        "Upload the apk to the BrowserStack storage if its not done earlier"
+        """Upload the apk to the BrowserStack storage if its not done earlier"""
         username = remote_credentials.USERNAME
         access_key = remote_credentials.ACCESS_KEY
         try:
