@@ -7,6 +7,7 @@ import sys
 from selenium import webdriver
 
 class LocalBrowsers():
+
     """Class contains methods for getting webfrivers for various browsers."""
 
     def firefox_local(self):

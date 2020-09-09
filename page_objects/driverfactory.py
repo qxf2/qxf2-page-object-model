@@ -15,6 +15,7 @@ from conf import ports_conf
 localhost_url = 'http://localhost:%s/wd/hub'%ports_conf.port #Set the url of localhost
 
 class DriverFactory(RemoteOptions, LocalBrowsers):
+
     """Class contains methods for getting web drivers and setting up remote testing platforms."""
 
     def __init__(self, browser='ff', browser_version=None, os_name=None):
@@ -39,7 +40,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
 
     def get_browser(self, browser, browser_version):
-        """select the browser."""
+        """Select the browser."""
         try:
             if browser.lower() == 'ff' or browser.lower() == 'firefox':
                 desired_capabilities = self.firefox(browser_version)
