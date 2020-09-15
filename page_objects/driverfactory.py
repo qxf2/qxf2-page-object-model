@@ -40,20 +40,19 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
     def get_browser(self, browser, browser_version):
         """Select the browser."""
-        try:
-            if browser.lower() == 'ff' or browser.lower() == 'firefox':
-                desired_capabilities = self.firefox(browser_version)
-            elif browser.lower() == 'ie':
-                desired_capabilities = self.explorer(browser_version)
-            elif browser.lower() == 'chrome':
-                desired_capabilities = self.chrome(browser_version)
-            elif browser.lower() == 'opera':
-                desired_capabilities = self.opera(browser_version)
-            elif browser.lower() == 'safari':
-                desired_capabilities = self.safari(browser_version)
 
-        except Exception as exception:
-            print("\n%s\nDriverFactory does not know the browser\t%s\n"%(exception, browser))
+        if browser.lower() == 'ff' or browser.lower() == 'firefox':
+            desired_capabilities = self.firefox(browser_version)
+        elif browser.lower() == 'ie':
+            desired_capabilities = self.explorer(browser_version)
+        elif browser.lower() == 'chrome':
+            desired_capabilities = self.chrome(browser_version)
+        elif browser.lower() == 'opera':
+            desired_capabilities = self.opera(browser_version)
+        elif browser.lower() == 'safari':
+            desired_capabilities = self.safari(browser_version)
+        else:
+            print("\nDriverFactory does not know the browser\t%s\n"%(browser))
 
         return desired_capabilities
 
@@ -266,8 +265,8 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         return mobile_driver
 
-
-    def print_exception(self, exception, remote_flag):
+    @staticmethod
+    def print_exception(exception, remote_flag):
         """Print out the exception message and suggest the solution based on the remote flag."""
         if remote_flag.lower() == 'y':
             solution = "It looks like you are trying to use a cloud service provider(BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and try again. \nTo use your local browser please run the test with the -M N flag"

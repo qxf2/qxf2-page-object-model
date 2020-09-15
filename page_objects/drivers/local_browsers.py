@@ -9,28 +9,29 @@ from selenium import webdriver
 class LocalBrowsers():
     """Class contains methods for getting webfrivers for various browsers."""
 
-    def firefox_local(self):
+    @staticmethod
+    def firefox_local():
         """Get webdriver for firefox."""
         local_driver = webdriver.Firefox()
 
         return local_driver
 
-
-    def explorer_local(self):
+    @staticmethod
+    def explorer_local():
         """Get webdriver for internet explorer."""
         local_driver = webdriver.Ie()
 
         return local_driver
 
-
-    def chrome_local(self):
+    @staticmethod
+    def chrome_local():
         """Get webdriver for chrome."""
         local_driver = webdriver.Chrome()
 
         return local_driver
 
-
-    def opera_local(self):
+    @staticmethod
+    def opera_local():
         """Get webdriver for opera."""
         try:
             opera_browser_location = opera_browser_conf.location
@@ -46,15 +47,15 @@ class LocalBrowsers():
 
         return local_driver
 
-
-    def safari_local(self):
+    @staticmethod
+    def safari_local():
         """Get webdriver for safari."""
         local_driver = webdriver.Safari()
 
         return local_driver
 
-
-    def headless_chrome(self):
+    @staticmethod
+    def headless_chrome():
         """Set up headless chrome driver options and get webdriver for headless chrome."""
         options = Options()
         options.headless = True
