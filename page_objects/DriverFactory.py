@@ -3,6 +3,7 @@ DriverFactory class
 NOTE: Change this class as you add support for:
 1. SauceLabs/BrowserStack
 2. More browsers like Opera
+3. Added support for Microsoft Edge Browser
 """
 import os,sys,requests,json
 from datetime import datetime
@@ -87,7 +88,7 @@ class DriverFactory():
         elif browser.lower() == 'opera':
             desired_capabilities = DesiredCapabilities.OPERA
         elif browser.lower() == 'safari':
-            desired_capabilities = DesiredCapabilities.SAFARI
+            desired_capabilities = DesiredCapabilities.SAFARI 
         desired_capabilities['version'] = browser_version
         desired_capabilities['platform'] = os_name + ' '+os_version
 
@@ -120,6 +121,8 @@ class DriverFactory():
             local_driver = webdriver.Safari()
         elif browser.lower() == "headless-chrome":
             local_driver = self.get_headless_chrome_options()
+        elif browser.lower() == "edge":
+            local_driver = webdriver.Edge(executable_path='msedgedriver.exe')
 
         return local_driver
 
