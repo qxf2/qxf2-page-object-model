@@ -3,6 +3,9 @@ Class to hold miscellaneous but useful decorators for our framework
 """
 
 from inspect import getfullargspec
+#from page_objects.Base_Page import Base_Page
+from behave import given,when,then,runner
+import functools
 
 
 class Wrapit():
@@ -37,6 +40,16 @@ class Wrapit():
 
         return wrapper
 
+    def _bdd_step_implementor(step_text):
+        def wrapper(func):
+            @given(step_text)
+            def inner(context,*args, **kwargs):
+                if hasattr(context,'test_obj'):
+                    test_obj = context.test_obj
+                    return func(test_obj,*args,**kwargs)
+                #return context.test_obj.'%s'(*args, **kwargs)%func
+            return inner
+        return wrapper
 
     def _check_browser_console_log(func):
         "Decorator to check the browser's console log for errors"

@@ -13,6 +13,8 @@ from .driverfactory import DriverFactory
 from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
+from utils import Tesults,Wrapit
+from conf import remote_credentials as Conf
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials
 import conf.base_url_conf
@@ -83,6 +85,11 @@ class Base_Page(Borg,unittest.TestCase):
     def turn_off_highlight(self):
         "Turn off the highlighting feature"
         self.highlight_flag = False
+    @Wrapit.Wrapit._bdd_step_implementor("This is a test step")
+    def print_hello(self):
+        "Print Hello"
+        print("BDD is cool!")
+        print("Hello Qxf2! I am BDD")
 
     def get_failure_message_list(self):
         "Return the failure message list"
