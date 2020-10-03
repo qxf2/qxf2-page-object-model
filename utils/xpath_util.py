@@ -81,7 +81,7 @@ class Xpath_Util:
         if (element.has_attr('id') and len(element['id'])>2) and bool(re.search(r'\d', element['id'])) == False and ("input" not in element['id'].lower() and "button" not in element['id'].lower()):
             self.variable_name = element['id'].strip("_")
         # condition to check if the 'value' attribute exists and not having date and time values in it.
-        elif element.has_attr('value') and element['value'] != '' and bool(re.search(r'([\d]{1,}([/-]|\s|[.])?)+(\D+)?([/-]|\s|[.])?[[\d]{1,}',element['value']))== False and bool(re.search(r'\d{1,2}[:]\d{1,2}\s+((am|AM|pm|PM)?)',element['value']))==False:
+        elif element.has_attr('value') and element['value'] != '' and bool(re.search(r'([\d]{1,}([/-]|\s|[.])?)+(\D+)?([/-]|\s|[.])?[\[\d]{1,}',element['value']))== False and bool(re.search(r'\d{1,2}[:]\d{1,2}\s+((am|AM|pm|PM)?)',element['value']))==False:
             # condition to check if the 'type' attribute exists
             # getting the text() value if the 'type' attribute value is in 'radio','submit','checkbox','search'
             # if the text() is not '', getting the getText() value else getting the 'value' attribute
