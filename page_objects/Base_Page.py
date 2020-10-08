@@ -301,7 +301,7 @@ class Base_Page(Borg,unittest.TestCase):
                 window_handle_id = self.driver.window_handles[-1]
 
             if window_handle_id is not None:
-                self.driver.switch_to_window(window_handle_id)
+                self.driver.switch_to.window(window_handle_id)
                 result_flag = True
 
             self.conditional_write(result_flag,
