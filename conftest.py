@@ -6,6 +6,7 @@ from conf import base_url_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
+from filelock import FileLock
 
 @pytest.fixture
 def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname):
@@ -399,24 +400,23 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "API: mark a test as part of the GUI regression suite.")
     config.addinivalue_line("markers", "MOBILE: mark a test as part of the GUI regression suite.")
 
-
 def pytest_terminal_summary(terminalreporter, exitstatus):
     "add additional section in terminal summary reporting."
     try:
-        if  terminalreporter.config.getoption("--slack_flag").lower() == 'y':
-            post_test_reports_to_slack.post_reports_to_slack()
-        if terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
-            #Initialize the Email_Pytest_Report object
-            email_obj = Email_Pytest_Report()
-            # Send html formatted email body message with pytest report as an attachment
-            email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
-        if terminalreporter.config.getoption("--tesults").lower() == 'y':
-            Tesults.post_results_to_tesults()
+        if not hasattr(terminalreporter.config, 'workerinput'):
+            if  terminalreporter.config.getoption("--slack_flag").lower() == 'y':
+                post_test_reports_to_slack.post_reports_to_slack()
+            if terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
+                #Initialize the Email_Pytest_Report object
+                email_obj = Email_Pytest_Report()
+                # Send html formatted email body message with pytest report as an attachment
+                email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
+            if terminalreporter.config.getoption("--tesults").lower() == 'y':
+                Tesults.post_results_to_tesults()
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
