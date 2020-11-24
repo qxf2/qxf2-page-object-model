@@ -12,7 +12,7 @@ local_browsers = ["firefox","chrome"]  #local browser list against which tests w
 
 browsers = ["firefox","chrome","safari"]  #browsers to generate test run configuration to run on Browserstack/Sauce Labs
 firefox_versions = ["57","58"]  #firefox versions for the tests to run against on Browserstack/Sauce Labs
-chrome_versions = ["84","85"]  #chrome versions for the tests to run against on Browserstack/Sauce Labs
+chrome_versions = ["80","81"]  #chrome versions for the tests to run against on Browserstack/Sauce Labs
 safari_versions = ["8"]  #safari versions for the tests to run against on Browserstack/Sauce Labs
 os_list = ["windows","OS X"]   #list of os for the tests to run against on Browserstack/Sauce Labs
 windows_versions = ["8","10"]  #list of windows versions for the tests to run against on Browserstack/Sauce Labs
