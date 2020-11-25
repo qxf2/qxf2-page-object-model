@@ -29,11 +29,6 @@ jobs:
                python cars-api/cars_app.py
             background: true
         - run:
-            name: Check Chrome & chromedriver version
-            command: |
-               google-chrome --version
-               chromedriver --version
-        - run:
             name: Run different Tox environments on different Containers
             command: |
                if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py36 ; fi
