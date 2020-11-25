@@ -54,6 +54,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         else:
             print("\nDriverFactory does not know the browser\t%s\n"%(browser))
 
+        print(desired_capabilities)
         return desired_capabilities
 
 
@@ -134,6 +135,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         elif browser.lower() == "headless-chrome":
             local_driver = self.headless_chrome()
 
+        print(local_driver)
         return local_driver
 
 
