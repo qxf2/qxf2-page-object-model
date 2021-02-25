@@ -3,14 +3,32 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
+from conf import api_example_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
+from endpoints.API_Player import API_Player
 from utils import Tesults
+from utils import interactive_mode
+import argparse
 
 @pytest.fixture
-def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname):
+def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,interactivemode_flag):
     "Return an instance of Base Page that knows about the third party integrations"
+
+
     try:
+
+        if interactivemode_flag.lower()=="y":
+
+            default_flag=interactive_mode.set_default_flag_gui(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name)
+
+            if default_flag==False:
+                browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag=interactive_mode.ask_questions_gui(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name)
+
+
+
+        print(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname)
+
         test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
         test_obj.set_calling_module(testname)
         #Setup and register a driver
@@ -29,7 +47,7 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
             test_obj.register_tesults()
 
         yield test_obj
-
+        #print(test_obj)
         #Teardown
         test_obj.wait(3)
         test_obj.teardown()
@@ -40,11 +58,18 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
 
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version):
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version,interactivemode_flag):
 
     "Return an instance of Base Page that knows about the third party integrations"
     try:
+
+        if interactivemode_flag.lower()=="y":
+
+            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path)
+
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
+
+        print("This is the:",app_activity)
 
         #Setup and register a driver
         test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version)
@@ -70,6 +95,23 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+
+@pytest.fixture
+def test_api_obj(interactivemode_flag,api_url=api_example_conf.api_url):
+
+    try:
+        if interactivemode_flag.lower()=='y':
+            api_url,session_flag = interactive_mode.ask_questions_api(api_url)
+            print(type(api_url))
+            test_api_obj = API_Player(api_url, session_flag)
+        else:
+            test_api_obj = API_Player(url=api_url, session_flag=True)
+        yield test_api_obj
+
+    except Exception as e:
+        print("Exception when trying to run test:%s" % __file__)
+        print("Python says:%s" % str(e))
+
 
 
 @pytest.fixture
@@ -327,7 +369,6 @@ def ud_id(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def org_id(request):
     "pytest fixture for iOS team id"
@@ -373,6 +414,16 @@ def app_path(request):
     "pytest fixture for app path"
     try:
         return request.config.getoption("--app_path")
+
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
+
+@pytest.fixture
+def interactivemode_flag(request):
+    "pytest fixture for questionary module"
+    try:
+        return request.config.getoption("--interactivemode_flag")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -441,6 +492,7 @@ def pytest_generate_tests(metafunc):
                 else:
                     config_list_local = [(metafunc.config.getoption("--browser")[0])]
                     metafunc.parametrize("browser", config_list_local)
+
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -568,6 +620,11 @@ def pytest_addoption(parser):
                             dest="appium_version",
                             help="The appium version if its run in BrowserStack",
                             default="1.17.0")
+
+        parser.addoption("--interactivemode_flag",
+                            dest="questionary",
+                            default="n",
+                            help="set the questionary flag")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)

@@ -10,6 +10,11 @@ from utils.results import Results
 import urllib.parse
 import logging
 from conf import api_example_conf as conf
+from utils import interactive_mode
+#from conftest import interactivemode_flag
+import pytest
+from _pytest import python
+from _pytest import config
 
 
 class API_Player(Results):
@@ -17,9 +22,17 @@ class API_Player(Results):
 
     def __init__(self, url, log_file_path=None, session_flag=False):
         "Constructor"
+
+        #print(self.set_flag(self.get_flag))
+        #interactive_mode.ask_questions_api()
         super(API_Player, self).__init__(
             level=logging.DEBUG, log_file_path=log_file_path)
         self.api_obj = API_Interface(url=url, session_flag=session_flag)
+
+    def set_url(self,url):
+
+        self.url=url
+        return self.url
 
 
     def set_auth_details(self, username, password):
