@@ -1,12 +1,12 @@
 requests==2.20.0
-pytest>=6.1.0
+pytest>=6.2.2
 selenium==3.13.0
 python_dotenv==0.8.2
 Appium_Python_Client==0.28
 pytest-xdist>=1.31
 pytest-html>=3.0.0
 pytest-rerunfailures>=9.1.1
-pytest_reportportal==1.10.0
+pytest_reportportal==5.0.8
 pillow>=6.2.0
 tesults
 loguru
