@@ -11,3 +11,6 @@ pillow>=6.2.0
 tesults
 loguru
 imageio
+questionary>=1.9.0
+clear-screen>=0.1.14
+

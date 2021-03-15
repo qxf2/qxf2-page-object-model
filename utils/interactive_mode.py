@@ -5,6 +5,8 @@ import questionary
 import os
 import sys
 from conf import api_example_conf
+from clear_screen import clear
+
 
 def set_default_flag_gui(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
     "This checks if the user wants to run the test with the default options or no"
@@ -29,7 +31,7 @@ def set_default_flag_gui(base_url,browser,browser_version,os_version,os_name,rem
 
 def ask_questions_gui(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name):
     "This module asks the users questions on what options they wish to run the test with and stores their choices"
-
+    clear()
     while True:
         questionary.print("\nUse up and down arrow keys to switch between options.\nUse Enter key to select an option",style="bold fg:yellow")
         questionary.print("\nSelected Options",style="bold fg:green")
@@ -53,9 +55,9 @@ def ask_questions_gui(base_url,browser,browser_version,os_version,os_name,remote
         questionary.print("**********",style="bold fg:green")
 
 
-        response = questionary.select("What would you like to change?",choices=["Browser","Browser Version","Os Version","Os Name","Remote flag status","Testrail flag status","Tesults flag status","Revert back to default options","Run","Exit"]).ask()
+        response = questionary.select("What would you like to change?",choices=["Browser","Browser Version","Os Version","Os Name","Remote flag status","Testrail flag status","Tesults flag status","Set Remote credentials","Revert back to default options","Run","Exit"]).ask()
 
-
+        clear()
         if response=="Browser":
             browser=questionary.select("Select the browser",choices=["chrome","firefox","safari"]).ask()
 
@@ -119,6 +121,18 @@ def ask_questions_gui(base_url,browser,browser_version,os_version,os_name,remote
             else:
                 tesults_flag="N"
 
+        if response=="Set Remote credentials":
+            platform = questionary.select("Select the remote platform on which you wish to run the test on",choices=["Browserstack","Saucelabs"]).ask()
+            if platform=="Browserstack":
+                platform="BS"
+            else:
+                platform="SL"
+            username = questionary.text("Enter the Username").ask()
+            password = questionary.password("Enter the password").ask()
+            with open("conf/remote_credentials.py",'w') as f:
+                f.write("REMOTE_BROWSER_PLATFORM = '%s' \nUSERNAME = '%s' \nACCESS_KEY = '%s'"%(platform,username,password))
+            questionary.print("Updated the credentials successfully",style="bold fg:green")
+
         if response=="Revert back to default options":
                 browser="chrome"
                 os_name=[]
@@ -152,6 +166,7 @@ def ask_questions_gui(base_url,browser,browser_version,os_version,os_name,remote
 def ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path):
     "This module asks the users questions on what options they wish to run the test with and stores their choices"
 
+    clear()
     while True:
         questionary.print("\nUse up and down arrow keys to switch between options.\nUse Enter key to select an option",style="bold fg:yellow")
         questionary.print("\nSelected Options",style="bold fg:green")
@@ -172,6 +187,8 @@ def ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_pac
 
 
         response = questionary.select("What would you like to change?",choices=["Mobile OS Name","Mobile OS Version","Device Name","App Package","App Activity","Remote Flag status","Testrail flag status","Tesults flag status","App Name","App Path","Revert back to default options","Run","Exit"]).ask()
+
+        clear()
 
         if response=="Mobile OS Name":
             mobile_os_name=questionary.select("Select the Mobile OS",choices=["Android","iOS"]).ask()
@@ -282,6 +299,7 @@ def ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_pac
     return mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path
 
 def ask_questions_api(api_url,session_flag=True):
+    clear()
     while True:
 
         questionary.print("\nSeleted Options",style="bold fg:green")
@@ -291,6 +309,8 @@ def ask_questions_api(api_url,session_flag=True):
         questionary.print("**********",style="bold fg:green")
 
         response=questionary.select("What would you like to change", choices=["API URL","Session flag status","Reset back to default settings","Run","Exit"]).ask()
+
+        clear()
         if response=="Session flag status":
             session_flag=questionary.select("Select the Session flag status",choices=["True","False"]).ask()
             if session_flag =="True":
@@ -309,6 +329,7 @@ def ask_questions_api(api_url,session_flag=True):
         if response =="Reset back to default settings":
             api_url= api_example_conf.api_url
             session_flag=True
+            questionary.print("Reverted back to default settings",style="bold fg:green")
 
         if response=="Run":
             break
