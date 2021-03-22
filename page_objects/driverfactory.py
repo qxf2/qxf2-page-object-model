@@ -94,6 +94,9 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         if remote_build_name is not None:
             desired_capabilities = self.remote_build_name(desired_capabilities, remote_build_name)
 
+        #Disable screenshots
+        desired_capabilities['browserstack.debug'] = "false"
+
         web_driver = webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"
                                                        %(username, password), resolve_ip=False), desired_capabilities=desired_capabilities)
 

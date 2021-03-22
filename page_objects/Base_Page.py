@@ -16,6 +16,7 @@ from utils import Tesults
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials
 import conf.base_url_conf
+import conf.screenshot_conf
 from utils import Gif_Maker
 
 class Borg:
@@ -247,6 +248,8 @@ class Base_Page(Borg,unittest.TestCase):
 
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"
+        if self.browserstack_flag is True and conf.screenshot_conf.BS_ENABLE_SCREENSHOTS is False:
+            return
         if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
             for i in range(1,100):
                 if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
