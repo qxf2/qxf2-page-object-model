@@ -11,6 +11,7 @@ from conf import remote_credentials
 from page_objects.drivers.remote_options import RemoteOptions
 from page_objects.drivers.local_browsers import LocalBrowsers
 from conf import ports_conf
+from conf import screenshot_conf
 
 localhost_url = 'http://localhost:%s/wd/hub'%ports_conf.port #Set the url of localhost
 
@@ -94,8 +95,11 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         if remote_build_name is not None:
             desired_capabilities = self.remote_build_name(desired_capabilities, remote_build_name)
 
-        #Disable screenshots
-        desired_capabilities['browserstack.debug'] = "false"
+        #Screenshot config
+        if screenshot_conf.BS_ENABLE_SCREENSHOTS:
+            desired_capabilities['browserstack.debug'] = "true"
+        else:
+            desired_capabilities['browserstack.debug'] = "false"
 
         web_driver = webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"
                                                        %(username, password), resolve_ip=False), desired_capabilities=desired_capabilities)
