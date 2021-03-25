@@ -74,7 +74,7 @@ class Base_Page(Borg,unittest.TestCase):
         self.screenshot_counter = 1
         self.exceptions = []
         self.gif_file_name = None
-        self.reportportal_pytest_session = None
+        self.rp_logger = None
 
 
     def turn_on_highlight(self):
@@ -235,11 +235,13 @@ class Base_Page(Borg,unittest.TestCase):
         try:
             with open(image_name, "rb") as fh:
                 image = fh.read()
+            screenshot_name = os.path.basename(image_name)
             self.rp_logger.info(
-                image_name,
+                screenshot_name,
                 attachment={
+                    "name": screenshot_name,
                     "data": image,
-                    "mime": "application/octet-stream"
+                    "mime": "image/png"
                 },
             )
         except Exception as e:
