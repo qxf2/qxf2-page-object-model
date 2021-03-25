@@ -96,10 +96,10 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
             desired_capabilities = self.remote_build_name(desired_capabilities, remote_build_name)
 
         #Screenshot config
-        if screenshot_conf.BS_ENABLE_SCREENSHOTS:
-            desired_capabilities['browserstack.debug'] = "true"
-        else:
-            desired_capabilities['browserstack.debug'] = "false"
+        if screenshot_conf.BS_ENABLE_SCREENSHOTS is None:
+            screenshot_conf.BS_ENABLE_SCREENSHOTS = False
+
+        desired_capabilities['browserstack.debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
 
         web_driver = webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"
                                                        %(username, password), resolve_ip=False), desired_capabilities=desired_capabilities)
