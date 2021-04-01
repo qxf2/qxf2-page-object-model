@@ -12,4 +12,4 @@ geckodriver.log
 debug.log
 __pycache__
 venv*
-conf/report_portol_conf.py
+
