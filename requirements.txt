@@ -1,4 +1,4 @@
-requests==2.20.0
+requests==2.25.1
 pytest>=6.2.2
 selenium==3.13.0
 python_dotenv==0.8.2
