@@ -24,8 +24,6 @@ from conftest import interactivemode_flag
 def test_api_example(test_api_obj):
     "Run api test"
     try:
-        # Create test object
-        #test_api_obj = API_Player(url=api_url, session_flag=True)
         expected_pass = 0
         actual_pass = -1
 

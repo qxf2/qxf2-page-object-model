@@ -25,10 +25,6 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
             if default_flag == False:
                 browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag = interactive_mode.ask_questions_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
 
-
-
-        print(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname)
-
         test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
         test_obj.set_calling_module(testname)
         #Setup and register a driver
@@ -47,7 +43,6 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
             test_obj.register_tesults()
 
         yield test_obj
-        #print(test_obj)
         #Teardown
         test_obj.wait(3)
         test_obj.teardown()
@@ -65,11 +60,9 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
 
         if interactivemode_flag.lower()=="y":
 
-            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path)
+            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path)
 
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
-
-        print("This is the:",app_activity)
 
         #Setup and register a driver
         test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version)
