@@ -18,12 +18,12 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
 
     try:
 
-        if interactivemode_flag.lower()=="y":
+        if interactivemode_flag.lower() == "y":
 
-            default_flag=interactive_mode.set_default_flag_gui(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name)
+            default_flag = interactive_mode.set_default_flag_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
 
-            if default_flag==False:
-                browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag=interactive_mode.ask_questions_gui(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name)
+            if default_flag == False:
+                browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag = interactive_mode.ask_questions_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
 
 
 
