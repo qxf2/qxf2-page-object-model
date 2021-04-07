@@ -404,8 +404,8 @@ def pytest_configure(config):
     try:
         config._inicache["rp_uuid"] = report_portal_conf.report_portal_uuid
         config._inicache["rp_endpoint"]= report_portal_conf.report_portal_endpoint
-        config._inicache["rp_project"]="default_personal"
-        config._inicache["rp_launch"]="Qxf2 Page object model launch"
+        config._inicache["rp_project"]=report_portal_conf.report_portal_project
+        config._inicache["rp_launch"]=report_portal_conf.report_portal_launch
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
