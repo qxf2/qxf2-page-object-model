@@ -14,14 +14,10 @@ import argparse
 @pytest.fixture
 def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,interactivemode_flag):
     "Return an instance of Base Page that knows about the third party integrations"
-
-
     try:
 
         if interactivemode_flag.lower() == "y":
-
             default_flag = interactive_mode.set_default_flag_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
-
             if default_flag == False:
                 browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag = interactive_mode.ask_questions_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
 
@@ -51,7 +47,6 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version,interactivemode_flag):
 
@@ -60,7 +55,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
 
         if interactivemode_flag.lower()=="y":
 
-            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path)
+            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path)
 
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
 
@@ -91,7 +86,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
 
 @pytest.fixture
 def test_api_obj(interactivemode_flag,api_url=api_example_conf.api_url):
-
+    "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower()=='y':
             api_url,session_flag = interactive_mode.ask_questions_api(api_url)
@@ -104,8 +99,6 @@ def test_api_obj(interactivemode_flag,api_url=api_example_conf.api_url):
     except Exception as e:
         print("Exception when trying to run test:%s" % __file__)
         print("Python says:%s" % str(e))
-
-
 
 @pytest.fixture
 def testname(request):
@@ -120,7 +113,6 @@ def testname(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def browser(request):
     "pytest fixture for browser"
@@ -130,7 +122,6 @@ def browser(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def base_url(request):
@@ -142,7 +133,6 @@ def base_url(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def api_url(request):
     "pytest fixture for base url"
@@ -152,7 +142,6 @@ def api_url(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def test_run_id(request):
@@ -164,7 +153,6 @@ def test_run_id(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def testrail_flag(request):
     "pytest fixture for test rail flag"
@@ -174,7 +162,6 @@ def testrail_flag(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def remote_flag(request):
@@ -186,7 +173,6 @@ def remote_flag(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def browser_version(request):
     "pytest fixture for browser version"
@@ -196,7 +182,6 @@ def browser_version(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def os_name(request):
@@ -208,7 +193,6 @@ def os_name(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def os_version(request):
     "pytest fixture for os version"
@@ -218,7 +202,6 @@ def os_version(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def remote_project_name(request):
@@ -230,7 +213,6 @@ def remote_project_name(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def remote_build_name(request):
     "pytest fixture for browserStack build name"
@@ -240,7 +222,6 @@ def remote_build_name(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def slack_flag(request):
@@ -252,7 +233,6 @@ def slack_flag(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def tesults_flag(request):
     "pytest fixture for sending results to tesults"
@@ -262,7 +242,6 @@ def tesults_flag(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def mobile_os_name(request):
@@ -274,7 +253,6 @@ def mobile_os_name(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def mobile_os_version(request):
     "pytest fixture for mobile os version"
@@ -284,7 +262,6 @@ def mobile_os_version(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def device_name(request):
@@ -296,7 +273,6 @@ def device_name(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def app_package(request):
     "pytest fixture for app package"
@@ -306,7 +282,6 @@ def app_package(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def app_activity(request):
@@ -318,7 +293,6 @@ def app_activity(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def device_flag(request):
     "pytest fixture for device flag"
@@ -328,7 +302,6 @@ def device_flag(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def email_pytest_report(request):
@@ -340,7 +313,6 @@ def email_pytest_report(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-
 @pytest.fixture
 def app_name(request):
     "pytest fixture for app name"
@@ -350,7 +322,6 @@ def app_name(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
 
 @pytest.fixture
 def ud_id(request):
@@ -486,13 +457,9 @@ def pytest_generate_tests(metafunc):
                     config_list_local = [(metafunc.config.getoption("--browser")[0])]
                     metafunc.parametrize("browser", config_list_local)
 
-
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-
-
-
 
 def pytest_addoption(parser):
     "Method to add the option to ini."

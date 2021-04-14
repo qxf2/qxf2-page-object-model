@@ -11,7 +11,6 @@ import urllib.parse
 import logging
 from conf import api_example_conf as conf
 from utils import interactive_mode
-#from conftest import interactivemode_flag
 import pytest
 from _pytest import python
 from _pytest import config
