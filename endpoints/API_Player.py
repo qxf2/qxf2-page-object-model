@@ -22,8 +22,6 @@ class API_Player(Results):
     def __init__(self, url, log_file_path=None, session_flag=False):
         "Constructor"
 
-        #print(self.set_flag(self.get_flag))
-        #interactive_mode.ask_questions_api()
         super(API_Player, self).__init__(
             level=logging.DEBUG, log_file_path=log_file_path)
         self.api_obj = API_Interface(url=url, session_flag=session_flag)
