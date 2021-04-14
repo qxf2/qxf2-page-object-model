@@ -150,7 +150,9 @@ a)py.test [options]
 	-n 	used to run tests in parallel					E.g: python -m pytest -n 3 -v (This will run three tests in parallel)
 	--tesults 	used to report test results to tesults			E.g: python -m pytest test_example_form.py --tesults Y(This will report test report to tesults)
 
-	--interactivemode_flag	used to run the tests interactively __Note:__ If your running the test on git bash for windows please make sure to set your bash aliash by adding the following command to bash_rc `alias python='winpty python.exe'`         E.g:  python -m pytest tests/test_example_form.py --interactivemode_flag Y(This will give the user a menu of different choices allowing the user to pick their desired configuration to run the test)
+	--interactivemode_flag	used to run the tests interactively   E.g:  python -m pytest tests/test_example_form.py --interactivemode_flag Y(This option will allow the user to pick the desired configuration to run the test, from the menu displayed)
+
+	__Note:__ If you wish to run the test with interactive mode on git bash for windows, please make sure to set your bash alias by adding the following command to bash_rc `alias python='winpty python.exe'`
 
 
 
