@@ -75,6 +75,7 @@ class Base_Page(Borg,unittest.TestCase):
         self.screenshot_counter = 1
         self.exceptions = []
         self.gif_file_name = None
+        self.rp_logger = None
 
 
     def turn_on_highlight(self):
@@ -216,6 +217,10 @@ class Base_Page(Borg,unittest.TestCase):
         self.log_name = self.testname + '.log'
         self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
 
+    def set_rp_logger(self,rp_pytest_service):
+        "Set the reportportal logger"
+        self.rp_logger = self.log_obj.setup_rp_logging(rp_pytest_service)
+
 
     def append_latest_image(self,screenshot_name):
         "Get image url list from Browser Stack"
@@ -229,15 +234,15 @@ class Base_Page(Borg,unittest.TestCase):
     def save_screenshot_reportportal(self,image_name):
         "Method to save image to ReportPortal"
         try:
-            rp_logger = self.log_obj.setup_rp_logging()
             with open(image_name, "rb") as fh:
                 image = fh.read()
-
-            rp_logger.info(
-                image_name,
+            screenshot_name = os.path.basename(image_name)
+            self.rp_logger.info(
+                screenshot_name,
                 attachment={
+                    "name": screenshot_name,
                     "data": image,
-                    "mime": "application/octet-stream"
+                    "mime": "image/png"
                 },
             )
         except Exception as e:
@@ -260,9 +265,8 @@ class Base_Page(Borg,unittest.TestCase):
         screenshot_name = self.screenshot_dir + os.sep + screenshot_name+'.png'
         self.driver.get_screenshot_as_file(screenshot_name)
 	    #self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
-        if hasattr(pytest,'config'):
-            if pytest.config._config.getoption('--reportportal'):
-                self.save_screenshot_reportportal(screenshot_name)
+        if self.rp_logger:
+            self.save_screenshot_reportportal(screenshot_name)
         if self.browserstack_flag is True:
             self.append_latest_image(screenshot_name)
         if self.tesults_flag is True:

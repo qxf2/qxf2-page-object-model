@@ -3,12 +3,13 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
+from conf import report_portal_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from utils import Tesults
 
 @pytest.fixture
-def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname):
+def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,reportportal_service):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
@@ -27,6 +28,9 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
 
         if tesults_flag.lower()=='y':
             test_obj.register_tesults()
+
+        if reportportal_service:
+            test_obj.set_rp_logger(reportportal_service)
 
         yield test_obj
 
@@ -378,6 +382,19 @@ def app_path(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
+@pytest.fixture
+def reportportal_service(request):
+    "pytest service fixture for reportportal"
+    reportportal_pytest_service = None
+    try:
+       if request.config.getoption("--reportportal"):
+           reportportal_pytest_service = request.node.config.py_test_service
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
+
+    return reportportal_pytest_service
+
 @pytest.hookimpl()
 def pytest_configure(config):
     "Sets the launch name based on the marker selected."
@@ -385,10 +402,10 @@ def pytest_configure(config):
     if_reportportal =config.getoption('--reportportal')
 
     try:
-        config._inicache["rp_uuid"]="34ec4436-1a3c-4079-9ca0-e177e530fa47"
-        config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
-        config._inicache["rp_project"]="personal"
-        config._inicache["rp_launch"]="TEST_EXAMPLE"
+        config._inicache["rp_uuid"] = report_portal_conf.report_portal_uuid
+        config._inicache["rp_endpoint"]= report_portal_conf.report_portal_endpoint
+        config._inicache["rp_project"]=report_portal_conf.report_portal_project
+        config._inicache["rp_launch"]=report_portal_conf.report_portal_launch
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
