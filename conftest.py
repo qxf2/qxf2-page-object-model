@@ -4,6 +4,7 @@ from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
 from conf import api_example_conf
+from conf import report_portal_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
@@ -12,7 +13,7 @@ from utils import interactive_mode
 import argparse
 
 @pytest.fixture
-def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,interactivemode_flag):
+def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,reportportal_service,interactivemode_flag):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
 
@@ -37,6 +38,9 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
 
         if tesults_flag.lower()=='y':
             test_obj.register_tesults()
+
+        if reportportal_service:
+            test_obj.set_rp_logger(reportportal_service)
 
         yield test_obj
         #Teardown
@@ -387,11 +391,25 @@ def app_path(request):
 def interactivemode_flag(request):
     "pytest fixture for questionary module"
     try:
-        return request.config.getoption("--interactivemode_flag")
+        return request.config.getoption("--interactive_mode_flag")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+
+@pytest.fixture
+def reportportal_service(request):
+    "pytest service fixture for reportportal"
+    reportportal_pytest_service = None
+    try:
+       if request.config.getoption("--reportportal"):
+           reportportal_pytest_service = request.node.config.py_test_service
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
+
+    return reportportal_pytest_service
+
 
 @pytest.hookimpl()
 def pytest_configure(config):
@@ -400,10 +418,10 @@ def pytest_configure(config):
     if_reportportal =config.getoption('--reportportal')
 
     try:
-        config._inicache["rp_uuid"]="34ec4436-1a3c-4079-9ca0-e177e530fa47"
-        config._inicache["rp_endpoint"]="http://web.demo.reportportal.io"
-        config._inicache["rp_project"]="personal"
-        config._inicache["rp_launch"]="TEST_EXAMPLE"
+        config._inicache["rp_uuid"] = report_portal_conf.report_portal_uuid
+        config._inicache["rp_endpoint"]= report_portal_conf.report_portal_endpoint
+        config._inicache["rp_project"]=report_portal_conf.report_portal_project
+        config._inicache["rp_launch"]=report_portal_conf.report_portal_launch
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -581,7 +599,7 @@ def pytest_addoption(parser):
                             help="The appium version if its run in BrowserStack",
                             default="1.17.0")
 
-        parser.addoption("--interactivemode_flag",
+        parser.addoption("--interactive_mode_flag",
                             dest="questionary",
                             default="n",
                             help="set the questionary flag")

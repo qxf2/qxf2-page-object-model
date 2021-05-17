@@ -16,6 +16,7 @@ class Base_Logging():
         self.level=level
         self.format=format
         self.log = self.set_log(self.log_file_name,self.level,self.format)
+        self.rp_logger = None
 
 
     def set_log(self,log_file_name,level,format,test_module_name=None):
@@ -50,18 +51,18 @@ class Base_Logging():
         return self.calling_module
 
 
-    def setup_rp_logging(self):
+    def setup_rp_logging(self, rp_pytest_service):
         "Setup reportportal logging"
         try:
             # Setting up a logging.
             logging.setLoggerClass(RPLogger)
-            rp_logger = logging.getLogger(__name__)
-            rp_logger.setLevel(logging.INFO)
+            self.rp_logger = logging.getLogger(__name__)
+            self.rp_logger.setLevel(logging.INFO)
             # Create handler for Report Portal.
-            rp_handler = RPLogHandler(pytest.config._config.py_test_service)
+            rp_handler = RPLogHandler(rp_pytest_service)
             # Set INFO level for Report Portal handler.
             rp_handler.setLevel(logging.INFO)
-            return rp_logger
+            return self.rp_logger
         except Exception as e:
             self.write("Exception when trying to set rplogger")
             self.write(str(e))
@@ -77,22 +78,20 @@ class Base_Logging():
                 break
         fname = stack_frame[3]
         d = {'caller_func': fname}
-        if hasattr(pytest,'config'):
-            if pytest.config._config.getoption('--reportportal'):
-                rp_logger = self.setup_rp_logging()
-                if level.lower()== 'debug':
-                    rp_logger.debug(msg=msg)
-                elif level.lower()== 'info':
-                    rp_logger.info(msg)
-                elif level.lower()== 'warn' or level.lower()=='warning':
-                    rp_logger.warning(msg)
-                elif level.lower()== 'error':
-                    rp_logger.error(msg)
-                elif level.lower()== 'critical':
-                    rp_logger.critical(msg)
-                else:
-                    rp_logger.critical(msg)
-                return
+        if self.rp_logger:
+            if level.lower()== 'debug':
+                self.rp_logger.debug(msg=msg)
+            elif level.lower()== 'info':
+                self.rp_logger.info(msg)
+            elif level.lower()== 'warn' or level.lower()=='warning':
+                self.rp_logger.warning(msg)
+            elif level.lower()== 'error':
+                self.rp_logger.error(msg)
+            elif level.lower()== 'critical':
+                self.rp_logger.critical(msg)
+            else:
+                self.rp_logger.critical(msg)
+            return
 
         if level.lower()== 'debug':
             logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)
