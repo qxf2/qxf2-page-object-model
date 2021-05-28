@@ -94,7 +94,6 @@ def test_api_obj(interactivemode_flag,api_url=api_example_conf.api_url):
     try:
         if interactivemode_flag.lower()=='y':
             api_url,session_flag = interactive_mode.ask_questions_api(api_url)
-            print(type(api_url))
             test_api_obj = API_Player(api_url, session_flag)
         else:
             test_api_obj = API_Player(url=api_url, session_flag=True)
