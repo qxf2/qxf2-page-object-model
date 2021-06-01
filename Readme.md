@@ -151,7 +151,7 @@ a)py.test [options]
 	--tesults 	used to report test results to tesults			E.g: python -m pytest test_example_form.py --tesults Y(This will report test report to tesults)
 	--interactive_mode_flag	used to run the tests interactively   E.g:  python -m pytest tests/test_example_form.py --interactive_mode_flag Y(This option will allow the user to pick the desired configuration to run the test, from the menu displayed)
 
-	__Note:__ If you wish to run the test with interactive mode on git bash for windows, please make sure to set your bash alias by adding the following command to bash_rc `alias python='winpty python.exe'`
+	Note: If you wish to run the test with interactive mode on git bash for windows, please make sure to set your bash alias by adding the following command to bash_rc `alias python='winpty python.exe'`
 
 
 
