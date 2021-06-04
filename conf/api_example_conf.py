@@ -1,4 +1,5 @@
 #Conf for api example
+api_url="http://127.0.0.1:5000"
 
 #add_car
 car_details = {'name':'figo','brand':'ford','price_range':'5-8 lacs','car_type':'hatchback'}
