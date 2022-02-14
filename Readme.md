@@ -2,7 +2,7 @@
 ![GitHub](https://img.shields.io/github/license/qxf2/qxf2-page-object-model?color=brightgreen)
 ![Maintenance](https://img.shields.io/maintenance/yes/2021?color=brightgreen)
 [![CircleCI](https://circleci.com/gh/qxf2/qxf2-page-object-model.svg?style=shield)](https://circleci.com/gh/qxf2/qxf2-page-object-model)
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=WjZlamhmWk4vZzZyd1czQ0JtMHBSbUM1bU1YWFpzOGt5MThSa0hNOHJUTT0tLTdMOG1VNXcvcHhFQ0s1V2FOVnZJT1E9PQ==--c16fe362e410467635700dd41428ef02e79d31c9)](https://www.browserstack.com/automate/public-build/WjZlamhmWk4vZzZyd1czQ0JtMHBSbUM1bU1YWFpzOGt5MThSa0hNOHJUTT0tLTdMOG1VNXcvcHhFQ0s1V2FOVnZJT1E9PQ==--c16fe362e410467635700dd41428ef02e79d31c9)
+[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=UkNYaDJDRHcvenVrRnA0Z0kyUVlvaEcyd2VDUStKMHNKTGRrSUNjM0Z3ND0tLTBhOURxRERkb01lZDFHTUJVNW1hOUE9PQ==--ddad5a4db068da815fdd14b63f9f330ab822b8bd)](https://www.browserstack.com/automate/public-build/UkNYaDJDRHcvenVrRnA0Z0kyUVlvaEcyd2VDUStKMHNKTGRrSUNjM0Z3ND0tLTBhOURxRERkb01lZDFHTUJVNW1hOUE9PQ==--ddad5a4db068da815fdd14b63f9f330ab822b8bd)
 ![GitHub stars](https://img.shields.io/github/stars/qxf2/qxf2-page-object-model)
 ![GitHub forks](https://img.shields.io/github/forks/qxf2/qxf2-page-object-model)
 ![GitHub repo size](https://img.shields.io/github/repo-size/qxf2/qxf2-page-object-model)
