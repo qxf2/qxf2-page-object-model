@@ -7,7 +7,7 @@ Appium_Python_Client==0.28
 pytest-xdist>=1.31
 pytest-html>=3.0.0
 pytest-rerunfailures>=9.1.1
-pytest_reportportal==5.0.4
+pytest_reportportal==5.0.0
 pillow>=6.2.0
 tesults
 loguru
