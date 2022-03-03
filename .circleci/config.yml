@@ -28,7 +28,7 @@ jobs:
             command: |
                python cars-api/cars_app.py
             background: true
-                    
+
         - run:
             name: Run different Tox environments on different Containers
             command: |
