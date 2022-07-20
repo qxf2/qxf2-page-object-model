@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import unittest,time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from utils.BrowserStack_Library import BrowserStack_Library
+from utils.stop_test_exception_util import Stop_Test_Exception
 from .driverfactory import DriverFactory
 from utils.Test_Rail import Test_Rail
 from page_objects import PageFactory
@@ -417,7 +418,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         except Exception:
                     self.conditional_write(result_flag,
                     positive='Located the element: %s'%locator,
-                    negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_time))
+                    negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
 
         return result_flag
 
