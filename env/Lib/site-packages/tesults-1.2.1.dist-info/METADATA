@@ -1,0 +1,28 @@
+Metadata-Version: 2.1
+Name: tesults
+Version: 1.2.1
+Summary: Tesults API library
+Home-page: https://www.tesults.com
+Author: Tesults
+Author-email: support@tesults.com
+License: MIT
+Keywords: tesults test results automation automated dashboard reporting
+Platform: UNKNOWN
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Topic :: Software Development :: Libraries
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.3
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Dist: requests
+Requires-Dist: boto3
+
+Tesults API library for uploading test results to Tesults in your python application.
+
+

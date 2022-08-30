@@ -9,9 +9,12 @@ Pages implemented so far:
 4. Bitcoin main page
 5. Bitcoin price page
 """
-
+ 
 from page_objects.zero_mobile_page import Zero_Mobile_Page
 from page_objects.zero_page import Zero_Page
+from page_objects.weathershopper_mainpage import Weathershopper_Mainpage
+from page_objects.moisturizer_main_page import Moisturizer_Mainpage
+from page_objects.sunscreen_main_page import Sunscreen_Mainpage
 from page_objects.tutorial_main_page import Tutorial_Main_Page
 from page_objects.tutorial_redirect_page import Tutorial_Redirect_Page
 from page_objects.contact_page import Contact_Page
@@ -40,6 +43,12 @@ class PageFactory():
             test_obj = Bitcoin_Main_Page()
         elif page_name == "bitcoin price page":
             test_obj = Bitcoin_Price_Page()
+        elif page_name == "moisturizer main page":
+            test_obj = Moisturizer_Mainpage(base_url=base_url)
+        elif page_name == "sunscreen main page":
+            test_obj = Sunscreen_Mainpage(base_url=base_url)
+        elif page_name == "weathershopper main page":
+            test_obj = Weathershopper_Mainpage(base_url=base_url)    
         return test_obj
 
     get_page_object = staticmethod(get_page_object)

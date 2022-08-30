@@ -1,0 +1,23 @@
+Metadata-Version: 2.1
+Name: reportportal-client
+Version: 5.0.10
+Summary: Python client for Report Portal v5.
+Home-page: https://github.com/reportportal/client-Python
+Author: UNKNOWN
+Author-email: SupportEPMC-TSTReportPortal@epam.com
+License: Apache 2.0.
+Download-URL: https://github.com/reportportal/client-Python/tarball/5.0.10
+Keywords: testing,reporting,reportportal
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Requires-Dist: aenum
+Requires-Dist: requests (>=2.23.0)
+Requires-Dist: six (>=1.15.0)
+
+UNKNOWN
+
+

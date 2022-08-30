@@ -1,0 +1,3 @@
+[pytest11]
+pytest_reportportal = pytest_reportportal.plugin
+
