@@ -19,7 +19,7 @@ class Weathershopper_Object_Page:
      temp_text=self.get_special_text(self.temperature_text)
      temp_txt = int((temp_text)[0:2])
      print (temp_txt)
-     return 
+     return temp_txt
     # get the moisturizer button 
     def get_moisturizer_button(self):
      Button=self.click_element(self.moisturizer_button)
