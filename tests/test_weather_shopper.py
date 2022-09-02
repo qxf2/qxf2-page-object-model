@@ -33,9 +33,8 @@ def test_weathershopper(test_obj):
             button= test_obj.get_moisturizer_button()
             button=test_obj.get_add_button()
             button=test_obj.get_cart_button()
-            time.sleep(2)
             button=test_obj.get_pay_button()
-            time.sleep(2)
+           
         elif(temp_text)> 20:
             button= test_obj.get_sunscreen_button() 
             button=test_obj.get_add_button()
