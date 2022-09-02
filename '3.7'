@@ -1,8 +1,0 @@
-============================= test session starts =============================
-platform win32 -- Python 3.10.5, pytest-7.1.2, pluggy-1.0.0 -- C:\Users\Ram\Desktop\Page_object_model\qxf2-page-object-model\env\Scripts\python.exe
-metadata: {'Python': '3.10.5', 'Platform': 'Windows-10-10.0.22000-SP0', 'Packages': {'pytest': '7.1.2', 'py': '1.11.0', 'pluggy': '1.0.0'}, 'Plugins': {'forked': '1.4.0', 'html': '3.1.1', 'metadata': '2.0.2', 'reportportal': '5.0.8', 'rerunfailures': '10.2', 'xdist': '2.5.0'}}
-rootdir: C:\Users\Ram\Desktop\Page_object_model\qxf2-page-object-model, configfile: pytest.ini
-plugins: forked-1.4.0, html-3.1.1, metadata-2.0.2, reportportal-5.0.8, rerunfailures-10.2, xdist-2.5.0
-collecting ... collected 0 items
-
-============================ no tests ran in 0.01s ============================
