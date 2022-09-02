@@ -20,7 +20,7 @@ def test_weather_shopper_home(test_obj):
         expected_pass = 0
         actual_pass = -1
 
-        #1. Create a test object and get the temperature text.
+        # Create a test object and get the temperature text
         test_obj = PageFactory.get_page_object("weather shopper main page")
         #Set start_time with current time
         start_time = int(time.time())
