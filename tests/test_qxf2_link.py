@@ -28,8 +28,8 @@ def test_weather_shopper_home(test_obj):
 
 
         # Click the qxf2 sevices link
-        click_links = test_obj.click_qxf2_link()
-        test_obj.log_result(click_links,
+        click_link = test_obj.click_qxf2_link()
+        test_obj.log_result(click_link,
                             positive="Able to get text\n",
                             negative="Not able to get text \n")
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
