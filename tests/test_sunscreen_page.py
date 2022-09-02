@@ -22,11 +22,11 @@ def test_sunscreen_page(test_obj):
         #Initalize flags for tests summary
         expected_pass = 0
         actual_pass = -1
-        # Create a test object for weathershopper
+        # Create a test object for sunscreen button
         test_obj = PageFactory.get_page_object("sunscreen main page")
         #Set start_time with current time
         start_time = int(time.time())
-        #get the temperature
+        #get the sunscreen button
         button= test_obj.get_sunscreen_button()
        
         test_obj.log_result(button,

@@ -4,7 +4,6 @@ Implementing the questionaty library to fetch the users choices for different ar
 import sys
 import questionary
 from clear_screen import clear
-from conf import api_example_conf
 from conf import browser_os_name_conf as conf
 from conf import remote_credentials
 

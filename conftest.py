@@ -3,11 +3,9 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
-from conf import api_example_conf
 from conf import report_portal_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
-from endpoints.API_Player import API_Player
 from utils import Tesults
 from utils import interactive_mode
 import argparse
@@ -51,57 +49,57 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-@pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version,interactivemode_flag):
+# @pytest.fixture
+# def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version,interactivemode_flag):
 
-    "Return an instance of Base Page that knows about the third party integrations"
-    try:
+#     "Return an instance of Base Page that knows about the third party integrations"
+#     try:
 
-        if interactivemode_flag.lower()=="y":
+#         if interactivemode_flag.lower()=="y":
 
-            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path)
+#             mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path)
 
-        test_mobile_obj = PageFactory.get_page_object("Zero mobile")
+#         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
 
-        #Setup and register a driver
-        test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version)
+#         #Setup and register a driver
+#         test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version)
 
-        #3. Setup TestRail reporting
-        if testrail_flag.lower()=='y':
-            if test_run_id is None:
-                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest --testrail_flag Y -R 100\n"+'\033[0m')
-                testrail_flag = 'N'
-            if test_run_id is not None:
-                test_mobile_obj.register_testrail()
-                test_mobile_obj.set_test_run_id(test_run_id)
+#         #3. Setup TestRail reporting
+#         if testrail_flag.lower()=='y':
+#             if test_run_id is None:
+#                 test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest --testrail_flag Y -R 100\n"+'\033[0m')
+#                 testrail_flag = 'N'
+#             if test_run_id is not None:
+#                 test_mobile_obj.register_testrail()
+#                 test_mobile_obj.set_test_run_id(test_run_id)
 
-        if tesults_flag.lower()=='y':
-            test_mobile_obj.register_tesults()
+#         if tesults_flag.lower()=='y':
+#             test_mobile_obj.register_tesults()
 
-        yield test_mobile_obj
+#         yield test_mobile_obj
 
-        #Teardown
-        test_mobile_obj.wait(3)
-        test_mobile_obj.teardown()
+#         #Teardown
+#         test_mobile_obj.wait(3)
+#         test_mobile_obj.teardown()
 
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+#     except Exception as e:
+#         print("Exception when trying to run test: %s"%__file__)
+#         print("Python says:%s"%str(e))
 
-@pytest.fixture
-def test_api_obj(interactivemode_flag,api_url=api_example_conf.api_url):
-    "Return an instance of Base Page that knows about the third party integrations"
-    try:
-        if interactivemode_flag.lower()=='y':
-            api_url,session_flag = interactive_mode.ask_questions_api(api_url)
-            test_api_obj = API_Player(api_url, session_flag)
-        else:
-            test_api_obj = API_Player(url=api_url, session_flag=True)
-        yield test_api_obj
+# @pytest.fixture
+#  test_api_obj(interactivemode_flag,api_url=api_example_conf.api_url):
+#     "Return an instance of Base Page that knows about the third party integrations"
+#     try:
+#         if interactivemode_flag.lower()=='y':
+#             api_url,session_flag = interactive_mode.ask_questions_api(api_url)
+#             test_api_obj = API_Player(api_url, session_flag)
+#         else:def
+#             test_api_obj = API_Player(url=api_url, session_flag=True)
+#         yield test_api_obj
 
-    except Exception as e:
-        print("Exception when trying to run test:%s" % __file__)
-        print("Python says:%s" % str(e))
+#     except Exception as e:
+#         print("Exception when trying to run test:%s" % __file__)
+#         print("Python says:%s" % str(e))
 
 @pytest.fixture
 def testname(request):

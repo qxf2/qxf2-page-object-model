@@ -22,11 +22,11 @@ def test_moisturizer_page(test_obj):
         #Initalize flags for tests summary
         expected_pass = 0
         actual_pass = -1
-        # Create a test object for weathershopper
+        # Create a test object for moisturizer button
         test_obj = PageFactory.get_page_object("moisturizer main page")
         #Set start_time with current time
         start_time = int(time.time())
-        #get the temperature
+        #get the moisturizer button
         button= test_obj.get_moisturizer_button()
        
         test_obj.log_result(button,

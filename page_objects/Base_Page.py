@@ -525,6 +525,18 @@ class Base_Page(Borg,unittest.TestCase):
             return None
         else:
             return text.encode('utf-8')
+    
+    def get_special_text(self,locator):
+        "Return the text for a given path or the 'None' object if the element is not found"
+        text = ''
+        try:
+            text = self.get_element(locator).text
+        except Exception as e:
+            self.write(e)
+            self.exceptions.append("Error when getting text from the path-'%s' in the conf/locators.conf file"%locator)
+            return None
+        else:
+            return text
 
           
 

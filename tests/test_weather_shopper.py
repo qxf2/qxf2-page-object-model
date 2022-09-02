@@ -27,8 +27,23 @@ def test_weathershopper(test_obj):
         #Set start_time with current time
         start_time = int(time.time())
         #get the temperature
-        temp_text= test_obj.get_temperature_text()
+        temp_text = test_obj.get_temperature_text()
         print(temp_text)
+        if(temp_text)< 20 :
+            button= test_obj.get_moisturizer_button()
+            button=test_obj.get_add_button()
+            button=test_obj.get_cart_button()
+            time.sleep(2)
+            button=test_obj.get_pay_button()
+            time.sleep(2)
+        elif(temp_text)> 20:
+            button= test_obj.get_sunscreen_button() 
+            button=test_obj.get_add_button()
+            button=test_obj.get_cart_button()
+            time.sleep(2)
+            button=test_obj.get_pay_button() 
+            time.sleep(2)  
+
         test_obj.log_result(temp_text,
                             positive="passed\n" ,
                             negative="Failed\n")
@@ -54,7 +69,7 @@ if __name__=='__main__':
 
     #Run the test only if the options provided are valid
     if options_obj.check_options(options):
-        test_obj = PageFactory.get_page_object("Zero",base_url=options.url)
+        test_obj = PageFactory.get_page_object("weathershopper main page",base_url=options.url)
 
         #Setup and register a driver
         test_obj.register_driver(options.remote_flag,options.os_name,options.os_version,options.browser,options.browser_version,options.remote_project_name,options.remote_build_name)
