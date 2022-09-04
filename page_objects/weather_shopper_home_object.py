@@ -56,7 +56,7 @@ class Weather_Shopper_Home_Object:
     @Wrapit._screenshot
     def click_qxf2_link(self):
         "Click qxf2 sevices link"
-        click_link = self.click_element(self.qxf2_link)
-        return click_link
+        result_flag = self.click_element(self.qxf2_link)
+        return result_flag
 
     

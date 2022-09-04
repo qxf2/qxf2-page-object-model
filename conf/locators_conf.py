@@ -20,7 +20,7 @@ least_priced_product = "xpath,//p[contains(text(),'%s')]/following-sibling::butt
 moisturizers_button = "xpath,//button[contains(text(),'Buy moisturizers')]"
 payment_button = "xpath,//span[normalize-space()='Pay with Card']"
 price_of_all = "xpath,//p[contains(text(),'Price')]"
-qxf2_link = "xpath,//a[@href='https://qxf2.com/?utm_source=footer&utm_medium=click&utm_campaign=Weather%20shopper']"
+qxf2_link = "xpath,//a[contains(text(),'Qxf2')]"
 sunscreens_button = "xpath,//button[contains(text(),'Buy sunscreens')]"
 temperature_text = "xpath,//span[@id='temperature']"
 buy_button = "xpath,//button[contains(text(),'Buy %s')]"

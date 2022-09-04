@@ -26,21 +26,21 @@ def test_weather_shopper_home(test_obj):
         start_time = int(time.time())
 
         # Get the temperature text
-        get_text = test_obj.get_temperature_text()
-        test_obj.log_result(get_text,
+        temperature_text = test_obj.get_temperature_text()
+        test_obj.log_result(temperature_text,
                             positive="Able to get text\n",
                             negative="Not able to get text \n")
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
 
         # Click moisturizers or sunscreens based on temperature
-        if get_text <= 25:
+        if temperature_text <= 25:
             click_moisturizer = test_obj.click_moisturizers_button()
             test_obj.log_result(click_moisturizer,
                                 positive="Able to click\n",
                                 negative="Not able to click \n")
             test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
             
-        elif get_text > 25:
+        elif temperature_text > 25:
             click_sunscreen = test_obj.click_sunscreens_button()
             test_obj.log_result(click_sunscreen,
                                 positive="Able to click\n",

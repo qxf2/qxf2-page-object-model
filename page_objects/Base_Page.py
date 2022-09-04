@@ -470,7 +470,7 @@ class Base_Page(Borg,unittest.TestCase):
         return dom_elements
 
 
-    def click_element(self,locator,wait_time=5):
+    def click_element(self,locator,wait_time=3):
         "Click the button supplied"
         result_flag = False
         try:
