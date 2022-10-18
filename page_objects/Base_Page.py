@@ -374,13 +374,23 @@ class Base_Page(Borg,unittest.TestCase):
         return self.driver.window_handles
 
     def switch_frame(self,name=None,index=None,wait_time=2):
-        "switch to iframe"
+        "Make the driver switch to the frame"
+        result_flag = False
         self.wait(wait_time)
         self.driver.switch_to.default_content()
-        if name is not None:
-            self.driver.switch_to.frame(name)
-        elif index is not None:
-            self.driver.switch_to.frame(self.driver.find_elements_by_tag_name("iframe")[index])
+        try:
+            if name is not None:
+                self.driver.switch_to.frame(name)
+            elif index is not None:
+                self.driver.switch_to.frame(driver.find_elements(By.TAG_NAME,("iframe")[index]))
+            result_flag = True
+
+        except Exception as e:
+            self.write("Exception when trying to switch frame")
+            self.write(str(e))
+            self.exceptions.append("Error when switching to frame")
+
+        return result_flag
 
     def _get_locator(key):
         "fetches locator from the locator conf"
@@ -588,7 +598,7 @@ class Base_Page(Borg,unittest.TestCase):
         result_flag= False
         try:
             dropdown = self.get_element(locator)
-            for option in dropdown.find_elements_by_tag_name('option'):
+            for option in dropdown.find_elements(By.TAG_NAME,'option'):
                 if option.text == option_text:
                     option.click()
                     result_flag = True
