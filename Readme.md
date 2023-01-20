@@ -11,7 +11,7 @@
 --------
 A Pythonic Selenium, Appium and API test automation framework
 --------
-You can use this test automation framework to write:
+You can use this test automation framework to write
 
 1. __Selenium__ and Python automation scripts to test web applications
 
