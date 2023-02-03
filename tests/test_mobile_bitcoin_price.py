@@ -23,7 +23,7 @@ def test_mobile_bitcoin_price(test_mobile_obj):
         actual_pass = -1
 
         #1. Create a test object.
-        test_obj = PageFactory.get_page_object("bitcoin main page")
+        test_obj = PageFactory.get_page_object("bitcoin main page", base_url=test_obj.base_url)
 
         #2. Setup and register a driver
         start_time = int(time.time())
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 
     # Run  the test only if the options provided are valid.
     if options_obj.check_options(options):
-        test_mobile_obj = PageFactory.get_page_object("Zero mobile")
+        test_mobile_obj = PageFactory.get_page_object("Zero mobile", base_url=test_obj.base_url)
 
         #Setup and register a driver
         test_mobile_obj.register_driver(options.mobile_os_name,options.mobile_os_version,options.device_name,options.app_package,options.app_activity,options.remote_flag,options.device_flag,options.app_name,options.app_path,options.ud_id,options.org_id,options.signing_id,options.no_reset_flag,options.appium_version)

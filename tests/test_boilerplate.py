@@ -18,7 +18,7 @@ def test_boilerplate(test_obj):
         actual_pass = -1
 
         #This is the test object, you can change it to the desired page with relevance to the page factory
-        test_obj = PageFactory.get_page_object("main page")
+        test_obj = PageFactory.get_page_object("main page", base_url=test_obj.base_url)
 
         #Print out the result
         test_obj.write_test_summary()
@@ -41,7 +41,7 @@ if __name__=='__main__':
 
     #Run the test only if the options provided are valid
     if options_obj.check_options(options):
-        test_obj = PageFactory.get_page_object("Zero",base_url=options.url)
+        test_obj = PageFactory.get_page_object("Zero", base_url=test_obj.base_url)
 
         #Setup and register a driver
         test_obj.register_driver(options.remote_flag,options.os_name,options.os_version,options.browser,options.browser_version,options.remote_project_name,options.remote_build_name)
