@@ -23,7 +23,7 @@ def test_succesive_form_creation(test_obj):
         actual_pass = -1
 
         #1. Create a test object and fill the example form.
-        test_obj = PageFactory.get_page_object("Main Page")
+        test_obj = PageFactory.get_page_object("Main Page", base_url=test_obj.base_url)
 
         #Set start_time with current time
         start_time = int(time.time())
@@ -77,7 +77,7 @@ def test_succesive_form_creation(test_obj):
             test_obj.add_tesults_case("Check copyright "  + str(form_number), "Check the copyright", "test_successive_form_creation", result_flag, "Copyright looks wrong.\nObtained the copyright: %s\n"%test_obj.get_copyright(), [])
 
             #d. Visit main page again
-            test_obj = PageFactory.get_page_object("Main Page")
+            test_obj = PageFactory.get_page_object("Main Page", base_url=test_obj.base_url)
             form_number = form_number + 1
 
         #4.Print out the results
@@ -102,7 +102,7 @@ if __name__=='__main__':
 
     #Run the test only if the options provided are valid
     if options_obj.check_options(options):
-        test_obj = PageFactory.get_page_object("Zero",base_url=options.url)
+        test_obj = PageFactory.get_page_object("Zero", base_url=test_obj.base_url)
 
         #Setup and register a driver
         test_obj.register_driver(options.remote_flag,options.os_name,options.os_version,options.browser,options.browser_version,options.remote_project_name,options.remote_build_name)
