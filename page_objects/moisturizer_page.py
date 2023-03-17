@@ -10,15 +10,15 @@ import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 
 
-class Tutorial_Redirect_Page(Base_Page,Header_Object,Footer_Object):
-    "Page Object for the tutorial's redirect page"
+class Moisturizer_page(Base_Page,Header_Object,Footer_Object):
+    "Page Object for the Weather shopper's Moisturizer redirect page"
 
     #locators
     heading = locators.heading
 
     def start(self):
         "Use this method to go to specific URL -- if needed"
-        url = 'sunscreen'
+        url = 'moisturizer'
         self.open(url)
 
     @Wrapit._exceptionHandler

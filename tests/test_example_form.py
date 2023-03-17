@@ -114,7 +114,7 @@ def test_example_form(test_obj):
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
         test_obj.add_tesults_case("Check Heading", "Checks the heading on the redirect page", "test_example_form", result_flag,"Fail: Heading on the redirect page is incorrect!", [])
 
-         # Turn on the highlighting feature
+        # Turn on the highlighting feature
         test_obj.turn_on_highlight()
 
         #12. Visit the contact page and verify the link

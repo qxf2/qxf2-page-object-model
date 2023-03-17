@@ -58,3 +58,26 @@ contact_name_field = "id,name"
 bitcoin_real_time_price_button = "xpath,//android.widget.TextView[@resource-id='com.dudam.rohan.bitcoininfo:id/current_price']"
 bitcoin_price_page_heading = "xpath,//android.widget.TextView[@text='Real Time Price of Bitcoin']"
 bitcoin_price_in_usd = "xpath,//android.widget.TextView[@resource-id='com.dudam.rohan.bitcoininfo:id/doller_value']"
+
+#Locators for Weather Shopper main page
+temperature = "css selector,span#temperature"
+sunscreen = "xpath,//a[@href='/sunscreen']/button"
+moisturizer = "xpath,//a[@href='/moisturizer']/button"
+
+price_list = "xpath,//div[@class='container']//div//p[2]"
+add_button = "xpath,./following-sibling::button"
+cart_id = "xpath,//*[@id='cart']"
+
+card_pay = "xpath,//button[@type='submit']/span"
+ifram = "name,stripe_checkout_app"
+email_id = "id,email"
+card_id = "id,card_number"
+cc_exp = "id,cc-exp"
+cvc_id = "id,cc-csc"
+zip_id = "id,billing-zip"
+pay_button = "xpath,//*[@id='submitButton']/span/span"
+confirmation = "xpath,//div[1]/h2"
+# add_item = "xpath,//div/div/button"
+
+add_item = "xpath, //button[contains(text(),'Add')]"
+checkout_confirmation = "xpath, /html/body/div/div[1]/h2"

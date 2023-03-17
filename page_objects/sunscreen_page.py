@@ -10,7 +10,7 @@ import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 
 
-class Tutorial_Redirect_Page(Base_Page,Header_Object,Footer_Object):
+class Sunscreen_page(Base_Page,Header_Object,Footer_Object):
     "Page Object for the tutorial's redirect page"
 
     #locators

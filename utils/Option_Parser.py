@@ -85,9 +85,9 @@ class Option_Parser:
                             help="Enter Y or N. 'Y' if you want to report results with Tesults",
                             default="N")
         self.parser.add_option("--ud_id",
-                      dest="ud_id",
-                      help="Enter your iOS device UDID which is required to run appium test in iOS device",
-                      default=None)
+                        dest="ud_id",
+                        help="Enter your iOS device UDID which is required to run appium test in iOS device",
+                        default=None)
         self.parser.add_option("--org_id",
                         dest="org_id",
                         help="Enter your iOS Team ID which is required to run appium test in iOS device",

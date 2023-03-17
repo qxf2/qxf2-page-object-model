@@ -2,6 +2,8 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
+from selenium.webdriver.common.by import By
+
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -18,6 +20,8 @@ import conf.remote_credentials
 import conf.base_url_conf
 import conf.screenshot_conf
 from utils import Gif_Maker
+
+from page_objects import driverfactory
 
 class Borg:
     #The borg design pattern is to share state
@@ -376,13 +380,16 @@ class Base_Page(Borg,unittest.TestCase):
     def switch_frame(self,name=None,index=None,wait_time=2):
         "Make the driver switch to the frame"
         result_flag = False
+        print("******")
         self.wait(wait_time)
+        
         self.driver.switch_to.default_content()
         try:
+            print(name)
             if name is not None:
                 self.driver.switch_to.frame(name)
             elif index is not None:
-                self.driver.switch_to.frame(driver.find_elements(By.TAG_NAME,("iframe")[index]))
+                self.driver.switch_to.frame(driverfactory.find_elements(By.TAG_NAME,("iframe")[index]))
             result_flag = True
 
         except Exception as e:
@@ -495,6 +502,44 @@ class Base_Page(Borg,unittest.TestCase):
             self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
 
         return result_flag
+    
+
+
+    # def click_web_element(self,web_element,wait_time=3):
+    #     "Click the button supplied"
+    #     result_flag = False
+    #     try:
+    #         link = self.web_element
+    #         if link is not None:
+    #             link.click()
+    #             result_flag=True
+    #             self.wait(wait_time)
+    #     except Exception as e:
+    #         self.write(str(e),'debug')
+    #         self.write('Exception when clicking link with path: %s'%web_element)
+    #         self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
+
+    #     return result_flag
+
+#-----------------------adding particular web_element-------------------
+    # def add_to_cart(self,web_element,wait_time=1):
+    #     print(">>>>>><<<<<<")
+
+    #     result_flag = False
+    #     try:
+    #         dom_element = web_element.find_element(By.XPATH, "./following-sibling::button")
+    #         if dom_element is not None:
+    #             dom_element.click()
+    #             result_flag=True
+    #             self.wait(wait_time)
+            
+    #     except Exception as e:
+    #         self.write(str(e),'debug')
+    #         self.write('Exception when clicking link with path: %s'%dom_element)
+    #         self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
+
+    #     return result_flag
+#-----------------------adding particular web_element-------------------
 
 
     def set_text(self,locator,value,clear_flag=True):
@@ -739,7 +784,7 @@ class Base_Page(Borg,unittest.TestCase):
             WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
             result_flag =True
         except Exception:
-	        self.conditional_write(result_flag,
+            self.conditional_write(result_flag,
                     positive='Located the element: %s'%locator,
                     negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
 
@@ -844,5 +889,20 @@ class Base_Page(Borg,unittest.TestCase):
         "Overwrite this method in your Page module if you want to visit a specific URL"
         pass
 
+#--------------------------------------------------------------------------------------
+    def add_list(self, locator, data ):
+        result_flag = False
+        try:
+            dom_element = self.get_element(locator)
+            if dom_element is not None:
+                for num in data:
+                    dom_element.send_keys(num)
+                    result_flag=True
+        except Exception as e:
+            self.write(str(e),'debug')
+            self.write('Exception when sending the values with path: %s'%dom_element)
+            self.exceptions.append("Error when sending the values with path,'%s' in the conf/locators.conf file"%locator)
+
+        return result_flag
 
     _get_locator = staticmethod(_get_locator)
