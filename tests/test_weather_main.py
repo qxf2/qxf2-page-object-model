@@ -37,26 +37,23 @@ def test_weather_main(test_obj):
         email_address = conf.email_address
         cvc_nm = conf.cvc_nm
         zipcode = conf.zipcode
+
         
         temp = test_obj.get_temperature()
         print("++++++++++++++++++++++++++++++++++++++++++++++")
         print("Temperature is : ",temp)
         print("++++++++++++++++++++++++++++++++++++++++++++++")
 
-        res=test_obj.select_product(temp)
-        print("select product: ",res)
-    
+
+        test_obj.select_product(temp)
 
         test_obj.add_item_to_cart()
 
-        bb=test_obj.click_cart()
-        print("click cart:", bb)
+        test_obj.click_cart()
 
-        cc=test_obj.click_pay_with_card()
-        print("click pay card:",cc)
+        test_obj.click_pay_with_card()
 
-        dd=test_obj.switch_frame_to()
-        print("switch frame:",dd)
+        test_obj.switch_frame_to()
 
         result_flag = test_obj.email_info(email_address)
         test_obj.log_result(result_flag,

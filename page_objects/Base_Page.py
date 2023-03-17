@@ -502,44 +502,6 @@ class Base_Page(Borg,unittest.TestCase):
             self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
 
         return result_flag
-    
-
-
-    # def click_web_element(self,web_element,wait_time=3):
-    #     "Click the button supplied"
-    #     result_flag = False
-    #     try:
-    #         link = self.web_element
-    #         if link is not None:
-    #             link.click()
-    #             result_flag=True
-    #             self.wait(wait_time)
-    #     except Exception as e:
-    #         self.write(str(e),'debug')
-    #         self.write('Exception when clicking link with path: %s'%web_element)
-    #         self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
-
-    #     return result_flag
-
-#-----------------------adding particular web_element-------------------
-    # def add_to_cart(self,web_element,wait_time=1):
-    #     print(">>>>>><<<<<<")
-
-    #     result_flag = False
-    #     try:
-    #         dom_element = web_element.find_element(By.XPATH, "./following-sibling::button")
-    #         if dom_element is not None:
-    #             dom_element.click()
-    #             result_flag=True
-    #             self.wait(wait_time)
-            
-    #     except Exception as e:
-    #         self.write(str(e),'debug')
-    #         self.write('Exception when clicking link with path: %s'%dom_element)
-    #         self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
-
-    #     return result_flag
-#-----------------------adding particular web_element-------------------
 
 
     def set_text(self,locator,value,clear_flag=True):
@@ -889,7 +851,7 @@ class Base_Page(Borg,unittest.TestCase):
         "Overwrite this method in your Page module if you want to visit a specific URL"
         pass
 
-#--------------------------------------------------------------------------------------
+#-----------------------------------to add credit card number to the payment form---------------------------------------------------
     def add_list(self, locator, data ):
         result_flag = False
         try:

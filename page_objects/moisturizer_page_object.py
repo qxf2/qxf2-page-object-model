@@ -42,38 +42,3 @@ class Moisturizer_page_object:
         
         return result_flag
 
-
-#------------------------selecting Lowest priced item-------------------------------
-#     @Wrapit._exceptionHandler
-#     @Wrapit._screenshot
-#     def choose_low_priced_item(self):
-#     # Function to select the lowest priced item in the list
-#         price_lists = self.get_elements(self.price_list)
-#         lowest_price = float("inf")
-
-#         for price in price_lists:
-#             price_value = int(price.text.split()[-1])
-#             if price_value < lowest_price:
-#                 lowest_price = price_value
-#                 lowest_price_element = price
-
-#         print(lowest_price)
-#         return lowest_price_element
-    
-
-#     @Wrapit._exceptionHandler
-#     @Wrapit._screenshot
-#     def add_lowest_item(self, lowest_price_element):
-#         print("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
-
-#         result_flag = self.add_to_cart(lowest_price_element)
-
-
-#         self.conditional_write(result_flag,
-#             positive='Clicked on the "lowest ADD" button',
-#             negative='Failed to click on "ADD" button',
-#             level='debug')
-        
-#         return result_flag
-#------------------------selecting Lowest priced item-------------------------------
-

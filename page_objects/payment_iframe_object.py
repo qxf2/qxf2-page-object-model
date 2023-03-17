@@ -106,22 +106,3 @@ class Payment_ifram_objects:
             level='debug')
 
         return result_flag
-
-
-
-
-
-
-
-
-        # return result_flag
-    
-        #     card_num = self.driver.find_element(*card_id)
-        # num1 = card_number
-        # for nm in num1:
-        #     card_num.send_keys(nm)
-
-        # cc_expx = self.driver.find_element(*cc)
-
-        # for date in cc_date:
-        #     cc_expx.send_keys(date)
