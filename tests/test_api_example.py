@@ -43,7 +43,6 @@ def test_api_example(test_api_obj):
                                 negative='Could not add new car with details %s' % car_details)
 
 
-
         # Get Cars and verify if new car is added
         result_flag = test_api_obj.get_cars(auth_details)
 
