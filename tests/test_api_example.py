@@ -155,4 +155,4 @@ def test_api_example(test_api_obj):
 
 
 if __name__ == '__main__':
-    test_api_example(test_api_obj)
+    test_api_example()
