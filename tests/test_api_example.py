@@ -152,3 +152,7 @@ def test_api_example(test_api_obj):
 
     # Assertion
     assert expected_pass == actual_pass,"Test failed: %s"%__file__
+
+
+if __name__ == '__main__':
+    test_api_example(test_api_obj)
