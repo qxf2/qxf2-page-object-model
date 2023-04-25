@@ -156,13 +156,13 @@ a)py.test [options]
 
 
 
-b)python tests/test_example_form.py (can also be used to run standalone test)
+b)python -m pytest tests/test_example_form.py (can also be used to run standalone test)
 
-c)python tests/test_example_form.py --browser Chrome (to run against chrome)
+c)python -m pytest tests/test_example_form.py --browser Chrome (to run against chrome)
 
-d)python tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
+d)python -m pytest tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
 
-e)python tests/test_mobile_bitcoin_price --mobile_os_version (android version) --device_name (simulator) --app_path (.apk location on local) --remote_flag Y (to run Mobile test case on Broswestack)remote_credentials.py
+e)python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version (android version) --device_name (simulator) --app_path (.apk location on local) --remote_flag Y (to run Mobile test case on Broswestack)remote_credentials.py
 NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to remote_credentials.py under conf.
 
 --------
