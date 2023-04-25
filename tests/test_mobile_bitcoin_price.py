@@ -9,7 +9,6 @@ Automated test will do the following:
 import os, sys, time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
-from utils.Option_Parser import Option_Parser
 import conf.mobile_bitcoin_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 import pytest
@@ -64,41 +63,3 @@ def test_mobile_bitcoin_price(test_mobile_obj):
         print("Python says:%s" % str(e))
 
     assert expected_pass == actual_pass,"Test failed: %s"%__file__
-
-
-# ---START OF SCRIPT
-
-if __name__ == '__main__':
-    print("Start of %s" % __file__)
-    # Creating an instance of the class.
-    options_obj = Option_Parser()
-    options = options_obj.get_options()
-
-    # Run  the test only if the options provided are valid.
-    if options_obj.check_options(options):
-        test_mobile_obj = PageFactory.get_page_object("Zero mobile")
-
-        #Setup and register a driver
-        test_mobile_obj.register_driver(options.mobile_os_name,options.mobile_os_version,options.device_name,options.app_package,options.app_activity,options.remote_flag,options.device_flag,options.app_name,options.app_path,options.ud_id,options.org_id,options.signing_id,options.no_reset_flag,options.appium_version)
-
-        #Setup TestRail reporting
-        if options.testrail_flag.lower()=='y':
-            if options.test_run_id is None:
-                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
-                options.testrail_flag = 'N'
-            if options.test_run_id is not None:
-                test_mobile_obj.register_testrail()
-                test_mobile_obj.set_test_run_id(options.test_run_id)
-
-        if options.tesults_flag.lower()=='y':
-            test_mobile_obj.register_tesults()
-
-        test_mobile_bitcoin_price(test_mobile_obj)
-
-        #teardowm
-        test_mobile_obj.wait(3)
-        test_mobile_obj.teardown()
-
-    else:
-        print('ERROR: Received incorrect comand line input arguments')
-        print(options_obj.print_usage())
