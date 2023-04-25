@@ -9,7 +9,6 @@ Automated test will do the following:
 import os, sys, time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
-from utils.Option_Parser import Option_Parser
 import conf.mobile_bitcoin_conf as conf
 import conf.testrail_caseid_conf as testrail_file
 import pytest
