@@ -30,28 +30,3 @@ def test_boilerplate(test_obj):
         print("Python says:%s"%str(e))
 
     assert expected_pass == actual_pass, "Test failed: %s"%__file__
-
-
-#---START OF SCRIPT
-if __name__=='__main__':
-    print("Start of %s"%__file__)
-    #Creating an instance of the class
-    options_obj = Option_Parser()
-    options = options_obj.get_options()
-
-    #Run the test only if the options provided are valid
-    if options_obj.check_options(options):
-        test_obj = PageFactory.get_page_object("Zero", base_url=test_obj.base_url)
-
-        #Setup and register a driver
-        test_obj.register_driver(options.remote_flag,options.os_name,options.os_version,options.browser,options.browser_version,options.remote_project_name,options.remote_build_name)
-
-
-        test_boilerplate(test_obj)
-
-        #teardowm
-        test_obj.wait(3)
-        test_obj.teardown()
-    else:
-        print('ERROR: Received incorrect comand line input arguments')
-        print(option_obj.print_usage())
