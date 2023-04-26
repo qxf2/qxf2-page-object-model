@@ -15,7 +15,7 @@ class Base_Logging():
         self.log_file_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
         self.level=level
         self.format=format
-        self.log = self.set_log(self.log_file_name,self.level,self.format)
+        self.set_log(self.log_file_name,self.level,self.format)
         self.rp_logger = None
 
 
