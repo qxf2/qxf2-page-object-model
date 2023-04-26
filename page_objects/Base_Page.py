@@ -458,7 +458,7 @@ class Base_Page(Borg,unittest.TestCase):
         except Exception as e:
             self.write(str(e),'debug')
             self.write("Error while parsing locator")
-            self.exceptions.append("Unable to split the locator-'%s' in the conf/locators.conf file"%(locator[0],locator[1]))
+            self.exceptions.append("Unable to split the locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
 
         return result
 
