@@ -12,7 +12,7 @@ class String_To_Int():
             int_var = int(str_var)
         except Exception as e:
             print("Error type casting var to int")
-            print("Obtained the %s"%int_var)
+            print("Obtained the %s"%str_var)
             print("Python says: " + str(e))
             return str_var
         return int_var
