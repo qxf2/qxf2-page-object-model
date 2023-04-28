@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     unzip \
     wget \
-    xvfb
+    xvfb \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Chrome browser to run the tests
 ARG CHROME_VERSION=latest
@@ -63,4 +65,6 @@ RUN apt-get update
 RUN apt-get install -y \
     python3 \
     python3-setuptools \
-    python3-pip
+    python3-pip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
