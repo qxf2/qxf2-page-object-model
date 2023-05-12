@@ -25,16 +25,16 @@ RUN dpkg-divert --add --rename --divert /opt/google/chrome/google-chrome.real /o
 
 # Chrome Driver
 ARG CHROME_DRIVER_VERSION=113.0.5672.63
-RUN CD_VERSION="$(if [ "${CHROME_DRIVER_VERSION:-latest}" = "latest" ]; then echo $(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE); else echo "${CHROME_DRIVER_VERSION}"; fi)" \
+RUN CD_VERSION="$(if [ "${CHROME_DRIVER_VERSION:-latest}" = "latest" ]; then echo "$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE)"; else echo "${CHROME_DRIVER_VERSION}"; fi)" \
   && wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CD_VERSION/chromedriver_linux64.zip \
   && rm -rf /opt/selenium/chromedriver \
   && unzip /tmp/chromedriver_linux64.zip -d /opt/selenium \
   && rm /tmp/chromedriver_linux64.zip \
-  && mv /opt/selenium/chromedriver /opt/selenium/chromedriver-$CD_VERSION \
-  && chmod 755 /opt/selenium/chromedriver-$CD_VERSION \
-  && ln -fs /opt/selenium/chromedriver-$CD_VERSION /usr/bin/chromedriver
+  && mv /opt/selenium/chromedriver /opt/selenium/chromedriver-"$CD_VERSION" \
+  && chmod 755 /opt/selenium/chromedriver-"$CD_VERSION" \
+  && ln -fs /opt/selenium/chromedriver-"$CD_VERSION" /usr/bin/chromedriver
 
-RUN if [ ${CHROME_DRIVER_VERSION} != "113.0.5672.63" ]; then \
+RUN if [ "${CHROME_DRIVER_VERSION}" != "113.0.5672.63" ]; then \
   mkdir -p /opt/selenium && \
   wget -qO /opt/selenium/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && \
   unzip /opt/selenium/chromedriver_linux64.zip -d /opt/selenium && \
@@ -44,32 +44,32 @@ RUN if [ ${CHROME_DRIVER_VERSION} != "113.0.5672.63" ]; then \
 
 #Firefox browser to run the tests
 ARG FIREFOX_VERSION=109.0
-RUN FIREFOX_DOWNLOAD_URL="$(if [ "$FIREFOX_VERSION" = "latest" ]; then echo "https://download.mozilla.org/?product=firefox-$FIREFOX_VERSION-ssl&os=linux64&lang=en-US"; else echo "https://download-installer.cdn.mozilla.net/pub/firefox/releases/$FIREFOX_VERSION/linux-x86_64/en-US/firefox-$FIREFOX_VERSION.tar.bz2"; fi)" \
+RUN FIREFOX_DOWNLOAD_URL="$(if [ "$FIREFOX_VERSION" = "latest" ]; then echo "https://download.mozilla.org/?product=firefox-"$FIREFOX_VERSION"-ssl&os=linux64&lang=en-US"; else echo "https://download-installer.cdn.mozilla.net/pub/firefox/releases/"$FIREFOX_VERSION"/linux-x86_64/en-US/firefox-"$FIREFOX_VERSION".tar.bz2"; fi)" \
   && apt-get update -qqy \
   && apt-get -qqy --no-install-recommends install firefox \
   && apt-get install libdbus-glib-1-2 \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
-  && wget --no-verbose -O /tmp/firefox.tar.bz2 $FIREFOX_DOWNLOAD_URL \
+  && wget --no-verbose -O /tmp/firefox.tar.bz2 "$FIREFOX_DOWNLOAD_URL" \
   && apt-get -y purge firefox \
   && rm -rf /opt/firefox \
   && tar -C /opt -xjf /tmp/firefox.tar.bz2 \
   && rm /tmp/firefox.tar.bz2 \
   && mv /opt/firefox /opt/firefox-$FIREFOX_VERSION \
-  && ln -fs /opt/firefox-$FIREFOX_VERSION/firefox /usr/bin/firefox \
+  && ln -fs /opt/firefox-"$FIREFOX_VERSION"/firefox /usr/bin/firefox \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
 #Geckodriver
 ARG GECKODRIVER_VERSION=0.32.2
-RUN GK_VERSION="$(if [ "${GECKODRIVER_VERSION:-latest}" = "latest" ]; then echo $(wget -qO- "https://api.github.com/repos/mozilla/geckodriver/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([0-9.]+)".*/\1/'); else echo "$GECKODRIVER_VERSION"; fi)" \
-  && echo "Using GeckoDriver version: "$GK_VERSION \
+RUN GK_VERSION="$(if [ "${GECKODRIVER_VERSION:-latest}" = "latest" ]; then echo "$(wget -qO- 'https://api.github.com/repos/mozilla/geckodriver/releases/latest' | grep '\"tag_name\":' | sed -E 's/.*\"v([0-9.]+)\".*/\1/')"; else echo "$GECKODRIVER_VERSION"; fi)" \
+  && echo "Using GeckoDriver version: ""$GK_VERSION" \
   && wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v$GK_VERSION/geckodriver-v$GK_VERSION-linux64.tar.gz \
   && rm -rf /opt/geckodriver \
   && tar -C /opt -zxf /tmp/geckodriver.tar.gz \
   && rm /tmp/geckodriver.tar.gz \
-  && mv /opt/geckodriver /opt/geckodriver-$GK_VERSION \
-  && chmod 755 /opt/geckodriver-$GK_VERSION \
-  && ln -fs /opt/geckodriver-$GK_VERSION /usr/bin/geckodriver
+  && mv /opt/geckodriver /opt/geckodriver-"$GK_VERSION" \
+  && chmod 755 /opt/geckodriver-"$GK_VERSION" \
+  && ln -fs /opt/geckodriver-"$GK_VERSION" /usr/bin/geckodriver
 
 # Python 3.5 and Python Pip
 RUN apt-get update
