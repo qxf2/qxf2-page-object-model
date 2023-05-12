@@ -80,10 +80,17 @@ RUN apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Creating a new directory
 RUN mkdir /shell_script
+
+# Copying shell script to directory
 COPY entrypoint.sh /shell_script
+
+# Setting the working directory
 WORKDIR /shell_script
 
+# Setting the entry point
 ENTRYPOINT ["/bin/bash", "/shell_script/entrypoint.sh"]
 
+# Setting the default command to be run in the container
 CMD ["sh", "-c", "Xvfb :20 -screen 0 1366x768x16 & x11vnc -passwd password -display :20 -N -forever"]
