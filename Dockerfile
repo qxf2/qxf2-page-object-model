@@ -25,7 +25,7 @@ RUN dpkg-divert --add --rename --divert /opt/google/chrome/google-chrome.real /o
 
 # Chrome Driver
 ARG CHROME_DRIVER_VERSION=113.0.5672.63
-RUN CD_VERSION="$(if [ "${CHROME_DRIVER_VERSION:-latest}" = "latest" ]; then echo "$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE)"; else echo "${CHROME_DRIVER_VERSION}"; fi)" \
+RUN CD_VERSION="$(if [ "${CHROME_DRIVER_VERSION:-latest}" = "latest" ]; then echo "$(wget -qO- 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE')"; else echo "${CHROME_DRIVER_VERSION}"; fi)" \
   && wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/$CD_VERSION/chromedriver_linux64.zip \
   && rm -rf /opt/selenium/chromedriver \
   && unzip /tmp/chromedriver_linux64.zip -d /opt/selenium \
