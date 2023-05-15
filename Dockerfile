@@ -75,8 +75,8 @@ RUN GK_VERSION="$(if [ "${GECKODRIVER_VERSION:-latest}" = "latest" ]; then echo 
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
     python3.10 \
-    python3-setuptools \
-    python3-pip \
+    python3-setuptools=59.6.0-1.2ubuntu0.22.04.1 \
+    python3-pip=22.0.2+dfsg-1ubuntu0.2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
