@@ -74,7 +74,7 @@ RUN GK_VERSION="$(if [ "${GECKODRIVER_VERSION:-latest}" = "latest" ]; then echo 
 # Python 3.5 and Python Pip
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
-    python3 \
+    python3.10 \
     python3-setuptools \
     python3-pip \
     && apt-get clean \
