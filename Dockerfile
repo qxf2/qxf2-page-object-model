@@ -8,12 +8,12 @@ ENV DISPLAY=:20
 # Essential tools and xvfb
 RUN apt-get update && apt-get install -y \
     software-properties-common \
-    unzip \
-    wget \
-    bzip2 \
+    unzip=6.00 \
+    wget=1.21.2 \
+    bzip2=1.0.8 \
     xvfb \
-    x11vnc \
-    fluxbox \
+    x11vnc=0.9.16 \
+    fluxbox=1.3.5 \
     xterm
 
 # Chrome browser to run the tests
