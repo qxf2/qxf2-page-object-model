@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
     xvfb \
     x11vnc \
     fluxbox \
-    xterm
+    xterm 
 
 # Chrome browser to run the tests
 ARG CHROME_VERSION=113.0.5672.92
