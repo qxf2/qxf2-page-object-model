@@ -8,12 +8,12 @@ ENV DISPLAY=:20
 # Essential tools and xvfb
 RUN apt-get update && apt-get install -y \
     software-properties-common \
-    unzip=6.00 \
-    wget=1.21.2 \
-    bzip2=1.0.8 \
+    unzip \
+    wget \
+    bzip2 \
     xvfb \
-    x11vnc=0.9.16 \
-    fluxbox=1.3.5 \
+    x11vnc \
+    fluxbox \
     xterm
 
 # Chrome browser to run the tests
@@ -45,18 +45,18 @@ RUN if [ "${CHROME_DRIVER_VERSION}" != "113.0.5672.63" ]; then \
 #Firefox browser to run the tests
 ARG FIREFOX_VERSION=109.0
 RUN FIREFOX_DOWNLOAD_URL="$(if [ "$FIREFOX_VERSION" = "latest" ]; then echo "https://download.mozilla.org/?product=firefox-"$FIREFOX_VERSION"-ssl&os=linux64&lang=en-US"; else echo "https://download-installer.cdn.mozilla.net/pub/firefox/releases/"$FIREFOX_VERSION"/linux-x86_64/en-US/firefox-"$FIREFOX_VERSION".tar.bz2"; fi)" \
-  && apt-get update -qqy \
+  apt-get -qqy update \
   && apt-get -qqy --no-install-recommends install firefox \
-  && apt-get install libdbus-glib-1-2 \
+  && apt-get -y install libdbus-glib-1-2 \
   && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
   && wget --no-verbose -O /tmp/firefox.tar.bz2 "$FIREFOX_DOWNLOAD_URL" \
   && apt-get -y purge firefox \
   && rm -rf /opt/firefox \
   && tar -C /opt -xjf /tmp/firefox.tar.bz2 \
   && rm /tmp/firefox.tar.bz2 \
-  && mv /opt/firefox /opt/firefox-$FIREFOX_VERSION \
+  && mv /opt/firefox /opt/firefox-"$FIREFOX_VERSION" \
   && ln -fs /opt/firefox-"$FIREFOX_VERSION"/firefox /usr/bin/firefox \
-  && apt-get clean \
+  && apt-get -y clean \
   && rm -rf /var/lib/apt/lists/*
 
 #Geckodriver
