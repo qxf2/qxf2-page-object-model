@@ -72,8 +72,11 @@ RUN GK_VERSION="$(if [ "${GECKODRIVER_VERSION:-latest}" = "latest" ]; then echo 
   && chmod 755 /opt/geckodriver-"$GK_VERSION" \
   && ln -fs /opt/geckodriver-"$GK_VERSION" /usr/bin/geckodriver
 
-# Python 3.10 and Python Pip
-RUN apt-get update && apt-get install -y python3.10 python3-setuptools python3-pip \
+# Python 3.5 and Python Pip
+RUN apt-get update && apt-get install -y \
+    python3.10 \
+    python3-setuptools=59.6.0-1.2ubuntu0.22.04.1 \
+    python3-pip=22.0.2+dfsg-1ubuntu0.2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
