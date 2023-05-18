@@ -64,7 +64,7 @@ RUN FIREFOX_DOWNLOAD_URL="$(if [ "$FIREFOX_VERSION" = "latest" ]; then echo "htt
 ARG GECKODRIVER_VERSION=0.32.2
 RUN GK_VERSION="$(if [ "${GECKODRIVER_VERSION:-latest}" = "latest" ]; then echo "$(wget -qO- 'https://api.github.com/repos/mozilla/geckodriver/releases/latest' | grep '\"tag_name\":' | sed -E 's/.*\"v([0-9.]+)\".*/\1/')"; else echo "$GECKODRIVER_VERSION"; fi)" \
   && echo "Using GeckoDriver version: ""$GK_VERSION" \
-  && wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v$GK_VERSION/geckodriver-v$GK_VERSION-linux64.tar.gz \
+  && wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v"$GK_VERSION"/geckodriver-v"$GK_VERSION"-linux64.tar.gz \
   && rm -rf /opt/geckodriver \
   && tar -C /opt -zxf /tmp/geckodriver.tar.gz \
   && rm /tmp/geckodriver.tar.gz \
@@ -72,12 +72,8 @@ RUN GK_VERSION="$(if [ "${GECKODRIVER_VERSION:-latest}" = "latest" ]; then echo 
   && chmod 755 /opt/geckodriver-"$GK_VERSION" \
   && ln -fs /opt/geckodriver-"$GK_VERSION" /usr/bin/geckodriver
 
-# Python 3.5 and Python Pip
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends \
-    python3.10 \
-    python3-setuptools=59.6.0-1.2ubuntu0.22.04.1 \
-    python3-pip=22.0.2+dfsg-1ubuntu0.2 \
+# Python 3.10 and Python Pip
+RUN apt-get update && apt-get install -y python3.10 python3-setuptools python3-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
