@@ -7,6 +7,7 @@
 ![GitHub forks](https://img.shields.io/github/forks/qxf2/qxf2-page-object-model)
 ![GitHub repo size](https://img.shields.io/github/repo-size/qxf2/qxf2-page-object-model)
 ![GitHub last commit](https://img.shields.io/github/last-commit/qxf2/qxf2-page-object-model)
+![Codacy Badge](https://app.codacy.com/gh/qxf2/qxf2-page-object-model/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 --------
 A Pythonic Selenium, Appium and API test automation framework
