@@ -1,3 +1,4 @@
+import os
 #Details needed for the Gmail
 #Fill out the email details over here
 imaphost="imap.gmail.com"  #Add imap hostname of your email client
@@ -8,7 +9,7 @@ username="Add your email address or username here"
 # 2. Follow the 2 factor authentication setup wizard to enable an app password
 #Src: https://support.google.com/accounts/answer/185839?hl=en
 #Src: https://support.google.com/mail/answer/185833?hl=en
-app_password="Add app password here"
+app_password = os.environ.get('APP_PASSWORD')
 
 #Details for sending pytest report
 smtp_ssl_host = 'smtp.gmail.com'  # Add smtp ssl host of your email client
