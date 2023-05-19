@@ -3,6 +3,7 @@ This config file would have the credentials of remote server,
 the commands to execute, upload and download file path details.
 """
 #Server credential details needed for ssh
+import os
 HOST = 'Enter your host details here'
 USERNAME = 'Enter your username here'
 PASSWORD = os.environ.get('PASSWORD')
