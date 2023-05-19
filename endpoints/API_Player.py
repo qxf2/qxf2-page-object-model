@@ -10,7 +10,6 @@ from utils.results import Results
 import urllib.parse
 import logging
 from conf import api_example_conf as conf
-from utils import interactive_mode
 
 
 class API_Player(Results):
