@@ -11,9 +11,6 @@ import urllib.parse
 import logging
 from conf import api_example_conf as conf
 from utils import interactive_mode
-import pytest
-from _pytest import python
-from _pytest import config
 
 
 class API_Player(Results):

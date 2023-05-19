@@ -4,7 +4,6 @@ This script would copy the required framework files from the input source to the
 2. Verify if the destination directory is created and create the sub-folder to copy files from POM\Conf.
 3. Verify if the destination directory is created and create the sub-folder to copy files from POM\Page_Objects.
 4. Verify if the destination directory is created and create the sub-folder to copy files from POM\Utils.
-
 """
 import os,sys
 import shutil
