@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     xterm 
 
 # Chrome browser to run the tests
-ARG CHROME_VERSION=113.0.5672.92
+ARG CHROME_VERSION=113.0.5672.126
 RUN wget -qO /tmp/google.pub https://dl-ssl.google.com/linux/linux_signing_key.pub && apt-key add /tmp/google.pub && rm /tmp/google.pub && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/google.list && mkdir -p /usr/share/desktop-directories && apt-get -y update && apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Disable the SUID sandbox so that chrome can launch without being in a privileged container
