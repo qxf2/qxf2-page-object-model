@@ -17,14 +17,14 @@ RUN apt-get update && apt-get install -y \
     xterm 
 
 # Chrome browser to run the tests
-ARG CHROME_VERSION=113.0.5672.126
+ARG CHROME_VERSION=114.0.5735.106
 RUN wget -qO /tmp/google.pub https://dl-ssl.google.com/linux/linux_signing_key.pub && apt-key add /tmp/google.pub && rm /tmp/google.pub && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/google.list && mkdir -p /usr/share/desktop-directories && apt-get -y update && apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Disable the SUID sandbox so that chrome can launch without being in a privileged container
 RUN dpkg-divert --add --rename --divert /opt/google/chrome/google-chrome.real /opt/google/chrome/google-chrome && printf "#!/bin/bash\nexec /opt/google/chrome/google-chrome.real --no-sandbox --disable-setuid-sandbox \"\$@\"" > /opt/google/chrome/google-chrome && chmod 755 /opt/google/chrome/google-chrome
 
 # Chrome Driver
-ARG CHROME_DRIVER_VERSION=113.0.5672.63
+ARG CHROME_DRIVER_VERSION=114.0.5735.90
 RUN CD_VERSION="$(if [ "${CHROME_DRIVER_VERSION:-latest}" = "latest" ]; then echo "$(wget -qO- 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE')"; else echo "${CHROME_DRIVER_VERSION}"; fi)" \
   && wget --no-verbose -O /tmp/chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/"$CD_VERSION"/chromedriver_linux64.zip \
   && rm -rf /opt/selenium/chromedriver \
@@ -34,7 +34,7 @@ RUN CD_VERSION="$(if [ "${CHROME_DRIVER_VERSION:-latest}" = "latest" ]; then ech
   && chmod 755 /opt/selenium/chromedriver-"$CD_VERSION" \
   && ln -fs /opt/selenium/chromedriver-"$CD_VERSION" /usr/bin/chromedriver
 
-RUN if [ "${CHROME_DRIVER_VERSION}" != "113.0.5672.63" ]; then \
+RUN if [ "${CHROME_DRIVER_VERSION}" != "114.0.5735.90" ]; then \
   mkdir -p /opt/selenium && \
   wget -qO /opt/selenium/chromedriver_linux64.zip http://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip && \
   unzip /opt/selenium/chromedriver_linux64.zip -d /opt/selenium && \
