@@ -5,8 +5,8 @@ the commands to execute, upload and download file path details.
 #Server credential details needed for ssh
 import os
 HOST = 'Enter your host details here'
-USERNAME = os.environ['USERNAME']
-PASSWORD = os.environ['PASSWORD']
+USERNAME = os.environ.get('USERNAME')
+PASSWORD = os.environ.get('PASSWORD')
 PORT = 22
 TIMEOUT = 10
 
