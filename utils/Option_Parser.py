@@ -110,7 +110,7 @@ class Option_Parser:
         self.parser.add_option("--remote_build_name",
                             dest="remote_build_name",
                             help="The build name if its run in BrowserStack",
-                            default=None)        
+                            default=None)
         self.parser.add_option("--appium_version",
                             dest="appium_version",
                             help="The appium version if its run in Browserstack",

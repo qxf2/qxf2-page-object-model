@@ -10,7 +10,6 @@ from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
 from utils import Tesults
 from utils import interactive_mode
-import argparse
 
 @pytest.fixture
 def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,reportportal_service,interactivemode_flag):

@@ -2,7 +2,6 @@
 A wrapper around Requests to make Restful API calls
 """
 
-import requests
 from urllib.error import HTTPError
 from urllib.error import URLError
 

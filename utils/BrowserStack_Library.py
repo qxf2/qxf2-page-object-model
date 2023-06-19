@@ -9,7 +9,7 @@ To do:
 a) Handle expired sessions better
 """
 
-import os,requests
+import requests
 from conf import remote_credentials as remote_credentials
 
 
