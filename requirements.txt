@@ -1,4 +1,4 @@
-requests==2.25.1
+requests==2.31.0
 reportportal-client==5.0.10
 pytest==6.2.4 ; python_version =='3.6'
 pytest>6.2.4 ; python_version >='3.7'
