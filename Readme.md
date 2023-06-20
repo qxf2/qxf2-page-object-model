@@ -1,6 +1,6 @@
 ![Python version](https://img.shields.io/badge/python-3.x-green?color=brightgreen)
 ![GitHub](https://img.shields.io/github/license/qxf2/qxf2-page-object-model?color=brightgreen)
-![Maintenance](https://img.shields.io/maintenance/yes/2022?color=brightgreen)
+![Maintenance](https://img.shields.io/maintenance/yes/2023?color=brightgreen)
 [![CircleCI](https://circleci.com/gh/qxf2/qxf2-page-object-model.svg?style=shield)](https://circleci.com/gh/qxf2/qxf2-page-object-model)
 [![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=SkkxWjdGa2orUFg0b0k2Z1AvRUpESDdiTDQ3a0V2azhWVzQrdm5YZ1Foaz0tLXl0ZkVlSmkrd0o5MW9BVzQveEcwblE9PQ==--9ce01d4a2cf49d02f22536fce91a82654856f585)](https://www.browserstack.com/automate/public-build/SkkxWjdGa2orUFg0b0k2Z1AvRUpESDdiTDQ3a0V2azhWVzQrdm5YZ1Foaz0tLXl0ZkVlSmkrd0o5MW9BVzQveEcwblE9PQ==--9ce01d4a2cf49d02f22536fce91a82654856f585)
 ![GitHub stars](https://img.shields.io/github/stars/qxf2/qxf2-page-object-model)
