@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y \
     xterm 
 
 # Chrome browser to run the tests
-ARG CHROME_VERSION=114.0.5735.106
+ARG CHROME_VERSION=114.0.5735.198
 RUN wget -qO /tmp/google.pub https://dl-ssl.google.com/linux/linux_signing_key.pub && apt-key add /tmp/google.pub && rm /tmp/google.pub && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' > /etc/apt/sources.list.d/google.list && mkdir -p /usr/share/desktop-directories && apt-get -y update && apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Disable the SUID sandbox so that chrome can launch without being in a privileged container
@@ -76,7 +76,7 @@ RUN GK_VERSION="$(if [ "${GECKODRIVER_VERSION:-latest}" = "latest" ]; then echo 
 RUN apt-get update && apt-get install -y \
     python3.10 \
     python3-setuptools=59.6.0-1.2ubuntu0.22.04.1 \
-    python3-pip=22.0.2+dfsg-1ubuntu0.2 \
+    python3-pip=22.0.2+dfsg-1ubuntu0.3 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
