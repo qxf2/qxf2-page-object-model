@@ -14,8 +14,7 @@ RUN apt-get update && apt-get install -y \
     xvfb \
     x11vnc \
     fluxbox \
-    xterm \
-    curl
+    xterm 
 
 # Chrome browser to run the tests
 # Install Google Chrome and dependencies
@@ -35,7 +34,7 @@ RUN dpkg-divert --add --rename --divert /opt/google/chrome/google-chrome.real /o
   && chmod 755 /opt/google/chrome/google-chrome
 
 # Install Chrome Driver (latest version)
-RUN CHROME_DRIVER_VERSION=$(curl -sS 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE') \
+RUN CHROME_DRIVER_VERSION=$(wget -qO- 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE') \
   && wget --no-verbose -O /tmp/chromedriver_linux64.zip "https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip" \
   && rm -rf /opt/selenium/chromedriver \
   && unzip /tmp/chromedriver_linux64.zip -d /opt/selenium \
