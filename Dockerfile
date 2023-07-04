@@ -1,7 +1,6 @@
-#Dockerfile to build an image for running Selenium tests
-#Pull ubuntu 22.04 base image
+# Pull ubuntu 22.04 base image
 FROM ubuntu:22.04
-LABEL maintainer = "Qxf2 Services"
+LABEL maintainer="Qxf2 Services"
 
 ENV DISPLAY=:20
 
@@ -16,7 +15,6 @@ RUN apt-get update && apt-get install -y \
     fluxbox \
     xterm 
 
-# Chrome browser to run the tests
 # Install Google Chrome and dependencies
 RUN wget -qO /tmp/google.pub https://dl-ssl.google.com/linux/linux_signing_key.pub \
   && apt-key add /tmp/google.pub \
@@ -59,18 +57,12 @@ RUN FIREFOX_DOWNLOAD_URL="$(if [ "$FIREFOX_VERSION" = "latest" ]; then echo "htt
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Geckodriver
-ARG GECKODRIVER_VERSION=latest
-RUN GK_VERSION="$(if [ "${GECKODRIVER_VERSION:-latest}" = "latest" ]; then echo "$(wget -qO- 'https://api.github.com/repos/mozilla/geckodriver/releases/latest' | grep '\"tag_name\":' | sed -E 's/.*\"v([0-9.]+)\".*/\1/')"; else echo "$GECKODRIVER_VERSION"; fi)" \
-  && echo "Using GeckoDriver version: $GK_VERSION" \
-  && wget --no-verbose -O /tmp/geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v"$GK_VERSION"/geckodriver-v"$GK_VERSION"-linux64.tar.gz \
-  && rm -rf /opt/geckodriver \
-  && tar -C /opt -zxf /tmp/geckodriver.tar.gz \
-  && rm /tmp/geckodriver.tar.gz \
-  && mv /opt/geckodriver /opt/geckodriver-"$GK_VERSION" \
-  && chmod 755 /opt/geckodriver-"$GK_VERSION" \
-  && ln -fs /opt/geckodriver-"$GK_VERSION" /usr/bin/geckodriver
-
+# Download and install the latest Geckodriver binary
+RUN GECKODRIVER_VERSION=$(wget -qO- 'https://api.github.com/repos/mozilla/geckodriver/releases/latest' | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/') \
+  && wget --no-verbose -O /tmp/geckodriver.tar.gz "https://github.com/mozilla/geckodriver/releases/download/v${GECKODRIVER_VERSION}/geckodriver-v${GECKODRIVER_VERSION}-linux64.tar.gz" \
+  && tar -xzf /tmp/geckodriver.tar.gz -C /tmp \
+  && mv /tmp/geckodriver /usr/bin/geckodriver \
+  && rm /tmp/geckodriver.tar.gz
 
 # Python 3.5 and Python Pip
 RUN apt-get update && apt-get install -y \
