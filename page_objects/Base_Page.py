@@ -171,9 +171,10 @@ class Base_Page(Borg,unittest.TestCase):
             if not os.path.exists(self.logs_parent_dir):
                 os.makedirs(self.logs_parent_dir)
         except Exception as e:
-            self.write("Exception when trying to set directory structure")
-            self.write(str(e))
-            self.exceptions.append("Error when setting up the directory structure")
+            # self.write("Exception when trying to set directory structure")
+            # self.write(str(e))
+            # self.exceptions.append("Error when setting up the directory structure")
+            print("Exception when trying to set screenshot directory due to error:",str(e))
 
 
     def set_screenshot_dir(self,os_name,os_version,browser,browser_version):
