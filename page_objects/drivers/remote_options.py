@@ -127,7 +127,7 @@ class RemoteOptions():
             #Upload the apk
             apk_file = os.path.join(app_path, app_name)
             files = {'file': open(apk_file, 'rb')}
-            post_response = requests.post("https://api.browserstack.com/app-automate/upload",
+            post_response = requests.post("https://api-cloud.browserstack.com/app-automate/upload",
                                           files=files, auth=(username, access_key))
             post_json_data = json.loads(post_response.text)
             #Get the app url of the newly uploaded apk
