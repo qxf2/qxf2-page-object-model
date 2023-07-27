@@ -276,7 +276,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
     def print_exception(exception, remote_flag):
         """Print out the exception message and suggest the solution based on the remote flag."""
         if remote_flag.lower() == 'y':
-            solution = "It looks like you are trying to use a cloud service provider(BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and also check the BS upload url and try again. \nTo use your local browser please run the test with the -M N flag"
+            solution = "It looks like you are trying to use a cloud service provider(BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and also check for BrowserStack upload url changes and try again. \nTo use your local browser please run the test with the -M N flag"
         else:
             solution = "It looks like you are trying to run test cases with Local Appium Setup. \nPlease make sure to run Appium Server and try again."
 
