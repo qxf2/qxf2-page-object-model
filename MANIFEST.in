@@ -1,0 +1,6 @@
+include Readme.md
+include LICENSE
+include requirements.txt
+
+# Do not copy the tests dir when building the package
+prune tests
