@@ -40,6 +40,15 @@ class PageFactory():
             test_obj = Bitcoin_Main_Page()
         elif page_name == "bitcoin price page":
             test_obj = Bitcoin_Price_Page()
+            "New pages added needs to be updated in the get_all_page_names method too"
         return test_obj
 
     get_page_object = staticmethod(get_page_object)
+
+    def get_all_page_names():
+        "Return the page names"
+        return ["main page",
+                "redirect",
+                "contact page",
+                "bitcoin main page",
+                "bitcoin price page"]
