@@ -18,6 +18,7 @@ import conf.remote_credentials
 import conf.base_url_conf
 import conf.screenshot_conf
 from utils import Gif_Maker
+from utils import accessibility_util
 
 class Borg:
     #The borg design pattern is to share state
@@ -478,7 +479,20 @@ class Base_Page(Borg,unittest.TestCase):
             self.exceptions.append("Unable to locate the element with the xpath -'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
 
         return dom_elements
+    
+    def accessibility_inject_axe(self):
+        "Inject Axe into the Page"
+        try:
+            accessibility_util.inject_accessibility_test(self.driver)
+        except Exception as e:
+             self.write(e)
 
+    def accessibility_run_axe(self):
+        "Run Axe into the Page"
+        try:
+            accessibility_util.run_accessibility_test(self.driver)
+        except Exception as e:
+             self.write(e)
 
     def click_element(self,locator,wait_time=3):
         "Click the button supplied"
