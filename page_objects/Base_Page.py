@@ -478,7 +478,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.exceptions.append("Unable to locate the element with the xpath -'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
 
         return dom_elements
-    
+
 
     def accessibility_inject_axe(self):
         "Inject Axe into the Page"
@@ -495,7 +495,7 @@ class Base_Page(Borg,unittest.TestCase):
         except Exception as e:
              self.write(e)
 
-    
+
     def click_element(self,locator,wait_time=3):
         "Click the button supplied"
         result_flag = False
