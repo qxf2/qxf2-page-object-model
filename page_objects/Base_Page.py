@@ -480,12 +480,14 @@ class Base_Page(Borg,unittest.TestCase):
 
         return dom_elements
     
+
     def accessibility_inject_axe(self):
         "Inject Axe into the Page"
         try:
             accessibility_util.inject_accessibility_test(self.driver)
         except Exception as e:
              self.write(e)
+
 
     def accessibility_run_axe(self):
         "Run Axe into the Page"
@@ -494,6 +496,7 @@ class Base_Page(Borg,unittest.TestCase):
         except Exception as e:
              self.write(e)
 
+    
     def click_element(self,locator,wait_time=3):
         "Click the button supplied"
         result_flag = False
