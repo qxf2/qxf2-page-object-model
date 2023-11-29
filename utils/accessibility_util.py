@@ -1,5 +1,5 @@
 """
-This is a class object that contains the following methods
+This is a module that contains the following methods
 #Inject accessibility
 #Run accessibility
 """
