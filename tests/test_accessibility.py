@@ -23,9 +23,7 @@ def test_accessibility(test_obj, snapshot):
         test_obj = PageFactory.get_page_object(page,base_url=test_obj.base_url)
         #Inject Axe
         test_obj.accessibility_inject_axe()
-        print("Injected Axe in:" f"{page}")
         #Run Axe
         result = test_obj.accessibility_run_axe()
-        print("Ran Axe in:" f"{page}")
         #Create Snapshot
         snapshot.assert_match(f"{result}", f'snapshot_output_{page}.txt')
