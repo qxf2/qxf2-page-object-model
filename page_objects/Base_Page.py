@@ -62,7 +62,7 @@ class Base_Page(Borg,unittest.TestCase):
         self.driver_obj = DriverFactory()
         if self.driver is not None:
             self.start() #Visit and initialize xpaths for the appropriate page
-
+            self.axe_util = accessibility_util.Accessibilityutil(self.driver)
 
     def reset(self):
         "Reset the base page object"
@@ -484,15 +484,14 @@ class Base_Page(Borg,unittest.TestCase):
     def accessibility_inject_axe(self):
         "Inject Axe into the Page"
         try:
-            accessibility_util.inject_accessibility_test(self.driver)
+            return self.axe_util.inject()
         except Exception as e:
              self.write(e)
-
 
     def accessibility_run_axe(self):
         "Run Axe into the Page"
         try:
-            accessibility_util.run_accessibility_test(self.driver)
+            return self.axe_util.run()
         except Exception as e:
              self.write(e)
 

@@ -7,15 +7,9 @@ This is a module that contains the following methods
 import os
 from axe_selenium_python import Axe
 
-def inject_accessibility_test(driver):
-    "Inject Axe in the test"
-    script_url=os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..", "utils", "axe.min.js"))
-    axe = Axe(driver)
-    axe.inject()
+script_url=os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "utils", "axe.min.js"))
 
-def run_accessibility_test(driver):
-    "Run Axe in the test"
-    axe = Axe(driver)
-    return axe.run()
-   
+class Accessibilityutil(Axe):
+    "Accessibility object to run accessibility test"
+    def __init__(self, driver):
+        super().__init__(driver, script_url)
