@@ -50,6 +50,4 @@ class PageFactory():
         "Return the page names"
         return ["main page",
                 "redirect",
-                "contact page",
-                "bitcoin main page",
-                "bitcoin price page"]
+                "contact page"]
