@@ -1,15 +1,14 @@
 """
-This is an accessibility test to newsletter generator application
-Our automated test will do the following:
-    #Open Qxf2 newsletter generator application
-    #Run accessibility for every page
-    #Create snapshot for each page
+This is a test file to run accessibility test on 
+    1. Selenium tutorial main page
+    2. Selenium tutorial redirect page
+    3. Selenium tutorial contact page
     #While running the test for first time, use --snapshot-update to create a snapshot folder
 """
 import os
 import sys
-from page_objects.PageFactory import PageFactory
 import pytest
+from page_objects.PageFactory import PageFactory
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 @pytest.mark.ACCESSIBILITY
