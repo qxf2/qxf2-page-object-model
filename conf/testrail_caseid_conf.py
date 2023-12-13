@@ -12,4 +12,5 @@ test_example_form_footer_contact = 131
 test_bitcoin_price_page_header = 234
 test_bitcoin_real_time_price = 235
 test_successive_form_creation = 132
+test_accessibility = 140
 
