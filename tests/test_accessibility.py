@@ -32,7 +32,7 @@ def test_accessibility(test_obj, snapshot):
             test_obj.accessibility_inject_axe()
             #Run Axe in every page
             result = test_obj.accessibility_run_axe()
-            #Converting Dict result to String
+            #Serialize dict to JSON-formatted string
             result_str = json.dumps(result, ensure_ascii=False, separators=(',', ':'))
             #Formatting result by removing \n,\\,timestamp
             #Every test run have a different timestamp.
