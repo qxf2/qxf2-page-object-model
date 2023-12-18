@@ -40,11 +40,6 @@ def test_accessibility(test_obj, snapshot):
             #Create Snapshot
             snapshot.assert_match(f"{cleaned_result}", f'snapshot_output_{page}.txt')
 
-        #Update TestRail
-        case_id = testrail_file.test_accessibility
-        test_obj.report_to_testrail(case_id,test_obj.test_run_id,result)
-        test_obj.add_tesults_case("Accessibility", "Verify if the page conforms to wcag standards", "test_accessibility", result,"\nFailed to Verify if page conforms to wcag standard\n")
-
         #5. Print out the result
         test_obj.write_test_summary()
         expected_pass = test_obj.result_counter
@@ -55,38 +50,3 @@ def test_accessibility(test_obj, snapshot):
         print("Python says:%s"%str(e))
 
     assert expected_pass == actual_pass, "Test failed: %s"%__file__
-
-#---START OF SCRIPT
-if __name__=='__main__':
-    print("Start of %s"%__file__)
-    #Creating an instance of the class
-    options_obj = Option_Parser()
-    options=options_obj.get_options()
-
-    #Run the test only if the options provided are valid
-    if options_obj.check_options(options):
-        test_obj = PageFactory.get_page_object("Zero",base_url=options.url)
-
-        #Setup and register a driver
-        test_obj.register_driver(options.remote_flag,options.os_name,options.os_version,options.browser,options.browser_version,options.remote_project_name,options.remote_build_name)
-        #Setup TestRail reporting
-        if options.testrail_flag.lower()=='y':
-            if options.test_run_id is None:
-                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
-                options.testrail_flag = 'N'
-            if options.test_run_id is not None:
-                test_obj.register_testrail()
-                test_obj.set_test_run_id(options.test_run_id)
-
-        if options.tesults_flag.lower()=='y':
-            test_obj.register_tesults()
-
-        test_accessibility(test_obj, snapshot)
-
-        #teardowm
-        test_obj.wait(3)
-        test_obj.teardown()
-
-    else:
-        print('ERROR: Received incorrect input arguments')
-        print(options_obj.print_usage())
