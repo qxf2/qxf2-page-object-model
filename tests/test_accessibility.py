@@ -40,7 +40,7 @@ def test_accessibility(test_obj, snapshot):
             #Create Snapshot
             snapshot.assert_match(f"{cleaned_result}", f'snapshot_output_{page}.txt')
 
-        #5. Print out the result
+        #Print out the result
         test_obj.write_test_summary()
         expected_pass = test_obj.result_counter
         actual_pass = test_obj.pass_counter
