@@ -11,8 +11,6 @@ import json
 import re
 import pytest
 from page_objects.PageFactory import PageFactory
-from utils.Option_Parser import Option_Parser
-import conf.testrail_caseid_conf as testrail_file
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 @pytest.mark.ACCESSIBILITY
