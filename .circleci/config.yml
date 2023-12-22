@@ -43,6 +43,10 @@ jobs:
             path: ./log
             destination: logs-file
 
+        - store_artifacts:
+            path: ./snapshots
+            destination: snapshots-file
+
 
 workflows:
   version: 2
