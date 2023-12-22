@@ -32,9 +32,10 @@ jobs:
         - run:
             name: Run different Tox environments on different Containers
             command: |
+                if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py38 ; fi
 #               if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py36 ; fi
 #               if [ $CIRCLE_NODE_INDEX == "1" ] ; then tox -e py37 ; fi
-               if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py38 ; fi
+#               if [ $CIRCLE_NODE_INDEX == "2" ] ; then tox -e py38 ; fi
 
         - store_artifacts:
             path: ./screenshots
