@@ -46,7 +46,7 @@ jobs:
             destination: logs-file
 
         - store_artifacts:
-            path: ./snapshots
+            path: ./tests/snapshots
             destination: snapshots-file
 
 
