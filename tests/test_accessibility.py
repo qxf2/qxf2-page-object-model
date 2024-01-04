@@ -35,7 +35,7 @@ def test_accessibility(test_obj, snapshot):
             #Formatting result by removing \n,\\,timestamp
             #Every test run have a different timestamp.
             cleaned_result = re.sub(r'\\|\n|\r|"timestamp":\s*"[^"]*"', '', result_str)
-            #Create Snapshot
+            #Create Snapshot for each page
             snapshot.assert_match(f"{cleaned_result}", f'snapshot_output_{page}.txt')
 
         #Print out the result
