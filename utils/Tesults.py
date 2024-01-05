@@ -1,5 +1,9 @@
+import os
+from dotenv import load_dotenv
 import tesults
-import conf.tesults_conf as conf_file
+
+
+load_dotenv()
 
 cases = []
 
@@ -7,7 +11,9 @@ def add_test_case(data):
     cases.append(data)
 
 def post_results_to_tesults ():
-    token = conf_file.target_token_default # uses default token unless otherwise specified
+    " This method is to post the results into the tesults"
+    # uses default token unless otherwise specified
+    token = os.getenv('tesults_target_token_default')
     data = {
         'target': token,
         'results': { 'cases': cases }
@@ -23,3 +29,4 @@ def post_results_to_tesults ():
         print ('errors: ' + str(ret['errors']))
     else:
         print ('No test results.')
+        

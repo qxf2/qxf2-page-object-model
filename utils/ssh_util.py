@@ -6,11 +6,13 @@ Qxf2 Services: Utility script to ssh into a remote server
 * Download a file
 """
 
-import paramiko
 import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from conf import ssh_conf as conf_file
+from dotenv import load_dotenv
+import paramiko
 import socket
+
+load_dotenv('.env.ssh')
 
 class Ssh_Util:
     "Class to connect to remote server"
@@ -19,23 +21,23 @@ class Ssh_Util:
         self.ssh_output = None
         self.ssh_error = None
         self.client = None
-        self.host= conf_file.HOST
-        self.username = conf_file.USERNAME
-        self.password = conf_file.PASSWORD
-        self.timeout = float(conf_file.TIMEOUT)
-        self.commands = conf_file.COMMANDS
-        self.pkey = conf_file.PKEY
-        self.port = conf_file.PORT
-        self.uploadremotefilepath = conf_file.UPLOADREMOTEFILEPATH
-        self.uploadlocalfilepath = conf_file.UPLOADLOCALFILEPATH
-        self.downloadremotefilepath = conf_file.DOWNLOADREMOTEFILEPATH
-        self.downloadlocalfilepath = conf_file.DOWNLOADLOCALFILEPATH
+        self.host= os.getenv('HOST')
+        self.username = os.getenv('USERNAME')
+        self.password = os.getenv('PASSWORD')
+        self.timeout = os.getenv('conf_file.TIMEOUT')
+        self.commands = os.getenv('COMMANDS')
+        self.pkey = os.getenv('PKEY')
+        self.port = os.getenv('PORT')
+        self.uploadremotefilepath = os.getenv('UPLOADREMOTEFILEPATH')
+        self.uploadlocalfilepath = os.getenv('UPLOADLOCALFILEPATH')
+        self.downloadremotefilepath = os.getenv('DOWNLOADREMOTEFILEPATH')
+        self.downloadlocalfilepath = os.getenv('DOWNLOADLOCALFILEPATH')
 
     def connect(self):
         "Login to the remote server"
         try:
             #Paramiko.SSHClient can be used to make connections to the remote server and transfer files
-            print("Establishing ssh connection...")
+            print("Establishing ssh connection...")            
             self.client = paramiko.SSHClient()
             #Parsing an instance of the AutoAddPolicy to set_missing_host_key_policy() changes it to allow any host.
             self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())

@@ -1,15 +1,17 @@
 import os,pytest,sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from dotenv import load_dotenv
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
 from conf import api_example_conf
-from conf import report_portal_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
 from utils import Tesults
 from utils import interactive_mode
+
+load_dotenv()
 
 @pytest.fixture
 def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,reportportal_service,interactivemode_flag):
@@ -416,10 +418,10 @@ def pytest_configure(config):
     if_reportportal =config.getoption('--reportportal')
 
     try:
-        config._inicache["rp_uuid"] = report_portal_conf.report_portal_uuid
-        config._inicache["rp_endpoint"]= report_portal_conf.report_portal_endpoint
-        config._inicache["rp_project"]=report_portal_conf.report_portal_project
-        config._inicache["rp_launch"]=report_portal_conf.report_portal_launch
+        config._inicache["rp_uuid"] = os.getenv('report_portal_uuid')
+        config._inicache["rp_endpoint"]= os.getenv('report_portal_endpoint')
+        config._inicache["rp_project"]=os.getenv('report_portal_project')
+        config._inicache["rp_launch"]=os.getenv('report_portal_launch')
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)

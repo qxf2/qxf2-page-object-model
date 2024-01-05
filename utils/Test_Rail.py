@@ -8,8 +8,10 @@ API reference: http://docs.gurock.com/testrail-api2/start
 """
 import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from dotenv import load_dotenv
 from utils import testrail
-import conf.testrailenv_conf as conf_file
+
+load_dotenv()
 
 class Test_Rail:
     "Wrapper around TestRail's API"
@@ -25,12 +27,12 @@ class Test_Rail:
         "Set the TestRail URL and username, password"
 
         #Set the TestRail URL
-        self.testrail_url = conf_file.testrail_url
+        self.testrail_url = os.getenv('testrail_url')
         self.client = testrail.APIClient(self.testrail_url)
 
         #TestRail User and Password
-        self.client.user = conf_file.testrail_user
-        self.client.password = conf_file.testrail_password
+        self.client.user = os.getenv('testrail_user')
+        self.client.password = os.getenv('testrail_password')
 
 
     def get_project_id(self,project_name):
@@ -213,6 +215,7 @@ class Test_Rail:
         #Parameters for add_result_for_case is the combination of runid and case id.
         #status_id is 1 for Passed, 2 For Blocked, 4 for Retest and 5 for Failed
         status_id = 1 if result_flag is True else 5
+        print('TestCASEID:',case_id)
 
         if ((run_id is not None) and (case_id != 'None')) :
             try:
