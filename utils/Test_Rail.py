@@ -8,10 +8,7 @@ API reference: http://docs.gurock.com/testrail-api2/start
 """
 import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from dotenv import load_dotenv
 from utils import testrail
-
-load_dotenv()
 
 class Test_Rail:
     "Wrapper around TestRail's API"
@@ -25,16 +22,20 @@ class Test_Rail:
 
     def set_testrail_conf(self):
         "Set the TestRail URL and username, password"
+        try :
+            #Set the TestRail URL
+            self.testrail_url = os.getenv('testrail_url')
+            self.client = testrail.APIClient(self.testrail_url)
 
-        #Set the TestRail URL
-        self.testrail_url = os.getenv('testrail_url')
-        self.client = testrail.APIClient(self.testrail_url)
-
-        #TestRail User and Password
-        self.client.user = os.getenv('testrail_user')
-        self.client.password = os.getenv('testrail_password')
-
-
+            #TestRail User and Password
+            self.client.user = os.getenv('testrail_user')
+            self.client.password = os.getenv('testrail_password')
+        except Exception as e:
+            solution ="It looks like you are trying to configure TestRail to run your test. \nPlease make sure you have updated .env with the right credentials . \nReadme is updated with the necessary details, kindly go through it."
+            print('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
+            print('\033[91m'+"\nPython says:%s"%str(e)+'\033[0m')
+            print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
+                 
     def get_project_id(self,project_name):
         "Get the project ID using project name"
         project_id=None

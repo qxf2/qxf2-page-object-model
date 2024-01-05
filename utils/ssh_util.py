@@ -37,7 +37,7 @@ class Ssh_Util:
         "Login to the remote server"
         try:
             #Paramiko.SSHClient can be used to make connections to the remote server and transfer files
-            print("Establishing ssh connection...")            
+            print("Establishing ssh connection...")
             self.client = paramiko.SSHClient()
             #Parsing an instance of the AutoAddPolicy to set_missing_host_key_policy() changes it to allow any host.
             self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())

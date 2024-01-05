@@ -22,19 +22,17 @@ from email.mime.base import MIMEBase
 import mimetypes
 from email import encoders
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import conf.email_conf as conf_file
-
 
 class Email_Pytest_Report:
     "Class to email pytest report"
 
     def __init__(self):
-        self.smtp_ssl_host = conf_file.smtp_ssl_host
-        self.smtp_ssl_port = conf_file.smtp_ssl_port
-        self.username = conf_file.username
-        self.password = conf_file.app_password
-        self.sender = conf_file.sender
-        self.targets = conf_file.targets
+        self.smtp_ssl_host = os.getenv('smtp_ssl_host')
+        self.smtp_ssl_port = os.getenv('smtp_ssl_port')
+        self.username = os.getenv('username')
+        self.password = os.getenv('app_password')
+        self.sender = os.getenv('sender')
+        self.targets = os.getenv('targets')
 
 
     def get_test_report_data(self,html_body_flag= True,report_file_path= 'default'):

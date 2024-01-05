@@ -1,9 +1,5 @@
 import os
-from dotenv import load_dotenv
 import tesults
-
-
-load_dotenv()
 
 cases = []
 
