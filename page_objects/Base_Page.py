@@ -2,11 +2,13 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
+
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 import unittest,time,logging,os,inspect,pytest
+from dotenv import load_dotenv
 from utils.Base_Logging import Base_Logging
 from utils.BrowserStack_Library import BrowserStack_Library
 from .driverfactory import DriverFactory
@@ -14,10 +16,11 @@ from page_objects import PageFactory
 from utils.Test_Rail import Test_Rail
 from utils import Tesults
 from utils.stop_test_exception_util import Stop_Test_Exception
-import conf.remote_credentials
 import conf.base_url_conf
 import conf.screenshot_conf
 from utils import Gif_Maker
+
+load_dotenv('.env.remote')
 
 class Borg:
     #The borg design pattern is to share state
@@ -104,7 +107,7 @@ class Base_Page(Borg,unittest.TestCase):
         self.driver.implicitly_wait(5)
         self.driver.maximize_window()
 
-        if conf.remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS' and remote_flag.lower() == 'y':
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             self.register_browserstack()
             self.session_url = self.browserstack_obj.get_session_url()
             self.browserstack_msg = 'BrowserStack session URL:'
