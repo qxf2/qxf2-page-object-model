@@ -4,10 +4,3 @@ REMOTE_BROWSER_PLATFORM = "BS"
 
 USERNAME = "Enter your username"
 ACCESS_KEY = "Enter your access key"
-
-
-
-
-
-
-
