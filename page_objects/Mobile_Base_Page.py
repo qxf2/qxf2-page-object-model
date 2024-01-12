@@ -6,10 +6,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import unittest,time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
-from utils.BrowserStack_Library import BrowserStack_Library
 from utils.stop_test_exception_util import Stop_Test_Exception
 from .driverfactory import DriverFactory
-from utils.Test_Rail import Test_Rail
 from page_objects import PageFactory
 
 class Borg:
@@ -92,6 +90,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
 
     def register_testrail(self):
         "Register TestRail with Page"
+        from utils.Test_Rail import Test_Rail  # pylint: disable=import-error,import-outside-toplevel
         self.testrail_flag = True
         self.tr_obj = Test_Rail()
         self.write('Automation registered with TestRail',level='debug')
@@ -102,10 +101,11 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
 
     def register_tesults(self):
         "Register Tesults with Page"
-        self.tesults_flag = True
+        self.tesults_flag = True      
 
     def register_browserstack(self):
         "Register Browser Stack with Page"
+        from utils.BrowserStack_Library import BrowserStack_Library  # pylint: disable=import-error,import-outside-toplevel
         self.browserstack_flag = True
         self.browserstack_obj = BrowserStack_Library()
 

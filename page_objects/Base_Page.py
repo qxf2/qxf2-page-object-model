@@ -6,13 +6,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-import unittest,time,logging,os,inspect,pytest
+import unittest,time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
-from utils.BrowserStack_Library import BrowserStack_Library
 from .driverfactory import DriverFactory
 from page_objects import PageFactory
-from utils.Test_Rail import Test_Rail
-from utils import Tesults
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials
 import conf.base_url_conf
@@ -52,6 +49,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.window_structure = {}
             self.testrail_flag = False
             self.tesults_flag = False
+            self.gif_import_flag = False
             self.images = []
             self.browserstack_flag = False
             self.highlight_flag = False
@@ -121,6 +119,7 @@ class Base_Page(Borg,unittest.TestCase):
     def register_testrail(self):
         "Register TestRail with Page"
         self.testrail_flag = True
+        from utils.Test_Rail import Test_Rail  # pylint: disable=import-error,import-outside-toplevel
         self.tr_obj = Test_Rail()
 
     def set_test_run_id(self,test_run_id):
@@ -130,10 +129,13 @@ class Base_Page(Borg,unittest.TestCase):
     def register_tesults(self):
         "Register Tesults with Page"
         self.tesults_flag = True
+        from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
+        self.tesult_objects = Tesults
 
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
+        from utils.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
         self.browserstack_obj = BrowserStack_Library()
 
     def set_calling_module(self,name):
@@ -713,10 +715,10 @@ class Base_Page(Borg,unittest.TestCase):
             caseObj = {'name': name, 'suite': suite, 'desc': desc, 'result': result, 'reason': failReason, 'files': files, 'params': params}
             for key, value in custom.items():
                 caseObj[key] = str(value)
-            Tesults.add_test_case(caseObj)
+            self.tesult_objects.add_test_case(caseObj)
 
     def make_gif(self):
-        "Create a gif of all the screenshots within the screenshots directory"
+        "Create a gif of all the screenshots within the screenshots directory"          
         self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
 
         return self.gif_file_name
