@@ -9,6 +9,7 @@ import os
 import sys
 import json
 import re
+from pathlib import Path
 import pytest
 from page_objects.PageFactory import PageFactory
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -35,8 +36,12 @@ def test_accessibility(test_obj, snapshot):
             #Formatting result by removing \n,\\,timestamp
             #Every test run have a different timestamp.
             cleaned_result = re.sub(r'\\|\n|\r|"timestamp":\s*"[^"]*"', '', result_str)
-            #Create Snapshot for each page
-            snapshot.assert_match(f"{cleaned_result}", os.path.join(os.path.dirname(os.path.abspath(__file__)),'snapshots','test_accesibility','test_accesibility','chrome',f'snapshot_output_{page}.txt'))
+            #Save the custom path for snapshots
+            custom_path = Path(os.path.join(os.path.dirname(os.path.abspath(__file__)),'snapshots','test_accessibility','test_accessibility','chrome'))
+            #Use the custom path as snapshot directory
+            snapshot.snapshot_dir = custom_path
+            #Compare Snapshot for each page
+            snapshot.assert_match(f"{cleaned_result}", f'snapshot_output_{page}.txt')
 
         #Print out the result
         test_obj.write_test_summary()
