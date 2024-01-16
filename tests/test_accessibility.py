@@ -47,4 +47,5 @@ def test_accessibility(test_obj):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-    assert expected_pass == actual_pass, "Test failed: %s"%__file__
+    if not expected_pass == actual_pass:
+        raise AssertionError("Test failed: %s" % __file__)
