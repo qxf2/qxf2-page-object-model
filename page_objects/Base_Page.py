@@ -498,10 +498,14 @@ class Base_Page(Borg,unittest.TestCase):
 
     def snapshot_assert_match(self, value, snapshot_name):
         "Asserts the current value of the snapshot with the given snapshot_name"
+        result_flag = False 
         try:
-            return self.snapshot_util.assert_match(value, snapshot_name)
+            self.snapshot_util.assert_match(value, snapshot_name) 
+            result_flag = True
         except Exception as e:
              self.write(e)
+
+        return result_flag
 
     def click_element(self,locator,wait_time=3):
         "Click the button supplied"
