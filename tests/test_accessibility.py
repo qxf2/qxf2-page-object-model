@@ -7,6 +7,7 @@ This is a test file to run accessibility test on
 """
 import os
 import sys
+import time
 import json
 import re
 import pytest
@@ -21,6 +22,10 @@ def test_accessibility(test_obj):
         #Initalize flags for tests summary
         expected_pass = 0
         actual_pass = -1
+
+        #Set start_time with current time
+        start_time = int(time.time())
+
         #Get all pages
         page_names = PageFactory.get_all_page_names()
 
@@ -28,10 +33,15 @@ def test_accessibility(test_obj):
             test_obj = PageFactory.get_page_object(page,base_url=test_obj.base_url)
             #Inject Axe in every page
             test_obj.accessibility_inject_axe()
-            #Run Axe in every page
-            result = test_obj.accessibility_run_axe()
+            #Check if Axe is run in every page
+            run_result = test_obj.accessibility_run_axe()
+            if run_result is not None:
+                test_obj.log_result(True,
+                                positive="Ran axe in %s"%page,
+                                negative="Unable to run axe in %s"%page)
+            test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
             #Serialize dict to JSON-formatted string
-            result_str = json.dumps(result, ensure_ascii=False, separators=(',', ':'))
+            result_str = json.dumps(run_result, ensure_ascii=False, separators=(',', ':'))
             #Formatting result by removing \n,\\,timestamp
             #Every test run have a different timestamp.
             cleaned_result = re.sub(r'\\|\n|\r|"timestamp":\s*"[^"]*"', '', result_str)
@@ -47,5 +57,4 @@ def test_accessibility(test_obj):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
-    if not expected_pass == actual_pass:
-        raise AssertionError("Test failed: %s" % __file__)
+    assert expected_pass == actual_pass, "Test failed: %s"%__file__
