@@ -64,7 +64,7 @@ class Base_Page(Borg,unittest.TestCase):
         if self.driver is not None:
             self.start() #Visit and initialize xpaths for the appropriate page
             self.axe_util = accessibility_util.Accessibilityutil(self.driver)
-            self.snapshot_util = snapshot_util.Snapshotutil(self)
+            self.snapshot_util = snapshot_util.Snapshotutil()
 
     def reset(self):
         "Reset the base page object"

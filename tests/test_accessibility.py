@@ -38,9 +38,10 @@ def test_accessibility(test_obj):
             cleaned_result = re.sub(r'\\|\n|\r|"timestamp":\s*"[^"]*"', '', result_str)
             #Compare Snapshot for each page
             snapshot_result = test_obj.snapshot_assert_match(f"{cleaned_result}", f'snapshot_output_{page}.txt')
-            test_obj.log_result(snapshot_result,
+            test_obj.conditional_write(snapshot_result,
                                 positive=f'Accessibility checks for {page} passed',
-                                negative=f'Accessibility checks for {page} failed')
+                                negative=f'Accessibility checks for {page} failed',
+                                level='debug')
 
         #Print out the result
         test_obj.write_test_summary()

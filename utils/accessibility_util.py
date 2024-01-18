@@ -1,7 +1,6 @@
 """
-This is a module that contains the following methods
-#Inject accessibility
-#Run accessibility
+Accessibility Integration
+* This is a class which extends the methods of Axe parent class
 """
 
 import os
