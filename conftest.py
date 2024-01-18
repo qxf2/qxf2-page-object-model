@@ -8,7 +8,6 @@ from conf import report_portal_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
-#from utils import Tesults
 from utils import interactive_mode
 
 @pytest.fixture
