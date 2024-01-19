@@ -101,7 +101,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
 
     def register_tesults(self):
         "Register Tesults with Page"
-        self.tesults_flag = True  
+        self.tesults_flag = True 
 
     def register_browserstack(self):
         "Register Browser Stack with Page"
