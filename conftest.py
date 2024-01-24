@@ -35,9 +35,6 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
                 test_obj.set_test_run_id(test_run_id)
 
         if tesults_flag.lower()=='y':
-            from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
-            global tesult_obj
-            tesult_obj = Tesults
             test_obj.register_tesults()
 
         if reportportal_service:
@@ -444,7 +441,8 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
                 # Send html formatted email body message with pytest report as an attachment
                 email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
-                tesult_obj.post_results_to_tesults()
+                from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
+                Tesults.post_results_to_tesults()
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
