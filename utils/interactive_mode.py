@@ -4,7 +4,7 @@ Implementing the questionaty library to fetch the users choices for different ar
 import sys
 import questionary
 from clear_screen import clear
-from conf import api_example_conf
+from conf import base_url_conf
 from conf import browser_os_name_conf as conf
 from conf import remote_credentials
 
@@ -242,7 +242,7 @@ def ask_questions_api(api_url,session_flag=True):
             api_url = get_api_url()
 
         if response == "Reset back to default settings":
-            api_url = api_example_conf.api_url
+            api_url = base_url_conf.api_base_url
             session_flag = True
             questionary.print("Reverted back to default settings",
                                style="bold fg:green")
@@ -588,7 +588,7 @@ def get_api_url():
                                   "http://35.167.62.251/",
                                   "Enter the URL manually"]).ask()
     if api_url == "localhost":
-        api_url = api_example_conf.api_url
+        api_url = base_url_conf.api_base_url
     if api_url == "Enter the URL manually":
         api_url = questionary.text("Enter the url").ask()
 

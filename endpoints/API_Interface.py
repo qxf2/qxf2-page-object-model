@@ -1,14 +1,12 @@
-"""
-A composed interface for all the API objects
-Use the API_Player to talk to this class
-"""
 import requests
 from .Base_API import Base_API
-from .Cars_API_Endpoints import Cars_API_Endpoints
-from .Registration_API_Endpoints import Registration_API_Endpoints
-from .User_API_Endpoints import User_API_Endpoints
 
-class API_Interface(Base_API,Cars_API_Endpoints,Registration_API_Endpoints,User_API_Endpoints):
+try:
+    from .Cars_API_Endpoints import Cars_API_Endpoints
+except ImportError:
+    Cars_API_Endpoints = object
+
+class API_Interface(Base_API,Cars_API_Endpoints):
 	"A composed interface for the API objects"
 
 	def __init__(self, url, session_flag=False):

@@ -3,7 +3,6 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
-from conf import api_example_conf
 from conf import report_portal_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
@@ -88,7 +87,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag,api_url=api_example_conf.api_url):
+def test_api_obj(interactivemode_flag,api_url=base_url_conf.api_base_url):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower()=='y':
