@@ -1,3 +1,8 @@
+"""
+A composed interface for all the API objects
+Use the API_Player to talk to this class
+"""
+
 import requests
 from .Base_API import Base_API
 
