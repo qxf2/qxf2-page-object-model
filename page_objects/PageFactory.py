@@ -22,6 +22,7 @@ import conf.base_url_conf
 
 class PageFactory():
     "PageFactory uses the factory design pattern."
+    @staticmethod
     def get_page_object(page_name,base_url=conf.base_url_conf.base_url):
         "Return the appropriate page object based on page_name"
         test_obj = None
@@ -40,6 +41,13 @@ class PageFactory():
             test_obj = Bitcoin_Main_Page()
         elif page_name == "bitcoin price page":
             test_obj = Bitcoin_Price_Page()
+            #"New pages added needs to be updated in the get_all_page_names method too"
         return test_obj
 
-    get_page_object = staticmethod(get_page_object)
+
+    @staticmethod
+    def get_all_page_names():
+        "Return the page names"
+        return ["main page",
+                "redirect",
+                "contact page"]
