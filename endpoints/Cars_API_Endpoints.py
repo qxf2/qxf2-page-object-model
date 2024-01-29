@@ -1,7 +1,7 @@
 """
 API endpoints for Cars
 """
-class Cars_API_Endpoints():
+class Cars_API_Endpoints:
 	"Class for cars endpoints"
 
 	def cars_url(self,suffix=''):
