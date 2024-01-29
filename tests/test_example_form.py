@@ -9,7 +9,6 @@ import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 import conf.example_form_conf as conf
-import conf.testrail_caseid_conf as testrail_file
 import pytest
 
 
@@ -43,9 +42,6 @@ def test_example_form(test_obj):
                             positive="Name was successfully set to: %s\n"%name,
                             negative="Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        #Update TestRail
-        case_id = testrail_file.test_example_form_name
-        test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Set Name", "Sets the name in the form", "test_example_form", result_flag, "Failed to set name: %s \nOn url: %s\n"%(name,test_obj.get_current_url()), [test_obj.log_obj.log_file_dir + os.sep + test_obj.log_obj.log_file_name])
         #6. Set Email in form
         result_flag = test_obj.set_email(email)
@@ -53,9 +49,6 @@ def test_example_form(test_obj):
                             positive="Email was successfully set to: %s\n"%email,
                             negative="Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        #Update TestRail
-        case_id = testrail_file.test_example_form_email
-        test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Set Email", "Sets the email in the form", "test_example_form", result_flag, "Failed to set Email: %s \nOn url: %s\n"%(email,test_obj.get_current_url()), [], {'Email': email}, {'_Email': email})
 
         #7. Set Phone number in form
@@ -64,9 +57,6 @@ def test_example_form(test_obj):
                             positive="Phone number was successfully set for phone: %s\n"%phone,
                             negative="Failed to set phone number: %s \nOn url: %s\n"%(phone,test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        #Update TestRail
-        case_id = testrail_file.test_example_form_phone
-        test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Set Phone Number", "Sets the phone number in the form", "test_example_form", result_flag, "Failed to set phone number: %s \nOn url: %s\n"%(phone,test_obj.get_current_url()), [], {}, {'_Phone': phone, '_AnotherCustomField': 'Custom field value'})
 
         #8. Set Gender in form
@@ -75,9 +65,6 @@ def test_example_form(test_obj):
                             positive= "Gender was successfully set to: %s\n"%gender,
                             negative="Failed to set gender: %s \nOn url: %s\n"%(gender,test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        #Update TestRail
-        case_id = testrail_file.test_example_form_gender
-        test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Set Gender", "Sets the gender in the form", "test_example_form", result_flag, "Failed to set gender: %s \nOn url: %s\n"%(gender,test_obj.get_current_url()), [])
 
         #9. Check the copyright
@@ -94,10 +81,6 @@ def test_example_form(test_obj):
                             positive="Successfully submitted the form\n",
                             negative="Failed to submit the form \nOn url: %s"%test_obj.get_current_url(),
                             level="critical")
-
-        #Update TestRail
-        case_id = testrail_file.test_example_form
-        test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Submit Form", "Submits the form", "test_example_form", result_flag,"Failed to submit the form \nOn url: %s"%test_obj.get_current_url(), [])
 
         #Turn off the highlighting feature
@@ -122,9 +105,6 @@ def test_example_form(test_obj):
                             positive="Successfully visited the Contact page\n",
                             negative="\nFailed to visit the Contact page\n")
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        #Update TestRail
-        case_id = testrail_file.test_example_form_footer_contact
-        test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Contact page", "Visits the contact page and verifies the link", "test_example_form", result_flag,"\nFailed to visit the Contact page\n")
 
         #13. Print out the result

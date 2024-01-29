@@ -10,7 +10,6 @@ import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 import conf.successive_form_creation_conf as conf
-import conf.testrail_caseid_conf as testrail_file
 import pytest
 @pytest.mark.GUI
 
@@ -48,9 +47,6 @@ def test_succesive_form_creation(test_obj):
                                 negative="Failed to submit the form number %d \nOn url: %s"%(form_number,test_obj.get_current_url()),
                                 level="critical")
             test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-            #Update TestRail
-            case_id = testrail_file.test_successive_form_creation
-            test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
             test_obj.add_tesults_case("Set and submit form " + str(form_number), "Sets and submits the form in one go", "test_successive_form_creation", result_flag, "Failed to submit the form number %d \nOn url: %s"%(form_number,test_obj.get_current_url()), [test_obj.log_obj.log_file_dir + os.sep + test_obj.log_obj.log_file_name])
 
             #b. Check the heading on the redirect page
