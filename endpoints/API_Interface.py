@@ -6,12 +6,27 @@ Use the API_Player to talk to this class
 import requests
 from .Base_API import Base_API
 
+base_classes = [Base_API]
+
 try:
     from .Cars_API_Endpoints import Cars_API_Endpoints
+    base_classes.append(Cars_API_Endpoints)
 except ImportError:
-    Cars_API_Endpoints = object
+    pass
 
-class API_Interface(Base_API,Cars_API_Endpoints):
+try:
+    from .Registration_API_Endpoints import Registration_API_Endpoints
+    base_classes.append(Registration_API_Endpoints)
+except ImportError:
+    pass
+
+try:
+    from .User_API_Endpoints import User_API_Endpoints
+    base_classes.append(User_API_Endpoints)
+except ImportError:
+    pass
+
+class API_Interface(*base_classes):
 	"A composed interface for the API objects"
 
 	def __init__(self, url, session_flag=False):
