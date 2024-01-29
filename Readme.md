@@ -119,7 +119,9 @@ a) Directory structure of our current Templates
 
    ./
 
-	|__conf: For all configurations and credential files
+	|__conf: For all configurations 
+
+	|__env For credential files
 
 	|__log: Log files for all tests
 
@@ -137,6 +139,16 @@ a) Directory structure of our current Templates
 ---------------------------
 COMMANDS FOR RUNNING TESTS
 ---------------------------
+
+Templates for.env files are accessible.
+Kindly fill in the credentials and rename the files according to the specified format.
+
+* env_conf to .env 
+	Tesults, TestRail, Gmail , Report portal crentials details can be entered here.
+* env_ssh_conf to .env.ssh
+    ssh server credentials used by the SSHKeywords keyword to connect to remote servers.
+* env_remote to .env.remote 
+    Remote WebDriver Server Details (BrowserStack/SauceLabs).
 
 a)py.test [options]
 
@@ -163,8 +175,8 @@ c)python -m pytest tests/test_example_form.py --browser Chrome (to run against c
 
 d)python -m pytest tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
 
-e)python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version (android version) --device_name (simulator) --app_path (.apk location on local) --remote_flag Y (to run Mobile test case on Broswestack)remote_credentials.py
-NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to remote_credentials.py under conf.
+e)python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version (android version) --device_name (simulator) --app_path (.apk location on local) --remote_flag Y (to run Mobile test case on Broswerstack)
+NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to .env.remote .
 
 --------
 ISSUES?
