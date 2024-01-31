@@ -129,7 +129,7 @@ if __name__=='__main__':
     imap_host = os.getenv('imaphost')
     username = os.getenv('app_username')
     password = os.getenv('app_password')
-    
+
     #Initialize the email object
     email_obj = Email_Util()
 
@@ -231,4 +231,3 @@ if __name__=='__main__':
         print("FAIL: Unique id of the latest email with non-existant subject and non-existant sender is: ",uid)
     else:
         print("PASS: After wait of 2 mins, looks like there is no email present with given non-existant subject and non-existant sender")
-

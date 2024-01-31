@@ -35,7 +35,7 @@ class Test_Rail:
             print('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
             print('\033[91m'+"\nPython says:%s"%str(e)+'\033[0m')
             print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
-                 
+
     def get_project_id(self,project_name):
         "Get the project ID using project name"
         project_id=None
