@@ -92,7 +92,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
         "Register TestRail with Page"
         from utils.Test_Rail import Test_Rail  # pylint: disable=import-error,import-outside-toplevel
         self.testrail_flag = True
-        self.tr_obj = Test_Rail()
+        self.testrail_object = Test_Rail()
         self.write('Automation registered with TestRail',level='debug')
 
     def set_test_run_id(self,test_run_id):
@@ -395,7 +395,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase):
                 for image in self.image_url_list:
                     msg += '\n' + '[' + image['name'] + ']('+ image['url']+')'
                 msg += '\n\n' + '[' + 'Watch Replay On BrowserStack' + ']('+ self.session_url+')'
-            self.tr_obj.update_testrail(case_id,test_run_id,result_flag,msg=msg)
+            self.testrail_object.update_testrail(case_id,test_run_id,result_flag,msg=msg)
         self.image_url_list = []
         self.msg_list = []
 
