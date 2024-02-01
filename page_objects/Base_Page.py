@@ -133,7 +133,7 @@ class Base_Page(Borg,unittest.TestCase):
         "Register Tesults with Page"
         self.tesults_flag = True
         from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
-        self.tesult_objects = Tesults
+        self.tesult_object = Tesults
 
     def register_browserstack(self):
         "Register Browser Stack with Page"
@@ -743,7 +743,7 @@ class Base_Page(Borg,unittest.TestCase):
             caseObj = {'name': name, 'suite': suite, 'desc': desc, 'result': result, 'reason': failReason, 'files': files, 'params': params}
             for key, value in custom.items():
                 caseObj[key] = str(value)
-            self.tesult_objects.add_test_case(caseObj)
+            self.tesult_object.add_test_case(caseObj)
 
     def make_gif(self):
         "Create a gif of all the screenshots within the screenshots directory"
