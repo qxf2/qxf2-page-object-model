@@ -6,7 +6,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-import unittest,time,logging,os,inspect
+import time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from .driverfactory import DriverFactory
 from page_objects import PageFactory
@@ -36,7 +36,7 @@ class Borg:
 # Get the Base URL from the conf file
 base_url = conf.base_url_conf
 
-class Base_Page(Borg,unittest.TestCase):
+class Base_Page(Borg):
     "Page class that all page models can inherit from"
 
     def __init__(self,base_url):
