@@ -31,7 +31,7 @@ class XpathUtil:
         if isinstance(element[attr], list):
             element[attr] = [i.encode('utf-8').decode('latin-1') for i in element[attr]]
             element[attr] = ' '.join(element[attr])
-        xpath = f"//{tag}[@{attr}='{element[attr]}']"
+        xpath = f'//{tag}[@{attr}="{element[attr]}"]'
         return xpath
 
     def guess_xpath_button(self, tag, attr, element):
