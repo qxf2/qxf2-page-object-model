@@ -6,13 +6,10 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-import unittest,time,logging,os,inspect,pytest
+import time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
-from utils.BrowserStack_Library import BrowserStack_Library
 from .driverfactory import DriverFactory
 from page_objects import PageFactory
-from utils.Test_Rail import Test_Rail
-from utils import Tesults
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials
 import conf.base_url_conf
@@ -39,7 +36,7 @@ class Borg:
 # Get the Base URL from the conf file
 base_url = conf.base_url_conf
 
-class Base_Page(Borg,unittest.TestCase):
+class Base_Page(Borg):
     "Page class that all page models can inherit from"
 
     def __init__(self,base_url):
@@ -54,6 +51,7 @@ class Base_Page(Borg,unittest.TestCase):
             self.window_structure = {}
             self.testrail_flag = False
             self.tesults_flag = False
+            self.gif_import_flag = False
             self.images = []
             self.browserstack_flag = False
             self.highlight_flag = False
@@ -124,7 +122,8 @@ class Base_Page(Borg,unittest.TestCase):
     def register_testrail(self):
         "Register TestRail with Page"
         self.testrail_flag = True
-        self.tr_obj = Test_Rail()
+        from utils.Test_Rail import Test_Rail  # pylint: disable=import-error,import-outside-toplevel
+        self.testrail_object = Test_Rail()
 
     def set_test_run_id(self,test_run_id):
         "Set TestRail's test run id"
@@ -133,10 +132,13 @@ class Base_Page(Borg,unittest.TestCase):
     def register_tesults(self):
         "Register Tesults with Page"
         self.tesults_flag = True
+        from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
+        self.tesult_object = Tesults
 
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
+        from utils.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
         self.browserstack_obj = BrowserStack_Library()
 
     def set_calling_module(self,name):
@@ -721,7 +723,7 @@ class Base_Page(Borg,unittest.TestCase):
                 for image in self.image_url_list:
                     msg += '\n' + '[' + image['name'] + ']('+ image['url']+')'
                 msg += '\n\n' + '[' + 'Watch Replay On BrowserStack' + ']('+ self.session_url+')'
-            self.tr_obj.update_testrail(case_id,test_run_id,result_flag,msg=msg)
+            self.testrail_object.update_testrail(case_id,test_run_id,result_flag,msg=msg)
         self.image_url_list = []
         self.msg_list = []
 
@@ -741,7 +743,7 @@ class Base_Page(Borg,unittest.TestCase):
             caseObj = {'name': name, 'suite': suite, 'desc': desc, 'result': result, 'reason': failReason, 'files': files, 'params': params}
             for key, value in custom.items():
                 caseObj[key] = str(value)
-            Tesults.add_test_case(caseObj)
+            self.tesult_object.add_test_case(caseObj)
 
     def make_gif(self):
         "Create a gif of all the screenshots within the screenshots directory"
