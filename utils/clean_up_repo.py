@@ -1,35 +1,46 @@
 """
 The Qxf2 automation repository ships with example tests.
 Run this file to delete all the example files and start fresh with your example.
-After this script runs, you will need to edit a few files to configure them to suit your own repository
 Usage: python clean_up_repo.py
 """
 import os
 import sys
-from loguru import logger
-
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from conf import clean_up_repo_conf as conf
+from utils.Base_Logging import Base_Logging
 
-def delete_file(file_name):
-    "The method will delete a particular file"
-    if os.path.exists(file_name):
-        os.remove(file_name)
-        logger.info(f'{file_name} deleted')
+class CleanUpRepo:
+    """Utility for cleaning up example files."""
+    def __init__(self):
+        """Initializes the CleanUpRepo class with a logger"""
+        self.logger = Base_Logging(log_file_name="clean_up_repo.log", level="INFO")
 
-def delete_files_in_dir(directory, files):
-    "The method will delete files in a particular directory"
-    for file_name in files:
-        delete_file(os.path.join(directory, file_name))
+    def delete_file(self, file_name):
+        """The method will delete a particular file"""
+        if os.path.exists(file_name):
+            os.remove(file_name)
+            self.logger.write(f'{file_name} deleted')
 
-def delete_files_used_in_example():
-    "The method will delete set of files"
-    # Files mentioned are in the blog post: https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/"
-    for every_dir_list, every_file_list in zip(conf.dir_list, conf.file_list):
-        delete_files_in_dir(every_dir_list, every_file_list)
+    def delete_files_in_dir(self, directory, files):
+        """The method will delete files in a particular directory"""
+        for file_name in files:
+            self.delete_file(os.path.join(directory, file_name))
 
-# ---USAGE EXAMPLES
+    def delete_files_used_in_example(self):
+        """The method will delete a set of files"""
+        for every_dir_list, every_file_list in zip(conf.dir_list, conf.file_list):
+            self.delete_files_in_dir(every_dir_list, every_file_list)
+
+    def run_cleanup(self):
+        """Runs the utility to delete example files and logs the operation."""
+        self.logger.write("Running utility to delete the files")
+        self.delete_files_used_in_example()
+        self.logger.write(
+            f'All the files related to the sample example from Page Object Model have been removed from {conf.dir_list} folders.\n'
+            'For next steps, please refer to the edit files section of this blog post: '
+            'https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/'
+        )
+
 if __name__ == "__main__":
-    logger.info("Running utility to delete the files")
-    delete_files_used_in_example()
-    logger.info(f'All the files related to the sample example from Page Object Model have been removed from {conf.dir_list} folders.\n For next steps, please refer to the edit files section of this blog post: https://qxf2.com/blog/how-to-start-using-the-qxf2-framework-with-a-new-project/')
+    cleanup = CleanUpRepo()
+    cleanup.run_cleanup()
