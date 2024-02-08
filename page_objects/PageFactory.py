@@ -9,6 +9,7 @@ Pages implemented so far:
 4. Bitcoin main page
 5. Bitcoin price page
 """
+# pylint: disable=import-outside-toplevel, E0401
 from conf import base_url_conf as url_conf
 
 class PageFactory():
