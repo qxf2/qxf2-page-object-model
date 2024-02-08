@@ -9,6 +9,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from .driverfactory import DriverFactory
+from .selenium_objects import Selenium_Objects
 from page_objects import PageFactory
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials
@@ -36,7 +37,7 @@ class Borg:
 # Get the Base URL from the conf file
 base_url = conf.base_url_conf
 
-class Base_Page(Borg):
+class Base_Page(Borg, Selenium_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self,base_url):
@@ -298,12 +299,6 @@ class Base_Page(Borg):
         "Get the current page title"
         return self.driver.title
 
-
-    def get_page_paths(self,section):
-        "Open configurations file,go to right sections,return section obj"
-        pass
-
-
     def get_current_window_handle(self):
         "Return the latest window handle"
         return self.driver.current_window_handle
@@ -437,53 +432,6 @@ class Base_Page(Borg):
     def apply_style_to_element(self,element,element_style):
         self.driver.execute_script("arguments[0].setAttribute('style', arguments[1])", element, element_style)
 
-    def get_element(self,locator,verbose_flag=True):
-        "Return the DOM element of the path or 'None' if the element is not found "
-        dom_element = None
-        try:
-            locator = self.split_locator(locator)
-            dom_element = self.driver.find_element(*locator)
-            if self.highlight_flag is True:
-                self.highlight_element(dom_element)
-        except Exception as e:
-            if verbose_flag is True:
-                self.write(str(e),'debug')
-                self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
-            self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
-
-        return dom_element
-
-
-    def split_locator(self,locator):
-        "Split the locator type and locator"
-        result = ()
-        try:
-            result = tuple(locator.split(',',1))
-        except Exception as e:
-            self.write(str(e),'debug')
-            self.write("Error while parsing locator")
-            self.exceptions.append("Unable to split the locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
-
-        return result
-
-
-    def get_elements(self,locator,msg_flag=True):
-        "Return a list of DOM elements that match the locator"
-        dom_elements = []
-        try:
-            locator = self.split_locator(locator)
-            dom_elements = self.driver.find_elements(*locator)
-            if self.highlight_flag is True:
-                self.highlight_elements(dom_elements)
-        except Exception as e:
-            if msg_flag==True:
-                self.write(str(e),'debug')
-                self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
-            self.exceptions.append("Unable to locate the element with the xpath -'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
-
-        return dom_elements
-
-
     def accessibility_inject_axe(self):
         "Inject Axe into the Page"
         try:
@@ -508,23 +456,6 @@ class Base_Page(Borg):
              self.write(e)
 
         return result_flag
-
-    def click_element(self,locator,wait_time=3):
-        "Click the button supplied"
-        result_flag = False
-        try:
-            link = self.get_element(locator)
-            if link is not None:
-                link.click()
-                result_flag=True
-                self.wait(wait_time)
-        except Exception as e:
-            self.write(str(e),'debug')
-            self.write('Exception when clicking link with path: %s'%locator)
-            self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
-
-        return result_flag
-
 
     def set_text(self,locator,value,clear_flag=True):
         "Set the value of the text field"
@@ -551,117 +482,6 @@ class Base_Page(Borg):
                 self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
 
         return result_flag
-
-
-    def get_text(self,locator):
-        "Return the text for a given path or the 'None' object if the element is not found"
-        text = ''
-        try:
-            text = self.get_element(locator).text
-        except Exception as e:
-            self.write(e)
-            self.exceptions.append("Error when getting text from the path-'%s' in the conf/locators.conf file"%locator)
-            return None
-        else:
-            return text.encode('utf-8')
-
-
-    def get_dom_text(self,dom_element):
-        "Return the text of a given DOM element or the 'None' object if the element has no attribute called text"
-        text = None
-        try:
-            text = dom_element.text
-            text = text.encode('utf-8')
-        except Exception as e:
-            self.write(e)
-            self.exceptions.append("Error when getting text from the DOM element-'%s' in the conf/locators.conf file"%locator)
-
-        return text
-
-
-    def select_checkbox(self,locator):
-        "Select a checkbox if not already selected"
-        result_flag = False
-        try:
-            checkbox = self.get_element(locator)
-            if checkbox.is_selected() is False:
-                result_flag = self.toggle_checkbox(locator)
-            else:
-                result_flag = True
-        except Exception as e:
-            self.write(e)
-            self.exceptions.append("Error when selecting checkbox-'%s' in the conf/locators.conf file"%locator)
-
-        return result_flag
-
-
-    def deselect_checkbox(self,locator):
-        "Deselect a checkbox if it is not already deselected"
-        result_flag = False
-        try:
-            checkbox =  self.get_element(locator)
-            if checkbox.is_selected() is True:
-                result_flag = self.toggle_checkbox(locator)
-            else:
-                result_flag = True
-        except Exception as e:
-            self.write(e)
-            self.exceptions.append("Error when deselecting checkbox-'%s' in the conf/locators.conf file"%locator)
-
-        return result_flag
-
-    unselect_checkbox = deselect_checkbox #alias the method
-
-
-    def toggle_checkbox(self,locator):
-        "Toggle a checkbox"
-        try:
-            return self.click_element(locator)
-        except Exception as e:
-            self.write(e)
-            self.exceptions.append("Error when toggling checkbox-'%s' in the conf/locators.conf file"%locator)
-
-
-    def select_dropdown_option(self, locator, option_text):
-        "Selects the option in the drop-down"
-        result_flag= False
-        try:
-            dropdown = self.get_element(locator)
-            for option in dropdown.find_elements(By.TAG_NAME,'option'):
-                if option.text == option_text:
-                    option.click()
-                    result_flag = True
-                    break
-        except Exception as e:
-            self.write(e)
-            self.exceptions.append("Error when selecting option from the drop-down '%s' "%locator)
-
-        return result_flag
-
-
-    def check_element_present(self,locator):
-        "This method checks if the web element is present in page or not and returns True or False accordingly"
-        result_flag = False
-        if self.get_element(locator,verbose_flag=False) is not None:
-            result_flag = True
-
-        return result_flag
-
-
-    def check_element_displayed(self,locator):
-        "This method checks if the web element is present in page or not and returns True or False accordingly"
-        result_flag = False
-        try:
-            if self.get_element(locator) is not None:
-                element = self.get_element(locator,verbose_flag=False)
-                if element.is_displayed() is True:
-                    result_flag = True
-        except Exception as e:
-            self.write(e)
-            self.exceptions.append("Web element not present in the page, please check the locator is correct -'%s' in the conf/locators.conf file"%locator)
-
-        return result_flag
-
 
     def hit_enter(self,locator,wait_time=2):
         "Hit enter"
@@ -751,15 +571,6 @@ class Base_Page(Borg):
 
         return self.gif_file_name
 
-
-    def wait(self,wait_seconds=5,locator=None):
-        "Performs wait for time provided"
-        if locator is not None:
-            self.smart_wait(locator,wait_seconds=wait_seconds)
-        else:
-            time.sleep(wait_seconds)
-
-
     def smart_wait(self,locator,wait_seconds=5):
         "Performs an explicit wait for a particular element"
         result_flag = False
@@ -774,7 +585,6 @@ class Base_Page(Borg):
 
         return result_flag
 
-
     def success(self,msg,level='info',pre_format='PASS: '):
         "Write out a success message"
         if level.lower() == 'critical':
@@ -782,7 +592,6 @@ class Base_Page(Borg):
         self.log_obj.write(pre_format + msg,level)
         self.result_counter += 1
         self.pass_counter += 1
-
 
     def failure(self,msg,level='info',pre_format='FAIL: '):
         "Write out a failure message"
@@ -792,7 +601,6 @@ class Base_Page(Borg):
         if level.lower() == 'critical':
             self.teardown()
             raise Stop_Test_Exception("Stopping test because: "+ msg)
-
 
     def log_result(self,flag,positive,negative,level='info'):
         "Write out the result of the test"
@@ -807,7 +615,6 @@ class Base_Page(Borg):
             else:
                 self.failure(negative,level=level)
 
-
     def read_browser_console_log(self):
         "Read Browser Console log"
         log = None
@@ -818,7 +625,6 @@ class Base_Page(Borg):
             self.write("Exception when reading Browser Console log")
             self.write(str(e))
             return log
-
 
     def conditional_write(self,flag,positive,negative,level='info'):
         "Write out either the positive or the negative message based on flag"
@@ -836,7 +642,6 @@ class Base_Page(Borg):
             else:
                 self.write(negative,level='error')
 
-
     def execute_javascript(self,js_script,*args):
         "Execute javascipt"
         try:
@@ -846,7 +651,6 @@ class Base_Page(Borg):
             result_flag = False
 
         return result_flag
-
 
     def write_test_summary(self):
         "Print out a useful, human readable summary"
@@ -872,6 +676,5 @@ class Base_Page(Borg):
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
         pass
-
 
     _get_locator = staticmethod(_get_locator)
