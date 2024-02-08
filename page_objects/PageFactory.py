@@ -9,12 +9,12 @@ Pages implemented so far:
 4. Bitcoin main page
 5. Bitcoin price page
 """
-import conf.base_url_conf
+from conf import base_url_conf as url_conf
 
 class PageFactory():
     "PageFactory uses the factory design pattern."
     @staticmethod
-    def get_page_object(page_name,base_url=conf.base_url_conf.base_url):
+    def get_page_object(page_name,base_url=url_conf.ui_base_url):
         "Return the appropriate page object based on page_name"
         test_obj = None
         page_name = page_name.lower()

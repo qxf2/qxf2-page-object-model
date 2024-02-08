@@ -491,7 +491,7 @@ def pytest_addoption(parser):
                             help="Browser. Valid options are firefox, ie and chrome")
         parser.addoption("--app_url",
                             dest="url",
-                            default=base_url_conf.base_url,
+                            default=base_url_conf.ui_base_url,
                             help="The url of the application")
         parser.addoption("--api_url",
                             dest="url",
