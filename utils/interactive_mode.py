@@ -585,7 +585,7 @@ def get_api_url():
     "Get the API URL"
     api_url = questionary.select("Select the API url",
                                   choices=["localhost",
-                                  "http://35.167.62.251/",
+                                  "https://cars-app.qxf2.com/",
                                   "Enter the URL manually"]).ask()
     if api_url == "localhost":
         api_url = base_url_conf.api_base_url

@@ -495,7 +495,7 @@ def pytest_addoption(parser):
                             help="The url of the application")
         parser.addoption("--api_url",
                             dest="url",
-                            default="http://35.167.62.251",
+                            default="https://cars-app.qxf2.com/",
                             help="The url of the api")
         parser.addoption("--testrail_flag",
                             dest="testrail_flag",
