@@ -216,8 +216,6 @@ class Test_Rail:
         #Parameters for add_result_for_case is the combination of runid and case id.
         #status_id is 1 for Passed, 2 For Blocked, 4 for Retest and 5 for Failed
         status_id = 1 if result_flag is True else 5
-        print('TestCASEID:',case_id)
-
         if ((run_id is not None) and (case_id != 'None')) :
             try:
                 self.client.send_post(
