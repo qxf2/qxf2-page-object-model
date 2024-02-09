@@ -8,6 +8,7 @@ import unittest,time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from utils.stop_test_exception_util import Stop_Test_Exception
 from .driverfactory import DriverFactory
+from .selenium_objects import Selenium_Objects
 from page_objects import PageFactory
 
 class Borg:
@@ -25,7 +26,7 @@ class Borg:
 
         return result_flag
 
-class Mobile_Base_Page(Borg,unittest.TestCase):
+class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self):

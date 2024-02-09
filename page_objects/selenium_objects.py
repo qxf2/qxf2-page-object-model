@@ -178,3 +178,4 @@ class Selenium_Objects:
             self.smart_wait(locator,wait_seconds=wait_seconds)
         else:
             time.sleep(wait_seconds)
+            
