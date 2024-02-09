@@ -10,6 +10,7 @@ from utils.stop_test_exception_util import Stop_Test_Exception
 from .driverfactory import DriverFactory
 from .selenium_objects import Selenium_Objects
 from .logging_objects import Logging_Objects
+from .test_reporting_objects import Test_Reporting_Objects
 from page_objects import PageFactory
 from utils import Gif_Maker
 
@@ -28,7 +29,7 @@ class Borg:
 
         return result_flag
 
-class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects):
+class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects, Test_Reporting_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self):
@@ -82,27 +83,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
     def get_driver_title(self):
         "Return the title of the current page"
         return self.driver.title
-
-    def register_testrail(self):
-        "Register TestRail with Page"
-        from utils.Test_Rail import Test_Rail  # pylint: disable=import-error,import-outside-toplevel
-        self.testrail_flag = True
-        self.testrail_object = Test_Rail()
-        self.write('Automation registered with TestRail',level='debug')
-
-    def set_test_run_id(self,test_run_id):
-        "Set TestRail's test run id"
-        self.test_run_id = test_run_id
-
-    def register_tesults(self):
-        "Register Tesults with Page"
-        self.tesults_flag = True
-
-    def register_browserstack(self):
-        "Register Browser Stack with Page"
-        from utils.BrowserStack_Library import BrowserStack_Library  # pylint: disable=import-error,import-outside-toplevel
-        self.browserstack_flag = True
-        self.browserstack_obj = BrowserStack_Library()
 
     def get_calling_module(self):
         "Get the name of the calling module"
@@ -205,20 +185,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
         "Tears down the driver"
         self.driver.quit()
         self.reset()
-
-    def report_to_testrail(self,case_id,test_run_id,result_flag,msg=''):
-        "Update Test Rail"
-        if self.testrail_flag is True:
-            self.write('Automation is about to update TestRail for case id: %s'%str(case_id),level='debug')
-            msg += '\n'.join(self.msg_list)
-            msg = msg + "\n"
-            if self.browserstack_flag is True:
-                for image in self.image_url_list:
-                    msg += '\n' + '[' + image['name'] + ']('+ image['url']+')'
-                msg += '\n\n' + '[' + 'Watch Replay On BrowserStack' + ']('+ self.session_url+')'
-            self.testrail_object.update_testrail(case_id,test_run_id,result_flag,msg=msg)
-        self.image_url_list = []
-        self.msg_list = []
 
     def smart_wait(self,wait_seconds,locator):
         "Performs an explicit wait for a particular element"
