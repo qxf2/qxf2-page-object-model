@@ -9,7 +9,9 @@ from utils.Base_Logging import Base_Logging
 from utils.stop_test_exception_util import Stop_Test_Exception
 from .driverfactory import DriverFactory
 from .selenium_objects import Selenium_Objects
+from .logging_objects import Logging_Objects
 from page_objects import PageFactory
+from utils import Gif_Maker
 
 class Borg:
     #The borg design pattern is to share state
@@ -26,7 +28,7 @@ class Borg:
 
         return result_flag
 
-class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects):
+class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self):
@@ -58,10 +60,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects):
         self.failure_message_list = []
         self.screenshot_counter = 1
 
-    def get_failure_message_list(self):
-        "Return the failure message list"
-        return self.failure_message_list
-
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name).__class__
@@ -72,6 +70,10 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects):
         self.set_screenshot_dir() # Create screenshot directory
         self.set_log_file()
         self.start()
+
+    def make_gif(self):
+        "Create a gif of all the screenshots within the screenshots directory"
+        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
 
     def get_current_driver(self):
         "Return current driver"
@@ -155,11 +157,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects):
 
         return self.screenshot_dir
 
-    def set_log_file(self):
-        'set the log file'
-        self.log_name = self.testname + '.log'
-        self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
-
     def append_latest_image(self,screenshot_name):
         "Get image url list from Browser Stack"
         screenshot_url = self.browserstack_obj.get_latest_screenshot_url()
@@ -209,14 +206,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects):
         self.driver.quit()
         self.reset()
 
-    def write(self,msg,level='info'):
-        "Log the message"
-        self.msg_list.append('%-8s:  '%level.upper() + msg)
-        if self.browserstack_flag is True:
-            if self.browserstack_msg not in msg:
-                self.msg_list.pop(-1) #Remove the redundant BrowserStack message
-        self.log_obj.write(msg,level)
-
     def report_to_testrail(self,case_id,test_run_id,result_flag,msg=''):
         "Update Test Rail"
         if self.testrail_flag is True:
@@ -245,30 +234,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects):
 
         return result_flag
 
-    def success(self,msg,level='info',pre_format='PASS: '):
-        "Write out a success message"
-        if level.lower() == 'critical':
-            level = 'info'
-        self.log_obj.write(pre_format + msg,level)
-        self.result_counter += 1
-        self.pass_counter += 1
-
-    def failure(self,msg,level='info',pre_format='FAIL: '):
-        "Write out a failure message"
-        self.log_obj.write(pre_format + msg,level)
-        self.result_counter += 1
-        self.failure_message_list.append(pre_format + msg)
-        if level.lower() == 'critical':
-            self.teardown()
-            raise Stop_Test_Exception("Stopping test because: "+ msg)
-
-    def log_result(self,flag,positive,negative,level='info'):
-        "Write out the result of the test"
-        if flag is True:
-            self.success(positive,level=level)
-        if flag is False:
-            self.failure(negative,level=level)
-
     def conditional_write(self,flag,positive,negative,level='debug',pre_format="  - "):
         "Write out either the positive or the negative message based on flag"
         if flag is True:
@@ -277,18 +242,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects):
         if flag is False:
             self.write(pre_format + negative,level)
         self.mini_check_counter += 1
-
-    def write_test_summary(self):
-        "Print out a useful, human readable summary"
-        self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
-        self.write('Total number of checks passed=%d\n----------------------\n************************\n\n'%self.pass_counter)
-        self.write('Total number of mini-checks=%d'%self.mini_check_counter)
-        self.write('Total number of mini-checks passed=%d'%self.mini_check_pass_counter)
-        failure_message_list = self.get_failure_message_list()
-        if len(failure_message_list) > 0:
-            self.write('\n--------FAILURE SUMMARY--------\n')
-            for msg in failure_message_list:
-                self.write(msg)
 
     def start(self):
         "Dummy method to be over-written by child classes"
