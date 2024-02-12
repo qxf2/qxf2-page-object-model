@@ -22,11 +22,11 @@ class Option_Parser:
                             help="Browser. Valid options are firefox, ie and chrome")
         self.parser.add_option("-U","--app_url",
                             dest="url",
-                            default=conf.base_url,
+                            default=conf.ui_base_url,
                             help="The url of the application")
         self.parser.add_option("-A","--api_url",
                             dest="api_url",
-                            default="http://35.167.62.251/",
+                            default="https://cars-app.qxf2.com/",
                             help="The url of the api")
         self.parser.add_option("-X","--testrail_flag",
                             dest="testrail_flag",

@@ -9,8 +9,6 @@ from .API_Interface import API_Interface
 from utils.results import Results
 import urllib.parse
 import logging
-from conf import api_example_conf as conf
-
 
 class API_Player(Results):
     "The class that maintains the test context/state"
@@ -88,6 +86,8 @@ class API_Player(Results):
 
     def register_car(self, car_name, brand, auth_details=None):
         "register car"
+        # pylint: disable=import-outside-toplevel
+        from conf import api_example_conf as conf
         url_params = {'car_name': car_name, 'brand': brand}
         url_params_encoded = urllib.parse.urlencode(url_params)
         customer_details = conf.customer_details
