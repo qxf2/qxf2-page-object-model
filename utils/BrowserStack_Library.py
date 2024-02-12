@@ -10,11 +10,6 @@ a) Handle expired sessions better
 """
 import os
 import requests
-from dotenv import load_dotenv
-
-load_dotenv('.env.remote')
-
-
 class BrowserStack_Library():
     "BrowserStack library to interact with BrowserStack artifacts"
     def __init__(self):

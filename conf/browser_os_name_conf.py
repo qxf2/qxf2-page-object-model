@@ -4,7 +4,7 @@ Conf file to generate the cross browser cross platform test run configuration
 
 import os
 from dotenv import load_dotenv
-load_dotenv('.env.remote')
+#load_dotenv('.env.remote')
 
 #Conf list for local
 default_browser = ["chrome"]  #default browser for the tests to run against when -B option is not used

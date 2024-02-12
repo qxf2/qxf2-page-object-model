@@ -5,12 +5,8 @@ import os
 import sys
 import questionary
 from clear_screen import clear
-from dotenv import load_dotenv
 from conf import api_example_conf
 from conf import browser_os_name_conf as conf
-
-
-load_dotenv('.env.remote')
 
 def display_gui_test_options(browser,browser_version,os_version,
                              os_name,remote_flag,testrail_flag,tesults_flag):

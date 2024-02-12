@@ -8,7 +8,6 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 import unittest,time,logging,os,inspect,pytest
-from dotenv import load_dotenv
 from utils.Base_Logging import Base_Logging
 from utils.BrowserStack_Library import BrowserStack_Library
 from .driverfactory import DriverFactory
@@ -21,8 +20,6 @@ import conf.screenshot_conf
 from utils import Gif_Maker
 from utils import accessibility_util
 from utils import snapshot_util
-
-load_dotenv('.env.remote')
 
 class Borg:
     #The borg design pattern is to share state
