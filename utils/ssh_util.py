@@ -43,7 +43,7 @@ class Ssh_Util:
             #Parsing an instance of the AutoAddPolicy to set_missing_host_key_policy() changes it to allow any host.
             self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             #Connect to the server
-            if self.password == '':
+            if len(self.password) == 0:
                 private_key = paramiko.RSAKey.from_private_key_file(self.pkey)
                 self.client.connect(hostname=self.host, port=self.port, username=self.username,pkey=private_key ,timeout=self.timeout, allow_agent=False, look_for_keys=False)
                 print("Connected to the server",self.host)
