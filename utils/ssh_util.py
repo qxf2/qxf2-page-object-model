@@ -8,9 +8,10 @@ Qxf2 Services: Utility script to ssh into a remote server
 
 import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from dotenv import load_dotenv
-import paramiko
 import socket
+import paramiko
+from dotenv import load_dotenv
+
 
 load_dotenv('.env.ssh')
 
@@ -18,23 +19,21 @@ class Ssh_Util:
     "Class to connect to remote server"
 
     def __init__(self):
-        try:
-            self.ssh_output = None
-            self.ssh_error = None
-            self.client = None
-            self.host= os.getenv('HOST')
-            self.username = os.getenv('USERNAME')
-            self.password = os.getenv('PASSWORD')
-            self.timeout = float(os.getenv('TIMEOUT'))
-            self.commands = os.getenv('COMMANDS')
-            self.pkey = os.getenv('PKEY')
-            self.port = os.getenv('PORT')
-            self.uploadremotefilepath = os.getenv('UPLOADREMOTEFILEPATH')
-            self.uploadlocalfilepath = os.getenv('UPLOADLOCALFILEPATH')
-            self.downloadremotefilepath = os.getenv('DOWNLOADREMOTEFILEPATH')
-            self.downloadlocalfilepath = os.getenv('DOWNLOADLOCALFILEPATH')
-        except Exception as e:
-            print('\nException when Initializing the Ssh_Util class! Kindly rename env_ssh_conf to .env.ssh and provide the credentials')
+        self.ssh_output = None
+        self.ssh_error = None
+        self.client = None
+        self.host= os.getenv('HOST')
+        self.username = os.getenv('USERNAME')
+        self.password = os.getenv('PASSWORD')
+        self.timeout = float(os.getenv('TIMEOUT'))
+        self.commands = os.getenv('COMMANDS')
+        self.pkey = os.getenv('PKEY')
+        self.port = os.getenv('PORT')
+        self.uploadremotefilepath = os.getenv('UPLOADREMOTEFILEPATH')
+        self.uploadlocalfilepath = os.getenv('UPLOADLOCALFILEPATH')
+        self.downloadremotefilepath = os.getenv('DOWNLOADREMOTEFILEPATH')
+        self.downloadlocalfilepath = os.getenv('DOWNLOADLOCALFILEPATH')
+
     def connect(self):
         "Login to the remote server"
         try:
@@ -175,5 +174,5 @@ if __name__=='__main__':
         else:
             print  ("Failed to download the file")
     except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:Kindly rename env_ssh_conf to .env.ssh and provide the credentials")
+        print('\nKindly rename env_ssh_conf to .env.ssh and provide the credentials\n')
+        print('PYTHON SAYS:',e)
