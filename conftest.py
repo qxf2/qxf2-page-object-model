@@ -4,11 +4,10 @@ from dotenv import load_dotenv
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
-from conf import api_example_conf
+from conf import report_portal_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
-from utils import Tesults
 from utils import interactive_mode
 
 load_dotenv()
@@ -90,7 +89,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag,api_url=api_example_conf.api_url):
+def test_api_obj(interactivemode_flag,api_url=base_url_conf.api_base_url):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower()=='y':
@@ -444,6 +443,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
                 # Send html formatted email body message with pytest report as an attachment
                 email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
+                from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
 
     except Exception as e:
@@ -494,11 +494,11 @@ def pytest_addoption(parser):
                             help="Browser. Valid options are firefox, ie and chrome")
         parser.addoption("--app_url",
                             dest="url",
-                            default=base_url_conf.base_url,
+                            default=base_url_conf.ui_base_url,
                             help="The url of the application")
         parser.addoption("--api_url",
                             dest="url",
-                            default="http://35.167.62.251",
+                            default="https://cars-app.qxf2.com/",
                             help="The url of the api")
         parser.addoption("--testrail_flag",
                             dest="testrail_flag",

@@ -55,6 +55,18 @@ c) If you do not have it already, get pip (NOTE: Most recent Python distribution
 
 d) pip install -r requirements.txt to install dependencies
 
+e)configure environmental variables 
+
+Templates for.env files are provided.
+Kindly fill in the credentials and rename the files according to the specified format.
+
+* env_conf to .env 
+	Tesults, TestRail, Gmail , Report portal crentials details can be entered here.
+* env_ssh_conf to .env.ssh
+    ssh server credentials used by the SSHKeywords keyword to connect to remote servers.
+* env_remote to .env.remote 
+    Remote WebDriver Server Details (BrowserStack/SauceLabs).
+
 If you ran into some problems on step (d), please report them as an issue or email Arun(mak@qxf2.com).
 
 
@@ -119,9 +131,7 @@ a) Directory structure of our current Templates
 
    ./
 
-	|__conf: For all configurations 
-
-	|__env For credential files
+	|__conf: For all configurations 	
 
 	|__log: Log files for all tests
 
@@ -139,16 +149,6 @@ a) Directory structure of our current Templates
 ---------------------------
 COMMANDS FOR RUNNING TESTS
 ---------------------------
-
-Templates for.env files are accessible.
-Kindly fill in the credentials and rename the files according to the specified format.
-
-* env_conf to .env 
-	Tesults, TestRail, Gmail , Report portal crentials details can be entered here.
-* env_ssh_conf to .env.ssh
-    ssh server credentials used by the SSHKeywords keyword to connect to remote servers.
-* env_remote to .env.remote 
-    Remote WebDriver Server Details (BrowserStack/SauceLabs).
 
 a)py.test [options]
 

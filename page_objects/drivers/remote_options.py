@@ -5,13 +5,7 @@ import os
 import json
 from datetime import datetime
 import requests
-from dotenv import load_dotenv
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-
-
-
-load_dotenv('.env.remote')
-
 
 class RemoteOptions():
     """Class contains methods for various remote options for browserstack and saucelab."""

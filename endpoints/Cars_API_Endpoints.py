@@ -1,7 +1,6 @@
 """
 API endpoints for Cars
 """
-
 class Cars_API_Endpoints:
 	"Class for cars endpoints"
 
