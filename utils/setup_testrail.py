@@ -63,15 +63,15 @@ def setup_testrail(project_name='POM DEMO',milestone_name=None,test_run_name=Non
     #4. write out test runid to latest_test_run.txt
     conf_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','conf'))
     config = ConfigParser.ConfigParser()
-    tr_obj = Test_Rail()
+    testrail_object = Test_Rail()
     #1. Get project id
-    project_id = tr_obj.get_project_id(project_name)
+    project_id = testrail_object.get_project_id(project_name)
 
     if project_id is not None: #i.e., the project exists
         #2. if milestone_name is not None:
         #   create the milestone if it does not already exist
         if milestone_name is not None:
-            tr_obj.create_milestone(project_name,milestone_name)
+            testrail_object.create_milestone(project_name,milestone_name)
 
         #3. if test_run_name is not None
         #   create the test run if it does not already exist
@@ -97,8 +97,8 @@ def setup_testrail(project_name='POM DEMO',milestone_name=None,test_run_name=Non
                     test_run_name =  test_run_name +  "All"
                 else:
                     test_run_name = test_run_name + str(description)
-            tr_obj.create_test_run(project_name,test_run_name,milestone_name=milestone_name,case_ids=case_ids,description=description)
-            run_id = tr_obj.get_run_id(project_name,test_run_name)
+            testrail_object.create_test_run(project_name,test_run_name,milestone_name=milestone_name,case_ids=case_ids,description=description)
+            run_id = testrail_object.get_run_id(project_name,test_run_name)
             save_new_test_run_details(os.path.join(conf_dir,'latest_test_run.txt'),test_run_name,run_id)
     else:
         print('Project does not exist: ',project_name)
