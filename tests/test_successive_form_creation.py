@@ -57,8 +57,6 @@ def test_succesive_form_creation(test_obj):
                                 positive="Heading on the redirect page checks out!\n",
                                 negative="Fail: Heading on the redirect page is incorrect!")
             test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-            case_id = testrail_file.test_successive_form_creation
-            test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
             test_obj.add_tesults_case("Check redirect heading "  + str(form_number), "Check the heading on the redirect page", "test_successive_form_creation", result_flag, "Fail: Heading on the redirect page is incorrect!", [])
 
             #c. Check the copyright
@@ -67,8 +65,6 @@ def test_succesive_form_creation(test_obj):
                                 positive="Copyright check was successful\n",
                                 negative="Copyright looks wrong.\nObtained the copyright: %s\n"%test_obj.get_copyright())
             test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-            case_id = testrail_file.test_successive_form_creation
-            test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
             test_obj.add_tesults_case("Check copyright "  + str(form_number), "Check the copyright", "test_successive_form_creation", result_flag, "Copyright looks wrong.\nObtained the copyright: %s\n"%test_obj.get_copyright(), [])
 
             #d. Visit main page again
