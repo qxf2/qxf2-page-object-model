@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
-from conf import api_example_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
@@ -315,7 +314,7 @@ def email_pytest_report(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-        
+
 @pytest.fixture
 def app_name(request):
     "pytest fixture for app name"
@@ -427,7 +426,7 @@ def pytest_configure(config):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
-        
+
 
     #Registering custom markers to supress warnings
     config.addinivalue_line("markers", "GUI: mark a test as part of the GUI regression suite.")
