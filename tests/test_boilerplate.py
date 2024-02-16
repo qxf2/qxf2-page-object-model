@@ -17,7 +17,7 @@ def test_boilerplate(test_obj):
         actual_pass = -1
 
         #This is the test object, you can change it to the desired page with relevance to the page factory
-        test_obj = PageFactory.get_page_object("main page", base_url=test_obj.base_url)
+        test_obj = PageFactory.get_page_object("zero", base_url=test_obj.base_url)
 
         #Print out the result
         test_obj.write_test_summary()

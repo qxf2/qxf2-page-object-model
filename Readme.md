@@ -63,9 +63,9 @@ __2. Setup for GUI/Selenium automation__
 
 a) Get setup with your browser driver. If you don't know how to, please try:
 
-   > [For Chrome](https://sites.google.com/a/chromium.org/chromedriver/getting-started)
+   > [For Chrome](https://googlechromelabs.github.io/chrome-for-testing/)
 
-   > [For Firefox]( https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver)
+   > [For Firefox](https://github.com/mozilla/geckodriver/releases)
 
 #Note: Check Firefox version & Selenium version compatibility before downloading geckodriver.
 
@@ -77,7 +77,7 @@ __If your setup goes well__, you should be to run a simple test with this comman
 
 __Optional steps__ for integrating with third-party tools:
 
-* [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Testrail)
+* [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-TestRail-using-Python)
 * [Integrate our Python GUI/web automation framework with BrowserStack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#browserstack)
 * [Integrate our Python Selenium automation framework with Sauce Labs ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#sauce-labs)
 * [Run Python integration tests on Jenkins ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#jenkins)
