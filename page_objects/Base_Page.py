@@ -9,9 +9,9 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from .driverfactory import DriverFactory
-from .selenium_objects import Selenium_Objects
-from .test_reporting_objects import Test_Reporting_Objects
-from .logging_objects import Logging_Objects
+from .core_helpers.selenium_objects import Selenium_Objects
+from .core_helpers.test_reporting_objects import Test_Reporting_Objects
+from .core_helpers.logging_objects import Logging_Objects
 from page_objects import PageFactory
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials
@@ -111,10 +111,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
 
         self.start()
 
-    def get_current_driver(self):
-        "Return current driver."
-        return self.driver
-
     def set_calling_module(self,name):
         "Set the test name"
         self.calling_module = name
@@ -193,58 +189,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
         "Set the reportportal logger"
         self.rp_logger = self.log_obj.setup_rp_logging(rp_pytest_service)
 
-
-    def append_latest_image(self,screenshot_name):
-        "Get image url list from Browser Stack"
-        screenshot_url = self.browserstack_obj.get_latest_screenshot_url()
-        image_dict = {}
-        image_dict['name'] = screenshot_name
-        image_dict['url'] = screenshot_url
-        self.image_url_list.append(image_dict)
-
-
-    def save_screenshot_reportportal(self,image_name):
-        "Method to save image to ReportPortal"
-        try:
-            with open(image_name, "rb") as fh:
-                image = fh.read()
-            screenshot_name = os.path.basename(image_name)
-            self.rp_logger.info(
-                screenshot_name,
-                attachment={
-                    "name": screenshot_name,
-                    "data": image,
-                    "mime": "image/png"
-                },
-            )
-        except Exception as e:
-            self.write("Exception when trying to get rplogger")
-            self.write(str(e))
-            self.exceptions.append("Error when trying to get reportportal logger")
-
-
-    def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
-        "Take a screenshot"
-        if self.browserstack_flag is True and conf.screenshot_conf.BS_ENABLE_SCREENSHOTS is False:
-            return
-        if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
-            for i in range(1,100):
-                if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
-                    continue
-                else:
-                    os.rename(self.screenshot_dir + os.sep +screenshot_name+'.png',self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png')
-                    break
-        screenshot_name = self.screenshot_dir + os.sep + screenshot_name+'.png'
-        self.driver.get_screenshot_as_file(screenshot_name)
-	    #self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
-        if self.rp_logger:
-            self.save_screenshot_reportportal(screenshot_name)
-        if self.browserstack_flag is True:
-            self.append_latest_image(screenshot_name)
-        if self.tesults_flag is True:
-            self.images.append(screenshot_name)
-
-
     def open(self,url,wait_time=2):
         "Visit the page base_url + url"
         if self.base_url[-1] != '/' and url[0] != '/':
@@ -289,7 +233,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
 
         return window_handle_id
 
-
     def switch_window(self,name=None):
         "Make the driver switch to the last window or a window with a name"
         result_flag = False
@@ -314,7 +257,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
 
         return result_flag
 
-
     def close_current_window(self):
         "Close the current window"
         result_flag = False
@@ -330,7 +272,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
             self.exceptions.append("Error when trying to close the current window")
 
         return result_flag
-
 
     def get_window_handles(self):
         "Get the window handles"
@@ -421,32 +362,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
 
         return result_flag
 
-    def set_text(self,locator,value,clear_flag=True):
-        "Set the value of the text field"
-        text_field = None
-        try:
-            text_field = self.get_element(locator)
-            if text_field is not None and clear_flag is True:
-                try:
-                    text_field.clear()
-                except Exception as e:
-                    self.write(str(e),'debug')
-                    self.exceptions.append("Could not clear the text field- '%s' in the conf/locators.conf file"%locator)
-        except Exception as e:
-            self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
-
-        result_flag = False
-        if text_field is not None:
-            try:
-                text_field.send_keys(value)
-                result_flag = True
-            except Exception as e:
-                self.write('Could not write to text field: %s'%locator,'debug')
-                self.write(str(e),'debug')
-                self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
-
-        return result_flag
-
     def hit_enter(self,locator,wait_time=2):
         "Hit enter"
         try:
@@ -457,7 +372,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
             self.write(str(e),'debug')
             self.exceptions.append("An exception occurred when hitting enter")
             return None
-
 
     def scroll_down(self,locator,wait_time=2):
         "Scroll down"
@@ -481,11 +395,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
         action_obj.perform()
         self.wait(wait_seconds)
 
-    def teardown(self):
-        "Tears down the driver"
-        self.driver.quit()
-        self.reset()
-
     def add_tesults_case(self, name, desc, suite, result_flag, msg='', files=[], params={}, custom={}):
         "Update Tesults with test results"
         if self.tesults_flag is True:
@@ -503,12 +412,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
             for key, value in custom.items():
                 caseObj[key] = str(value)
             self.tesult_object.add_test_case(caseObj)
-
-    def make_gif(self):
-        "Create a gif of all the screenshots within the screenshots directory"
-        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
-
-        return self.gif_file_name
 
     def smart_wait(self,locator,wait_seconds=5):
         "Performs an explicit wait for a particular element"

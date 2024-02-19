@@ -8,9 +8,9 @@ import unittest,time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from utils.stop_test_exception_util import Stop_Test_Exception
 from .driverfactory import DriverFactory
-from .selenium_objects import Selenium_Objects
-from .logging_objects import Logging_Objects
-from .test_reporting_objects import Test_Reporting_Objects
+from .core_helpers.selenium_objects import Selenium_Objects
+from .core_helpers.logging_objects import Logging_Objects
+from .core_helpers.test_reporting_objects import Test_Reporting_Objects
 from page_objects import PageFactory
 from utils import Gif_Maker
 
@@ -72,14 +72,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
         self.set_log_file()
         self.start()
 
-    def make_gif(self):
-        "Create a gif of all the screenshots within the screenshots directory"
-        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
-
-    def get_current_driver(self):
-        "Return current driver"
-        return self.driver
-
     def get_driver_title(self):
         "Return the title of the current page"
         return self.driver.title
@@ -137,54 +129,9 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
 
         return self.screenshot_dir
 
-    def append_latest_image(self,screenshot_name):
-        "Get image url list from Browser Stack"
-        screenshot_url = self.browserstack_obj.get_latest_screenshot_url()
-        image_dict = {}
-        image_dict['name'] = screenshot_name
-        image_dict['url'] = screenshot_url
-        self.image_url_list.append(image_dict)
-
-    def save_screenshot(self,screenshot_name):
-        "Take a screenshot"
-        if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
-            for i in range(1,100):
-                if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
-                    continue
-                else:
-                    os.rename(self.screenshot_dir + os.sep +screenshot_name+'.png',self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png')
-                    break
-        self.driver.get_screenshot_as_file(self.screenshot_dir + os.sep+ screenshot_name+'.png')
-        if self.browserstack_flag is True:
-            self.append_latest_image(screenshot_name)
-
     def open(self,wait_time=2):
         "Visit the page base_url + url"
         self.wait(wait_time)
-
-    def set_text(self,locator,value,clear_flag=True):
-        "Set the value of the text field"
-        text_field = self.get_element(locator)
-        try:
-            if clear_flag is True:
-                text_field.clear()
-        except Exception as e:
-            self.write('ERROR: Could not clear the text field: %s'%locator,'debug')
-
-        result_flag = False
-        try:
-            text_field.send_keys(value)
-            result_flag = True
-        except Exception as e:
-            self.write('Unable to write to text field: %s'%locator,'debug')
-            self.write(str(e),'debug')
-
-        return result_flag
-
-    def teardown(self):
-        "Tears down the driver"
-        self.driver.quit()
-        self.reset()
 
     def smart_wait(self,wait_seconds,locator):
         "Performs an explicit wait for a particular element"

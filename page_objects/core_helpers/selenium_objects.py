@@ -2,6 +2,10 @@ import time
 
 class Selenium_Objects:
 
+    def get_current_driver(self):
+        "Return current driver."
+        return self.driver
+
     def check_element_displayed(self,locator):
         "This method checks if the web element is present in page or not and returns True or False accordingly"
         result_flag = False
@@ -178,4 +182,36 @@ class Selenium_Objects:
             self.smart_wait(locator,wait_seconds=wait_seconds)
         else:
             time.sleep(wait_seconds)
+
+    def set_text(self,locator,value,clear_flag=True):
+        "Set the value of the text field"
+        text_field = None
+        try:
+            text_field = self.get_element(locator)
+            if text_field is not None and clear_flag is True:
+                try:
+                    text_field.clear()
+                except Exception as e:
+                    self.write(str(e),'debug')
+                    self.exceptions.append("Could not clear the text field- '%s' in the conf/locators.conf file"%locator)
+        except Exception as e:
+            self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
+
+        result_flag = False
+        if text_field is not None:
+            try:
+                text_field.send_keys(value)
+                result_flag = True
+            except Exception as e:
+                self.write('Could not write to text field: %s'%locator,'debug')
+                self.write(str(e),'debug')
+                self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
+
+        return result_flag
+
+    def teardown(self):
+        "Tears down the driver"
+        self.driver.quit()
+        self.reset()
+
             

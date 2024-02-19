@@ -71,3 +71,4 @@ class Logging_Objects:
             self.teardown()
             raise Stop_Test_Exception("Stopping test because: "+ msg)
             
+            
