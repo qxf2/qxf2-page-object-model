@@ -11,6 +11,7 @@ from .driverfactory import DriverFactory
 from .core_helpers.selenium_objects import Selenium_Objects
 from .core_helpers.logging_objects import Logging_Objects
 from .core_helpers.test_reporting_objects import Test_Reporting_Objects
+from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
 from utils import Gif_Maker
 
@@ -29,7 +30,7 @@ class Borg:
 
         return result_flag
 
-class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects, Test_Reporting_Objects):
+class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects, Test_Reporting_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self):
@@ -87,21 +88,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
             calling_filename = calling_file.split('/')
 
         self.calling_module = calling_filename[-1].split('.')[0]
-
         return self.calling_module
-
-    def set_directory_structure(self):
-        "Setup the required directory structure if it is not already present"
-        try:
-            self.screenshots_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','screenshots'))
-            if not os.path.exists(self.screenshots_parent_dir):
-                os.makedirs(self.screenshots_parent_dir)
-            self.logs_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
-            if not os.path.exists(self.logs_parent_dir):
-                os.makedirs(self.logs_parent_dir)
-        except Exception as e:
-            self.write("Exception when trying to set directory structure")
-            self.write(str(e))
 
     def set_screenshot_dir(self):
         "Set the screenshot directory"

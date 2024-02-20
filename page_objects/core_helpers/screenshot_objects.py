@@ -1,3 +1,6 @@
+import os
+from utils import Gif_Maker
+
 
 class Screenshot_Objects:
     def append_latest_image(self,screenshot_name):
@@ -47,4 +50,25 @@ class Screenshot_Objects:
             self.write("Exception when trying to get rplogger")
             self.write(str(e))
             self.exceptions.append("Error when trying to get reportportal logger")
+
+    def make_gif(self):
+        "Create a gif of all the screenshots within the screenshots directory"
+        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
+        return self.gif_file_name
+
+    def set_directory_structure(self):
+        "Setup the required directory structure if it is not already present"
+        try:
+            self.screenshots_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','screenshots'))
+            if not os.path.exists(self.screenshots_parent_dir):
+                os.makedirs(self.screenshots_parent_dir)
+            self.logs_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
+            if not os.path.exists(self.logs_parent_dir):
+                os.makedirs(self.logs_parent_dir)
+        except Exception as e:
+            # Using print as log_obj wouldnt be created to write this exception to log file
+            print("Exception when trying to set screenshot directory due to error:",str(e))
+
+
+
 

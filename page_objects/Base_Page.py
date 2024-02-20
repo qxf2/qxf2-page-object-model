@@ -12,6 +12,7 @@ from .driverfactory import DriverFactory
 from .core_helpers.selenium_objects import Selenium_Objects
 from .core_helpers.test_reporting_objects import Test_Reporting_Objects
 from .core_helpers.logging_objects import Logging_Objects
+from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
 from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials
@@ -39,7 +40,7 @@ class Borg:
 # Get the Base URL from the conf file
 base_url = conf.base_url_conf
 
-class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects):
+class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self,base_url):
@@ -81,7 +82,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
         self.gif_file_name = None
         self.rp_logger = None
 
-
     def turn_on_highlight(self):
         "Highlight the elements being operated upon"
         self.highlight_flag = True
@@ -93,7 +93,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
-
 
     def register_driver(self,remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name):
         "Register the driver with Page."
@@ -134,21 +133,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
             self.set_calling_module(testname)
 
         return self.calling_module
-
-
-    def set_directory_structure(self):
-        "Setup the required directory structure if it is not already present"
-        try:
-            self.screenshots_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','screenshots'))
-            if not os.path.exists(self.screenshots_parent_dir):
-                os.makedirs(self.screenshots_parent_dir)
-            self.logs_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
-            if not os.path.exists(self.logs_parent_dir):
-                os.makedirs(self.logs_parent_dir)
-        except Exception as e:
-            # Using print as log_obj wouldnt be created to write this exception to log file
-            print("Exception when trying to set screenshot directory due to error:",str(e))
-
 
     def set_screenshot_dir(self,os_name,os_version,browser,browser_version):
         "Set the screenshot directory"
@@ -221,7 +205,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects)
             self.write("Exception when trying to set windows name")
             self.write(str(e))
             self.exceptions.append("Error when setting up the name of the current window")
-
 
     def get_window_by_name(self,window_name):
         "Return window handle id based on name"
