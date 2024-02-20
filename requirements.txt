@@ -18,3 +18,4 @@ clear-screen>=0.1.14
 prompt-toolkit==2.0.10
 axe_selenium_python==2.1.6
 pytest-snapshot==0.9.0
+beautifulsoup4
