@@ -1,7 +1,10 @@
+"""
+Helper class for Base_Page and Mobile_Base_Page consisiting of Selenium/Appium objects
+"""
 import time
 
 class Selenium_Objects:
-
+    """Class contains common Selenium operations"""
     def get_current_driver(self):
         "Return current driver."
         return self.driver

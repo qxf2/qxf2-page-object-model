@@ -1,7 +1,11 @@
+"""
+Helper class for Base_Page and Mobile_Base_Page consisiting of logging objects
+"""
 from utils.Base_Logging import Base_Logging
 import logging
 
 class Logging_Objects:
+    """Class for logging objects"""
     def write_test_summary(self):
         "Print out a useful, human readable summary"
         self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
@@ -42,7 +46,7 @@ class Logging_Objects:
 
     def set_log_file(self):
         "set the log file"
-        self.log_name = self.testname + '.log'
+        self.log_name = "self.testname" + '.log'
         self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
 
     def log_result(self,flag,positive,negative,level='info'):

@@ -1,6 +1,10 @@
+"""
+Helper class for Base_Page and Mobile_Base_Page consisiting of Scrreenshot objects
+"""
 import os
 from utils import Gif_Maker
 class Screenshot_Objects:
+    """Class to handle screenshots"""
     def append_latest_image(self,screenshot_name):
         "Get image url list from Browser Stack"
         screenshot_url = self.browserstack_obj.get_latest_screenshot_url()

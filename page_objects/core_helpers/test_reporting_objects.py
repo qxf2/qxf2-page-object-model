@@ -1,6 +1,10 @@
+"""
+Helper class for Base_Page and Mobile_Base_Page consisiting of remote reporting objects
+"""
 import conf.remote_credentials
 
 class Test_Reporting_Objects:
+    """Class for Test Reporting"""
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
