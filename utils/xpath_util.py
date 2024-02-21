@@ -92,7 +92,7 @@ class XpathUtil:
                         .replace(' ', '_')} = {locator.encode('utf-8').decode('latin-1')}""")
                 else:
                     print(f"""{guessable_element}_foreign_language_{self.language_counter} =
-                        {locator.encode('utf-8').decode('latin-1')} ---> 
+                        {locator.encode('utf-8').decode('latin-1')} --->
                         Foreign language found, please change the variable name appropriately""")
                     self.language_counter += 1
             else:
