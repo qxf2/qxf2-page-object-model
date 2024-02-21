@@ -45,7 +45,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
             self.testrail_flag = False
             self.browserstack_flag = False
             self.test_run_id = None
-
+            self.tesults_flag = False
             self.reset()
 
         self.driver_obj = DriverFactory()
@@ -60,6 +60,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
         self.mini_check_counter = 0 #Increment when conditional_write is called
         self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
         self.failure_message_list = []
+        self.rp_logger = None
+        self.exceptions = []
         self.screenshot_counter = 1
 
     def switch_page(self,page_name):
@@ -102,18 +104,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
 
     def get_screenshot_dir(self):
         "Get the name of the test"
-        self.testname = self.get_calling_module()
-        self.testname =self.testname.replace('<','')
-        self.testname =self.testname.replace('>','')
-        self.screenshot_dir = self.screenshots_parent_dir + os.sep  + self.testname
-        if os.path.exists(self.screenshot_dir):
-            for i in range(1,4096):
-                if os.path.exists(self.screenshot_dir + '_'+str(i)):
-                    continue
-                else:
-                    os.rename(self.screenshot_dir,self.screenshot_dir +'_'+str(i))
-                    break
-
+        self.testname = self.get_test_name()
+        self.screenshot_dir = self.screenshot_directory(self.testname)
         return self.screenshot_dir
 
     def open(self,wait_time=2):

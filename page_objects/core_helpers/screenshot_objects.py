@@ -1,7 +1,5 @@
 import os
 from utils import Gif_Maker
-
-
 class Screenshot_Objects:
     def append_latest_image(self,screenshot_name):
         "Get image url list from Browser Stack"
@@ -68,6 +66,27 @@ class Screenshot_Objects:
         except Exception as e:
             # Using print as log_obj wouldnt be created to write this exception to log file
             print("Exception when trying to set screenshot directory due to error:",str(e))
+
+    def get_test_name(self):
+        testname = self.get_calling_module()
+        testname = testname.replace('<','')
+        testname = testname.replace('>','')
+        return testname
+
+    def screenshot_directory(self, testname):
+        screenshot_dir = self.screenshots_parent_dir + os.sep + testname
+        if os.path.exists(screenshot_dir) and overwrite_flag is True:
+            for i in range(1,4096):
+                if os.path.exists(screenshot_dir + '_'+str(i)):
+                    continue
+                else:
+                    os.rename(screenshot_dir,screenshot_dir +'_'+str(i))
+                    break
+
+        return screenshot_dir
+
+
+
 
 
 
