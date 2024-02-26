@@ -5,7 +5,7 @@ jobs:
   toxify:
 
       docker:
-        - image: 31z4/tox
+        - image: divio/multi-python
 
       parallelism: 3
 
