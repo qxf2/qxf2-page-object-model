@@ -32,13 +32,15 @@ RUN dpkg-divert --add --rename --divert /opt/google/chrome/google-chrome.real /o
   && chmod 755 /opt/google/chrome/google-chrome
 
 # Install Chrome Driver (latest version)
-RUN CHROME_DRIVER_VERSION=$(wget -qO- 'https://chromedriver.storage.googleapis.com/LATEST_RELEASE') \
-  && wget --no-verbose -O /tmp/chromedriver_linux64.zip "https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/chromedriver_linux64.zip" \
-  && rm -rf /opt/selenium/chromedriver \
-  && unzip /tmp/chromedriver_linux64.zip -d /opt/selenium \
-  && rm /tmp/chromedriver_linux64.zip \
-  && mv /opt/selenium/chromedriver /usr/bin/chromedriver \
-  && chmod 755 /usr/bin/chromedriver
+RUN CHROME_VER=$(google-chrome --version | grep -oP "Google Chrome \K[\d.]+") \
+    && echo "Chrome version: $CHROME_VER" \
+    && wget --no-verbose -O /tmp/chromedriver-linux64.zip "https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VER}/linux64/chromedriver-linux64.zip" \
+    && rm -rf /opt/selenium/chromedriver \
+    && mkdir -p /opt/selenium \
+    && unzip /tmp/chromedriver-linux64.zip -d /opt/selenium \
+    && rm /tmp/chromedriver-linux64.zip \
+    && mv /opt/selenium/chromedriver-linux64/chromedriver /usr/bin/chromedriver \
+    && chmod 755 /usr/bin/chromedriver
 
 ARG FIREFOX_VERSION=latest
 RUN FIREFOX_DOWNLOAD_URL="$(if [ "$FIREFOX_VERSION" = "latest" ]; then echo "https://download.mozilla.org/?product=firefox-"$FIREFOX_VERSION"-ssl&os=linux64&lang=en-US"; else echo "https://download-installer.cdn.mozilla.net/pub/firefox/releases/"$FIREFOX_VERSION"/linux-x86_64/en-US/firefox-"$FIREFOX_VERSION".tar.bz2"; fi)" \
@@ -68,7 +70,7 @@ RUN GECKODRIVER_VERSION=$(wget -qO- 'https://api.github.com/repos/mozilla/geckod
 RUN apt-get update && apt-get install -y \
     python3.10 \
     python3-setuptools=59.6.0-1.2ubuntu0.22.04.1 \
-    python3-pip=22.0.2+dfsg-1ubuntu0.3 \
+    python3-pip=22.0.2+dfsg-1ubuntu0.4 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
