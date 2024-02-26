@@ -4,14 +4,14 @@ pytest==6.2.4 ; python_version =='3.6'
 pytest>6.2.4 ; python_version >='3.7'
 selenium>=4.12.0
 python_dotenv==0.16.0
-Appium_Python_Client==3.2.0
+Appium_Python_Client==3.1.1
 pytest-xdist>=1.31
 pytest-html>=3.0.0
 pytest-rerunfailures>=9.1.1
 pytest_reportportal==5.0.8
 pillow>=6.2.0
 tesults==1.2.1
-boto3==1.34.49
+boto3==1.33.0
 loguru
 imageio
 questionary>=1.9.0
