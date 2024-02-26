@@ -7,13 +7,14 @@ import sys
 from selenium import webdriver
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
+from appium.options.android import UiAutomator2Options
 from conf import remote_credentials
 from page_objects.drivers.remote_options import RemoteOptions
 from page_objects.drivers.local_browsers import LocalBrowsers
 from conf import ports_conf
 from conf import screenshot_conf
 
-localhost_url = 'http://localhost:%s/wd/hub'%ports_conf.port #Set the url of localhost
+localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost
 
 class DriverFactory(RemoteOptions, LocalBrowsers):
     """Class contains methods for getting web drivers and setting up remote testing platforms."""
@@ -183,15 +184,21 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                 desired_capabilities['appPackage'] = app_package
                 desired_capabilities['appActivity'] = app_activity
                 if device_flag.lower() == 'y':
-                    mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
+                    mobile_driver = self.set_capabilities_options(desired_capabilities)
+                    #mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
                 else:
                     desired_capabilities['app'] = os.path.join(app_path, app_name)
-                    mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
+                    mobile_driver = self.set_capabilities_options(desired_capabilities)
+                    #mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
         return mobile_driver
 
+    def set_capabilities_options(self, desired_capabilities):
+        capabilities_options = UiAutomator2Options().load_capabilities(desired_capabilities)
+        mobile_driver = mobile_webdriver.Remote(command_executor=localhost_url,options=capabilities_options)
+        return mobile_driver
 
     def ios(self, remote_flag, desired_capabilities, app_path, app_name, username,
             password, app_package, no_reset_flag, ud_id, org_id, signing_id,
@@ -214,8 +221,8 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                     desired_capabilities['xcodeOrgId'] = org_id
                     desired_capabilities['xcodeSigningId'] = signing_id
 
-                mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
-
+                mobile_driver = self.set_capabilities_options(desired_capabilities)
+                #mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
