@@ -39,7 +39,6 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         return web_driver
 
-
     def get_browser(self, browser, browser_version):
         """Select the browser."""
 
@@ -83,7 +82,9 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         password = remote_credentials.ACCESS_KEY
 
         #Set browser
-        desired_capabilities = self.get_browser(browser, browser_version)
+        options = self.get_browser(browser, browser_version)
+
+        desired_capabilities = {}
 
         #Set os and os_version
         desired_capabilities = self.set_os(desired_capabilities, os_name, os_version)
@@ -100,13 +101,12 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         if screenshot_conf.BS_ENABLE_SCREENSHOTS is None:
             screenshot_conf.BS_ENABLE_SCREENSHOTS = False
 
-        desired_capabilities['browserstack.debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
+        desired_capabilities['debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
 
-        capabilities_options = UiAutomator2Options().load_capabilities(desired_capabilities)
-        #mobile_driver = mobile_webdriver.Remote(command_executor=localhost_url,options=capabilities_options)
+        options.set_capability('bstack:options', desired_capabilities)
 
-        web_driver = webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com"
-                                                       %(username, password)), options=capabilities_options)
+        web_driver = webdriver.Remote(command_executor="http://%s:%s@hub-cloud.browserstack.com/wd/hub"
+                                                       %(username, password), options=options)
 
         return web_driver
 
@@ -118,13 +118,17 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         password = remote_credentials.ACCESS_KEY
 
         #set browser
-        desired_capabilities = self.get_browser(browser, browser_version)
+        options = self.get_browser(browser, browser_version)
+
+        desired_capabilities = {}
 
         #set saucelab platform
         desired_capabilities = self.saucelab_platform(desired_capabilities, os_name, os_version)
 
+        options.set_capability('sauce:options', desired_capabilities)
+
         web_driver = webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
-                                      %(username, password), desired_capabilities=desired_capabilities)
+                                      %(username, password), options=options)
 
         return web_driver
 
@@ -188,17 +192,16 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                 desired_capabilities['appActivity'] = app_activity
                 if device_flag.lower() == 'y':
                     mobile_driver = self.set_capabilities_options(desired_capabilities,url=localhost_url)
-                    #mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
                 else:
                     desired_capabilities['app'] = os.path.join(app_path, app_name)
                     mobile_driver = self.set_capabilities_options(desired_capabilities, url=localhost_url)
-                    #mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
         return mobile_driver
 
     def set_capabilities_options(self, desired_capabilities, url):
+        """Set the capabilities options for the mobile driver."""
         capabilities_options = UiAutomator2Options().load_capabilities(desired_capabilities)
         mobile_driver = mobile_webdriver.Remote(command_executor=url,options=capabilities_options)
         return mobile_driver
@@ -225,7 +228,6 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                     desired_capabilities['xcodeSigningId'] = signing_id
 
                 mobile_driver = self.set_capabilities_options(desired_capabilities, url=localhost_url)
-                #mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 

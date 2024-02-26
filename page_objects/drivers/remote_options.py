@@ -2,6 +2,11 @@
 Set the desired option for running the test on a remote platform.
 """
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.ie.options import Options as IeOptions
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+#from selenium.webdriver.opera.options import Options as OperaOptions
+from selenium.webdriver.safari.options import Options as SafariOptions
 from conf import remote_credentials
 import os
 import requests
@@ -14,10 +19,13 @@ class RemoteOptions():
     @staticmethod
     def firefox(browser_version):
         """Set web browser as firefox."""
+        options = FirefoxOptions()
+        options.browser_version = browser_version
+
         desired_capabilities = DesiredCapabilities.FIREFOX
         desired_capabilities['browser_version'] = browser_version
 
-        return desired_capabilities
+        return options
 
     @staticmethod
     def explorer(browser_version):
@@ -25,7 +33,10 @@ class RemoteOptions():
         desired_capabilities = DesiredCapabilities.INTERNETEXPLORER
         desired_capabilities['browser_version'] = browser_version
 
-        return desired_capabilities
+        options = IeOptions()
+        options.browser_version = browser_version
+
+        return options
 
     @staticmethod
     def chrome(browser_version):
@@ -33,7 +44,10 @@ class RemoteOptions():
         desired_capabilities = DesiredCapabilities.CHROME
         desired_capabilities['browser_version'] = browser_version
 
-        return desired_capabilities
+        options = ChromeOptions()
+        options.browser_version = browser_version
+
+        return options
 
     @staticmethod
     def opera(browser_version):
@@ -49,34 +63,38 @@ class RemoteOptions():
         desired_capabilities = DesiredCapabilities.SAFARI
         desired_capabilities['browser_version'] = browser_version
 
-        return desired_capabilities
+        options = SafariOptions()
+        options.browser_version = browser_version
+
+        return options
 
     @staticmethod
     def set_os(desired_capabilities, os_name, os_version):
         """Set os name and os_version."""
+        
         desired_capabilities['os'] = os_name
-        desired_capabilities['os_version'] = os_version
+        desired_capabilities['osVersion'] = os_version
 
         return desired_capabilities
 
     @staticmethod
     def remote_project_name(desired_capabilities, remote_project_name):
         """Set remote project name for browserstack."""
-        desired_capabilities['project'] = remote_project_name
+        desired_capabilities['projectName'] = remote_project_name
 
         return desired_capabilities
 
     @staticmethod
     def remote_build_name(desired_capabilities, remote_build_name):
         """Set remote build name for browserstack."""
-        desired_capabilities['build'] = remote_build_name+"_"+str(datetime.now().strftime("%c"))
+        desired_capabilities['buildName'] = remote_build_name+"_"+str(datetime.now().strftime("%c"))
 
         return desired_capabilities
 
     @staticmethod
     def saucelab_platform(desired_capabilities, os_name, os_version):
         """Set platform for saucelab."""
-        desired_capabilities['platform'] = os_name + ' '+os_version
+        desired_capabilities['platform_name'] = os_name + ' '+os_version
 
         return desired_capabilities
 
