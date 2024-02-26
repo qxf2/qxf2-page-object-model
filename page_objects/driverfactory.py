@@ -5,8 +5,7 @@ This module gets the webdrivers for different browsers and sets up the remote te
 import os
 import sys
 from selenium import webdriver
-#from selenium.webdriver.remote.webdriver import RemoteConnection
-from selenium.webdriver.remote.remote_connection import RemoteConnection
+from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from appium.options.android import UiAutomator2Options
 from conf import remote_credentials
@@ -103,8 +102,11 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         desired_capabilities['browserstack.debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
 
-        web_driver = webdriver.Remote(command_executor=RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"
-                                                       %(username, password), resolve_ip=False), desired_capabilities=desired_capabilities)
+        capabilities_options = UiAutomator2Options().load_capabilities(desired_capabilities)
+        #mobile_driver = mobile_webdriver.Remote(command_executor=localhost_url,options=capabilities_options)
+
+        web_driver = webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com"
+                                                       %(username, password)), options=capabilities_options)
 
         return web_driver
 
@@ -185,20 +187,20 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                 desired_capabilities['appPackage'] = app_package
                 desired_capabilities['appActivity'] = app_activity
                 if device_flag.lower() == 'y':
-                    mobile_driver = self.set_capabilities_options(desired_capabilities)
+                    mobile_driver = self.set_capabilities_options(desired_capabilities,url=localhost_url)
                     #mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
                 else:
                     desired_capabilities['app'] = os.path.join(app_path, app_name)
-                    mobile_driver = self.set_capabilities_options(desired_capabilities)
+                    mobile_driver = self.set_capabilities_options(desired_capabilities, url=localhost_url)
                     #mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
         return mobile_driver
 
-    def set_capabilities_options(self, desired_capabilities):
+    def set_capabilities_options(self, desired_capabilities, url):
         capabilities_options = UiAutomator2Options().load_capabilities(desired_capabilities)
-        mobile_driver = mobile_webdriver.Remote(command_executor=localhost_url,options=capabilities_options)
+        mobile_driver = mobile_webdriver.Remote(command_executor=url,options=capabilities_options)
         return mobile_driver
 
     def ios(self, remote_flag, desired_capabilities, app_path, app_name, username,
@@ -222,7 +224,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                     desired_capabilities['xcodeOrgId'] = org_id
                     desired_capabilities['xcodeSigningId'] = signing_id
 
-                mobile_driver = self.set_capabilities_options(desired_capabilities)
+                mobile_driver = self.set_capabilities_options(desired_capabilities, url=localhost_url)
                 #mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
@@ -263,9 +265,8 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
             print("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)
         desired_capabilities['app'] = 'sauce-storage:'+app_name
         desired_capabilities['autoAcceptAlert'] = 'true'
-        mobile_driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
-                                                %(username, password), desired_capabilities=desired_capabilities)
-
+        mobile_driver = self.set_capabilities_options(desired_capabilities, url="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
+                                                %(username, password))
         return mobile_driver
 
 
@@ -275,9 +276,9 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         desired_capabilities['browserstack.appium_version'] = appium_version
         desired_capabilities['realMobile'] = 'true'
         desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
-        mobile_driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"
-                                                %(username, password), desired_capabilities=desired_capabilities)
-
+    
+        mobile_driver = self.set_capabilities_options(desired_capabilities, url="http://%s:%s@hub.browserstack.com:80/wd/hub"
+                                                %(username, password))
         return mobile_driver
 
     @staticmethod
