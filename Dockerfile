@@ -66,7 +66,7 @@ RUN GECKODRIVER_VERSION=$(wget -qO- 'https://api.github.com/repos/mozilla/geckod
   && mv /tmp/geckodriver /usr/bin/geckodriver \
   && rm /tmp/geckodriver.tar.gz
 
-# Python 3.5 and Python Pip
+# Python 3.10 and Python Pip
 RUN apt-get update && apt-get install -y \
     python3.10 \
     python3-setuptools=59.6.0-1.2ubuntu0.22.04.1 \
