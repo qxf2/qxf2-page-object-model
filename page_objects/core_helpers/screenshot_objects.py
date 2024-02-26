@@ -69,6 +69,23 @@ class Screenshot_Objects:
             # Using print as log_obj wouldnt be created to write this exception to log file
             print("Exception when trying to set screenshot directory due to error:",str(e))
 
+    def get_test_name(self):
+        self.testname = self.get_calling_module()
+        self.testname = self.testname.replace('<','')
+        self.testname = self.testname.replace('>','')
+        return self.testname
+
+    def screenshot_directory(self, testname, overwrite_flag=False):
+        self.screenshot_dir = self.screenshots_parent_dir + os.sep + testname
+        if os.path.exists(self.screenshot_dir) and overwrite_flag is True:
+            for i in range(1,4096):
+                if os.path.exists(self.screenshot_dir + '_'+str(i)):
+                    continue
+                else:
+                    os.rename(self.screenshot_dir,self.screenshot_dir +'_'+str(i))
+                    break
+        return self.screenshot_dir
+
 
 
 

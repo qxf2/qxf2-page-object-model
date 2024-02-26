@@ -145,7 +145,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects,
             self.write(str(e))
             self.exceptions.append("Error when setting up the screenshot directory")
 
-
     def get_screenshot_dir(self,os_name,os_version,browser,browser_version,overwrite_flag=False):
         "Get the name of the test"
         if os_name == 'OS X':
@@ -154,19 +153,9 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects,
             windows_browser_combination = browser.lower()
         else:
             windows_browser_combination = os_name.lower() + '_' + str(os_version).lower() + '_' + browser.lower()+ '_' + str(browser_version)
-        self.testname = self.get_calling_module()
-        self.testname =self.testname.replace('<','')
-        self.testname =self.testname.replace('>','')
+        self.testname = self.get_test_name()
         self.testname = self.testname + '[' + str(windows_browser_combination)+ ']'
-        self.screenshot_dir = self.screenshots_parent_dir + os.sep + self.testname
-        if os.path.exists(self.screenshot_dir) and overwrite_flag is True:
-            for i in range(1,4096):
-                if os.path.exists(self.screenshot_dir + '_'+str(i)):
-                    continue
-                else:
-                    os.rename(self.screenshot_dir,self.screenshot_dir +'_'+str(i))
-                    break
-
+        self.screenshot_dir = self.screenshot_directory(self.testname, overwrite_flag)
         return self.screenshot_dir
 
     def set_rp_logger(self,rp_pytest_service):

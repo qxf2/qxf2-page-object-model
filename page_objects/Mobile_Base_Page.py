@@ -99,23 +99,11 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
         except Exception as e:
             self.write("Exception when trying to set screenshot directory")
             self.write(str(e))
-
     def get_screenshot_dir(self):
         "Get the name of the test"
-        self.testname = self.get_calling_module()
-        self.testname =self.testname.replace('<','')
-        self.testname =self.testname.replace('>','')
-        self.screenshot_dir = self.screenshots_parent_dir + os.sep  + self.testname
-        if os.path.exists(self.screenshot_dir):
-            for i in range(1,4096):
-                if os.path.exists(self.screenshot_dir + '_'+str(i)):
-                    continue
-                else:
-                    os.rename(self.screenshot_dir,self.screenshot_dir +'_'+str(i))
-                    break
-
+        self.testname = self.get_test_name()
+        self.screenshot_dir = self.screenshot_directory(self.testname)
         return self.screenshot_dir
-
     def open(self,wait_time=2):
         "Visit the page base_url + url"
         self.wait(wait_time)
