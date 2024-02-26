@@ -45,7 +45,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
             self.testrail_flag = False
             self.browserstack_flag = False
             self.test_run_id = None
-
+            self.tesults_flag = False
             self.reset()
 
         self.driver_obj = DriverFactory()
@@ -60,6 +60,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
         self.mini_check_counter = 0 #Increment when conditional_write is called
         self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
         self.failure_message_list = []
+        self.rp_logger = None
+        self.exceptions = []
         self.screenshot_counter = 1
 
     def switch_page(self,page_name):

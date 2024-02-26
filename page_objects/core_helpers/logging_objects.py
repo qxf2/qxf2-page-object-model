@@ -70,5 +70,9 @@ class Logging_Objects:
         if level.lower() == 'critical':
             self.teardown()
             raise Stop_Test_Exception("Stopping test because: "+ msg)
+
+    def set_rp_logger(self,rp_pytest_service):
+        "Set the reportportal logger"
+        self.rp_logger = self.log_obj.setup_rp_logging(rp_pytest_service)
             
             
