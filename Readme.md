@@ -2,7 +2,7 @@
 ![GitHub](https://img.shields.io/github/license/qxf2/qxf2-page-object-model?color=brightgreen)
 ![Maintenance](https://img.shields.io/maintenance/yes/2023?color=brightgreen)
 [![CircleCI](https://circleci.com/gh/qxf2/qxf2-page-object-model.svg?style=shield)](https://circleci.com/gh/qxf2/qxf2-page-object-model)
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)](https://www.browserstack.com/automate/public-build/cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)
+[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)](https://automate.browserstack.com/public-build/cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)
 ![GitHub stars](https://img.shields.io/github/stars/qxf2/qxf2-page-object-model)
 ![GitHub forks](https://img.shields.io/github/forks/qxf2/qxf2-page-object-model)
 ![GitHub repo size](https://img.shields.io/github/repo-size/qxf2/qxf2-page-object-model)
@@ -75,9 +75,9 @@ __2. Setup for GUI/Selenium automation__
 
 a) Get setup with your browser driver. If you don't know how to, please try:
 
-   > [For Chrome](https://sites.google.com/a/chromium.org/chromedriver/getting-started)
+   > [For Chrome](https://googlechromelabs.github.io/chrome-for-testing/)
 
-   > [For Firefox]( https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver)
+   > [For Firefox](https://github.com/mozilla/geckodriver/releases)
 
 #Note: Check Firefox version & Selenium version compatibility before downloading geckodriver.
 
@@ -89,7 +89,7 @@ __If your setup goes well__, you should be to run a simple test with this comman
 
 __Optional steps__ for integrating with third-party tools:
 
-* [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Testrail)
+* [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-TestRail-using-Python)
 * [Integrate our Python GUI/web automation framework with BrowserStack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#browserstack)
 * [Integrate our Python Selenium automation framework with Sauce Labs ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#sauce-labs)
 * [Run Python integration tests on Jenkins ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#jenkins)
