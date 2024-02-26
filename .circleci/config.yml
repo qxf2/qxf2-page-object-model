@@ -5,7 +5,7 @@ jobs:
   toxify:
 
       docker:
-        - image: themattrix/tox
+        - image: 31z4/tox
 
       parallelism: 3
 
