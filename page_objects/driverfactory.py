@@ -5,7 +5,8 @@ This module gets the webdrivers for different browsers and sets up the remote te
 import os
 import sys
 from selenium import webdriver
-from selenium.webdriver.remote.webdriver import RemoteConnection
+#from selenium.webdriver.remote.webdriver import RemoteConnection
+from selenium.webdriver.remote.remote_connection import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from appium.options.android import UiAutomator2Options
 from conf import remote_credentials
@@ -102,7 +103,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         desired_capabilities['browserstack.debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
 
-        web_driver = webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"
+        web_driver = webdriver.Remote(command_executor=RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"
                                                        %(username, password), resolve_ip=False), desired_capabilities=desired_capabilities)
 
         return web_driver
