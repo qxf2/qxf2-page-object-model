@@ -300,8 +300,8 @@ def set_remote_credentials():
     password = questionary.password("Enter the password").ask()
     with open(".env.remote",'w') as cred_file:
         cred_file.write("REMOTE_BROWSER_PLATFORM = '%s'\
-                         \nUSERNAME = '%s'\
-                         \nACCESS_KEY = '%s'"%(platform,username,password))
+                         \nREMOTE_USERNAME = '%s'\
+                         \nREMOTE_ACCESS_KEY = '%s'"%(platform,username,password))
     questionary.print("Updated the credentials successfully",
                        style="bold fg:green")
 

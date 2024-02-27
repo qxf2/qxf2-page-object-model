@@ -81,8 +81,8 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                          remote_project_name, remote_build_name):
         """Run the test in browser stack when remote flag is 'Y'."""
         #Get the browser stack credentials from browser stack credentials file
-        username = os.getenv('USERNAME')
-        password = os.getenv('ACCESS_KEY')
+        username = os.getenv('REMOTE_USERNAME')
+        password = os.getenv('REMOTE_ACCESS_KEY')
 
         #Set browser
         desired_capabilities = self.get_browser(browser, browser_version)
@@ -113,8 +113,8 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
     def run_sauce_lab(self, os_name, os_version, browser, browser_version):
         """Run the test in sauce labs when remote flag is 'Y'."""
         #Get the sauce labs credentials from sauce.credentials file
-        username = os.getenv('USERNAME')
-        password = os.getenv('ACCESS_KEY')
+        username = os.getenv('REMOTE_USERNAME')
+        password = os.getenv('REMOTE_ACCESS_KEY')
 
         #set browser
         desired_capabilities = self.get_browser(browser, browser_version)
@@ -152,8 +152,8 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                    ud_id, org_id, signing_id, no_reset_flag, appium_version):
         """Specify the mobile device configurations and get the mobile driver."""
         #Get the remote credentials from remote_credentials file
-        username = os.getenv('USERNAME')
-        password = os.getenv('ACCESS_KEY')
+        username = os.getenv('REMOTE_USERNAME')
+        password = os.getenv('REMOTE_ACCESS_KEY')
 
         #setup mobile device
         desired_capabilities = self.set_mobile_device(mobile_os_name, mobile_os_version, device_name)

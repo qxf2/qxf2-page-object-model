@@ -92,8 +92,8 @@ class RemoteOptions():
     @staticmethod
     def sauce_upload(app_path, app_name):
         """Upload the apk to the sauce temperory storage."""
-        username =  os.getenv('USERNAME')
-        password =  os.getenv('ACCESS_KEY')
+        username =  os.getenv('REMOTE_USERNAME')
+        password =  os.getenv('REMOTE_ACCESS_KEY')
         result_flag = False
         try:
             headers = {'Content-Type':'application/octet-stream'}
@@ -120,8 +120,8 @@ class RemoteOptions():
     @staticmethod
     def browser_stack_upload(app_name, app_path):
         """Upload the apk to the BrowserStack storage if its not done earlier."""
-        username =  os.getenv('USERNAME')
-        access_key =  os.getenv('ACCESS_KEY')
+        username =  os.getenv('REMOTE_USERNAME')
+        access_key =  os.getenv('REMOTE_ACCESS_KEY')
         try:
             #Upload the apk
             apk_file = os.path.join(app_path, app_name)
