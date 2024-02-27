@@ -102,11 +102,9 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
             screenshot_conf.BS_ENABLE_SCREENSHOTS = False
 
         desired_capabilities['debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
-
+        desired_capabilities = self.browserstack_credentials(desired_capabilities,username, password)
         options.set_capability('bstack:options', desired_capabilities)
-
-        web_driver = webdriver.Remote(command_executor="http://%s:%s@hub-cloud.browserstack.com/wd/hub"
-                                                       %(username, password), options=options)
+        web_driver = webdriver.Remote(command_executor="http://hub-cloud.browserstack.com/wd/hub", options=options)
 
         return web_driver
 
@@ -120,18 +118,26 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         #set browser
         options = self.get_browser(browser, browser_version)
 
-        desired_capabilities = {}
-
         #set saucelab platform
-        desired_capabilities = self.saucelab_platform(desired_capabilities, os_name, os_version)
-
-        options.set_capability('sauce:options', desired_capabilities)
-
-        web_driver = webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
-                                      %(username, password), options=options)
+        options = self.saucelab_platform(options, os_name, os_version) 
+        sauce_options = {}
+        sauce_options = self.saucelab_credentials(sauce_options, username, password)
+        options.set_capability('sauce:options', sauce_options)
+        web_driver = webdriver.Remote(command_executor="https://ondemand.eu-central-1.saucelabs.com:443/wd/hub", options=options)
 
         return web_driver
 
+    def saucelab_credentials(self, sauce_options,username,password):
+        """Set saucelab credentials."""
+        sauce_options['username'] = username
+        sauce_options['accessKey'] = password
+        return sauce_options
+
+    def browserstack_credentials(self, browserstack_options,username,password):
+        """Set browserstack credentials."""
+        browserstack_options['userName'] = username
+        browserstack_options['accessKey'] = password
+        return browserstack_options
 
     def run_local(self, browser):
         """Run the test on local system."""
@@ -265,10 +271,11 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         if ' ' in app_name:
             app_name = app_name.replace(' ', '')
             print("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)
-        desired_capabilities['app'] = 'sauce-storage:'+app_name
+        desired_capabilities['appium:app'] = 'storage:filename='+app_name
         desired_capabilities['autoAcceptAlert'] = 'true'
-        mobile_driver = self.set_capabilities_options(desired_capabilities, url="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
-                                                %(username, password))
+        desired_capabilities = self.saucelab_credentials(desired_capabilities,username, password)
+        mobile_driver = self.set_capabilities_options(desired_capabilities, url="https://%s:%s@ondemand.eu-central-1.saucelabs.com:443/wd/hub"
+                                                    %(username, password))
         return mobile_driver
 
 
@@ -278,9 +285,9 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         desired_capabilities['browserstack.appium_version'] = appium_version
         desired_capabilities['realMobile'] = 'true'
         desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
-    
+        desired_capabilities = self.browserstack_credentials(desired_capabilities,username, password)
         mobile_driver = self.set_capabilities_options(desired_capabilities, url="http://%s:%s@hub.browserstack.com:80/wd/hub"
-                                                %(username, password))
+                                                     %(username, password))
         return mobile_driver
 
     @staticmethod

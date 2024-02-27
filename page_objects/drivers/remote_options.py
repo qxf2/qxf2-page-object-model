@@ -21,18 +21,11 @@ class RemoteOptions():
         """Set web browser as firefox."""
         options = FirefoxOptions()
         options.browser_version = browser_version
-
-        desired_capabilities = DesiredCapabilities.FIREFOX
-        desired_capabilities['browser_version'] = browser_version
-
         return options
 
     @staticmethod
     def explorer(browser_version):
         """Set web browser as Explorer."""
-        desired_capabilities = DesiredCapabilities.INTERNETEXPLORER
-        desired_capabilities['browser_version'] = browser_version
-
         options = IeOptions()
         options.browser_version = browser_version
 
@@ -41,9 +34,6 @@ class RemoteOptions():
     @staticmethod
     def chrome(browser_version):
         """Set web browser as Chrome."""
-        desired_capabilities = DesiredCapabilities.CHROME
-        desired_capabilities['browser_version'] = browser_version
-
         options = ChromeOptions()
         options.browser_version = browser_version
 
@@ -60,9 +50,6 @@ class RemoteOptions():
     @staticmethod
     def safari(browser_version):
         """Set web browser as Safari."""
-        desired_capabilities = DesiredCapabilities.SAFARI
-        desired_capabilities['browser_version'] = browser_version
-
         options = SafariOptions()
         options.browser_version = browser_version
 
@@ -70,8 +57,7 @@ class RemoteOptions():
 
     @staticmethod
     def set_os(desired_capabilities, os_name, os_version):
-        """Set os name and os_version."""
-        
+        """Set os name and os_version."""      
         desired_capabilities['os'] = os_name
         desired_capabilities['osVersion'] = os_version
 
@@ -92,11 +78,10 @@ class RemoteOptions():
         return desired_capabilities
 
     @staticmethod
-    def saucelab_platform(desired_capabilities, os_name, os_version):
+    def saucelab_platform(options, os_name, os_version):
         """Set platform for saucelab."""
-        desired_capabilities['platform_name'] = os_name + ' '+os_version
-
-        return desired_capabilities
+        options.platform_name = os_name + ' '+os_version
+        return options
 
     @staticmethod
     def set_mobile_device(mobile_os_name, mobile_os_version, device_name):
