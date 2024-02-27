@@ -8,6 +8,7 @@ from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
 from utils import interactive_mode
+from utils import gpt_summary_generator
 
 @pytest.fixture
 def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,reportportal_service,interactivemode_flag):
@@ -406,6 +407,15 @@ def reportportal_service(request):
 
     return reportportal_pytest_service
 
+@pytest.fixture
+def summary_flag(request):
+    "pytest fixture for generating summary using LLM (GPT-4)"
+    try:
+        return request.config.getoption("--summary")
+
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
 
 @pytest.hookimpl()
 def pytest_configure(config):
@@ -442,7 +452,8 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
                 from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
-
+            if  terminalreporter.config.getoption("--summary").lower() == 'y':
+                gpt_summary_generator.generate_gpt_summary()          
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
@@ -600,6 +611,10 @@ def pytest_addoption(parser):
                             dest="questionary",
                             default="n",
                             help="set the questionary flag")
+        parser.addoption("--summary",
+                            dest="summary",
+                            default="n",
+                            help="Generate pytest results summary using LLM (GPT): y or n")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
