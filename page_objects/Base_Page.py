@@ -696,6 +696,18 @@ class Base_Page(Borg):
         action_obj.move_to_element(element)
         action_obj.perform()
         self.wait(wait_seconds)
+        
+
+    def drag_and_drop(self, source_locator, target_locator, wait_seconds=2):
+        "Drag and drop the element from source to target"
+        try:
+            source_element = WebDriverWait(self.driver, wait_seconds).until(EC.element_to_be_clickable((By.XPATH, source_locator)))
+            target_element = WebDriverWait(self.driver, wait_seconds).until(EC.element_to_be_clickable((By.XPATH, target_locator)))
+            action_obj = ActionChains(self.driver)
+            action_obj.drag_and_drop(source_element, target_element).perform()
+            self.wait(wait_seconds)
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
 
 
     def teardown(self):
