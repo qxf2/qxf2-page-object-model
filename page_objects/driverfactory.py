@@ -121,7 +121,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         options = self.get_browser(browser, browser_version)
 
         #set saucelab platform
-        options = self.saucelab_platform(options, os_name, os_version) 
+        options = self.saucelab_platform(options, os_name, os_version)
         sauce_options = {}
         sauce_options = self.saucelab_credentials(sauce_options, username, password)
         options.set_capability('sauce:options', sauce_options)
@@ -290,8 +290,8 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         bstack_mobile_options['sessionName'] = 'Appium Python Test'
         bstack_mobile_options['appiumVersion'] = appium_version
         bstack_mobile_options['realMobile'] = 'true'
-        bstack_mobile_options["networkProfile"] : "4g-lte-good"
-        bstack_mobile_options = self.browserstack_credentials(bstack_mobile_options,username, password)    
+        bstack_mobile_options["networkProfile"] = "4g-lte-good"
+        bstack_mobile_options = self.browserstack_credentials(bstack_mobile_options, username, password)
         desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
         desired_capabilities['bstack:options'] = bstack_mobile_options
 
