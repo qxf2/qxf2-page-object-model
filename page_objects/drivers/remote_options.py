@@ -5,7 +5,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.ie.options import Options as IeOptions
 from selenium.webdriver.chrome.options import Options as ChromeOptions
-#from selenium.webdriver.opera.options import Options as OperaOptions
 from selenium.webdriver.safari.options import Options as SafariOptions
 from conf import remote_credentials
 import os
@@ -38,14 +37,6 @@ class RemoteOptions():
         options.browser_version = browser_version
 
         return options
-
-    @staticmethod
-    def opera(browser_version):
-        """Set web_browser as Opera."""
-        desired_capabilities = DesiredCapabilities.OPERA
-        desired_capabilities['browser_version'] = browser_version
-
-        return desired_capabilities
 
     @staticmethod
     def safari(browser_version):
