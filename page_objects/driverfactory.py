@@ -15,6 +15,8 @@ from conf import ports_conf
 from conf import screenshot_conf
 
 localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost
+browserstack_url = "http://hub-cloud.browserstack.com/wd/hub"
+saucelabs_url = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub"
 
 class DriverFactory(RemoteOptions, LocalBrowsers):
     """Class contains methods for getting web drivers and setting up remote testing platforms."""
@@ -104,7 +106,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         desired_capabilities['debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
         desired_capabilities = self.browserstack_credentials(desired_capabilities,username, password)
         options.set_capability('bstack:options', desired_capabilities)
-        web_driver = webdriver.Remote(command_executor="http://hub-cloud.browserstack.com/wd/hub", options=options)
+        web_driver = webdriver.Remote(command_executor=browserstack_url, options=options)
 
         return web_driver
 
@@ -123,7 +125,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         sauce_options = {}
         sauce_options = self.saucelab_credentials(sauce_options, username, password)
         options.set_capability('sauce:options', sauce_options)
-        web_driver = webdriver.Remote(command_executor="https://ondemand.eu-central-1.saucelabs.com:443/wd/hub", options=options)
+        web_driver = webdriver.Remote(command_executor=saucelabs_url, options=options)
 
         return web_driver
 
@@ -239,15 +241,12 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         return mobile_driver
 
-
     def remote_platform_mobile(self, remote_flag, app_path, app_name, desired_capabilities,
                                username, password, appium_version):
         """
         Checks wether the test is to be run on either browserstack or saucelab and gets the
         remote mobile driver.
         """
-        desired_capabilities['idleTimeout'] = 300
-        desired_capabilities['name'] = 'Appium Python Test'
         try:
             #Gets driver when test is run on Saucelab
             if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
@@ -272,22 +271,31 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
             app_name = app_name.replace(' ', '')
             print("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)
         desired_capabilities['appium:app'] = 'storage:filename='+app_name
-        desired_capabilities['autoAcceptAlert'] = 'true'
-        desired_capabilities = self.saucelab_credentials(desired_capabilities,username, password)
-        mobile_driver = self.set_capabilities_options(desired_capabilities, url="https://%s:%s@ondemand.eu-central-1.saucelabs.com:443/wd/hub"
-                                                    %(username, password))
+        desired_capabilities['autoAcceptAlerts'] = 'true'
+        sauce_mobile_options = {}
+        sauce_mobile_options = self.saucelab_credentials(sauce_mobile_options,username, password)
+
+        desired_capabilities['sauce:options'] = sauce_mobile_options
+        mobile_driver = self.set_capabilities_options(desired_capabilities, url=saucelabs_url)
+
         return mobile_driver
 
 
     def browserstack_mobile(self, app_path, app_name, desired_capabilities, username, password,
                             appium_version):
         """Setup mobile driver to run the test in Browserstack."""
-        desired_capabilities['browserstack.appium_version'] = appium_version
-        desired_capabilities['realMobile'] = 'true'
+
+        bstack_mobile_options = {}
+        bstack_mobile_options['idleTimeout'] = 300
+        bstack_mobile_options['sessionName'] = 'Appium Python Test'
+        bstack_mobile_options['appiumVersion'] = appium_version
+        bstack_mobile_options['realMobile'] = 'true'
+        bstack_mobile_options["networkProfile"] : "4g-lte-good"
+        bstack_mobile_options = self.browserstack_credentials(bstack_mobile_options,username, password)    
         desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
-        desired_capabilities = self.browserstack_credentials(desired_capabilities,username, password)
-        mobile_driver = self.set_capabilities_options(desired_capabilities, url="http://%s:%s@hub.browserstack.com:80/wd/hub"
-                                                     %(username, password))
+        desired_capabilities['bstack:options'] = bstack_mobile_options
+
+        mobile_driver = self.set_capabilities_options(desired_capabilities, url=browserstack_url)
         return mobile_driver
 
     @staticmethod
