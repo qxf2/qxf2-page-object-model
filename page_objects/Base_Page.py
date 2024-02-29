@@ -396,6 +396,18 @@ class Base_Page(Borg):
 
         return result_flag
 
+    def file_upload(self,locator,file_path):
+            "set path of the file browser"
+            result_flag = False
+            try:
+            self.get_element(locator).send_keys(file_path)
+            result_flag = True
+            except Exception as e:
+                self.write(e)
+                self.exceptions.append("Error uploading the file '%s' "%locator)
+            
+            return result_flag
+
     def _get_locator(key):
         "fetches locator from the locator conf"
         value = None
