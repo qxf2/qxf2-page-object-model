@@ -88,7 +88,7 @@ __Optional steps__ for integrating with third-party tools:
 __3. Setup for Mobile/Appium automation__
 
 
-a) [Download and Install appium desktop app](https://github.com/appium/appium-desktop/releases/latest)
+a) [Install appium globally using npm](https://appium.io/docs/en/latest/quickstart/install/)
 
 b) [Download and Install Android Studio and create an emulator](https://developer.android.com/studio/index.html)
 
