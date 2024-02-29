@@ -696,7 +696,7 @@ class Base_Page(Borg):
         action_obj.move_to_element(element)
         action_obj.perform()
         self.wait(wait_seconds)
-        
+
 
     def drag_and_drop(self, source_locator, target_locator, wait_seconds=2):
         "Drag and drop the element from source to target"
