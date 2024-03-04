@@ -59,10 +59,10 @@ class Screenshot_Objects:
     def set_directory_structure(self):
         "Setup the required directory structure if it is not already present"
         try:
-            self.screenshots_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','screenshots'))
+            self.screenshots_parent_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'..','screenshots'))
             if not os.path.exists(self.screenshots_parent_dir):
                 os.makedirs(self.screenshots_parent_dir)
-            self.logs_parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
+            self.logs_parent_dir = os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'..','log'))
             if not os.path.exists(self.logs_parent_dir):
                 os.makedirs(self.logs_parent_dir)
         except Exception as e:
