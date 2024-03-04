@@ -1,6 +1,6 @@
 import os
 from utils import Gif_Maker
-
+import conf.snapshot_dir_conf as conf
 
 class Screenshot_Objects:
     def append_latest_image(self,screenshot_name):
@@ -75,7 +75,8 @@ class Screenshot_Objects:
         self.testname = self.testname.replace('>','')
         return self.testname
 
-    def screenshot_directory(self, testname, overwrite_flag=False):
+    def screenshot_directory(self, testname):
+        overwrite_flag=conf.overwrite_flag
         self.screenshot_dir = self.screenshots_parent_dir + os.sep + testname
         if os.path.exists(self.screenshot_dir) and overwrite_flag is True:
             for i in range(1,4096):

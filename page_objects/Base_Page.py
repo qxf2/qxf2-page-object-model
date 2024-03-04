@@ -138,9 +138,7 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects,
     def set_screenshot_dir(self,os_name,os_version,browser,browser_version):
         "Set the screenshot directory"
         try:
-            self.screenshot_dir = self.get_screenshot_dir(os_name,os_version,browser,browser_version,overwrite_flag=True)
-            print("hello",self.screenshot_dir)
-
+            self.screenshot_dir = self.get_screenshot_dir(os_name,os_version,browser,browser_version)
             if not os.path.exists(self.screenshot_dir):
                 os.makedirs(self.screenshot_dir)
         except Exception as e:
@@ -148,7 +146,7 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects,
             self.write(str(e))
             self.exceptions.append("Error when setting up the screenshot directory")
 
-    def get_screenshot_dir(self,os_name,os_version,browser,browser_version,overwrite_flag=False):
+    def get_screenshot_dir(self,os_name,os_version,browser,browser_version):
         "Get the name of the test"
         if os_name == 'OS X':
             os_name = 'OS_X'
@@ -158,7 +156,7 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects,
             windows_browser_combination = os_name.lower() + '_' + str(os_version).lower() + '_' + browser.lower()+ '_' + str(browser_version)
         self.testname = self.get_test_name()
         self.testname = self.testname + '[' + str(windows_browser_combination)+ ']'
-        self.screenshot_dir = self.screenshot_directory(self.testname, overwrite_flag)
+        self.screenshot_dir = self.screenshot_directory(self.testname)
         return self.screenshot_dir
 
     def open(self,url,wait_time=2):

@@ -46,7 +46,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
             self.browserstack_flag = False
             self.test_run_id = None
             self.tesults_flag = False
-            #self.highlight_flag = False
+            self.highlight_flag = False
             self.reset()
 
         self.driver_obj = DriverFactory()
@@ -108,7 +108,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
     def get_screenshot_dir(self):
         "Get the name of the test"
         self.testname = self.get_test_name()
-        self.screenshot_dir = self.screenshot_directory(self.testname, overwrite_flag=True)
+        self.screenshot_dir = self.screenshot_directory(self.testname)
         return self.screenshot_dir
     def open(self,wait_time=2):
         "Visit the page base_url + url"
