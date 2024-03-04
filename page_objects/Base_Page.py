@@ -10,7 +10,7 @@ import time,logging,os,inspect
 from utils.Base_Logging import Base_Logging
 from .driverfactory import DriverFactory
 from .core_helpers.selenium_objects import Selenium_Objects
-from .core_helpers.test_reporting_objects import Test_Reporting_Objects
+from .core_helpers.remote_objects import Remote_Objects
 from .core_helpers.logging_objects import Logging_Objects
 from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
@@ -40,7 +40,7 @@ class Borg:
 # Get the Base URL from the conf file
 base_url = conf.base_url_conf
 
-class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects, Screenshot_Objects):
+class Base_Page(Borg, Selenium_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self,base_url):

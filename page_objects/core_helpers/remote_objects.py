@@ -1,6 +1,6 @@
 import conf.remote_credentials
 
-class Test_Reporting_Objects:
+class Remote_Objects:
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
