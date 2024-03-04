@@ -46,6 +46,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
             self.browserstack_flag = False
             self.test_run_id = None
             self.tesults_flag = False
+            #self.highlight_flag = False
             self.reset()
 
         self.driver_obj = DriverFactory()
@@ -63,6 +64,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
         self.rp_logger = None
         self.exceptions = []
         self.screenshot_counter = 1
+        self.calling_module = None
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
@@ -82,16 +84,18 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
     def get_calling_module(self):
         "Get the name of the calling module"
         calling_file = inspect.stack()[-1][1]
-        if 'runpy' or 'string' in calling_file:
-            calling_file = inspect.stack()[4][3]
+        if 'runpy' in calling_file:
+            calling_file = inspect.stack()[4][1]
+
         calling_filename = calling_file.split(os.sep)
+
         #This logic bought to you by windows + cygwin + git bash
         if len(calling_filename) == 1: #Needed for
             calling_filename = calling_file.split('/')
 
         self.calling_module = calling_filename[-1].split('.')[0]
-        return self.calling_module
 
+        return self.calling_module
     def set_screenshot_dir(self):
         "Set the screenshot directory"
         try:
@@ -104,12 +108,11 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
     def get_screenshot_dir(self):
         "Get the name of the test"
         self.testname = self.get_test_name()
-        self.screenshot_dir = self.screenshot_directory(self.testname)
+        self.screenshot_dir = self.screenshot_directory(self.testname, overwrite_flag=True)
         return self.screenshot_dir
     def open(self,wait_time=2):
         "Visit the page base_url + url"
         self.wait(wait_time)
-
     def smart_wait(self,wait_seconds,locator):
         "Performs an explicit wait for a particular element"
         result_flag = False
@@ -123,7 +126,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
                     negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
 
         return result_flag
-
     def conditional_write(self,flag,positive,negative,level='debug',pre_format="  - "):
         "Write out either the positive or the negative message based on flag"
         if flag is True:

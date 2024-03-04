@@ -134,10 +134,13 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects,
 
         return self.calling_module
 
+
     def set_screenshot_dir(self,os_name,os_version,browser,browser_version):
         "Set the screenshot directory"
         try:
             self.screenshot_dir = self.get_screenshot_dir(os_name,os_version,browser,browser_version,overwrite_flag=True)
+            print("hello",self.screenshot_dir)
+
             if not os.path.exists(self.screenshot_dir):
                 os.makedirs(self.screenshot_dir)
         except Exception as e:
@@ -157,10 +160,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Test_Reporting_Objects,
         self.testname = self.testname + '[' + str(windows_browser_combination)+ ']'
         self.screenshot_dir = self.screenshot_directory(self.testname, overwrite_flag)
         return self.screenshot_dir
-
-    def set_rp_logger(self,rp_pytest_service):
-        "Set the reportportal logger"
-        self.rp_logger = self.log_obj.setup_rp_logging(rp_pytest_service)
 
     def open(self,url,wait_time=2):
         "Visit the page base_url + url"
