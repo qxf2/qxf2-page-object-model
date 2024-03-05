@@ -1,6 +1,6 @@
 import os
 from utils import Gif_Maker
-import conf.snapshot_dir_conf as conf
+import conf.screenshot_conf as conf
 
 class Screenshot_Objects:
     def append_latest_image(self,screenshot_name):
@@ -13,7 +13,7 @@ class Screenshot_Objects:
 
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"
-        if self.browserstack_flag is True and conf.screenshot_conf.BS_ENABLE_SCREENSHOTS is False:
+        if self.browserstack_flag is True and conf.BS_ENABLE_SCREENSHOTS is False:
             return
         if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
             for i in range(1,100):
