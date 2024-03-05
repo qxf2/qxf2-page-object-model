@@ -85,7 +85,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
         "Get the name of the calling module"
         calling_file = inspect.stack()[-1][1]
         if 'runpy' in calling_file:
-            calling_file = inspect.stack()[4][1]
+            calling_file = inspect.stack()[5][3]
 
         calling_filename = calling_file.split(os.sep)
 
@@ -93,8 +93,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
         if len(calling_filename) == 1: #Needed for
             calling_filename = calling_file.split('/')
         self.calling_module = calling_filename[-1].split('.')[0]
-
         return self.calling_module
+
     def set_screenshot_dir(self):
         "Set the screenshot directory"
         self.screenshot_dir = self.get_screenshot_dir()
