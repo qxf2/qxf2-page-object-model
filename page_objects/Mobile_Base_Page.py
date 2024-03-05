@@ -92,19 +92,14 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
         #This logic bought to you by windows + cygwin + git bash
         if len(calling_filename) == 1: #Needed for
             calling_filename = calling_file.split('/')
-
         self.calling_module = calling_filename[-1].split('.')[0]
 
         return self.calling_module
     def set_screenshot_dir(self):
         "Set the screenshot directory"
-        try:
-            self.screenshot_dir = self.get_screenshot_dir()
-            if not os.path.exists(self.screenshot_dir):
-                os.makedirs(self.screenshot_dir)
-        except Exception as e:
-            self.write("Exception when trying to set screenshot directory")
-            self.write(str(e))
+        self.screenshot_dir = self.get_screenshot_dir()
+        self.create_dir_screenshot = self.create_screenshot_dir(self.screenshot_dir)
+
     def get_screenshot_dir(self):
         "Get the name of the test"
         self.testname = self.get_test_name()

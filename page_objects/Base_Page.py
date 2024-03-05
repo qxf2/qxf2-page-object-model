@@ -82,14 +82,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Remote_Objects, Screens
         self.gif_file_name = None
         self.rp_logger = None
 
-    def turn_on_highlight(self):
-        "Highlight the elements being operated upon"
-        self.highlight_flag = True
-
-    def turn_off_highlight(self):
-        "Turn off the highlighting feature"
-        self.highlight_flag = False
-
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
@@ -109,6 +101,14 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Remote_Objects, Screens
             self.write( self.browserstack_msg + '\n' + str(self.session_url))
 
         self.start()
+
+    def turn_on_highlight(self):
+        "Highlight the elements being operated upon"
+        self.highlight_flag = True
+
+    def turn_off_highlight(self):
+        "Turn off the highlighting feature"
+        self.highlight_flag = False
 
     def set_calling_module(self,name):
         "Set the test name"
@@ -134,17 +134,10 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Remote_Objects, Screens
 
         return self.calling_module
 
-
     def set_screenshot_dir(self,os_name,os_version,browser,browser_version):
         "Set the screenshot directory"
-        try:
-            self.screenshot_dir = self.get_screenshot_dir(os_name,os_version,browser,browser_version)
-            if not os.path.exists(self.screenshot_dir):
-                os.makedirs(self.screenshot_dir)
-        except Exception as e:
-            self.write("Exception when trying to set screenshot directory")
-            self.write(str(e))
-            self.exceptions.append("Error when setting up the screenshot directory")
+        self.screenshot_dir = self.get_screenshot_dir(os_name,os_version,browser,browser_version)
+        self.create_dir_screenshot = self.create_screenshot_dir(self.screenshot_dir)
 
     def get_screenshot_dir(self,os_name,os_version,browser,browser_version):
         "Get the name of the test"
