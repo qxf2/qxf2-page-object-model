@@ -88,7 +88,7 @@ class Screenshot_Objects:
         return self.screenshot_dir
 
     def create_screenshot_dir(self, screenshot_dir):
-        "Set the screenshot directory"
+        "Create the screenshot directory if it doesn't exists already"
         try:
             if not os.path.exists(screenshot_dir):
                 os.makedirs(screenshot_dir)

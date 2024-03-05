@@ -3,22 +3,17 @@ Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
-import time,logging,os,inspect
-from utils.Base_Logging import Base_Logging
+import os,inspect
 from .driverfactory import DriverFactory
 from .core_helpers.selenium_objects import Selenium_Objects
 from .core_helpers.remote_objects import Remote_Objects
 from .core_helpers.logging_objects import Logging_Objects
 from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
-from utils.stop_test_exception_util import Stop_Test_Exception
 import conf.remote_credentials
 import conf.base_url_conf
 import conf.screenshot_conf
-from utils import Gif_Maker
 from utils import accessibility_util
 from utils import snapshot_util
 
@@ -374,20 +369,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Remote_Objects, Screens
             for key, value in custom.items():
                 caseObj[key] = str(value)
             self.tesult_object.add_test_case(caseObj)
-
-    def smart_wait(self,locator,wait_seconds=5):
-        "Performs an explicit wait for a particular element"
-        result_flag = False
-        try:
-            path = self.split_locator(locator)
-            WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
-            result_flag =True
-        except Exception:
-	        self.conditional_write(result_flag,
-                    positive='Located the element: %s'%locator,
-                    negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
-
-        return result_flag
 
     def read_browser_console_log(self):
         "Read Browser Console log"

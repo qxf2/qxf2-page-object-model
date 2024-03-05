@@ -2,18 +2,13 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import unittest,time,logging,os,inspect
-from utils.Base_Logging import Base_Logging
-from utils.stop_test_exception_util import Stop_Test_Exception
+import unittest,os,inspect
 from .driverfactory import DriverFactory
 from .core_helpers.selenium_objects import Selenium_Objects
 from .core_helpers.logging_objects import Logging_Objects
 from .core_helpers.remote_objects import Remote_Objects
 from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
-from utils import Gif_Maker
 
 class Borg:
     #The borg design pattern is to share state
@@ -108,19 +103,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Objects, Logging_Objects
     def open(self,wait_time=2):
         "Visit the page base_url + url"
         self.wait(wait_time)
-    def smart_wait(self,wait_seconds,locator):
-        "Performs an explicit wait for a particular element"
-        result_flag = False
-        try:
-            path = self.split_locator(locator)
-            WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
-            result_flag =True
-        except Exception:
-                    self.conditional_write(result_flag,
-                    positive='Located the element: %s'%locator,
-                    negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
 
-        return result_flag
     def conditional_write(self,flag,positive,negative,level='debug',pre_format="  - "):
         "Write out either the positive or the negative message based on flag"
         if flag is True:

@@ -1,4 +1,6 @@
 import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 class Selenium_Objects:
 
@@ -206,6 +208,20 @@ class Selenium_Objects:
                 self.write('Could not write to text field: %s'%locator,'debug')
                 self.write(str(e),'debug')
                 self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
+
+        return result_flag
+
+    def smart_wait(self,locator,wait_seconds=5):
+        "Performs an explicit wait for a particular element"
+        result_flag = False
+        try:
+            path = self.split_locator(locator)
+            WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
+            result_flag =True
+        except Exception:
+	        self.conditional_write(result_flag,
+                    positive='Located the element: %s'%locator,
+                    negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
 
         return result_flag
 
