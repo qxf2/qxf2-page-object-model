@@ -11,7 +11,6 @@ import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 import conf.example_table_conf as conf
-import conf.testrail_caseid_conf as testrail_file
 import pytest
 
 
@@ -46,9 +45,6 @@ def test_example_table(test_obj):
                             positive="Located the name %s in the table"%name,
                             negative="The name %s is not present under name column on the Page with url: %s"%(name,test_obj.get_current_url()))
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
-        #Update TestRail
-        case_id = testrail_file.test_example_table
-        test_obj.report_to_testrail(case_id,test_obj.test_run_id,result_flag)
         test_obj.add_tesults_case("Example table", "Verify if a certain name is present in the table", "test_example_table", result_flag,"\nFailed to Verify if a certain name is present in the table\n")
 
         #5. Print out the result
