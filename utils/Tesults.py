@@ -10,7 +10,8 @@ def post_results_to_tesults ():
     " This method is to post the results into the tesults"
     # uses default token unless otherwise specified
     token = os.getenv('tesults_target_token_default')
-    if token is None:
+    
+    if token is None or token =="":
         solution =("It looks like you are trying to use tesults to run your test."
                    "Please make sure you have updated .env with the right credentials .")
         print(f"\033[92m\nSOLUTION: {solution}\n\033[0m")
