@@ -103,7 +103,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         if screenshot_conf.BS_ENABLE_SCREENSHOTS is None:
             screenshot_conf.BS_ENABLE_SCREENSHOTS = False
 
-        desired_capabilities['debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
+        desired_capabilities = self.browserstack_snapshots(desired_capabilities)
         desired_capabilities = self.browserstack_credentials(desired_capabilities,username, password)
         options.set_capability('bstack:options', desired_capabilities)
         web_driver = webdriver.Remote(command_executor=browserstack_url, options=options)
