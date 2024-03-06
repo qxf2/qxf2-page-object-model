@@ -13,12 +13,13 @@ from page_objects.drivers.remote_options import RemoteOptions
 from page_objects.drivers.local_browsers import LocalBrowsers
 from conf import ports_conf
 from conf import screenshot_conf
+from .capabilities import Capabilities
 
 localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost
 browserstack_url = "http://hub-cloud.browserstack.com/wd/hub"
 saucelabs_url = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub"
 
-class DriverFactory(RemoteOptions, LocalBrowsers):
+class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
     """Class contains methods for getting web drivers and setting up remote testing platforms."""
 
     def __init__(self, browser='ff', browser_version=None, os_name=None):
@@ -75,7 +76,6 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         return web_driver
 
-
     def run_browserstack(self, os_name, os_version, browser, browser_version,
                          remote_project_name, remote_build_name):
         """Run the test in browser stack when remote flag is 'Y'."""
@@ -128,19 +128,6 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         web_driver = webdriver.Remote(command_executor=saucelabs_url, options=options)
 
         return web_driver
-
-    def saucelab_credentials(self, sauce_options,username,password):
-        """Set saucelab credentials."""
-        sauce_options['username'] = username
-        sauce_options['accessKey'] = password
-        return sauce_options
-
-    def browserstack_credentials(self, browserstack_options,username,password):
-        """Set browserstack credentials."""
-        browserstack_options['userName'] = username
-        browserstack_options['accessKey'] = password
-        return browserstack_options
-
     def run_local(self, browser):
         """Run the test on local system."""
         local_driver = None
@@ -196,12 +183,11 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         #Get the driver when test is run on local setup
         else:
             try:
-                desired_capabilities['appPackage'] = app_package
-                desired_capabilities['appActivity'] = app_activity
+                desired_capabilities = self.app_details(desired_capabilities,app_package, app_activity)
                 if device_flag.lower() == 'y':
                     mobile_driver = self.set_capabilities_options(desired_capabilities,url=localhost_url)
                 else:
-                    desired_capabilities['app'] = os.path.join(app_path, app_name)
+                    desired_capabilities = self.app_name(desired_capabilities, app_path, app_name)
                     mobile_driver = self.set_capabilities_options(desired_capabilities, url=localhost_url)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
@@ -227,14 +213,8 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         #Get the driver when test is run on local setup
         else:
             try:
-                desired_capabilities['app'] = os.path.join(app_path, app_name)
-                desired_capabilities['bundleId'] = app_package
-                desired_capabilities['noReset'] = no_reset_flag
-                if ud_id is not None:
-                    desired_capabilities['udid'] = ud_id
-                    desired_capabilities['xcodeOrgId'] = org_id
-                    desired_capabilities['xcodeSigningId'] = signing_id
-
+                desired_capabilities = self.app_name(desired_capabilities, app_path, app_name)
+                desired_capabilities = self.ios_capabilities(desired_capabilities, app_package, no_reset_flag, ud_id, org_id, signing_id)
                 mobile_driver = self.set_capabilities_options(desired_capabilities, url=localhost_url)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
@@ -270,31 +250,16 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         if ' ' in app_name:
             app_name = app_name.replace(' ', '')
             print("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)
-        desired_capabilities['appium:app'] = 'storage:filename='+app_name
-        desired_capabilities['autoAcceptAlerts'] = 'true'
-        sauce_mobile_options = {}
-        sauce_mobile_options = self.saucelab_credentials(sauce_mobile_options,username, password)
-
-        desired_capabilities['sauce:options'] = sauce_mobile_options
+        
+        desired_capabilities = self.saucelab_capabilities(desired_capabilities, app_name, username, password)
         mobile_driver = self.set_capabilities_options(desired_capabilities, url=saucelabs_url)
 
         return mobile_driver
-
-
     def browserstack_mobile(self, app_path, app_name, desired_capabilities, username, password,
                             appium_version):
         """Setup mobile driver to run the test in Browserstack."""
 
-        bstack_mobile_options = {}
-        bstack_mobile_options['idleTimeout'] = 300
-        bstack_mobile_options['sessionName'] = 'Appium Python Test'
-        bstack_mobile_options['appiumVersion'] = appium_version
-        bstack_mobile_options['realMobile'] = 'true'
-        bstack_mobile_options["networkProfile"] = "4g-lte-good"
-        bstack_mobile_options = self.browserstack_credentials(bstack_mobile_options, username, password)
-        desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
-        desired_capabilities['bstack:options'] = bstack_mobile_options
-
+        desired_capabilities = self.browserstack_capabilities(desired_capabilities, app_name, app_path, username, password, appium_version)
         mobile_driver = self.set_capabilities_options(desired_capabilities, url=browserstack_url)
         return mobile_driver
 
@@ -314,10 +279,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
     def get_firefox_driver(self):
         """Return the Firefox driver."""
         driver = webdriver.Firefox(firefox_profile=self.set_firefox_profile())
-
         return driver
-
-
     def set_firefox_profile(self):
         """Setup firefox with the right preferences and return a profile."""
         try:
