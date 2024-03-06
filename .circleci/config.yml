@@ -5,7 +5,7 @@ jobs:
   toxify:
 
       docker:
-        - image: themattrix/tox
+        - image: divio/multi-python
 
       parallelism: 3
 
@@ -32,8 +32,9 @@ jobs:
         - run:
             name: Run different Tox environments on different Containers
             command: |
-               if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py37 ; fi
-               if [ $CIRCLE_NODE_INDEX == "1" ] ; then tox -e py38 ; fi
+               if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py39 ; fi
+               if [ $CIRCLE_NODE_INDEX == "1" ] ; then tox -e py310 ; fi
+               if [ $CIRCLE_NODE_INDEX == "2" ] ; then tox -e py311 ; fi
 
         - store_artifacts:
             path: ./screenshots
