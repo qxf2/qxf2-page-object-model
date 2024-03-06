@@ -14,6 +14,7 @@ class Capabilities:
         browserstack_options['userName'] = username
         browserstack_options['accessKey'] = password
         return browserstack_options
+
     def app_details(self, desired_capabilities, app_package, app_activity):
         desired_capabilities['appPackage'] = app_package
         desired_capabilities['appActivity'] = app_activity
@@ -51,31 +52,31 @@ class Capabilities:
         desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
         desired_capabilities['bstack:options'] = bstack_mobile_options
         return desired_capabilities
-        
+
     def browserstack_snapshots(self, desired_capabilities):
         desired_capabilities['debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
         return desired_capabilities
 
-    def set_os(desired_capabilities, os_name, os_version):
+    def set_os(self, desired_capabilities, os_name, os_version):
         """Set os name and os_version."""      
         desired_capabilities['os'] = os_name
         desired_capabilities['osVersion'] = os_version
 
         return desired_capabilities
 
-    def remote_project_name(desired_capabilities, remote_project_name):
+    def remote_project_name(self, desired_capabilities, remote_project_name):
         """Set remote project name for browserstack."""
         desired_capabilities['projectName'] = remote_project_name
 
         return desired_capabilities
 
-    def remote_build_name(desired_capabilities, remote_build_name):
+    def remote_build_name(self, desired_capabilities, remote_build_name):
         """Set remote build name for browserstack."""
         desired_capabilities['buildName'] = remote_build_name+"_"+str(datetime.now().strftime("%c"))
 
         return desired_capabilities
 
-    def set_mobile_device(mobile_os_name, mobile_os_version, device_name):
+    def set_mobile_device(self, mobile_os_name, mobile_os_version, device_name):
         """Setup the mobile device."""
         desired_capabilities = {}
         desired_capabilities['platformName'] = mobile_os_name

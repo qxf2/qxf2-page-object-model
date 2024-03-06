@@ -149,7 +149,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
 
     def run_mobile(self, mobile_os_name, mobile_os_version, device_name, app_package,
                    app_activity, remote_flag, device_flag, app_name, app_path,
-                   ud_id, org_id, signing_id, no_reset_flag, appium_version):
+                   ud_id, org_id, signing_id, no_reset_flag, appium_version,remote_project_name,remote_build_name):
         """Specify the mobile device configurations and get the mobile driver."""
         #Get the remote credentials from remote_credentials file
         username = remote_credentials.USERNAME
@@ -157,6 +157,13 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
 
         #setup mobile device
         desired_capabilities = self.set_mobile_device(mobile_os_name, mobile_os_version, device_name)
+        
+        if remote_project_name is not None:
+            desired_capabilities = self.remote_project_name(desired_capabilities, remote_project_name)
+
+        #Set remote build name
+        if remote_build_name is not None:
+            desired_capabilities = self.remote_build_name(desired_capabilities, remote_build_name)
 
         #Check wether the OS is android or iOS and get the mobile driver
         if mobile_os_name in 'Android':

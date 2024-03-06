@@ -49,7 +49,7 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version,interactivemode_flag):
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version,interactivemode_flag, remote_project_name,remote_build_name):
 
     "Return an instance of Base Page that knows about the third party integrations"
     try:
@@ -61,7 +61,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
 
         #Setup and register a driver
-        test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version)
+        test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version,remote_project_name,remote_build_name)
 
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
