@@ -6,11 +6,14 @@ Qxf2 Services: Utility script to ssh into a remote server
 * Download a file
 """
 
-import paramiko
 import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from conf import ssh_conf as conf_file
 import socket
+import paramiko
+from dotenv import load_dotenv
+
+
+load_dotenv('.env.ssh')
 
 class Ssh_Util:
     "Class to connect to remote server"
@@ -19,17 +22,17 @@ class Ssh_Util:
         self.ssh_output = None
         self.ssh_error = None
         self.client = None
-        self.host= conf_file.HOST
-        self.username = conf_file.USERNAME
-        self.password = conf_file.PASSWORD
-        self.timeout = float(conf_file.TIMEOUT)
-        self.commands = conf_file.COMMANDS
-        self.pkey = conf_file.PKEY
-        self.port = conf_file.PORT
-        self.uploadremotefilepath = conf_file.UPLOADREMOTEFILEPATH
-        self.uploadlocalfilepath = conf_file.UPLOADLOCALFILEPATH
-        self.downloadremotefilepath = conf_file.DOWNLOADREMOTEFILEPATH
-        self.downloadlocalfilepath = conf_file.DOWNLOADLOCALFILEPATH
+        self.host= os.getenv('HOST')
+        self.username = os.getenv('USERNAME')
+        self.password = os.getenv('PASSWORD')
+        self.timeout = float(os.getenv('TIMEOUT'))
+        self.commands = os.getenv('COMMANDS')
+        self.pkey = os.getenv('PKEY')
+        self.port = os.getenv('PORT')
+        self.uploadremotefilepath = os.getenv('UPLOADREMOTEFILEPATH')
+        self.uploadlocalfilepath = os.getenv('UPLOADLOCALFILEPATH')
+        self.downloadremotefilepath = os.getenv('DOWNLOADREMOTEFILEPATH')
+        self.downloadlocalfilepath = os.getenv('DOWNLOADLOCALFILEPATH')
 
     def connect(self):
         "Login to the remote server"
@@ -40,7 +43,7 @@ class Ssh_Util:
             #Parsing an instance of the AutoAddPolicy to set_missing_host_key_policy() changes it to allow any host.
             self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             #Connect to the server
-            if (self.password == ''):
+            if len(self.password) == 0:
                 private_key = paramiko.RSAKey.from_private_key_file(self.pkey)
                 self.client.connect(hostname=self.host, port=self.port, username=self.username,pkey=private_key ,timeout=self.timeout, allow_agent=False, look_for_keys=False)
                 print("Connected to the server",self.host)
@@ -147,25 +150,29 @@ class Ssh_Util:
 
 #---USAGE EXAMPLES
 if __name__=='__main__':
-    print("Start of %s"%__file__)
+    try:
+        print("Start of %s"%__file__)
 
-    #Initialize the ssh object
-    ssh_obj = Ssh_Util()
+        #Initialize the ssh object
+        ssh_obj = Ssh_Util()
 
-    #Sample code to execute commands
-    if ssh_obj.execute_command(ssh_obj.commands) is True:
-        print("Commands executed successfully\n")
-    else:
-        print ("Unable to execute the commands" )
+        #Sample code to execute commands
+        if ssh_obj.execute_command(ssh_obj.commands) is True:
+            print("Commands executed successfully\n")
+        else:
+            print ("Unable to execute the commands" )
 
-    #Sample code to upload a file to the server
-    if ssh_obj.upload_file(ssh_obj.uploadlocalfilepath,ssh_obj.uploadremotefilepath) is True:
-        print ("File uploaded successfully", ssh_obj.uploadremotefilepath)
-    else:
-        print  ("Failed to upload the file")
+        #Sample code to upload a file to the server
+        if ssh_obj.upload_file(ssh_obj.uploadlocalfilepath,ssh_obj.uploadremotefilepath) is True:
+            print ("File uploaded successfully", ssh_obj.uploadremotefilepath)
+        else:
+            print  ("Failed to upload the file")
 
-    #Sample code to download a file from the server
-    if ssh_obj.download_file(ssh_obj.downloadremotefilepath,ssh_obj.downloadlocalfilepath) is True:
-        print ("File downloaded successfully", ssh_obj.downloadlocalfilepath)
-    else:
-        print  ("Failed to download the file")
+        #Sample code to download a file from the server
+        if ssh_obj.download_file(ssh_obj.downloadremotefilepath,ssh_obj.downloadlocalfilepath) is True:
+            print ("File downloaded successfully", ssh_obj.downloadlocalfilepath)
+        else:
+            print  ("Failed to download the file")
+    except Exception as e:
+        print('\nKindly rename env_ssh_conf to .env.ssh and provide the credentials\n')
+        print('PYTHON SAYS:',e)

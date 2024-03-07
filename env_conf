@@ -1,15 +1,23 @@
-import os
+# Tesults Configuration
+tesults_target_token_default = ""
+
+#TestRail url and credentials
+
+testrail_url = "Add your testrail url"
+testrail_user = 'TESTRAIL_USERNAME'
+testrail_password = 'TESTRAIL_PASSWORD'
+
 #Details needed for the Gmail
 #Fill out the email details over here
 imaphost ="imap.gmail.com"  #Add imap hostname of your email client
-username = os.environ.get('USERNAME')
+app_username ='USERNAME'
 
 #Login has to use the app password because of Gmail security configuration
 # 1. Setup 2 factor authentication
 # 2. Follow the 2 factor authentication setup wizard to enable an app password
 #Src: https://support.google.com/accounts/answer/185839?hl=en
 #Src: https://support.google.com/mail/answer/185833?hl=en
-app_password = os.environ.get('APP_PASSWORD')
+app_password = 'APP_PASSWORD'
 
 #Details for sending pytest report
 smtp_ssl_host = 'smtp.gmail.com'  # Add smtp ssl host of your email client
@@ -18,5 +26,10 @@ sender = 'abc@xyz.com' #Add senders email address here
 targets = ['asd@xyz.com','qwe@xyz.com'] # Add recipients email address in a list
 
 
+#REPORT PORTAL
+report_portal_uuid = "Enter your UUID here"
+report_portal_endpoint = "Enter your endpoint here"
+report_portal_project = "Enter your Project here"
+report_portal_launch = "Enter your project launch here"
 
 
