@@ -405,6 +405,8 @@ def reportportal_service(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+        solution = "It looks like you are trying to use report portal to run your test. \nPlease make sure you have updated .env with the right credentials ."
+        print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
 
     return reportportal_pytest_service
 
@@ -424,6 +426,7 @@ def pytest_configure(config):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+
 
     #Registering custom markers to supress warnings
     config.addinivalue_line("markers", "GUI: mark a test as part of the GUI regression suite.")
@@ -448,6 +451,9 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+        solution = "It looks like you are trying to use email pytest report to run your test. \nPlease make sure you have updated .env with the right credentials ."
+        print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
+
 
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"

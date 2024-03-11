@@ -22,11 +22,6 @@ from email.mime.base import MIMEBase
 import mimetypes
 from email import encoders
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from dotenv import load_dotenv
-
-
-load_dotenv()
-
 
 class Email_Pytest_Report:
     "Class to email pytest report"
@@ -34,7 +29,7 @@ class Email_Pytest_Report:
     def __init__(self):
         self.smtp_ssl_host = os.getenv('smtp_ssl_host')
         self.smtp_ssl_port = os.getenv('smtp_ssl_port')
-        self.username = os.getenv('username')
+        self.username = os.getenv('app_username')
         self.password = os.getenv('app_password')
         self.sender = os.getenv('sender')
         self.targets = os.getenv('targets')
