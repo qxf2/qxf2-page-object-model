@@ -8,7 +8,6 @@ API reference: http://docs.gurock.com/testrail-api2/start
 """
 import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from dotenv import load_dotenv
 from utils import testrail
 
 class Test_Rail:
