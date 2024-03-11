@@ -5,7 +5,7 @@ This class wraps around Python's loguru module.
 import os, inspect
 import logging
 from loguru import logger
-from pytest_reportportal import RPLogger, RPLogHandler
+from reportportal_client import RPLogger, RPLogHandler
 
 class Base_Logging():
     "A plug-n-play class for logging"
