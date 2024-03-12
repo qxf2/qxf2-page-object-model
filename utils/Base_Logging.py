@@ -66,8 +66,7 @@ class Base_Logging():
         except Exception as e:
             self.write("Exception when trying to set rplogger")
             self.write(str(e))
-            self.exceptions.append("Error when setting up the reportportal logger")
-
+            
 
     def write(self,msg,level='info'):
         "Write out a message"
