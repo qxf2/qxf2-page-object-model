@@ -104,3 +104,4 @@ class Base_Logging():
             logger.critical("{module} | {msg}",module=d['caller_func'],msg=msg)
         else:
             logger.critical("Unknown level passed for the msg: {}", msg)
+            
