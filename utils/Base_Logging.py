@@ -66,7 +66,7 @@ class Base_Logging():
         except Exception as e:
             self.write("Exception when trying to set rplogger")
             self.write(str(e))
-            
+
 
     def write(self,msg,level='info'):
         "Write out a message"
@@ -104,4 +104,3 @@ class Base_Logging():
             logger.critical("{module} | {msg}",module=d['caller_func'],msg=msg)
         else:
             logger.critical("Unknown level passed for the msg: {}", msg)
-            
