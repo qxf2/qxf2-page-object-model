@@ -1,4 +1,7 @@
 import os,pytest,sys
+import glob
+import shutil
+from loguru import logger
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
@@ -409,13 +412,66 @@ def reportportal_service(request):
 
 @pytest.fixture
 def summary_flag(request):
-    "pytest fixture for generating summary using LLM (GPT-4)"
+    "pytest fixture for generating summary using LLM"
     try:
         return request.config.getoption("--summary")
-
-    except Exception as e:
+    except Exception as error:
         print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+        print("Python says:%s"%str(error))
+
+def pytest_sessionstart(session):
+    """
+    Perform cleanup at the start of the test session.
+    Delete the consolidated log file and temporary log files if present.
+    """
+    source_directory = "log"
+    log_file_name = "*.log-temp"
+    consolidated_log_file = os.path.join(source_directory, "consolidated_log.txt")
+
+    # Delete the consolidated log file
+    if os.path.exists(consolidated_log_file):
+        try:
+            os.remove(consolidated_log_file)
+        except OSError as error:
+            print(f"Error removing existing consolidated log file: {error}")
+
+    # Delete all temporary log files if present
+    for temp_log_file in glob.glob(os.path.join(source_directory, log_file_name)):
+        try:
+            os.remove(temp_log_file)
+        except OSError as error:
+            print(f"Error removing temporary log file: {error}")
+
+def pytest_sessionfinish(session, exitstatus):
+    """
+    Called after the entire test session finishes.
+    The temporary log files are consolidated into a single log file 
+    and later deleted.
+    """
+    source_directory = "log"
+    log_file_name = "*.log-temp"
+
+    consolidated_log_file = os.path.join(source_directory, "consolidated_log.txt")
+
+    #Detach all handlers from the logger inorder to release the file handle 
+    #which can be used for deleting the temp files later
+    logger.remove(None)
+    
+    # Consolidate the temporary log files into the consolidated log file    
+    try:
+        with open(consolidated_log_file, "a") as final_log:
+            for file_name in glob.glob(os.path.join(source_directory, log_file_name)):
+                source_file = None
+                try:
+                    with open(file_name, "r") as source_file:
+                        shutil.copyfileobj(source_file, final_log)
+                    os.remove(file_name)
+                except FileNotFoundError as error:
+                    print(f"Temporary log file not found: {error}")
+                except Exception as error:
+                    print(f"Error processing the temporary log file: {error}")
+    except OSError as error:
+        print(f"Error processing consolidated log file: {error}")
 
 @pytest.hookimpl()
 def pytest_configure(config):
