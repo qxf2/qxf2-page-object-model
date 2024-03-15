@@ -28,7 +28,6 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         self.browser_version = browser_version
         self.os_name = os_name
 
-
     def get_web_driver(self, remote_flag, os_name, os_version, browser,
                        browser_version, remote_project_name, remote_build_name):
         """Return the appropriate driver."""
@@ -128,6 +127,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         web_driver = webdriver.Remote(command_executor=saucelabs_url, options=options)
 
         return web_driver
+
     def run_local(self, browser):
         """Run the test on local system."""
         local_driver = None
@@ -262,6 +262,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         mobile_driver = self.set_capabilities_options(desired_capabilities, url=saucelabs_url)
 
         return mobile_driver
+
     def browserstack_mobile(self, app_path, app_name, desired_capabilities, username, password,
                             appium_version):
         """Setup mobile driver to run the test in Browserstack."""
@@ -287,6 +288,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         """Return the Firefox driver."""
         driver = webdriver.Firefox(firefox_profile=self.set_firefox_profile())
         return driver
+
     def set_firefox_profile(self):
         """Setup firefox with the right preferences and return a profile."""
         try:
