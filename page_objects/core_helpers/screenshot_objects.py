@@ -2,6 +2,7 @@
 Helper class for Screenshot Objects
 """
 import os
+import shutil
 from utils import Gif_Maker
 import conf.screenshot_conf as conf
 
@@ -78,13 +79,19 @@ class Screenshot_Objects:
     def screenshot_directory(self, testname):
         overwrite_flag=conf.overwrite_flag
         self.screenshot_dir = self.screenshots_parent_dir + os.sep + testname
-        if os.path.exists(self.screenshot_dir) and overwrite_flag is True:
-            for i in range(1,4096):
-                if os.path.exists(self.screenshot_dir + '_'+str(i)):
-                    continue
-                else:
-                    os.rename(self.screenshot_dir,self.screenshot_dir +'_'+str(i))
+        if os.path.exists(self.screenshot_dir):
+            if overwrite_flag is True:
+                for i in range(1,4096):
+                    if os.path.exists(self.screenshot_dir + '_'+str(i)):
+                        continue
+                    else:
+                        os.rename(self.screenshot_dir,self.screenshot_dir +'_'+str(i))
                     break
+            else:
+                try:
+                    shutil.rmtree(self.screenshot_dir)
+                except OSError as e:
+                    self.write("Error: %s - %s." % (e.filename, e.strerror))
         return self.screenshot_dir
 
     def create_screenshot_dir(self, screenshot_dir):
