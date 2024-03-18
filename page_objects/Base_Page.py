@@ -2,6 +2,7 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
+
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 import os,inspect
@@ -11,7 +12,11 @@ from .core_helpers.remote_objects import Remote_Objects
 from .core_helpers.logging_objects import Logging_Objects
 from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
+<<<<<<< HEAD
 import conf.remote_credentials
+=======
+from utils.stop_test_exception_util import Stop_Test_Exception
+>>>>>>> master
 import conf.base_url_conf
 import conf.screenshot_conf
 from utils import accessibility_util
@@ -89,7 +94,7 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Remote_Objects, Screens
         self.driver.implicitly_wait(5)
         self.driver.maximize_window()
 
-        if conf.remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS' and remote_flag.lower() == 'y':
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             self.register_browserstack()
             self.session_url = self.browserstack_obj.get_session_url()
             self.browserstack_msg = 'BrowserStack session URL:'
