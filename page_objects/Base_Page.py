@@ -12,11 +12,7 @@ from .core_helpers.remote_objects import Remote_Objects
 from .core_helpers.logging_objects import Logging_Objects
 from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
-<<<<<<< HEAD
 import conf.remote_credentials
-=======
-from utils.stop_test_exception_util import Stop_Test_Exception
->>>>>>> master
 import conf.base_url_conf
 import conf.screenshot_conf
 from utils import accessibility_util
