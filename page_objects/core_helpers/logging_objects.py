@@ -7,6 +7,10 @@ from utils.stop_test_exception_util import Stop_Test_Exception
 import logging
 
 class Logging_Objects:
+    def __init__(self):
+        self.msg_list = []
+        self.exceptions = []
+
     def write_test_summary(self):
         "Print out a useful, human readable summary"
         self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
@@ -79,4 +83,3 @@ class Logging_Objects:
     def set_rp_logger(self,rp_pytest_service):
         "Set the reportportal logger"
         self.rp_logger = self.log_obj.setup_rp_logging(rp_pytest_service)
-            

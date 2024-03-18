@@ -3,6 +3,10 @@ Helper class for Remote Objects
 """
 
 class Remote_Objects:
+    def __init__(self):
+        self.image_url_list = []
+        self.msg_list = []
+        
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
