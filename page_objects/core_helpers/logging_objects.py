@@ -80,4 +80,3 @@ class Logging_Objects:
         "Set the reportportal logger"
         self.rp_logger = self.log_obj.setup_rp_logging(rp_pytest_service)
             
-            

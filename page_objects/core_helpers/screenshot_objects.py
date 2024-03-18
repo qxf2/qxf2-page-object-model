@@ -6,13 +6,6 @@ from utils import Gif_Maker
 import conf.screenshot_conf as conf
 
 class Screenshot_Objects:
-    def append_latest_image(self,screenshot_name):
-        "Get image url list from Browser Stack"
-        screenshot_url = self.browserstack_obj.get_latest_screenshot_url()
-        image_dict = {}
-        image_dict['name'] = screenshot_name
-        image_dict['url'] = screenshot_url
-        self.image_url_list.append(image_dict)
 
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"

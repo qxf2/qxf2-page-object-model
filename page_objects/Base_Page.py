@@ -5,6 +5,7 @@ There are useful wrappers for common Selenium operations
 
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 import os,inspect
 from .driverfactory import DriverFactory
 from .core_helpers.selenium_objects import Selenium_Objects
@@ -55,7 +56,6 @@ class Base_Page(Borg, Selenium_Objects, Logging_Objects, Remote_Objects, Screens
             self.browserstack_flag = False
             self.highlight_flag = False
             self.test_run_id = None
-            self.test_flag = "hello this is test"
             self.reset()
         self.base_url = base_url
         self.driver_obj = DriverFactory()

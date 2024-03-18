@@ -4,6 +4,7 @@ Helper class for Selenium Objects
 import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 class Selenium_Objects:
 
@@ -74,7 +75,7 @@ class Selenium_Objects:
             text = text.encode('utf-8')
         except Exception as e:
             self.write(e)
-            self.exceptions.append("Error when getting text from the DOM element-'%s' in the conf/locators.conf file"%locator)
+            self.exceptions.append("Error when getting text from the DOM element-'%s' in the conf/locators.conf file"%dom_element)
 
         return text
 
@@ -200,7 +201,8 @@ class Selenium_Objects:
                     self.write(str(e),'debug')
                     self.exceptions.append("Could not clear the text field- '%s' in the conf/locators.conf file"%locator)
         except Exception as e:
-            self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
+            self.write(str(e),'debug')
+            self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
 
         result_flag = False
         if text_field is not None:

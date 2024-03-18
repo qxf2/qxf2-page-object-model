@@ -8,13 +8,21 @@ class Remote_Objects:
         self.browserstack_flag = True
         from utils.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
         self.browserstack_obj = BrowserStack_Library()
-        
+
     def register_testrail(self):
         "Register TestRail with Page"
         from utils.Test_Rail import Test_Rail  # pylint: disable=import-error,import-outside-toplevel
         self.testrail_flag = True
         self.testrail_object = Test_Rail()
         self.write('Automation registered with TestRail',level='debug')
+
+    def append_latest_image(self,screenshot_name):
+        "Get image url list from Browser Stack"
+        screenshot_url = self.browserstack_obj.get_latest_screenshot_url()
+        image_dict = {}
+        image_dict['name'] = screenshot_name
+        image_dict['url'] = screenshot_url
+        self.image_url_list.append(image_dict)
 
     def register_tesults(self):
         "Register Tesults with Page"
