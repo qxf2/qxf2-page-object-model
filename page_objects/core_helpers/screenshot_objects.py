@@ -6,6 +6,10 @@ from utils import Gif_Maker
 import conf.screenshot_conf as conf
 
 class Screenshot_Objects:
+    def __init__(self):
+        self.tesults_flag = False
+        self.browserstack_flag = False
+        self.images = []
 
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"

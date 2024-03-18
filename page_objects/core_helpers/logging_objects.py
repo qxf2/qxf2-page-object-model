@@ -10,6 +10,7 @@ class Logging_Objects:
     def __init__(self):
         self.msg_list = []
         self.exceptions = []
+        self.browserstack_flag = False
 
     def write_test_summary(self):
         "Print out a useful, human readable summary"

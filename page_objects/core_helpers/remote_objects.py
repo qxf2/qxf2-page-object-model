@@ -6,7 +6,11 @@ class Remote_Objects:
     def __init__(self):
         self.image_url_list = []
         self.msg_list = []
-        
+        self.testrail_flag = False
+        self.tesults_flag = False
+        self.browserstack_flag = False
+        self.test_run_id = None
+
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True

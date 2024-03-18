@@ -8,6 +8,9 @@ from selenium.webdriver.common.by import By
 
 class Selenium_Objects:
 
+    def __init__(self):
+        self.highlight_flag = False
+
     def get_current_driver(self):
         "Return current driver."
         return self.driver
@@ -160,8 +163,6 @@ class Selenium_Objects:
             return text.encode('utf-8')
     get_text_by_locator = get_text #alias the method
 
-
-
     def split_locator(self,locator):
         "Split the locator type and locator"
         result = ()
@@ -234,5 +235,3 @@ class Selenium_Objects:
         "Tears down the driver"
         self.driver.quit()
         self.reset()
-
-            
