@@ -1,3 +1,7 @@
+"""
+Helper class for Logging Objects
+"""
+
 from utils.Base_Logging import Base_Logging
 from utils.stop_test_exception_util import Stop_Test_Exception
 import logging

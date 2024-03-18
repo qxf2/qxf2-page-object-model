@@ -1,3 +1,6 @@
+"""
+Helper class for Screenshot Objects
+"""
 import os
 from utils import Gif_Maker
 import conf.screenshot_conf as conf

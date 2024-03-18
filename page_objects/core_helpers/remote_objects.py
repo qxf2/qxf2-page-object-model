@@ -1,4 +1,6 @@
-import conf.remote_credentials
+"""
+Helper class for Remote Objects
+"""
 
 class Remote_Objects:
     def register_browserstack(self):
