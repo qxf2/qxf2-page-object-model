@@ -30,7 +30,7 @@ This GUI and API test automation framework is developed and maintained by [Qxf2 
 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too!
 
-If you end up using our framework, please let us know by giving us a star on GitHub and/or dropping an email to __mak@qxf2.com__
+If you end up using our framework, please let us know by giving us a star on GitHub and/or dropping an email to __mak@qxf2.com__.
 
 ------
 Setup
@@ -54,6 +54,18 @@ b) Add Python 3.x to your PATH environment variable
 c) If you do not have it already, get pip (NOTE: Most recent Python distributions come with pip)
 
 d) pip install -r requirements.txt to install dependencies
+
+e)configure environmental variables 
+
+Templates for.env files are provided.
+Kindly fill in the credentials and rename the files according to the specified format.
+
+* env_conf to .env 
+	Tesults, TestRail, Gmail , Report portal crentials details can be entered here.
+* env_ssh_conf to .env.ssh
+    ssh server credentials used by the SSHKeywords keyword to connect to remote servers.
+* env_remote to .env.remote 
+    Remote WebDriver Server Details (BrowserStack/SauceLabs).
 
 If you ran into some problems on step (d), please report them as an issue or email Arun(mak@qxf2.com).
 
@@ -119,7 +131,7 @@ a) Directory structure of our current Templates
 
    ./
 
-	|__conf: For all configurations and credential files
+	|__conf: For all configurations 	
 
 	|__log: Log files for all tests
 
@@ -163,8 +175,8 @@ c)python -m pytest tests/test_example_form.py --browser Chrome (to run against c
 
 d)python -m pytest tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
 
-e)python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version (android version) --device_name (simulator) --app_path (.apk location on local) --remote_flag Y (to run Mobile test case on Broswestack)remote_credentials.py
-NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to remote_credentials.py under conf.
+e)python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version (android version) --device_name (simulator) --app_path (.apk location on local) --remote_flag Y (to run Mobile test case on Broswerstack)
+NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to .env.remote .
 
 --------
 ISSUES?
