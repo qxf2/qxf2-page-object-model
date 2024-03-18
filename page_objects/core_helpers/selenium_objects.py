@@ -148,7 +148,7 @@ class Selenium_Objects:
 
     def get_page_paths(self,section):
         "Open configurations file,go to right sections,return section obj"
-        pass
+        return section
 
     def get_text(self,locator):
         "Return the text for a given path or the 'None' object if the element is not found"
