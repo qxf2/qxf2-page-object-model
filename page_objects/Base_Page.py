@@ -12,7 +12,6 @@ from .core_helpers.remote_objects import Remote_Objects
 from .core_helpers.logging_objects import Logging_Objects
 from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
-import conf.remote_credentials
 import conf.base_url_conf
 import conf.screenshot_conf
 from utils import accessibility_util
