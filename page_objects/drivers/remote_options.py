@@ -1,16 +1,16 @@
 """
 Set the desired option for running the test on a remote platform.
 """
+
+import os
+import json
+from datetime import datetime
+import requests
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from selenium.webdriver.ie.options import Options as IeOptions
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.safari.options import Options as SafariOptions
-from conf import remote_credentials
-import os
-import requests
-import json
-from datetime import datetime
 
 class RemoteOptions():
     """Class contains methods for various remote options for browserstack and saucelab."""
@@ -87,8 +87,8 @@ class RemoteOptions():
     @staticmethod
     def sauce_upload(app_path, app_name):
         """Upload the apk to the sauce temperory storage."""
-        username = remote_credentials.USERNAME
-        password = remote_credentials.ACCESS_KEY
+        username =  os.getenv('REMOTE_USERNAME')
+        password =  os.getenv('REMOTE_ACCESS_KEY')
         result_flag = False
         try:
             headers = {'Content-Type':'application/octet-stream'}
@@ -115,8 +115,8 @@ class RemoteOptions():
     @staticmethod
     def browser_stack_upload(app_name, app_path):
         """Upload the apk to the BrowserStack storage if its not done earlier."""
-        username = remote_credentials.USERNAME
-        access_key = remote_credentials.ACCESS_KEY
+        username =  os.getenv('REMOTE_USERNAME')
+        access_key =  os.getenv('REMOTE_ACCESS_KEY')
         try:
             #Upload the apk
             apk_file = os.path.join(app_path, app_name)
