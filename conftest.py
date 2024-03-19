@@ -1,14 +1,15 @@
 import os,pytest,sys
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from dotenv import load_dotenv
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
-from conf import api_example_conf
-from conf import report_portal_conf
 from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
 from utils import interactive_mode
+
+load_dotenv()
 
 @pytest.fixture
 def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,reportportal_service,interactivemode_flag):
@@ -87,7 +88,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag,api_url=api_example_conf.api_url):
+def test_api_obj(interactivemode_flag,api_url=base_url_conf.api_base_url):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower()=='y':
@@ -404,6 +405,8 @@ def reportportal_service(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+        solution = "It looks like you are trying to use report portal to run your test. \nPlease make sure you have updated .env with the right credentials ."
+        print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
 
     return reportportal_pytest_service
 
@@ -415,14 +418,15 @@ def pytest_configure(config):
     if_reportportal =config.getoption('--reportportal')
 
     try:
-        config._inicache["rp_uuid"] = report_portal_conf.report_portal_uuid
-        config._inicache["rp_endpoint"]= report_portal_conf.report_portal_endpoint
-        config._inicache["rp_project"]=report_portal_conf.report_portal_project
-        config._inicache["rp_launch"]=report_portal_conf.report_portal_launch
+        config._inicache["rp_api_key"] = os.getenv('report_portal_api_key')
+        config._inicache["rp_endpoint"]= os.getenv('report_portal_endpoint')
+        config._inicache["rp_project"]=os.getenv('report_portal_project')
+        config._inicache["rp_launch"]=os.getenv('report_portal_launch')
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+
 
     #Registering custom markers to supress warnings
     config.addinivalue_line("markers", "GUI: mark a test as part of the GUI regression suite.")
@@ -447,6 +451,9 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+        solution = "It looks like you are trying to use email pytest report to run your test. \nPlease make sure you have updated .env with the right credentials ."
+        print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
+
 
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
@@ -492,11 +499,11 @@ def pytest_addoption(parser):
                             help="Browser. Valid options are firefox, ie and chrome")
         parser.addoption("--app_url",
                             dest="url",
-                            default=base_url_conf.base_url,
+                            default=base_url_conf.ui_base_url,
                             help="The url of the application")
         parser.addoption("--api_url",
                             dest="url",
-                            default="http://35.167.62.251",
+                            default="https://cars-app.qxf2.com/",
                             help="The url of the api")
         parser.addoption("--testrail_flag",
                             dest="testrail_flag",

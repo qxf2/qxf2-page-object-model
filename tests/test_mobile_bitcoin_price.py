@@ -10,7 +10,6 @@ import os, sys, time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 import conf.mobile_bitcoin_conf as conf
-import conf.testrail_caseid_conf as testrail_file
 import pytest
 
 @pytest.mark.MOBILE
@@ -35,9 +34,7 @@ def test_mobile_bitcoin_price(test_mobile_obj):
         test_obj.log_result(result_flag,
                     positive="Successfully visited the bitcoin real time price page.",
                     negative="Failed to visit the bitcoin real time price page.")
-        #Update TestRail
-        case_id = testrail_file.test_bitcoin_price_page_header
-        test_obj.report_to_testrail(case_id,test_mobile_obj.test_run_id,result_flag)
+
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
 
         #5. Verify bitcoin real time price is displayed.
@@ -46,9 +43,6 @@ def test_mobile_bitcoin_price(test_mobile_obj):
         test_obj.log_result(result_flag,
                             positive="Successfully got the bitcoin real time price in usd.",
                             negative="Failed to get the bitcoin real time price in usd.")
-        #Update TestRail
-        case_id = testrail_file.test_bitcoin_real_time_price
-        test_obj.report_to_testrail(case_id,test_mobile_obj.test_run_id,result_flag)
         test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
 
         #6. Print out the results.

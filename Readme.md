@@ -2,7 +2,7 @@
 ![GitHub](https://img.shields.io/github/license/qxf2/qxf2-page-object-model?color=brightgreen)
 ![Maintenance](https://img.shields.io/maintenance/yes/2023?color=brightgreen)
 [![CircleCI](https://circleci.com/gh/qxf2/qxf2-page-object-model.svg?style=shield)](https://circleci.com/gh/qxf2/qxf2-page-object-model)
-[![BrowserStack Status](https://www.browserstack.com/automate/badge.svg?badge_key=cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)](https://www.browserstack.com/automate/public-build/cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)
+[![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)](https://automate.browserstack.com/public-build/cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)
 ![GitHub stars](https://img.shields.io/github/stars/qxf2/qxf2-page-object-model)
 ![GitHub forks](https://img.shields.io/github/forks/qxf2/qxf2-page-object-model)
 ![GitHub repo size](https://img.shields.io/github/repo-size/qxf2/qxf2-page-object-model)
@@ -30,7 +30,7 @@ This GUI and API test automation framework is developed and maintained by [Qxf2 
 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too!
 
-If you end up using our framework, please let us know by giving us a star on GitHub and/or dropping an email to __mak@qxf2.com__
+If you end up using our framework, please let us know by giving us a star on GitHub and/or dropping an email to __mak@qxf2.com__.
 
 ------
 Setup
@@ -55,6 +55,18 @@ c) If you do not have it already, get pip (NOTE: Most recent Python distribution
 
 d) pip install -r requirements.txt to install dependencies
 
+e)configure environmental variables 
+
+Templates for.env files are provided.
+Kindly fill in the credentials and rename the files according to the specified format.
+
+* env_conf to .env 
+	Tesults, TestRail, Gmail , Report portal crentials details can be entered here.
+* env_ssh_conf to .env.ssh
+    ssh server credentials used by the SSHKeywords keyword to connect to remote servers.
+* env_remote to .env.remote 
+    Remote WebDriver Server Details (BrowserStack/SauceLabs).
+
 If you ran into some problems on step (d), please report them as an issue or email Arun(mak@qxf2.com).
 
 
@@ -63,9 +75,9 @@ __2. Setup for GUI/Selenium automation__
 
 a) Get setup with your browser driver. If you don't know how to, please try:
 
-   > [For Chrome](https://sites.google.com/a/chromium.org/chromedriver/getting-started)
+   > [For Chrome](https://googlechromelabs.github.io/chrome-for-testing/)
 
-   > [For Firefox]( https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette/WebDriver)
+   > [For Firefox](https://github.com/mozilla/geckodriver/releases)
 
 #Note: Check Firefox version & Selenium version compatibility before downloading geckodriver.
 
@@ -77,7 +89,7 @@ __If your setup goes well__, you should be to run a simple test with this comman
 
 __Optional steps__ for integrating with third-party tools:
 
-* [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Testrail)
+* [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-TestRail-using-Python)
 * [Integrate our Python GUI/web automation framework with BrowserStack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#browserstack)
 * [Integrate our Python Selenium automation framework with Sauce Labs ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#sauce-labs)
 * [Run Python integration tests on Jenkins ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#jenkins)
@@ -88,7 +100,7 @@ __Optional steps__ for integrating with third-party tools:
 __3. Setup for Mobile/Appium automation__
 
 
-a) [Download and Install appium desktop app](https://github.com/appium/appium-desktop/releases/latest)
+a) [Install appium globally using npm](https://appium.io/docs/en/latest/quickstart/install/)
 
 b) [Download and Install Android Studio and create an emulator](https://developer.android.com/studio/index.html)
 
@@ -119,7 +131,7 @@ a) Directory structure of our current Templates
 
    ./
 
-	|__conf: For all configurations and credential files
+	|__conf: For all configurations 	
 
 	|__log: Log files for all tests
 
@@ -163,8 +175,8 @@ c)python -m pytest tests/test_example_form.py --browser Chrome (to run against c
 
 d)python -m pytest tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
 
-e)python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version (android version) --device_name (simulator) --app_path (.apk location on local) --remote_flag Y (to run Mobile test case on Broswestack)remote_credentials.py
-NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to remote_credentials.py under conf.
+e)python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version (android version) --device_name (simulator) --app_path (.apk location on local) --remote_flag Y (to run Mobile test case on Broswerstack)
+NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to .env.remote .
 
 --------
 ISSUES?
