@@ -680,26 +680,32 @@ class Base_Page(Borg):
 
     def scroll_down(self,locator,wait_time=2):
         "Scroll down"
+        result_flag=False
         try:
             element = self.get_element(locator)
-            element.send_keys(Keys.PAGE_DOWN)
+            actions_obj = ActionChains(self.driver)
+            actions_obj.move_to_element(element).perform()
             self.wait(wait_time)
+            result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
             self.exceptions.append("An exception occured when scrolling down")
-            return None
+        return result_flag
 
-
-    def hover(self,locator,wait_seconds=2):
+    def hover(self, locator, wait_seconds=2):
         "Hover over the element"
-        #Note: perform() of ActionChains does not return a bool
-        #So we have no way of returning a bool when hover is called
-        element = self.get_element(locator)
-        action_obj = ActionChains(self.driver)
-        action_obj.move_to_element(element)
-        action_obj.perform()
-        self.wait(wait_seconds)
-
+        result_flag = False  # Initialize the result flag to False
+        try:
+            element = self.get_element(locator)
+            action_obj = ActionChains(self.driver)
+            action_obj.move_to_element(element)
+            action_obj.perform()
+            self.wait(wait_seconds)
+            result_flag = True  # Update the result flag to True if hover is successful
+        except Exception as e:
+            self.write(str(e),'debug')
+            self.exceptions.append("An exception occured when hovering over the element", locator)
+        return result_flag
 
     def teardown(self):
         "Tears down the driver"
