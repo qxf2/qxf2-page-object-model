@@ -13,11 +13,12 @@ from page_objects.drivers.remote_options import RemoteOptions
 from page_objects.drivers.local_browsers import LocalBrowsers
 from conf import ports_conf
 from conf import screenshot_conf
+from conf import remote_url_conf
 
 load_dotenv('.env.remote')
 localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost
-browserstack_url = "http://hub-cloud.browserstack.com/wd/hub"
-saucelabs_url = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub"
+browserstack_url=remote_url_conf.browserstack_url
+saucelabs_url=remote_url_conf.saucelabs_url
 
 class DriverFactory(RemoteOptions, LocalBrowsers):
     """Class contains methods for getting web drivers and setting up remote testing platforms."""

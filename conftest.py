@@ -466,6 +466,10 @@ def pytest_generate_tests(metafunc):
                 elif metafunc.config.getoption("--browser") == []:
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
                                         browser_os_name_conf.default_config_list)
+                elif not metafunc.config.getoption("--browser") or not metafunc.config.getoption("--ver") or not metafunc.config.getoption("--os_name") or not metafunc.config.getoption("--os_version"):
+                    print("Feedback: Missing command-line arguments. Falling back to default values.")
+                    # Use default values from the default list
+                    metafunc.parametrize("browser, browser_version, os_name, os_version", browser_os_name_conf.default_config_list)
                 else:
                     config_list = [(metafunc.config.getoption("--browser")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("--os_name")[0],metafunc.config.getoption("--os_version")[0])]
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
