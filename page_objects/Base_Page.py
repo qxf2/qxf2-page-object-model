@@ -408,7 +408,7 @@ class Base_Page(Borg):
         except Exception as e:
             self.write(e)
             self.exceptions.append("Error uploading the file '%s' "%locator)
-            
+
         return result_flag
 
     def _get_locator(key):
