@@ -21,7 +21,7 @@ os_list = ["windows","OS X"]   #list of os for the tests to run against on Brows
 windows_versions = ["10","11"]  #list of windows versions for the tests to run against on Browserstack/Sauce Labs
 os_x_versions = ["Monterey"]   #list of os x versions for the tests to run against on Browserstack/Sauce Labs
 sauce_labs_os_x_versions = ["10.10"] #Set if running on sauce_labs instead of "yosemite"
-default_config_list = [("chrome","123","windows","11")] #default configuration against which the test would run if no -B all option is used
+default_config_list = [("chrome","121","windows","11")] #default configuration against which the test would run if no -B all option is used
 
 
 def generate_configuration(browsers=browsers,firefox_versions=firefox_versions,chrome_versions=chrome_versions,safari_versions=safari_versions,
