@@ -8,11 +8,8 @@ b) Obtaining URLs of screenshots
 To do:
 a) Handle expired sessions better
 """
-
+import os
 import requests
-from conf import remote_credentials as remote_credentials
-
-
 class BrowserStack_Library():
     "BrowserStack library to interact with BrowserStack artifacts"
     def __init__(self):
@@ -23,8 +20,8 @@ class BrowserStack_Library():
 
     def get_auth(self):
         "Set up the auth object for the Requests library"
-        USERNAME = remote_credentials.USERNAME
-        PASSWORD = remote_credentials.ACCESS_KEY
+        USERNAME = os.getenv('REMOTE_USERNAME')
+        PASSWORD = os.getenv('REMOTE_ACCESS_KEY')
         auth = (USERNAME,PASSWORD)
 
         return auth

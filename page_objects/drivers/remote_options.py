@@ -1,12 +1,16 @@
 """
 Set the desired option for running the test on a remote platform.
 """
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
-from conf import remote_credentials
+
 import os
-import requests
 import json
 from datetime import datetime
+import requests
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+from selenium.webdriver.ie.options import Options as IeOptions
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.safari.options import Options as SafariOptions
 
 class RemoteOptions():
     """Class contains methods for various remote options for browserstack and saucelab."""
@@ -14,71 +18,61 @@ class RemoteOptions():
     @staticmethod
     def firefox(browser_version):
         """Set web browser as firefox."""
-        desired_capabilities = DesiredCapabilities.FIREFOX
-        desired_capabilities['browser_version'] = browser_version
-
-        return desired_capabilities
+        options = FirefoxOptions()
+        options.browser_version = browser_version
+        return options
 
     @staticmethod
     def explorer(browser_version):
         """Set web browser as Explorer."""
-        desired_capabilities = DesiredCapabilities.INTERNETEXPLORER
-        desired_capabilities['browser_version'] = browser_version
+        options = IeOptions()
+        options.browser_version = browser_version
 
-        return desired_capabilities
+        return options
 
     @staticmethod
     def chrome(browser_version):
         """Set web browser as Chrome."""
-        desired_capabilities = DesiredCapabilities.CHROME
-        desired_capabilities['browser_version'] = browser_version
+        options = ChromeOptions()
+        options.browser_version = browser_version
 
-        return desired_capabilities
-
-    @staticmethod
-    def opera(browser_version):
-        """Set web_browser as Opera."""
-        desired_capabilities = DesiredCapabilities.OPERA
-        desired_capabilities['browser_version'] = browser_version
-
-        return desired_capabilities
+        return options
 
     @staticmethod
     def safari(browser_version):
         """Set web browser as Safari."""
-        desired_capabilities = DesiredCapabilities.SAFARI
-        desired_capabilities['browser_version'] = browser_version
+        options = SafariOptions()
+        options.browser_version = browser_version
 
-        return desired_capabilities
+        return options
 
     @staticmethod
     def set_os(desired_capabilities, os_name, os_version):
-        """Set os name and os_version."""
+        """Set os name and os_version."""      
         desired_capabilities['os'] = os_name
-        desired_capabilities['os_version'] = os_version
+        desired_capabilities['osVersion'] = os_version
 
         return desired_capabilities
 
     @staticmethod
     def remote_project_name(desired_capabilities, remote_project_name):
         """Set remote project name for browserstack."""
-        desired_capabilities['project'] = remote_project_name
+        desired_capabilities['projectName'] = remote_project_name
 
         return desired_capabilities
 
     @staticmethod
     def remote_build_name(desired_capabilities, remote_build_name):
         """Set remote build name for browserstack."""
-        desired_capabilities['build'] = remote_build_name+"_"+str(datetime.now().strftime("%c"))
+        desired_capabilities['buildName'] = remote_build_name+"_"+str(datetime.now().strftime("%c"))
 
         return desired_capabilities
 
     @staticmethod
-    def saucelab_platform(desired_capabilities, os_name, os_version):
+    def saucelab_platform(options, os_name, os_version):
         """Set platform for saucelab."""
-        desired_capabilities['platform'] = os_name + ' '+os_version
-
-        return desired_capabilities
+        options.platform_name = os_name + ' '+os_version
+        return options
 
     @staticmethod
     def set_mobile_device(mobile_os_name, mobile_os_version, device_name):
@@ -93,8 +87,8 @@ class RemoteOptions():
     @staticmethod
     def sauce_upload(app_path, app_name):
         """Upload the apk to the sauce temperory storage."""
-        username = remote_credentials.USERNAME
-        password = remote_credentials.ACCESS_KEY
+        username =  os.getenv('REMOTE_USERNAME')
+        password =  os.getenv('REMOTE_ACCESS_KEY')
         result_flag = False
         try:
             headers = {'Content-Type':'application/octet-stream'}
@@ -121,8 +115,8 @@ class RemoteOptions():
     @staticmethod
     def browser_stack_upload(app_name, app_path):
         """Upload the apk to the BrowserStack storage if its not done earlier."""
-        username = remote_credentials.USERNAME
-        access_key = remote_credentials.ACCESS_KEY
+        username =  os.getenv('REMOTE_USERNAME')
+        access_key =  os.getenv('REMOTE_ACCESS_KEY')
         try:
             #Upload the apk
             apk_file = os.path.join(app_path, app_name)

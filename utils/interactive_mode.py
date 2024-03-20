@@ -1,12 +1,12 @@
 """
 Implementing the questionaty library to fetch the users choices for different arguments
 """
+import os
 import sys
 import questionary
 from clear_screen import clear
 from conf import base_url_conf
 from conf import browser_os_name_conf as conf
-from conf import remote_credentials
 
 def display_gui_test_options(browser,browser_version,os_version,
                              os_name,remote_flag,testrail_flag,tesults_flag):
@@ -298,10 +298,10 @@ def set_remote_credentials():
         platform = "SL"
     username = questionary.text("Enter the Username").ask()
     password = questionary.password("Enter the password").ask()
-    with open("conf/remote_credentials.py",'w') as cred_file:
+    with open(".env.remote",'w') as cred_file:
         cred_file.write("REMOTE_BROWSER_PLATFORM = '%s'\
-                         \nUSERNAME = '%s'\
-                         \nACCESS_KEY = '%s'"%(platform,username,password))
+                         \nREMOTE_USERNAME = '%s'\
+                         \nREMOTE_ACCESS_KEY = '%s'"%(platform,username,password))
     questionary.print("Updated the credentials successfully",
                        style="bold fg:green")
 
@@ -338,7 +338,7 @@ def get_os_version(os_name):
         os_version = questionary.select("Select the OS version",
                                          choices=conf.windows_versions).ask()
     elif os_name == "OS X":
-        if remote_credentials.REMOTE_BROWSER_PLATFORM == "SL":
+        if (os.getenv('REMOTE_BROWSER_PLATFORM') == "SL"):
             os_version = questionary.select("Select the OS version",
                                              choices=conf.sauce_labs_os_x_versions).ask()
         else:
