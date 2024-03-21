@@ -150,7 +150,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
 
     def run_mobile(self, mobile_os_name, mobile_os_version, device_name, app_package,
                    app_activity, remote_flag, device_flag, app_name, app_path,
-                   ud_id, org_id, signing_id, no_reset_flag, appium_version,remote_project_name,remote_build_name):
+                   ud_id, org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name):
         """Specify the mobile device configurations and get the mobile driver."""
         #Get the remote credentials from remote_credentials file
         username = os.getenv('REMOTE_USERNAME')
