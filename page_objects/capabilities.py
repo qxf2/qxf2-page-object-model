@@ -47,7 +47,6 @@ class Capabilities:
         bstack_mobile_options['sessionName'] = 'Appium Python Test'
         bstack_mobile_options['appiumVersion'] = appium_version
         bstack_mobile_options['realMobile'] = 'true'
-        bstack_mobile_options["networkProfile"] = "4g-lte-good"
         bstack_mobile_options = self.browserstack_credentials(bstack_mobile_options, username, password)
         desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
         desired_capabilities['bstack:options'] = bstack_mobile_options
