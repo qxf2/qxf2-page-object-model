@@ -158,7 +158,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
 
         #setup mobile device
         desired_capabilities = self.set_mobile_device(mobile_os_name, mobile_os_version, device_name)
-        
+
         if remote_project_name is not None:
             desired_capabilities = self.remote_project_name(desired_capabilities, remote_project_name)
 

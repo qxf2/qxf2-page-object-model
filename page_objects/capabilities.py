@@ -2,7 +2,7 @@ import os
 from conf import screenshot_conf
 from datetime import datetime
 
-class Capabilities:    
+class Capabilities:
     def saucelab_credentials(self, sauce_options,username,password):
         """Set saucelab credentials."""
         sauce_options['username'] = username

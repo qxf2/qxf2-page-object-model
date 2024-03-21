@@ -4,7 +4,6 @@ Set the desired option for running the test on a remote platform.
 
 import os
 import json
-from datetime import datetime
 import requests
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
@@ -51,7 +50,7 @@ class RemoteOptions():
         """Set platform for saucelab."""
         options.platform_name = os_name + ' '+os_version
         return options
-        
+
     @staticmethod
     def sauce_upload(app_path, app_name):
         """Upload the apk to the sauce temperory storage."""
