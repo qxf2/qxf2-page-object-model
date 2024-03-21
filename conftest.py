@@ -459,7 +459,7 @@ def pytest_sessionfinish(session, exitstatus):
     #Detach all handlers from the logger inorder to release the file handle
     #which can be used for deleting the temp files later
     logger.remove(None)
-    
+
     #Consolidate the temporary log files into the consolidated log file
     try:
         with open(consolidated_log_file, "a") as final_log:
