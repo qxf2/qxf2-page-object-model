@@ -258,7 +258,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         if ' ' in app_name:
             app_name = app_name.replace(' ', '')
             print("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)
-        
+
         desired_capabilities = self.saucelab_capabilities(desired_capabilities, app_name, username, password)
         mobile_driver = self.set_capabilities_options(desired_capabilities, url=saucelabs_url)
 
