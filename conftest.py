@@ -11,7 +11,6 @@ from utils import post_test_reports_to_slack
 from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
 from utils import interactive_mode
-from utils import gpt_summary_generator
 
 load_dotenv()
 
@@ -457,11 +456,11 @@ def pytest_sessionfinish(session, exitstatus):
 
     consolidated_log_file = os.path.join(source_directory, "consolidated_log.txt")
 
-    #Detach all handlers from the logger inorder to release the file handle 
+    #Detach all handlers from the logger inorder to release the file handle
     #which can be used for deleting the temp files later
     logger.remove(None)
     
-    # Consolidate the temporary log files into the consolidated log file    
+    #Consolidate the temporary log files into the consolidated log file
     try:
         with open(consolidated_log_file, "a") as final_log:
             for file_name in glob.glob(os.path.join(source_directory, log_file_name)):
@@ -514,7 +513,8 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
                 from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
             if  terminalreporter.config.getoption("--summary").lower() == 'y':
-                gpt_summary_generator.generate_gpt_summary()          
+                from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel
+                gpt_summary_generator.generate_gpt_summary()
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))

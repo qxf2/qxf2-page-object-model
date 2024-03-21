@@ -208,7 +208,7 @@ def generate_gpt_summary():
 
     # Generate GPT response based on input log file
     gpt_response = get_gpt_response(client, model, test_run_log_file)
-    
+
     # Generate HTML report for the GPT response
     if gpt_response:
         html_report = generate_html_report(gpt_response)
