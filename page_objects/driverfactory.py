@@ -7,13 +7,17 @@ import sys
 from selenium import webdriver
 from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
-from conf import remote_credentials
+from dotenv import load_dotenv
+from appium.options.android import UiAutomator2Options
 from page_objects.drivers.remote_options import RemoteOptions
 from page_objects.drivers.local_browsers import LocalBrowsers
 from conf import ports_conf
 from conf import screenshot_conf
 
-localhost_url = 'http://localhost:%s/wd/hub'%ports_conf.port #Set the url of localhost
+load_dotenv('.env.remote')
+localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost
+browserstack_url = "http://hub-cloud.browserstack.com/wd/hub"
+saucelabs_url = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub"
 
 class DriverFactory(RemoteOptions, LocalBrowsers):
     """Class contains methods for getting web drivers and setting up remote testing platforms."""
@@ -38,7 +42,6 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         return web_driver
 
-
     def get_browser(self, browser, browser_version):
         """Select the browser."""
 
@@ -62,7 +65,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                                browser_version, remote_project_name, remote_build_name):
         """Select the remote platform to run the test when the remote_flag is Y."""
         try:
-            if remote_credentials.REMOTE_BROWSER_PLATFORM == 'BS':
+            if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS':
                 web_driver = self.run_browserstack(os_name, os_version, browser, browser_version,
                                                    remote_project_name, remote_build_name)
             else:
@@ -78,11 +81,13 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                          remote_project_name, remote_build_name):
         """Run the test in browser stack when remote flag is 'Y'."""
         #Get the browser stack credentials from browser stack credentials file
-        username = remote_credentials.USERNAME
-        password = remote_credentials.ACCESS_KEY
+        username = os.getenv('REMOTE_USERNAME')
+        password = os.getenv('REMOTE_ACCESS_KEY')
 
         #Set browser
-        desired_capabilities = self.get_browser(browser, browser_version)
+        options = self.get_browser(browser, browser_version)
+
+        desired_capabilities = {}
 
         #Set os and os_version
         desired_capabilities = self.set_os(desired_capabilities, os_name, os_version)
@@ -99,10 +104,10 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         if screenshot_conf.BS_ENABLE_SCREENSHOTS is None:
             screenshot_conf.BS_ENABLE_SCREENSHOTS = False
 
-        desired_capabilities['browserstack.debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
-
-        web_driver = webdriver.Remote(RemoteConnection("http://%s:%s@hub-cloud.browserstack.com/wd/hub"
-                                                       %(username, password), resolve_ip=False), desired_capabilities=desired_capabilities)
+        desired_capabilities['debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
+        desired_capabilities = self.browserstack_credentials(desired_capabilities,username, password)
+        options.set_capability('bstack:options', desired_capabilities)
+        web_driver = webdriver.Remote(command_executor=browserstack_url, options=options)
 
         return web_driver
 
@@ -110,20 +115,32 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
     def run_sauce_lab(self, os_name, os_version, browser, browser_version):
         """Run the test in sauce labs when remote flag is 'Y'."""
         #Get the sauce labs credentials from sauce.credentials file
-        username = remote_credentials.USERNAME
-        password = remote_credentials.ACCESS_KEY
+        username = os.getenv('REMOTE_USERNAME')
+        password = os.getenv('REMOTE_ACCESS_KEY')
 
         #set browser
-        desired_capabilities = self.get_browser(browser, browser_version)
+        options = self.get_browser(browser, browser_version)
 
         #set saucelab platform
-        desired_capabilities = self.saucelab_platform(desired_capabilities, os_name, os_version)
-
-        web_driver = webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
-                                      %(username, password), desired_capabilities=desired_capabilities)
+        options = self.saucelab_platform(options, os_name, os_version)
+        sauce_options = {}
+        sauce_options = self.saucelab_credentials(sauce_options, username, password)
+        options.set_capability('sauce:options', sauce_options)
+        web_driver = webdriver.Remote(command_executor=saucelabs_url, options=options)
 
         return web_driver
 
+    def saucelab_credentials(self, sauce_options,username,password):
+        """Set saucelab credentials."""
+        sauce_options['username'] = username
+        sauce_options['accessKey'] = password
+        return sauce_options
+
+    def browserstack_credentials(self, browserstack_options,username,password):
+        """Set browserstack credentials."""
+        browserstack_options['userName'] = username
+        browserstack_options['accessKey'] = password
+        return browserstack_options
 
     def run_local(self, browser):
         """Run the test on local system."""
@@ -149,8 +166,8 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                    ud_id, org_id, signing_id, no_reset_flag, appium_version):
         """Specify the mobile device configurations and get the mobile driver."""
         #Get the remote credentials from remote_credentials file
-        username = remote_credentials.USERNAME
-        password = remote_credentials.ACCESS_KEY
+        username = os.getenv('REMOTE_USERNAME')
+        password = os.getenv('REMOTE_ACCESS_KEY')
 
         #setup mobile device
         desired_capabilities = self.set_mobile_device(mobile_os_name, mobile_os_version, device_name)
@@ -183,15 +200,20 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                 desired_capabilities['appPackage'] = app_package
                 desired_capabilities['appActivity'] = app_activity
                 if device_flag.lower() == 'y':
-                    mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
+                    mobile_driver = self.set_capabilities_options(desired_capabilities,url=localhost_url)
                 else:
                     desired_capabilities['app'] = os.path.join(app_path, app_name)
-                    mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
+                    mobile_driver = self.set_capabilities_options(desired_capabilities, url=localhost_url)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
         return mobile_driver
 
+    def set_capabilities_options(self, desired_capabilities, url):
+        """Set the capabilities options for the mobile driver."""
+        capabilities_options = UiAutomator2Options().load_capabilities(desired_capabilities)
+        mobile_driver = mobile_webdriver.Remote(command_executor=url,options=capabilities_options)
+        return mobile_driver
 
     def ios(self, remote_flag, desired_capabilities, app_path, app_name, username,
             password, app_package, no_reset_flag, ud_id, org_id, signing_id,
@@ -214,13 +236,11 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                     desired_capabilities['xcodeOrgId'] = org_id
                     desired_capabilities['xcodeSigningId'] = signing_id
 
-                mobile_driver = mobile_webdriver.Remote(localhost_url, desired_capabilities)
-
+                mobile_driver = self.set_capabilities_options(desired_capabilities, url=localhost_url)
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
         return mobile_driver
-
 
     def remote_platform_mobile(self, remote_flag, app_path, app_name, desired_capabilities,
                                username, password, appium_version):
@@ -228,11 +248,9 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         Checks wether the test is to be run on either browserstack or saucelab and gets the
         remote mobile driver.
         """
-        desired_capabilities['idleTimeout'] = 300
-        desired_capabilities['name'] = 'Appium Python Test'
         try:
             #Gets driver when test is run on Saucelab
-            if remote_credentials.REMOTE_BROWSER_PLATFORM == 'SL':
+            if os.getenv('REMOTE_BROWSER_PLATFORM') == 'SL':
                 mobile_driver = self.saucelab_mobile(app_path, app_name, desired_capabilities,
                                                      username, password)
             #Gets driver when test is run on Browserstack
@@ -253,10 +271,13 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         if ' ' in app_name:
             app_name = app_name.replace(' ', '')
             print("The app file name is having spaces, hence replaced the white spaces with blank in the file name:%s"%app_name)
-        desired_capabilities['app'] = 'sauce-storage:'+app_name
-        desired_capabilities['autoAcceptAlert'] = 'true'
-        mobile_driver = mobile_webdriver.Remote(command_executor="http://%s:%s@ondemand.saucelabs.com:80/wd/hub"
-                                                %(username, password), desired_capabilities=desired_capabilities)
+        desired_capabilities['appium:app'] = 'storage:filename='+app_name
+        desired_capabilities['autoAcceptAlerts'] = 'true'
+        sauce_mobile_options = {}
+        sauce_mobile_options = self.saucelab_credentials(sauce_mobile_options,username, password)
+
+        desired_capabilities['sauce:options'] = sauce_mobile_options
+        mobile_driver = self.set_capabilities_options(desired_capabilities, url=saucelabs_url)
 
         return mobile_driver
 
@@ -264,19 +285,25 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
     def browserstack_mobile(self, app_path, app_name, desired_capabilities, username, password,
                             appium_version):
         """Setup mobile driver to run the test in Browserstack."""
-        desired_capabilities['browserstack.appium_version'] = appium_version
-        desired_capabilities['realMobile'] = 'true'
-        desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
-        mobile_driver = mobile_webdriver.Remote(command_executor="http://%s:%s@hub.browserstack.com:80/wd/hub"
-                                                %(username, password), desired_capabilities=desired_capabilities)
 
+        bstack_mobile_options = {}
+        bstack_mobile_options['idleTimeout'] = 300
+        bstack_mobile_options['sessionName'] = 'Appium Python Test'
+        bstack_mobile_options['appiumVersion'] = appium_version
+        bstack_mobile_options['realMobile'] = 'true'
+        bstack_mobile_options["networkProfile"] = "4g-lte-good"
+        bstack_mobile_options = self.browserstack_credentials(bstack_mobile_options, username, password)
+        desired_capabilities['app'] = self.browser_stack_upload(app_name, app_path) #upload the application to the Browserstack Storage
+        desired_capabilities['bstack:options'] = bstack_mobile_options
+
+        mobile_driver = self.set_capabilities_options(desired_capabilities, url=browserstack_url)
         return mobile_driver
 
     @staticmethod
     def print_exception(exception, remote_flag):
         """Print out the exception message and suggest the solution based on the remote flag."""
         if remote_flag.lower() == 'y':
-            solution = "It looks like you are trying to use a cloud service provider(BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated ./conf/remote_credentials.py with the right credentials and also check for BrowserStack upload url changes and try again. \nTo use your local browser please run the test with the -M N flag"
+            solution = "It looks like you are trying to use a cloud service provider(BrowserStack or Sauce Labs) to run your test. \nPlease make sure you have updated .env.remote with the right credentials and also check for BrowserStack upload url changes and try again. \nTo use your local browser please run the test with the -M N flag"
         else:
             solution = "It looks like you are trying to run test cases with Local Appium Setup. \nPlease make sure to run Appium Server and try again."
 

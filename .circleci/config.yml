@@ -5,7 +5,7 @@ jobs:
   toxify:
 
       docker:
-        - image: themattrix/tox
+        - image: divio/multi-python
 
       parallelism: 3
 
@@ -17,7 +17,7 @@ jobs:
 
         - run: git clone https://github.com/qxf2/bitcoin-info.git
 
-        - run: openssl aes-256-cbc -d -md sha256 -in ./conf/remote_credentials_enc.py -out ./conf/remote_credentials.py -pass env:KEY
+        - run: openssl aes-256-cbc -d -md sha256 -in ./conf/env_remote_enc -out ./.env.remote -pass env:KEY
 
         - run: git clone https://github.com/qxf2/cars-api.git
 
@@ -32,8 +32,9 @@ jobs:
         - run:
             name: Run different Tox environments on different Containers
             command: |
-               if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py37 ; fi
-               if [ $CIRCLE_NODE_INDEX == "1" ] ; then tox -e py38 ; fi
+               if [ $CIRCLE_NODE_INDEX == "0" ] ; then tox -e py39 ; fi
+               if [ $CIRCLE_NODE_INDEX == "1" ] ; then tox -e py310 ; fi
+               if [ $CIRCLE_NODE_INDEX == "2" ] ; then tox -e py311 ; fi
 
         - store_artifacts:
             path: ./screenshots
