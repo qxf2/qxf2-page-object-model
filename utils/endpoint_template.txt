@@ -1,0 +1,42 @@
+{# This template is used to generate Endpoints file for the API Test Automation Framework #}
+class {{endpoint['class_name']}}:
+
+    def {{endpoint['url_method_name']}}(self, suffix=''):
+        "Append endpoint to base URI"
+        return self.base_url+suffix
+
+{% for function in endpoint['functions'] %} {# No need to enclose paths in {{}} in for step #}
+    def {{function['name']}}({{function['parameter_string']}}):
+        """
+        Run {{function['http_method']}} request against {{function['endpoint']}}
+        {%- set dict_param_list=[] -%}
+        {%- set param_json_name=[] -%}
+        {% if function['parameters']|length >= 2 %}
+        :parameters:
+        {% endif %}
+        {% for param in function['parameters'] -%}
+        {% if (param['name']!= 'self' and param['name'] is defined) -%}
+            {% if (param['param_expression']=='params' or param['param_expression']=='json') -%}
+            {%- set param_tmp = param_json_name.append(param['param_expression']) -%}
+            {%- set tmp = dict_param_list.append({'name':param['name'], 'type': param['data_type']}) -%}
+            {% else -%}
+            :{{param['name']}}: {{param['data_type']}}
+            {%- endif %}
+        {%- endif -%}
+        {%- endfor -%}
+        {% if dict_param_list|length >= 1 -%}
+            :{{param_json_name[0]}}: dict
+        {%- for dict_param_json in dict_param_list %}
+                :{{ dict_param_json['name']}}: {{dict_param_json['type'] }}
+        {%- endfor -%} 
+        {%- endif %}
+        """
+        url = self.{{endpoint['url_method_name']}}(f"{{function['endpoint']}}")
+        json_response = self.make_request(method='{{function["http_method"]}}', url=url{{function['request_function_param']}})
+        return {
+            'url' : url,
+            'response' : json_response['json_response']
+            }
+
+
+{% endfor %}
