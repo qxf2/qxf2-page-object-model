@@ -166,7 +166,8 @@ a)py.test [options]
 		E.g:  python -m pytest tests/test_example_form.py --interactive_mode_flag Y(This option will allow the user to pick the desired configuration to run the test, from the menu displayed)
 
 	Note: If you wish to run the test with interactive mode on git bash for windows, please make sure to set your bash alias by adding the following command to bash_rc `alias python='winpty python.exe'`
-
+	--summary used to summarize the pytest results in the form of a html report        Eg: python -m pytest -k example_table --summary y
+	Note: You would need to provide your OPENAI_API_KEY    export OPENAI_API_KEY=<your-key>
 
 
 b)python -m pytest tests/test_example_form.py (can also be used to run standalone test)
