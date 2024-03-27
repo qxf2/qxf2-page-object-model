@@ -15,19 +15,19 @@ from utils import interactive_mode
 load_dotenv()
 
 @pytest.fixture
-def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,reportportal_service,interactivemode_flag):
+def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
 
         if interactivemode_flag.lower() == "y":
-            default_flag = interactive_mode.set_default_flag_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
+            default_flag = interactive_mode.set_default_flag_gui(browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag)
             if default_flag == False:
                 browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag = interactive_mode.ask_questions_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
 
         test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
         test_obj.set_calling_module(testname)
         #Setup and register a driver
-        test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
+        test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name)
 
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -54,7 +54,7 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version,interactivemode_flag):
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, remote_project_name, remote_build_name):
 
     "Return an instance of Base Page that knows about the third party integrations"
     try:
@@ -66,7 +66,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
 
         #Setup and register a driver
-        test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version)
+        test_mobile_obj.register_driver(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, app_name, app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name)
 
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -91,7 +91,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag,api_url=base_url_conf.api_base_url):
+def test_api_obj(interactivemode_flag, api_url=base_url_conf.api_base_url):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower()=='y':
