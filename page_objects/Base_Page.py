@@ -701,6 +701,21 @@ class Base_Page(Borg):
         self.wait(wait_seconds)
 
 
+    def drag_and_drop(self, source_locator, target_locator):
+        "Drag and drop the element from source to target"
+
+        result_flag = False
+        try:
+            source_element = self.get_element(source_locator)
+            target_element = self.get_element(target_locator)
+            action_obj = ActionChains(self.driver)
+            action_obj.drag_and_drop(source_element, target_element).perform()
+            result_flag = True
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+
+        return result_flag
+
     def teardown(self):
         "Tears down the driver"
         self.driver.quit()
