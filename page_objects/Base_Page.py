@@ -450,7 +450,7 @@ class Base_Page(Borg):
                 self.highlight_element(dom_element)
         except Exception as e:
             if verbose_flag is True:
-                self.write(str(e),'debug')
+                self.write(str(e),'error')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
 
@@ -522,7 +522,7 @@ class Base_Page(Borg):
                 result_flag=True
                 self.wait(wait_time)
         except Exception as e:
-            self.write(str(e),'debug')
+            self.write(str(e),'error')
             self.write('Exception when clicking link with path: %s'%locator)
             self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
 
@@ -713,14 +713,14 @@ class Base_Page(Borg):
         self.reset()
 
 
-    def write(self,msg,level='info'):
+    def write(self,msg,level='info',trace_back=None):
         "Log the message"
         msg = str(msg)
         self.msg_list.append('%-8s:  '%level.upper() + msg)
         if self.browserstack_flag is True:
             if self.browserstack_msg not in msg:
                 self.msg_list.pop(-1) #Remove the redundant BrowserStack message
-        self.log_obj.write(msg,level)
+        self.log_obj.write(msg,level,trace_back)
 
 
     def report_to_testrail(self,case_id,test_run_id,result_flag,msg=''):
