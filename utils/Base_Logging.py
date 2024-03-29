@@ -120,10 +120,9 @@ class Base_Logging():
             try:
                 pattern = r'in (\w+)\n'
                 # Extracting file name using regular expression
-                match = re.search(pattern, trace_back)                
+                match = re.search(pattern, trace_back)       
                 module_name = match.group(1)
             except Exception as e:
                 self.write("Module where exception arises not found.")
                 self.write(str(e))
         return module_name
-            
