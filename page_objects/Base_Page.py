@@ -698,8 +698,7 @@ class Base_Page(Borg):
         try:
             element = self.get_element(locator)
             action_obj = ActionChains(self.driver)
-            action_obj.move_to_element(element)
-            action_obj.perform()
+            action_obj.move_to_element(element).perform()
             self.wait(wait_seconds)
             result_flag = True  # Update the result flag to True if hover is successful
         except Exception as e:
