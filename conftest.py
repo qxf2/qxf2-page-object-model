@@ -530,9 +530,32 @@ def pytest_generate_tests(metafunc):
                 if metafunc.config.getoption("--browser") == ["all"]:
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
                                         browser_os_name_conf.cross_browser_cross_platform_config)
-                elif metafunc.config.getoption("--browser") == []:
-                    metafunc.parametrize("browser,browser_version,os_name,os_version",
-                                        browser_os_name_conf.default_config_list)
+                elif not metafunc.config.getoption("--browser") or not metafunc.config.getoption("--ver") or not metafunc.config.getoption("--os_name") or not metafunc.config.getoption("--os_version"):
+                    print("Feedback: Missing command-line arguments. Falling back to default values.")
+                    # Use default values from the default list if not provided
+                    default_config_list = browser_os_name_conf.default_config_list
+                    config_list = []
+                    if not metafunc.config.getoption("--browser"):
+                        config_list.append(default_config_list[0][0])
+                    else:
+                        config_list.append(metafunc.config.getoption("--browser")[0])
+
+                    if not metafunc.config.getoption("--ver"):
+                        config_list.append(default_config_list[0][1])
+                    else:
+                        config_list.append(metafunc.config.getoption("--ver")[0])
+
+                    if not metafunc.config.getoption("--os_name"):
+                        config_list.append(default_config_list[0][2])
+                    else:
+                        config_list.append(metafunc.config.getoption("--os_name")[0])
+
+                    if not metafunc.config.getoption("--os_version"):
+                        config_list.append(default_config_list[0][3])
+                    else:
+                        config_list.append(metafunc.config.getoption("--os_version")[0])
+
+                    metafunc.parametrize("browser, browser_version, os_name, os_version", [tuple(config_list)])
                 else:
                     config_list = [(metafunc.config.getoption("--browser")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("--os_name")[0],metafunc.config.getoption("--os_version")[0])]
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
