@@ -82,7 +82,7 @@ class Screenshot_Objects:
         overwrite_flag=conf.overwrite_flag
         self.screenshot_dir = self.screenshots_parent_dir + os.sep + testname
         if os.path.exists(self.screenshot_dir):
-            if overwrite_flag is True:
+            if overwrite_flag is False:
                 for i in range(1,4096):
                     if os.path.exists(self.screenshot_dir + '_'+str(i)):
                         continue
