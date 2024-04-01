@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 
-class Selenium_Objects:
+class Selenium_Action_Objects:
 
     def __init__(self):
         self.highlight_flag = False

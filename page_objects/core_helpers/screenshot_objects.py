@@ -71,12 +71,14 @@ class Screenshot_Objects:
             print("Exception when trying to set screenshot directory due to error:",str(e))
 
     def get_test_name(self):
+        "Returns the name of the test case by extracting it from the calling module."
         self.testname = self.get_calling_module()
         self.testname = self.testname.replace('<','')
         self.testname = self.testname.replace('>','')
         return self.testname
 
     def screenshot_directory(self, testname):
+        "It checks for an existing screenshot directory, handles overwriting, and returns the path of the saved screenshot directory."
         overwrite_flag=conf.overwrite_flag
         self.screenshot_dir = self.screenshots_parent_dir + os.sep + testname
         if os.path.exists(self.screenshot_dir):
