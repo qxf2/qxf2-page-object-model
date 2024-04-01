@@ -231,6 +231,39 @@ class Selenium_Action_Objects:
 
         return result_flag
 
+    def hit_enter(self,locator,wait_time=2):
+        "Hit enter"
+        try:
+            element = self.get_element(locator)
+            element.send_keys(Keys.ENTER)
+            self.wait(wait_time)
+        except Exception as e:
+            self.write(str(e),'debug')
+            self.exceptions.append("An exception occurred when hitting enter")
+            return None
+
+    def scroll_down(self,locator,wait_time=2):
+        "Scroll down"
+        try:
+            element = self.get_element(locator)
+            element.send_keys(Keys.PAGE_DOWN)
+            self.wait(wait_time)
+        except Exception as e:
+            self.write(str(e),'debug')
+            self.exceptions.append("An exception occured when scrolling down")
+            return None
+
+
+    def hover(self,locator,wait_seconds=2):
+        "Hover over the element"
+        #Note: perform() of ActionChains does not return a bool
+        #So we have no way of returning a bool when hover is called
+        element = self.get_element(locator)
+        action_obj = ActionChains(self.driver)
+        action_obj.move_to_element(element)
+        action_obj.perform()
+        self.wait(wait_seconds)
+
     def teardown(self):
         "Tears down the driver"
         self.driver.quit()
