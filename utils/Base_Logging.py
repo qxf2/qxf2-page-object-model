@@ -72,7 +72,9 @@ class Base_Logging():
         "Write out a message"
         #fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead
         all_stack_frames = inspect.stack()
-        for stack_frame in all_stack_frames[1:]:
+        #print('all_stack_frames',all_stack_frames)
+        for stack_frame in all_stack_frames[2:]:
+            #print (stack_frame)
             if 'Base_Page' not in stack_frame[1]:
                 break
         fname = stack_frame[3]
