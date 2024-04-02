@@ -17,6 +17,7 @@ class Borg:
     def __init__(self):
         self.__dict__ = self.__shared_state
 
+
     def is_first_time(self):
         "Has the child class been invoked before?"
         result_flag = False
@@ -24,6 +25,7 @@ class Borg:
             result_flag = True
 
         return result_flag
+
 
 class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
@@ -48,6 +50,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         if self.driver is not None:
             self.start() #Visit and initialize xpaths for the appropriate page
 
+
     def reset(self):
         "Reset the base page object"
         self.driver = None
@@ -61,6 +64,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         self.screenshot_counter = 1
         self.calling_module = None
 
+
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name).__class__
@@ -73,9 +77,11 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         self.set_log_file()
         self.start()
 
+
     def get_driver_title(self):
         "Return the title of the current page"
         return self.driver.title
+
 
     def get_calling_module(self):
         "Get the name of the calling module"
@@ -91,10 +97,12 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         self.calling_module = calling_filename[-1].split('.')[0]
         return self.calling_module
 
+
     def set_screenshot_dir(self):
         "Set the screenshot directory"
         self.screenshot_dir = self.get_screenshot_dir()
         self.create_dir_screenshot = self.create_screenshot_dir(self.screenshot_dir)
+
 
     def get_screenshot_dir(self):
         "Get the name of the test"
@@ -102,9 +110,11 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         self.screenshot_dir = self.screenshot_directory(self.testname)
         return self.screenshot_dir
 
+
     def open(self,wait_time=2):
         "Visit the page base_url + url"
         self.wait(wait_time)
+
 
     def conditional_write(self,flag,positive,negative,level='debug',pre_format="  - "):
         "Write out either the positive or the negative message based on flag"
@@ -114,6 +124,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         if flag is False:
             self.write(pre_format + negative,level)
         self.mini_check_counter += 1
+
 
     def start(self):
         "Dummy method to be over-written by child classes"
