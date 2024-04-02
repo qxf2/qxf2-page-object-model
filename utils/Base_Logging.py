@@ -75,7 +75,7 @@ class Base_Logging():
         #print('all_stack_frames',all_stack_frames)
         for stack_frame in all_stack_frames[2:]:
             #print (stack_frame)
-            if 'Base_Page' not in stack_frame[1]:
+            if 'Base_Page' not in stack_frame[1] and 'logging_objects' not in stack_frame[1]:
                 break
         fname = stack_frame[3]
         d = {'caller_func': fname}
