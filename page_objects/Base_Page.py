@@ -3,8 +3,6 @@ Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
 
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 import os,inspect
 from .driverfactory import DriverFactory
