@@ -4,7 +4,6 @@ Set the desired option for running the test on a remote platform.
 
 import os
 import json
-from datetime import datetime
 import requests
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
@@ -47,42 +46,10 @@ class RemoteOptions():
         return options
 
     @staticmethod
-    def set_os(desired_capabilities, os_name, os_version):
-        """Set os name and os_version."""      
-        desired_capabilities['os'] = os_name
-        desired_capabilities['osVersion'] = os_version
-
-        return desired_capabilities
-
-    @staticmethod
-    def remote_project_name(desired_capabilities, remote_project_name):
-        """Set remote project name for browserstack."""
-        desired_capabilities['projectName'] = remote_project_name
-
-        return desired_capabilities
-
-    @staticmethod
-    def remote_build_name(desired_capabilities, remote_build_name):
-        """Set remote build name for browserstack."""
-        desired_capabilities['buildName'] = remote_build_name+"_"+str(datetime.now().strftime("%c"))
-
-        return desired_capabilities
-
-    @staticmethod
     def saucelab_platform(options, os_name, os_version):
         """Set platform for saucelab."""
         options.platform_name = os_name + ' '+os_version
         return options
-
-    @staticmethod
-    def set_mobile_device(mobile_os_name, mobile_os_version, device_name):
-        """Setup the mobile device."""
-        desired_capabilities = {}
-        desired_capabilities['platformName'] = mobile_os_name
-        desired_capabilities['platformVersion'] = mobile_os_version
-        desired_capabilities['deviceName'] = device_name
-
-        return desired_capabilities
 
     @staticmethod
     def sauce_upload(app_path, app_name):

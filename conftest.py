@@ -1,4 +1,7 @@
 import os,pytest,sys
+import glob
+import shutil
+from loguru import logger
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from dotenv import load_dotenv
 from page_objects.PageFactory import PageFactory
@@ -12,19 +15,19 @@ from utils import interactive_mode
 load_dotenv()
 
 @pytest.fixture
-def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag,test_run_id,remote_project_name,remote_build_name,testname,reportportal_service,interactivemode_flag):
+def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
 
         if interactivemode_flag.lower() == "y":
-            default_flag = interactive_mode.set_default_flag_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
+            default_flag = interactive_mode.set_default_flag_gui(browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag)
             if default_flag == False:
                 browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag = interactive_mode.ask_questions_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
 
         test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
         test_obj.set_calling_module(testname)
         #Setup and register a driver
-        test_obj.register_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
+        test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name)
 
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -51,7 +54,7 @@ def test_obj(base_url,browser,browser_version,os_version,os_name,remote_flag,tes
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id,app_name,app_path,appium_version,interactivemode_flag):
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, remote_project_name, remote_build_name):
 
     "Return an instance of Base Page that knows about the third party integrations"
     try:
@@ -63,7 +66,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
 
         #Setup and register a driver
-        test_mobile_obj.register_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version)
+        test_mobile_obj.register_driver(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, app_name, app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name)
 
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -88,7 +91,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag,api_url=base_url_conf.api_base_url):
+def test_api_obj(interactivemode_flag, api_url=base_url_conf.api_base_url):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower()=='y':
@@ -410,6 +413,68 @@ def reportportal_service(request):
 
     return reportportal_pytest_service
 
+@pytest.fixture
+def summary_flag(request):
+    "pytest fixture for generating summary using LLM"
+    try:
+        return request.config.getoption("--summary")
+    except Exception as error:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(error))
+
+def pytest_sessionstart(session):
+    """
+    Perform cleanup at the start of the test session.
+    Delete the consolidated log file and temporary log files if present.
+    """
+    source_directory = "log"
+    log_file_name = "*.log-temp"
+    consolidated_log_file = os.path.join(source_directory, "consolidated_log.txt")
+
+    # Delete the consolidated log file
+    if os.path.exists(consolidated_log_file):
+        try:
+            os.remove(consolidated_log_file)
+        except OSError as error:
+            print(f"Error removing existing consolidated log file: {error}")
+
+    # Delete all temporary log files if present
+    for temp_log_file in glob.glob(os.path.join(source_directory, log_file_name)):
+        try:
+            os.remove(temp_log_file)
+        except OSError as error:
+            print(f"Error removing temporary log file: {error}")
+
+def pytest_sessionfinish(session, exitstatus):
+    """
+    Called after the entire test session finishes.
+    The temporary log files are consolidated into a single log file 
+    and later deleted.
+    """
+    source_directory = "log"
+    log_file_name = "*.log-temp"
+
+    consolidated_log_file = os.path.join(source_directory, "consolidated_log.txt")
+
+    #Detach all handlers from the logger inorder to release the file handle
+    #which can be used for deleting the temp files later
+    logger.remove(None)
+
+    #Consolidate the temporary log files into the consolidated log file
+    try:
+        with open(consolidated_log_file, "a") as final_log:
+            for file_name in glob.glob(os.path.join(source_directory, log_file_name)):
+                source_file = None
+                try:
+                    with open(file_name, "r") as source_file:
+                        shutil.copyfileobj(source_file, final_log)
+                    os.remove(file_name)
+                except FileNotFoundError as error:
+                    print(f"Temporary log file not found: {error}")
+                except Exception as error:
+                    print(f"Error processing the temporary log file: {error}")
+    except OSError as error:
+        print(f"Error processing consolidated log file: {error}")
 
 @pytest.hookimpl()
 def pytest_configure(config):
@@ -447,7 +512,9 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
                 from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
-
+            if  terminalreporter.config.getoption("--summary").lower() == 'y':
+                from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel
+                gpt_summary_generator.generate_gpt_summary()
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
@@ -463,9 +530,32 @@ def pytest_generate_tests(metafunc):
                 if metafunc.config.getoption("--browser") == ["all"]:
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
                                         browser_os_name_conf.cross_browser_cross_platform_config)
-                elif metafunc.config.getoption("--browser") == []:
-                    metafunc.parametrize("browser,browser_version,os_name,os_version",
-                                        browser_os_name_conf.default_config_list)
+                elif not metafunc.config.getoption("--browser") or not metafunc.config.getoption("--ver") or not metafunc.config.getoption("--os_name") or not metafunc.config.getoption("--os_version"):
+                    print("Feedback: Missing command-line arguments. Falling back to default values.")
+                    # Use default values from the default list if not provided
+                    default_config_list = browser_os_name_conf.default_config_list
+                    config_list = []
+                    if not metafunc.config.getoption("--browser"):
+                        config_list.append(default_config_list[0][0])
+                    else:
+                        config_list.append(metafunc.config.getoption("--browser")[0])
+
+                    if not metafunc.config.getoption("--ver"):
+                        config_list.append(default_config_list[0][1])
+                    else:
+                        config_list.append(metafunc.config.getoption("--ver")[0])
+
+                    if not metafunc.config.getoption("--os_name"):
+                        config_list.append(default_config_list[0][2])
+                    else:
+                        config_list.append(metafunc.config.getoption("--os_name")[0])
+
+                    if not metafunc.config.getoption("--os_version"):
+                        config_list.append(default_config_list[0][3])
+                    else:
+                        config_list.append(metafunc.config.getoption("--os_version")[0])
+
+                    metafunc.parametrize("browser, browser_version, os_name, os_version", [tuple(config_list)])
                 else:
                     config_list = [(metafunc.config.getoption("--browser")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("--os_name")[0],metafunc.config.getoption("--os_version")[0])]
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
@@ -608,6 +698,10 @@ def pytest_addoption(parser):
                             dest="questionary",
                             default="n",
                             help="set the questionary flag")
+        parser.addoption("--summary",
+                            dest="summary",
+                            default="n",
+                            help="Generate pytest results summary using LLM (GPT): y or n")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)

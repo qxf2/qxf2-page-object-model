@@ -78,7 +78,6 @@ class Logging_Objects:
         self.result_counter += 1
         self.failure_message_list.append(pre_format + msg)
         if level.lower() == 'critical':
-            self.teardown()
             raise Stop_Test_Exception("Stopping test because: "+ msg)
 
     def set_rp_logger(self,rp_pytest_service):

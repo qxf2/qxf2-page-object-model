@@ -32,6 +32,9 @@ class Base_Logging():
 
         logger.add(log_file_name,level=level,format=format,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
+        # Create temporary log files for consolidating log data of all tests of a session to a single file
+        logger.add(log_file_name + '-temp',level=level,format=format,
+        rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
     def get_calling_module(self):

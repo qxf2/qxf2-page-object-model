@@ -3,6 +3,7 @@ Class to hold miscellaneous but useful decorators for our framework
 """
 
 from inspect import getfullargspec
+import traceback
 
 
 class Wrapit():
@@ -14,9 +15,10 @@ class Wrapit():
             try:
                 return f(*args,**kwargs)
             except Exception as e:
-                args[0].write('You have this exception')
-                args[0].write('Exception in method: %s'%str(f.__name__))
-                args[0].write('PYTHON SAYS: %s'%str(e))
+                trace = traceback.format_exc(limit=-1)
+                # Create a message with the traceback details
+                message = f"You have this exception: {str(e)}\n{trace}"
+                args[0].write(message, level='error')
                 #we denote None as failure case
                 return None
 

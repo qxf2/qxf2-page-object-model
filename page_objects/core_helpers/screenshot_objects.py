@@ -55,6 +55,7 @@ class Screenshot_Objects:
     def make_gif(self):
         "Create a gif of all the screenshots within the screenshots directory"
         self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
+
         return self.gif_file_name
 
     def set_directory_structure(self):
