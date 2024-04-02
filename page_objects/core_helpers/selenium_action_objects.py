@@ -141,6 +141,9 @@ class Selenium_Action_Objects:
         else:
             return text.encode('utf-8')
 
+    get_text_by_locator = get_text #alias the method
+
+
     def get_dom_text(self,dom_element):
         "Return the text of a given DOM element or the 'None' object if the element has no attribute called text"
         text = None
