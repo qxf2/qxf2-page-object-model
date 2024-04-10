@@ -16,7 +16,7 @@ class Base_API:
                      params=None,
                      data=None,
                      json=None):
-        "Get request"
+        "Generic method to make HTTP request"
         json_response = None
         error = {}
         try:
