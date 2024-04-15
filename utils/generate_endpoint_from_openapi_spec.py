@@ -175,7 +175,7 @@ class Endpoint(specification.Path):
                     instance_method_param_string += f', {path_param[0]}'
             parsed_parameters['query_params'] = query_params
             parsed_parameters['path_params'] = path_params
-            
+
             # Parse the request body and create the JSON params that needs to be passed to request function
             if operation.request_body:
                 json_params = parse_request_body(operation.request_body)
@@ -228,7 +228,8 @@ class EndpointGenerator():
         """
         self.endpoint_template_filename = ENDPOINT_TEMPLATE_NAME.name
         self.jinja_template_dir = ENDPOINT_TEMPLATE_NAME.parent.name
-        self.jinja_environment = Environment(loader=FileSystemLoader(self.jinja_template_dir))
+        self.jinja_environment = Environment(loader=FileSystemLoader(self.jinja_template_dir),
+                                             autoescape=True)
 
 
     def content_generator(self, endpoint_class_name: str, endpoint_class_content: dict) -> str:
@@ -279,6 +280,7 @@ if __name__ == "__main__":
             endpoint_generator = EndpointGenerator()
             for path in parser.paths:
                 logger.info(f"Parsing endpoing {path.url}")
+                #pylint: disable=too-many-arguments
                 endpoint = Endpoint(path.url,
                                     path.summary,
                                     path.description,

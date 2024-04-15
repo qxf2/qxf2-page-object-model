@@ -11,7 +11,7 @@ class Base_API:
     def make_request(self,
                      method,
                      url,
-                     headers={},
+                     headers=None,
                      auth=None,
                      params=None,
                      data=None,
@@ -19,6 +19,8 @@ class Base_API:
         "Generic method to make HTTP request"
         json_response = None
         error = {}
+        if not headers:
+            headers = {}
         try:
             response = self.request_obj.request(method=method,
                                                 url=url,
