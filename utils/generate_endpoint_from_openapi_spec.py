@@ -22,12 +22,12 @@ from openapi_spec_validator import validate_spec
 import openapi_spec_validator as osv
 
 
+# pylint: disable=line-too-long
 # Get the template file location & endpoint destination location relative to this script
 ENDPOINT_TEMPLATE_NAME = Path(__file__).parent.joinpath("endpoint_template.txt") # <- Jinja2 template needs to be on the same directory as this script
 ENDPOINT_DESTINATION_DIR = Path(__file__).parent.parent.joinpath("endpoints") # <- The Endpoint files are created in the endpoints dir in the project root
 
 
-# pylint: disable=line-too-long
 def create_endpoint_split(endpoint_url: str) -> list[str]:
     """
     Split the text in the endpoint, clean it up & return a list of text
@@ -280,7 +280,7 @@ if __name__ == "__main__":
             endpoint_generator = EndpointGenerator()
             for path in parser.paths:
                 logger.info(f"Parsing endpoing {path.url}")
-                #pylint: disable=too-many-arguments
+                #pylint: disable=R0913
                 endpoint = Endpoint(path.url,
                                     path.summary,
                                     path.description,
