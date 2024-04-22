@@ -129,7 +129,6 @@ def parse_request_body(request_body: specification.RequestBody) -> tuple[str,lis
                     else:
                         parsed_rb.append((name, param_type))
                     param_type = "data"
-                    logger.warning(f"The form parsed request body is is {parsed_rb}")
     return (param_type,parsed_rb,)
 
 
