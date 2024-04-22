@@ -24,7 +24,7 @@ import openapi_spec_validator as osv
 
 # pylint: disable=line-too-long
 # Get the template file location & endpoint destination location relative to this script
-ENDPOINT_TEMPLATE_NAME = Path(__file__).parent.joinpath("endpoint_template.txt") # <- Jinja2 template needs to be on the same directory as this script
+ENDPOINT_TEMPLATE_NAME = Path(__file__).parent.joinpath("endpoint_template.jinja2") # <- Jinja2 template needs to be on the same directory as this script
 ENDPOINT_DESTINATION_DIR = Path(__file__).parent.parent.joinpath("endpoints") # <- The Endpoint files are created in the endpoints dir in the project root
 
 
@@ -76,7 +76,7 @@ def get_function_param_type(type_str: str) -> Union[str, None]:
         return 'dict'
 
 
-def parse_request_body(request_body: specification.RequestBody) -> list:
+def parse_request_body(request_body: specification.RequestBody) -> tuple[str,list]:
     """
     Parse the requestBody from the spec and return a list of json params
     This function will parse dict inside a JSON param to only one level only
@@ -97,6 +97,7 @@ def parse_request_body(request_body: specification.RequestBody) -> list:
     }
     """
     parsed_rb = []
+    param_type = None
     for content in request_body.content:
         if content.type.name.lower() == "json":
             if content.schema.type.name.lower() == 'object':
@@ -112,7 +113,24 @@ def parse_request_body(request_body: specification.RequestBody) -> list:
                         parsed_rb.append(nested_dict_param)
                     else:
                         parsed_rb.append((name, param_type))
-    return parsed_rb
+                    param_type = "json"
+        if content.type.name.lower() == "form":
+            if content.schema.type.name.lower() == 'object':
+                for prop in content.schema.properties:
+                    name = prop.name
+                    param_type = get_function_param_type(prop.schema.type.name)
+                    if param_type == 'dict':
+                        nested_dict_param = {name: []}
+                        for nested_prop in prop.schema.properties:
+                            nested_name = nested_prop.name
+                            nested_param_type = get_function_param_type(nested_prop.schema.type.name)
+                            nested_dict_param[name].append((nested_name, nested_param_type))
+                        parsed_rb.append(nested_dict_param)
+                    else:
+                        parsed_rb.append((name, param_type))
+                    param_type = "data"
+                    logger.warning(f"The form parsed request body is is {parsed_rb}")
+    return (param_type,parsed_rb,)
 
 
 def parse_parameters(parameters: list[specification.Parameter]) -> tuple[list, list]:
@@ -178,11 +196,15 @@ class Endpoint(specification.Path):
 
             # Parse the request body and create the JSON params that needs to be passed to request function
             if operation.request_body:
-                json_params = parse_request_body(operation.request_body)
-                if json_params:
+                request_body_type, request_body_params = parse_request_body(operation.request_body)
+                if request_body_type == "json":
                     base_api_param_string += ', json=json'
                     instance_method_param_string += ', json'
-                parsed_parameters['json_params'] = json_params
+                    parsed_parameters['json_params'] = request_body_params
+                elif request_body_type == "data":
+                    base_api_param_string += ', data=data'
+                    instance_method_param_string += ', data'
+                    parsed_parameters['data_params'] = request_body_params
             endpoint_split = create_endpoint_split(self.url)
             endpoint_split = [text.lower() for text in endpoint_split]
             endpoint_split = [text.replace('-','_') for text in endpoint_split]
