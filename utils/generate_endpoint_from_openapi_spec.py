@@ -78,8 +78,8 @@ def get_function_param_type(type_str: str) -> Union[str, None]:
 
 def parse_request_body(request_body: specification.RequestBody) -> tuple[str,list]:
     """
-    Parse the requestBody from the spec and return a list of json params
-    This function will parse dict inside a JSON param to only one level only
+    Parse the requestBody from the spec and return a list of json & data params
+    This function will parse dict inside a JSON/Form param to only one level only
     i.e this function will identify another_dict in this example:
     json_param = {
         another_dict: {
