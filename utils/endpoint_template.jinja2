@@ -41,7 +41,22 @@ class {{class_name}}:
         {%- endif %}
         {%- endfor %}
         {%- endif %}
-        """
+        {%- if function_value['params']['data_params'] %}
+            :data: dict
+        {%- for data_param in function_value['params']['data_params'] %}
+        {%- if data_param is mapping %}
+        {%- for data_key, data_value in data_param.items() %}
+                :{{data_key}}: dict
+        {%- for nested_data_value in data_value %}
+                    :{{nested_data_value[0]}}: {{nested_data_value[1]}}
+        {%- endfor %}
+        {%- endfor %}
+        {%- else %}
+                :{{data_param[0]}}: {{data_param[1]}}
+        {%- endif %}
+        {%- endfor %}
+        {%- endif %}
+         """
         url = self.{{class_content['url_method_name']}}(f"{{function_value['endpoint']}}")
         json_response = self.make_request(method='{{function_value["http_method"]}}', url=url{{function_value['base_api_param_string']}})
         return {
