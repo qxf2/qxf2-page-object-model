@@ -301,7 +301,7 @@ if __name__ == "__main__":
             endpoint_generator = EndpointGenerator()
             for path in parser.paths:
                 logger.info(f"Parsing endpoing {path.url}")
-                # pylint: disable=too-many-arguments
+                # pylint: disable=E1121
                 endpoint = Endpoint(path.url,
                                     path.summary,
                                     path.description,
