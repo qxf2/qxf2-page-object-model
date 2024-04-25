@@ -377,4 +377,3 @@ class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, 
         pass
 
     _get_locator = staticmethod(_get_locator)
-    
