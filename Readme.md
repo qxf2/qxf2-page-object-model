@@ -1,6 +1,6 @@
 ![Python version](https://img.shields.io/badge/python-3.x-green?color=brightgreen)
 ![GitHub](https://img.shields.io/github/license/qxf2/qxf2-page-object-model?color=brightgreen)
-![Maintenance](https://img.shields.io/maintenance/yes/2023?color=brightgreen)
+![Maintenance](https://img.shields.io/maintenance/yes/2024?color=brightgreen)
 [![CircleCI](https://circleci.com/gh/qxf2/qxf2-page-object-model.svg?style=shield)](https://circleci.com/gh/qxf2/qxf2-page-object-model)
 [![BrowserStack Status](https://automate.browserstack.com/badge.svg?badge_key=cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)](https://automate.browserstack.com/public-build/cVVDdmxnTmpNL3FEeS9FUWY2S2M2Q0xLRFJoTFhVV0RUNlJRS292Sm9WWT0tLWxuS2dGeWhmK0M3SUt2d1hOR0F2TXc9PQ==--f6f4c1765a8d4d5250966b5ee1397a93da38a7a3)
 ![GitHub stars](https://img.shields.io/github/stars/qxf2/qxf2-page-object-model)
@@ -30,7 +30,9 @@ This GUI and API test automation framework is developed and maintained by [Qxf2 
 
 We've implemented some version of this framework at several [clients](https://qxf2.com/clients). In all cases, this framework helped us write automated tests within the first week of our engagement. We hope you find this framework useful too!
 
-If you end up using our framework, please let us know by giving us a star on GitHub and/or dropping an email to __mak@qxf2.com__.
+Looking for ways to automate your __UI__ and __API__ tests quickly and effectively? You've come to the right place. By harnessing __AI__ and __code auto-generation__ capabilities, we've developed solutions that significantly decrease the time needed to create a fully functional test suite. For further information, please refer to the following links.
+* [Qxf2's Gen AI test automation service](https://qxf2.com/qait)
+* [Qxf2's API test automation service](https://qxf2.com/api-tests-autogenerate.html)
 
 ------
 Setup
@@ -166,7 +168,8 @@ a)py.test [options]
 		E.g:  python -m pytest tests/test_example_form.py --interactive_mode_flag Y(This option will allow the user to pick the desired configuration to run the test, from the menu displayed)
 
 	Note: If you wish to run the test with interactive mode on git bash for windows, please make sure to set your bash alias by adding the following command to bash_rc `alias python='winpty python.exe'`
-
+	--summary used to summarize the pytest results in the form of a html report        Eg: python -m pytest -k example_table --summary y
+	Note: You would need to provide your OPENAI_API_KEY    export OPENAI_API_KEY=<your-key>
 
 
 b)python -m pytest tests/test_example_form.py (can also be used to run standalone test)

@@ -33,6 +33,9 @@ class Base_Logging():
 
         logger.add(log_file_name,level=level,format=format,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
+        # Create temporary log files for consolidating log data of all tests of a session to a single file
+        logger.add(log_file_name + '-temp',level=level,format=format,
+        rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
     def get_calling_module(self):
@@ -73,8 +76,10 @@ class Base_Logging():
         "Write out a message"
         #fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead
         all_stack_frames = inspect.stack()
-        for stack_frame in all_stack_frames[1:]:
-            if 'Base_Page' not in stack_frame[1]:
+        #print('all_stack_frames',all_stack_frames)
+        for stack_frame in all_stack_frames[2:]:
+            #print (stack_frame)
+            if 'Base_Page' not in stack_frame[1] and 'logging_objects' not in stack_frame[1]:
                 break
         fname = stack_frame[3]
         d = {'caller_func': fname}
