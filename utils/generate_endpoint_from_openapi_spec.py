@@ -39,6 +39,11 @@ def create_endpoint_split(endpoint_url: str) -> list[str]:
     else:
         endpoint_split = endpoint_url.split("/")
         endpoint_split = [ re.sub("{|}","",text) for text in endpoint_split if text ]
+    for split_values in endpoint_split:
+        if split_values == "api":
+            endpoint_split.remove(split_values)
+        if re.match(r"\d+(.)?.*", split_values):
+            endpoint_split.remove(split_values)
     return endpoint_split
 
 
@@ -51,6 +56,7 @@ def create_module_class_url_name(endpoint_url:str) -> tuple[str, str, str]:
     """
     endpoint_split = create_endpoint_split(endpoint_url)
     common_base_endpoint = endpoint_split[0]
+    logger.info(f"The common base endpoint is {common_base_endpoint}")
 
     # create filename module name for an endpoint group
     endpoints_in_a_file = [endpoint.capitalize() for endpoint in re.split("-|_", common_base_endpoint)]
