@@ -5,6 +5,7 @@ This class wraps around Python's loguru module.
 import os, inspect
 import logging
 from loguru import logger
+import re
 from reportportal_client import RPLogger, RPLogHandler
 
 class Base_Logging():
@@ -71,7 +72,7 @@ class Base_Logging():
             self.write(str(e))
 
 
-    def write(self,msg,level='info'):
+    def write(self,msg,level='info',trace_back=None):
         "Write out a message"
         #fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead
         all_stack_frames = inspect.stack()
@@ -82,6 +83,7 @@ class Base_Logging():
                 break
         fname = stack_frame[3]
         d = {'caller_func': fname}
+
         if self.rp_logger:
             if level.lower()== 'debug':
                 self.rp_logger.debug(msg=msg)
@@ -97,15 +99,35 @@ class Base_Logging():
                 self.rp_logger.critical(msg)
             return
 
-        if level.lower()== 'debug':
-            logger.debug("{module} | {msg}",module=d['caller_func'],msg=msg)
-        elif level.lower()== 'info':
-            logger.info("{module} | {msg}",module=d['caller_func'],msg=msg)
-        elif level.lower()== 'warn' or level.lower()=='warning':
-            logger.warning("{module} | {msg}",module=d['caller_func'],msg=msg)
-        elif level.lower()== 'error':
-            logger.error("{module} | {msg}",module=d['caller_func'],msg=msg)
-        elif level.lower()== 'critical':
-            logger.critical("{module} | {msg}",module=d['caller_func'],msg=msg)
+        exception_source = self.get_exception_module(trace_back)
+        if level.lower() == 'debug':
+            module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
+            logger.debug("{module} | {msg}", module=module, msg=msg)
+        elif level.lower() == 'info':
+            module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
+            logger.info("{module} | {msg}", module=module, msg=msg)
+        elif level.lower() == 'warn' or level.lower() == 'warning':
+            module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
+            logger.warning("{module} | {msg}", module=module, msg=msg)
+        elif level.lower() == 'error':
+            module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
+            logger.error("{module} | {msg}", module=module, msg=msg)
+        elif level.lower() == 'critical':
+            module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
+            logger.critical("{module} | {msg}", module=module, msg=msg)
         else:
             logger.critical("Unknown level passed for the msg: {}", msg)
+
+    def get_exception_module(self,trace_back):
+        "Get the actual name of the calling module where exception arises"
+        module_name = None
+        if trace_back is not None:
+            try:
+                pattern = r'in (\w+)\n'
+                # Extracting file name using regular expression
+                match = re.search(pattern, trace_back)
+                module_name = match.group(1)
+            except Exception as e:
+                self.write("Module where exception arises not found.")
+                self.write(str(e))
+        return module_name

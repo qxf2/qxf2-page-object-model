@@ -33,14 +33,14 @@ class Logging_Objects:
             self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
             self.write('************************')
 
-    def write(self,msg,level='info'):
+    def write(self,msg,level='info', trace_back=None):
         "Log the message"
         msg = str(msg)
         self.msg_list.append('%-8s:  '%level.upper() + msg)
         if self.browserstack_flag is True:
             if self.browserstack_msg not in msg:
                 self.msg_list.pop(-1) #Remove the redundant BrowserStack message
-        self.log_obj.write(msg,level)
+        self.log_obj.write(msg,level,trace_back)
 
     def success(self,msg,level='info',pre_format='PASS: '):
         "Write out a success message"
