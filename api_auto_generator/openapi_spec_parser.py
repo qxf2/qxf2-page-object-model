@@ -253,13 +253,13 @@ class OpenAPISpecParser():
                             self._fdict[p_path.module_name]= {p_path.class_name:{'instance_methods': p_path.instance_methods}}
                         self._fdict[p_path.module_name][p_path.class_name]['url_method_name'] = p_path.url_method_name
             except Exception as err:
-                raise err
+                self.logger.error(err)
         except osv.validation.exceptions.OpenAPIValidationError as val_err:
             self.logger.error(f"Validation failed for {spec_file}")
-            raise val_err
+            self.logger.error(val_err)
         except Exception as gen_err:
             self.logger.error(f"Failed to parse spec {spec_file}")
-            raise gen_err
+            self.logger.error(gen_err)
         else:
             self.logger.success(f"Successfully parsed spec file {spec_file}")
 
