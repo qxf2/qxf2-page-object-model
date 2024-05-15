@@ -9,8 +9,8 @@ from .Base_API import Base_API
 base_classes = [Base_API]
 
 try:
-    from .Cars_API_Endpoints import Cars_API_Endpoints
-    base_classes.append(Cars_API_Endpoints)
+    from .Cars_Endpoint import CarsEndpoint
+    base_classes.append(CarsEndpoint)
 except ImportError:
     pass
 
