@@ -9,7 +9,6 @@ through headers
 """
 
 
-import json
 from argparse import ArgumentParser
 from pathlib import Path
 from jinja2 import FileSystemLoader, Environment
@@ -37,7 +36,6 @@ class EndpointGenerator():
         self.endpoint_template_filename = ENDPOINT_TEMPLATE_NAME.name
         self.jinja_template_dir = ENDPOINT_TEMPLATE_NAME.parent.absolute()
         self.logger = logger_obj
-        self.logger.debug(f"Using {self.endpoint_template_filename} from {self.jinja_template_dir}")
         self.jinja_environment = Environment(loader=FileSystemLoader(self.jinja_template_dir),
                                              autoescape=True)
 
@@ -49,13 +47,10 @@ class EndpointGenerator():
         Create Jinja2 template content
         """
         content = None
-        try:
-            template = self.jinja_environment.get_template(self.endpoint_template_filename)
-            content = template.render(class_name=endpoint_class_name, class_content=endpoint_class_content)
-            self.logger.success("Successfully generated Endpoint class content for {endpoint_class_name}")
-            return content
-        except Exception as error:
-            raise error
+        template = self.jinja_environment.get_template(self.endpoint_template_filename)
+        content = template.render(class_name=endpoint_class_name, class_content=endpoint_class_content)
+        self.logger.info(f"Rendered content for {endpoint_class_name} class using Jinja2 template")
+        return content
 
 
     def generate_endpoint_file(self,
@@ -71,11 +66,12 @@ class EndpointGenerator():
                                                                      endpoint_class_content)
             with open(endpoint_filename, 'w', encoding='utf-8') as endpoint_f:
                 endpoint_f.write(endpoint_content)
-            self.logger.success(f"Successfully generated Endpoint file - {endpoint_filename}")
         except TemplateNotFound:
             self.logger.error(f"Unable to find {ENDPOINT_TEMPLATE_NAME.absolute()}")
         except Exception as endpoint_creation_err:
-            self.logger.error("Unable to generate Endpoint file - {endpoint_filename} due to {endpoint_creation_err}")
+            self.logger.error(f"Unable to generate Endpoint file - {endpoint_filename} due to {endpoint_creation_err}")
+        else:
+            self.logger.success(f"Successfully generated Endpoint file - {endpoint_filename.name}")
 
 
 if __name__ == "__main__":
@@ -93,7 +89,6 @@ if __name__ == "__main__":
     args = arg_parser.parse_args()
     try:
         parser = OpenAPISpecParser(args.spec_file, logger)
-        logger.debug(json.dumps(parser.parsed_dict, indent=4))
         if args.if_generate_endpoints:
             endpoint_generator = EndpointGenerator(logger)
             for module_name, file_content in parser.parsed_dict.items():
@@ -101,6 +96,5 @@ if __name__ == "__main__":
                     endpoint_generator.generate_endpoint_file(module_name,
                                                             class_name,
                                                             class_content)
-                    logger.success(f"Successfully generated Endpoint file - {module_name}")
     except Exception as ep_generation_err:
         raise ep_generation_err

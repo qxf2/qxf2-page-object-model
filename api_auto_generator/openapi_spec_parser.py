@@ -77,7 +77,7 @@ class OpenAPIPathParser():
                                                                 'http_method': operation.method.name.lower(),
                                                                 'endpoint':self.path.url}
             self.instance_methods.append(instance_method_details)
-            self.logger.success(f"Successfully parsed {operation.method.name} for {path.url}")
+            self.logger.info(f"Parsed {operation.method.name} for {path.url}")
 
 
     # pylint: disable=inconsistent-return-statements
@@ -229,7 +229,7 @@ class OpenAPISpecParser():
         try: # <- Outer level try-catch to prevent exception chaining
             spec_dict, _ = read_from_filename(spec_file)
             validate_spec(spec_dict)
-            self.logger.success(f"Successfully validate spec file - {spec_file}")
+            self.logger.success(f"Successfully validated spec file - {spec_file}")
             try:
                 self.parsed_spec = parse(spec_file)
                 # Loop through all paths and parse them using OpenAPIPathParser obj
@@ -252,9 +252,7 @@ class OpenAPISpecParser():
                         else:
                             self._fdict[p_path.module_name]= {p_path.class_name:{'instance_methods': p_path.instance_methods}}
                         self._fdict[p_path.module_name][p_path.class_name]['url_method_name'] = p_path.url_method_name
-                        self.logger.success(f"Successfully generated parsed dict for {spec_file}")
             except Exception as err:
-                self.logger.error(f"Unable to generate parsed dict for {spec_file}")
                 raise err
         except osv.validation.exceptions.OpenAPIValidationError as val_err:
             self.logger.error(f"Validation failed for {spec_file}")
@@ -262,6 +260,8 @@ class OpenAPISpecParser():
         except Exception as gen_err:
             self.logger.error(f"Failed to parse spec {spec_file}")
             raise gen_err
+        else:
+            self.logger.success(f"Successfully parsed spec file {spec_file}")
 
 
     @property
