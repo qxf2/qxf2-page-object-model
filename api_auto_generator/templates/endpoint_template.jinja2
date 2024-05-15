@@ -1,6 +1,6 @@
 {#- This template is used to generate Endpoints file for the API Test Automation Framework -#}
 """
-This Endpoint file is generated using the utils/generate_endpoint_from_openapi_spec.py file
+This Endpoint file is generated using the api_auto_generator/endpoint_module_generator.py file
 """
 class {{class_name}}:
 
@@ -28,6 +28,9 @@ class {{class_name}}:
         {%- endif %}
         {%- if function_value['params']['json_params'] %}
             :json: dict
+        {%- if function_value['params']['content_schema_type'] == 'array' %}
+            :list:
+        {%- endif %}
         {%- for json_param in function_value['params']['json_params'] %}
         {%- if json_param is mapping %}
         {%- for json_key, json_value in json_param.items() %}
@@ -43,6 +46,9 @@ class {{class_name}}:
         {%- endif %}
         {%- if function_value['params']['data_params'] %}
             :data: dict
+        {%- if function_value['params']['content_schema_type'] == 'array' %}
+            :list:
+        {%- endif %}
         {%- for data_param in function_value['params']['data_params'] %}
         {%- if data_param is mapping %}
         {%- for data_key, data_value in data_param.items() %}
