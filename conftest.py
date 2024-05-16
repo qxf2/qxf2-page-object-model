@@ -650,12 +650,12 @@ def pytest_addoption(parser):
                             default="Android")
         parser.addoption("--mobile_os_version",
                             dest="mobile_os_version",
-                            help="Enter version of operating system of mobile: 8.1.0",
-                            default="8.0")
+                            help="Enter version of operating system of mobile: 11.0",
+                            default="11.0")
         parser.addoption("--device_name",
                             dest="device_name",
                             help="Enter device name. Ex: Emulator, physical device name",
-                            default="Samsung Galaxy S9")
+                            default="Samsung Galaxy S21")
         parser.addoption("--app_package",
                             dest="app_package",
                             help="Enter name of app package. Ex: weathershopper",
