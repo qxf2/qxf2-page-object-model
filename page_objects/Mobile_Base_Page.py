@@ -180,7 +180,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
 
         return result_flag
 
-    def swipe_to_element(self,initial_element_locator, search_element_locator, max_swipes=20, direction="up"):
+    def swipe_to_element(self,initial_element_locator, search_element_locator, max_swipes=50, direction="up"):
         result_flag = False
         try:
            #Get the initial element
@@ -214,13 +214,13 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
                 
                 # Perform swipe based on direction
                 if direction == "up":
-                    self.driver.swipe(start_x=center_x, start_y=center_y, end_x=center_x, end_y=center_y-200, duration=100)
+                    self.driver.swipe(start_x=center_x, start_y=center_y, end_x=center_x, end_y=center_y-300, duration=300)
                 elif direction == "down":
-                    self.driver.swipe(start_x=center_x, start_y=center_y-200, end_x=center_x, end_y=center_y, duration=100)
+                    self.driver.swipe(start_x=center_x, start_y=center_y-300, end_x=center_x, end_y=center_y, duration=300)
                 elif direction == "left":
-                    self.driver.swipe(start_x=center_x, start_y=center_y, end_x=center_x-start_x, end_y=center_y, duration=100)
+                    self.driver.swipe(start_x=center_x, start_y=center_y, end_x=center_x-300, end_y=center_y, duration=300)
                 elif direction == "right":
-                    self.driver.swipe(start_x=center_x-start_x, start_y=center_y, end_x=center_x, end_y=center_y, duration=100)
+                    self.driver.swipe(start_x=center_x-300, start_y=center_y, end_x=center_x, end_y=center_y, duration=300)
 
         except Exception as e:
             self.write(str(e), 'debug')
