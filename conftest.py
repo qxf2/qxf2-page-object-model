@@ -658,8 +658,8 @@ def pytest_addoption(parser):
                             default="Samsung Galaxy S9")
         parser.addoption("--app_package",
                             dest="app_package",
-                            help="Enter name of app package. Ex: bitcoininfo",
-                            default="com.dudam.rohan.bitcoininfo")
+                            help="Enter name of app package. Ex: weathershopper",
+                            default="com.qxf2.weathershopper")
         parser.addoption("--app_activity",
                             dest="app_activity",
                             help="Enter name of app activity. Ex: .MainActivity",
@@ -678,8 +678,8 @@ def pytest_addoption(parser):
                             help="Y or N. 'Y' if you want to report results with Tesults")
         parser.addoption("--app_name",
                             dest="app_name",
-                            help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
-                            default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
+                            help="Enter application name to be uploaded.Ex:app-release-v1.2.apk",
+                            default="app-release-v1.2.apk")
         parser.addoption("--ud_id",
                             dest="ud_id",
                             help="Enter your iOS device UDID which is required to run appium test in iOS device",
