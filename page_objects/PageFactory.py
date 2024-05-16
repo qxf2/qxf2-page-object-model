@@ -41,6 +41,9 @@ class PageFactory():
             from page_objects.bitcoin_price_page import Bitcoin_Price_Page
             test_obj = Bitcoin_Price_Page()
             #"New pages added needs to be updated in the get_all_page_names method too"
+        elif page_name == "weather shopper app":
+            from page_objects.weather_shopper import Weather_Shopper
+            test_obj = Weather_Shopper()
         return test_obj
 
 

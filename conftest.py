@@ -54,19 +54,19 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, remote_project_name, remote_build_name):
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, remote_project_name, remote_build_name, orientation):
 
     "Return an instance of Base Page that knows about the third party integrations"
     try:
 
         if interactivemode_flag.lower()=="y":
 
-            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path)
+            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path, orientation)
 
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
 
         #Setup and register a driver
-        test_mobile_obj.register_driver(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, app_name, app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name)
+        test_mobile_obj.register_driver(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, app_name, app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name, orientation)
 
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -422,6 +422,16 @@ def summary_flag(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(error))
 
+@pytest.fixture
+def orientation(request):
+    "pytest fixture for device orientation"
+    try:
+        return request.config.getoption("--orientation")
+
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
+
 def pytest_sessionstart(session):
     """
     Perform cleanup at the start of the test session.
@@ -702,6 +712,10 @@ def pytest_addoption(parser):
                             dest="summary",
                             default="n",
                             help="Generate pytest results summary using LLM (GPT): y or n")
+        parser.addoption("--orientation",
+                            dest="orientation",
+                            default=None,
+                            help="Enter LANDSCAPE to change device orientation to landscape")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
