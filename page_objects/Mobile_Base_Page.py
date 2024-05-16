@@ -180,24 +180,30 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
 
         return result_flag
 
-    def swipe_to_element(self,initial_element_locator, search_element_locator, max_swipes=50, direction="up"):
+    def swipe_to_element(self,scroll_group_locator, search_element_locator, max_swipes=20, direction="up"):
         result_flag = False
         try:
-           #Get the initial element
-           initial_element = self.get_element(initial_element_locator)
+           #Get the scroll group
+           scroll_group = self.get_element(scroll_group_locator)
 
            #Get the initial element location
-           initial_element_location = initial_element.location
-           start_x = initial_element_location['x']
-           start_y = initial_element_location['y']
+           scroll_group_location = scroll_group.location
 
            #Get the initial element size
-           initial_element_size = initial_element.size
+           scroll_group_size = scroll_group.size
 
            #Get the center of the initial element
-           center_x = start_x + initial_element_size['width'] / 2
-           center_y = start_y + initial_element_size['height'] / 2
+           center_x = scroll_group_location['x'] + scroll_group_size['width'] / 2
+           center_y = scroll_group_location['y'] + scroll_group_size['height'] / 2
 
+           # 40% from the top of the element
+           start_x = scroll_group_location['x'] + scroll_group_size['width'] * 0.4
+           start_y = scroll_group_location['y'] + scroll_group_size['height'] * 0.4
+
+           # 20% from the top of the element    
+           end_x = scroll_group_location['x'] + scroll_group_size['width'] * 0.2     
+           end_y = scroll_group_location['y'] + scroll_group_size['height'] * 0.2
+           
            #Get the search element locator
            path = self.split_locator(search_element_locator)
 
@@ -214,13 +220,13 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
                 
                 # Perform swipe based on direction
                 if direction == "up":
-                    self.driver.swipe(start_x=center_x, start_y=center_y, end_x=center_x, end_y=center_y-300, duration=300)
+                    self.driver.swipe(start_x=center_x, start_y=start_y, end_x=center_x, end_y=end_y, duration=200)
                 elif direction == "down":
-                    self.driver.swipe(start_x=center_x, start_y=center_y-300, end_x=center_x, end_y=center_y, duration=300)
+                    self.driver.swipe(start_x=center_x, start_y=end_y, end_x=center_x, end_y=start_y, duration=200)
                 elif direction == "left":
-                    self.driver.swipe(start_x=center_x, start_y=center_y, end_x=center_x-300, end_y=center_y, duration=300)
+                    self.driver.swipe(start_x=start_x, start_y=center_y, end_x=end_x, end_y=center_y, duration=200)
                 elif direction == "right":
-                    self.driver.swipe(start_x=center_x-300, start_y=center_y, end_x=center_x, end_y=center_y, duration=300)
+                    self.driver.swipe(start_x=end_x, start_y=center_y, end_x=start_x, end_y=center_y, duration=200)
 
         except Exception as e:
             self.write(str(e), 'debug')

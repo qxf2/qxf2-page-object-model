@@ -105,7 +105,6 @@ class Weather_Shopper(Mobile_Base_Page):
 
                 #If product are the same as the previous scroll, break the loop
                 products_after_scroll = self.get_elements(locators.product_name)
-                self.write("Product before scroll is %s and after scroll is %s" % (product_names, products_after_scroll))
 
                 if products_after_scroll == product_names:
                     break
@@ -141,14 +140,12 @@ class Weather_Shopper(Mobile_Base_Page):
     
     def add_to_cart(self,least_expensive_item, most_expensive_item):
         "This method is to click on Add to cart button in the Weather Shopper application."
-
         try:
-            self.swipe_to_element(locators.product_name, locators.add_to_cart.format(least_expensive_item['name']), direction="down")
+            self.swipe_to_element(locators.recycler_view, locators.add_to_cart.format(least_expensive_item['name']), direction="down")
             result_flag = self.click_element(locators.add_to_cart.format(least_expensive_item['name']))
             self.scroll_to_top()
-            self.swipe_to_element(locators.product_name, locators.add_to_cart.format(most_expensive_item['name']), direction="up")
+            self.swipe_to_element(locators.recycler_view, locators.add_to_cart.format(most_expensive_item['name']), direction="up")
             result_flag = self.click_element(locators.add_to_cart.format(most_expensive_item['name']))
-
             return result_flag
         
         except Exception as e:
