@@ -28,12 +28,14 @@ def test_weather_shopper_app(test_mobile_obj):
             result_flag = test_obj.view_moisturizers()
             test_obj.log_result(result_flag,
                 positive="Successfully visited moistorizer page",
-                negative="Failed to visit moistorizer page")
+                negative="Failed to visit moistorizer page",
+                level="critical")
         elif temperature > 32:
             result_flag = test_obj.view_sunscreens()
             test_obj.log_result(result_flag,
                 positive="Successfully visited sunscreens page",
-                negative="Failed to visit sunscreens page")
+                negative="Failed to visit sunscreens page",
+                level="critical")
         else:
             skin_product = random.choice(['Moisturizers', 'Sunscreens'])
             if skin_product == 'Moisturizers':
@@ -43,7 +45,8 @@ def test_weather_shopper_app(test_mobile_obj):
 
             test_obj.log_result(result_flag,
                 positive="Successfully visited random page",
-                negative="Failed to visit random page")
+                negative="Failed to visit random page",
+                level="critical")
 
         #Get all products from page
         all_items = test_obj.get_all_products()
@@ -52,17 +55,26 @@ def test_weather_shopper_app(test_mobile_obj):
         least_expensive_item = test_obj.get_least_expensive_item(all_items)
         most_expensive_item = test_obj.get_most_expensive_item(all_items)
 
-        #Add least and most expensive item to cart
-        result_flag = test_obj.add_to_cart(least_expensive_item,most_expensive_item)
+        #Add least expensive item to cart
+        result_flag = test_obj.add_to_cart(least_expensive_item)
         test_obj.log_result(result_flag,
-            positive="Successfully added items to cart",
-            negative="Failed to add items to cart")
+            positive="Successfully added least expensive item to cart",
+            negative="Failed to add least expensive item to cart",
+            level="critical")
+
+        #Add most expensive item to cart
+        result_flag = test_obj.add_to_cart(most_expensive_item)
+        test_obj.log_result(result_flag,
+            positive="Successfully added most expensive item to cart",
+            negative="Failed to add most expensive item to cart",
+            level="critical")
 
         #View cart  
         result_flag = test_obj.view_cart()
         test_obj.log_result(result_flag,
             positive="Successfully visited cart page",
-            negative="Failed to visit cart page")
+            negative="Failed to visit cart page",
+            level="critical")
 
         #Verify cart total
         cart_total = test_obj.get_cart_total()
@@ -108,7 +120,8 @@ def test_weather_shopper_app(test_mobile_obj):
         resul_flag = test_obj.checkout()
         test_obj.log_result(resul_flag,
             positive="Successfully entered checkout page",
-            negative="Failed to checkout")
+            negative="Failed to checkout",
+            level="critical")
 
         #Enter valid payment details and submit payment
         payment_details = {

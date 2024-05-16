@@ -19,11 +19,10 @@ class Weather_Shopper(Mobile_Base_Page):
         try:
             temperature = locators.temperature
             current_temperature = self.get_text(temperature)
+            return int(current_temperature)
         except Exception as e:
             self.write("Exception while trying to get temperature ")
             self.write(str(e))
-
-        return int(current_temperature)
 
     def view_moisturizers(self):
         "This method is to click on Moisturizer tab in the Weather Shopper application."
@@ -31,16 +30,15 @@ class Weather_Shopper(Mobile_Base_Page):
         try:
             moisturizers = locators.moisturizers
             result_flag = self.click_element(moisturizers)
+            self.conditional_write(result_flag,
+                positive='Successfully clicked on Moisturizer tab',
+                negative='Failed to click on Moisturizer tab',
+                level='debug')
+
+            return result_flag
         except Exception as e:
             self.write("Exception while trying to click on Moisturizer tab")
             self.write(str(e))
-
-        self.conditional_write(result_flag,
-            positive='Successfully clicked on Moisturizer tab',
-            negative='Failed to click on Moisturizer tab',
-            level='debug')
-
-        return result_flag
 
     def view_sunscreens(self):
         "This method is to click on Sunscreen tab in the Weather Shopper application."
@@ -48,16 +46,16 @@ class Weather_Shopper(Mobile_Base_Page):
         try:
             sunscreens = locators.sunscreens
             result_flag = self.click_element(sunscreens)
+            self.conditional_write(result_flag,
+                positive='Successfully clicked on Sunscreen tab',
+                negative='Failed to click on Sunscreen tab',
+                level='debug')
+
+            return result_flag
         except Exception as e:
             self.write("Exception while trying to click on Sunscreen tab")
             self.write(str(e))
 
-        self.conditional_write(result_flag,
-            positive='Successfully clicked on Sunscreen tab',
-            negative='Failed to click on Sunscreen tab',
-            level='debug')
-
-        return result_flag
 
     def zoom_in_product_image(self, product_type):
         "This method is to zoom in the product image in the Weather Shopper application."
@@ -80,39 +78,48 @@ class Weather_Shopper(Mobile_Base_Page):
 
         return result_flag  
 
-
     def get_all_products(self):
         "This method is to get all items from product page."
 
         try:
             all_products = []
-            for _ in range(50):
-                #Get product names and prices
+            max_scrolls = 50
+            for attempt in range(max_scrolls):
+                # Get product names and prices
                 product_names = self.get_elements(locators.product_name)
                 product_prices = self.get_elements(locators.product_price)
 
-                #Loop through the products and store the product names and prices in a list
-                for name,price in zip(product_names, product_prices):
+                # Loop through the products and store the product names and prices in a list
+                for name, price in zip(product_names, product_prices):
                     product_name = self.get_text(name, dom_element_flag=True)
                     product_price = self.get_text(price, dom_element_flag=True)
 
-                    #Append the product name and price to the list if it is not already in the list
-                    if {"name":product_name.decode(),"price":float(product_price)} not in all_products:
-                        all_products.append({"name":product_name.decode(),"price":float(product_price)})
+                    # Append the product name and price to the list if it is not already in the list
+                    if {"name": product_name.decode(), "price": float(product_price)} not in all_products:
+                        all_products.append({"name": product_name.decode(), "price": float(product_price)})
 
-                #Scroll forward
-                self.scroll_forward()
+                # Scroll forward
+                result_flag = self.scroll_forward()
 
-                #If product are the same as the previous scroll, break the loop
+                # If products are the same as the previous scroll, break the loop
                 products_after_scroll = self.get_elements(locators.product_name)
-
                 if products_after_scroll == product_names:
                     break
+                
+                # If it's the last attempt and we haven't reached the end, set result_flag to False
+                if attempt == max_scrolls - 1:
+                    result_flag &= False
+
+            self.conditional_write(result_flag,
+                positive='Successfully scrolled to the end of the page',
+                negative='Failed to scroll to the end of the page',
+                level='debug')
             return all_products
-        
+            
         except Exception as e:
             self.write("Exception while trying to get items")
             self.write(str(e))
+
 
     def get_least_expensive_item(self, all_items):
         "This method is to get the least expensive item from the given list of items"
@@ -138,14 +145,17 @@ class Weather_Shopper(Mobile_Base_Page):
             self.write("Exception while trying to get most expensive item")
             self.write(str(e))
     
-    def add_to_cart(self,least_expensive_item, most_expensive_item):
+    def add_to_cart(self,item):
         "This method is to click on Add to cart button in the Weather Shopper application."
         try:
-            self.swipe_to_element(locators.recycler_view, locators.add_to_cart.format(least_expensive_item['name']), direction="down")
-            result_flag = self.click_element(locators.add_to_cart.format(least_expensive_item['name']))
-            self.scroll_to_top()
-            self.swipe_to_element(locators.recycler_view, locators.add_to_cart.format(most_expensive_item['name']), direction="up")
-            result_flag = self.click_element(locators.add_to_cart.format(most_expensive_item['name']))
+            result_flag = self.scroll_to_bottom()
+            result_flag &= self.swipe_to_element(locators.recycler_view, locators.add_to_cart.format(item['name']), direction="down")
+            result_flag &= self.click_element(locators.add_to_cart.format(item['name']))
+            self.conditional_write(result_flag, 
+                positive='Successfully added %s to cart'%item['name'], 
+                negative='Failed to add %s to cart'%item['name'], 
+                level='debug')
+            
             return result_flag
         
         except Exception as e:
@@ -154,7 +164,6 @@ class Weather_Shopper(Mobile_Base_Page):
 
     def view_cart(self):
         "This method is to click on Cart button in the Weather Shopper application."
-
         try:
             cart = locators.cart
             result_flag = self.click_element(cart)
@@ -171,14 +180,17 @@ class Weather_Shopper(Mobile_Base_Page):
             match = re.search(r'\d+\.\d+', cart_total.decode())
             total_amount = float(match.group()) if match else None
 
-            print("Total amount is ",total_amount)
+            if total_amount is None:
+                self.write("Total amount is None")
+            else:
+                self.write("Total amount is %s" % total_amount)
             return total_amount
         
         except Exception as e:
             self.write("Exception while trying to get cart total")
             self.write(str(e))
 
-    def verify_total(self, cart_total, cart_item_1, cart_item_2=0):
+    def verify_total(self, cart_total, cart_item_1=0, cart_item_2=0):
         "This method is to verify the total price in the cart."
         try:
             if cart_total == cart_item_1 + cart_item_2:

@@ -130,56 +130,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             self.write(pre_format + negative,level)
         self.mini_check_counter += 1
 
-    def swipe_by_elements(self, start_element, end_element):
-        result_flag = False
-        try:
-            start_element= self.get_element(start_element)
-            end_element= self.get_element(end_element)
-
-            print(start_element.location['x'], end_element.location['x'])
-
-            start_x = start_element.location['x']
-            start_y = start_element.location['y']
-            end_x = end_element.location['x']
-            end_y = end_element.location['y']
-
-            touch_action = TouchAction(self.driver)
-
-            self.driver.swipe(start_x=end_x, start_y=end_y, end_x=start_x, end_y=start_y, duration=100)
-
-            #touch_action.press(x=1019, y=1853).wait(1000).move_to(x=76, y=1853).release().perform()
-            result_flag = True
-        except Exception as e:
-            print("Error occurred while swiping:", e)
-        return result_flag
-
-    def swipe(self, element_locator, max_swipes=10):
-        result_flag = False
-        try:
-            for _ in range(max_swipes):
-        
-                #Perform swipe
-                deviceSize = self.driver.get_window_size()
-                screenWidth = deviceSize['width']
-                screenHeight = deviceSize['height']
-                print(screenWidth, screenHeight)
-                start_x = screenWidth * 0.25
-                end_x = screenWidth * 0.25   
-                start_y = screenHeight * 0.25 
-                end_y = screenHeight * 0.25   
-                
-                self.driver.swipe(start_x=start_x, start_y=start_y, end_x=end_x, end_y=end_y, duration=100)
-
-        except Exception as e:
-            self.write(str(e),'debug')
-            self.exceptions.append("Error while swiping to element- '%s' "%locator)
-
-        self.conditional_write(result_flag,
-        positive='Located the element: %s'%element_locator,
-        negative='Could not locate the element %s after swiping.'%(element_locator))
-
-        return result_flag
-
     def swipe_to_element(self,scroll_group_locator, search_element_locator, max_swipes=20, direction="up"):
         result_flag = False
         try:
@@ -228,15 +178,15 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
                 elif direction == "right":
                     self.driver.swipe(start_x=end_x, start_y=center_y, end_x=start_x, end_y=center_y, duration=200)
 
-        except Exception as e:
-            self.write(str(e), 'debug')
-            self.exceptions.append("Error while swiping to element - '%s' " % search_element_locator)
-
-        self.conditional_write(result_flag,
+           self.conditional_write(result_flag,
                             positive='Located the element: %s' % search_element_locator,
                             negative='Could not locate the element %s after swiping.' % search_element_locator)
 
-        return result_flag
+           return result_flag
+
+        except Exception as e:
+            self.write(str(e), 'debug')
+            self.exceptions.append("Error while swiping to element - '%s' " % search_element_locator)
 
     def zoom_in(self, element_locator):
         """
@@ -336,22 +286,20 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         """
         Perform a long press gesture on the specified element.
         """
+        ressult_flag = False
         try:
             # Convert element locator to WebDriver element
-            web_element = self.get_element(element)
-            
+            web_element = self.get_element(element)            
             # Perform long press gesture
             action = ActionChains(self.driver)
             action.click_and_hold(web_element).pause(duration).release().perform()
-            return True
+            ressult_flag = True
 
         except Exception as e:
             # Log error if any exception occurs
             self.write(str(e), 'debug')
-            self.exceptions.append("Error while performing long press gesture.")
-
-    # Log result
-        self.conditional_write(True, positive='Long press gesture performed successfully.', negative='Failed to perform long press gesture.')
+            self.exceptions.append("Error while performing long press gesture.")        
+        return ressult_flag
 
     def drag_and_drop(self, source_locator, destination_locator):
         """
