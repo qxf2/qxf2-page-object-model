@@ -702,7 +702,7 @@ def pytest_addoption(parser):
         parser.addoption("--appium_version",
                             dest="appium_version",
                             help="The appium version if its run in BrowserStack",
-                            default="1.17.0")
+                            default="2.5.0")
 
         parser.addoption("--interactive_mode_flag",
                             dest="questionary",
