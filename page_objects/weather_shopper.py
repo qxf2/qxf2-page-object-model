@@ -1,5 +1,5 @@
 """
-Page object for Bitcoin price Page.
+Page object for Weathershopper application.
 """
 import os
 import sys
