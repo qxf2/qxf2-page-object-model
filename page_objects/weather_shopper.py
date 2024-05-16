@@ -105,6 +105,8 @@ class Weather_Shopper(Mobile_Base_Page):
 
                 #If product are the same as the previous scroll, break the loop
                 products_after_scroll = self.get_elements(locators.product_name)
+                self.write("Product before scroll is %s and after scroll is %s" % (product_names, products_after_scroll))
+
                 if products_after_scroll == product_names:
                     break
             return all_products
@@ -118,7 +120,7 @@ class Weather_Shopper(Mobile_Base_Page):
 
         try:
             least_expensive_item = min(all_items, key=lambda x: x['price'])
-            print("Least expensive item is ",least_expensive_item)
+            self.write("Least expensive item is %s" % least_expensive_item)
             return least_expensive_item
         
         except Exception as e:
@@ -130,7 +132,7 @@ class Weather_Shopper(Mobile_Base_Page):
 
         try:
             most_expensive_item = max(all_items, key=lambda x: x['price'])
-            print("Most expensive item is ",most_expensive_item)
+            self.write("Most expensive item is %s" % most_expensive_item)
             return most_expensive_item
 
         except Exception as e:
