@@ -1,16 +1,14 @@
 """
 Page object for Weathershopper application.
 """
+import conf.locators_conf as locators
+from .Mobile_Base_Page import Mobile_Base_Page
+from utils.Wrapit import Wrapit
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
-from .Mobile_Base_Page import Mobile_Base_Page
 import re
 
-
-class Weather_Shopper(Mobile_Base_Page):
+class WeatherShopper(Mobile_Base_Page):
     "Page object for Weathershopper application."
 
     def get_temperature(self):
@@ -76,7 +74,7 @@ class Weather_Shopper(Mobile_Base_Page):
             negative='Failed to zoom in product image',
             level='debug')
 
-        return result_flag  
+        return result_flag
 
     def get_all_products(self):
         "This method is to get all items from product page."
@@ -105,7 +103,7 @@ class Weather_Shopper(Mobile_Base_Page):
                 products_after_scroll = self.get_elements(locators.product_name)
                 if products_after_scroll == product_names:
                     break
-                
+
                 # If it's the last attempt and we haven't reached the end, set result_flag to False
                 if attempt == max_scrolls - 1:
                     result_flag &= False
@@ -115,7 +113,7 @@ class Weather_Shopper(Mobile_Base_Page):
                 negative='Failed to scroll to the end of the page',
                 level='debug')
             return all_products
-            
+
         except Exception as e:
             self.write("Exception while trying to get items")
             self.write(str(e))
@@ -128,7 +126,7 @@ class Weather_Shopper(Mobile_Base_Page):
             least_expensive_item = min(all_items, key=lambda x: x['price'])
             self.write("Least expensive item is %s" % least_expensive_item)
             return least_expensive_item
-        
+
         except Exception as e:
             self.write("Exception while trying to get least expensive item")
             self.write(str(e))
@@ -144,20 +142,20 @@ class Weather_Shopper(Mobile_Base_Page):
         except Exception as e:
             self.write("Exception while trying to get most expensive item")
             self.write(str(e))
-    
+
     def add_to_cart(self,item):
         "This method is to click on Add to cart button in the Weather Shopper application."
         try:
             result_flag = self.scroll_to_bottom()
             result_flag &= self.swipe_to_element(locators.recycler_view, locators.add_to_cart.format(item['name']), direction="down")
             result_flag &= self.click_element(locators.add_to_cart.format(item['name']))
-            self.conditional_write(result_flag, 
-                positive='Successfully added %s to cart'%item['name'], 
-                negative='Failed to add %s to cart'%item['name'], 
+            self.conditional_write(result_flag,
+                positive='Successfully added %s to cart'%item['name'],
+                negative='Failed to add %s to cart'%item['name'],
                 level='debug')
-            
+
             return result_flag
-        
+
         except Exception as e:
             self.write("Exception while trying to click on Add to cart button")
             self.write(str(e))
@@ -181,11 +179,11 @@ class Weather_Shopper(Mobile_Base_Page):
             total_amount = float(match.group()) if match else None
 
             if total_amount is None:
-                self.write("Total amount is None")
+                self.write("Total amount is None", level='debug')
             else:
-                self.write("Total amount is %s" % total_amount)
+                self.write("Total amount is %s" % total_amount, level='debug')
             return total_amount
-        
+
         except Exception as e:
             self.write("Exception while trying to get cart total")
             self.write(str(e))
@@ -197,7 +195,7 @@ class Weather_Shopper(Mobile_Base_Page):
                 return True
             else:
                 return False
-        
+
         except Exception as e:
             self.write("Exception while trying to verify total")
             self.write(str(e))
@@ -207,7 +205,7 @@ class Weather_Shopper(Mobile_Base_Page):
         try:
             result_flag = self.set_text(locators.edit_quantity.format(item_to_change), quantity)
             return result_flag
-        
+
         except Exception as e:
             self.write("Exception while trying to change quantity")
             self.write(str(e))
@@ -217,7 +215,7 @@ class Weather_Shopper(Mobile_Base_Page):
         try:
             result_flag = self.click_element(locators.refresh_button)
             return result_flag
-        
+
         except Exception as e:
             self.write("Exception while trying to refresh total amount")
             self.write(str(e))
@@ -229,7 +227,7 @@ class Weather_Shopper(Mobile_Base_Page):
             result_flag = self.click_element(locators.checkbox.format(item_to_delete))
             result_flag &= self.click_element(locators.delete_from_cart_button)
             return result_flag
-        
+
         except Exception as e:
             self.write("Exception while trying to delete from cart")
             self.write(str(e))
@@ -240,7 +238,7 @@ class Weather_Shopper(Mobile_Base_Page):
         try:
             result_flag = self.click_element(locators.checkout_button)
             return result_flag
-        
+
         except Exception as e:
             self.write("Exception while trying to checkout")
             self.write(str(e))
@@ -263,21 +261,3 @@ class Weather_Shopper(Mobile_Base_Page):
         except Exception as e:
             self.write("Exception while trying to enter valid payment details")
             self.write(str(e))
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
