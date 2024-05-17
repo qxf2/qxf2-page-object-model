@@ -91,14 +91,20 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         print("Python says:%s"%str(e))
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag, api_url=base_url_conf.api_base_url):
+def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_url):
     "Return an instance of Base Page that knows about the third party integrations"
+    # request.module._name__ is tests.<module_name> strip and get the module name
+    log_file = request.module.__name__.split('.')[-1] + '.log'
     try:
         if interactivemode_flag.lower()=='y':
             api_url,session_flag = interactive_mode.ask_questions_api(api_url)
-            test_api_obj = API_Player(api_url, session_flag)
+            test_api_obj = API_Player(api_url,
+                                      session_flag,
+                                      log_file_path=log_file)
         else:
-            test_api_obj = API_Player(url=api_url, session_flag=True)
+            test_api_obj = API_Player(url=api_url,
+                                      session_flag=True,
+                                      log_file_path=log_file)
         yield test_api_obj
 
     except Exception as e:
