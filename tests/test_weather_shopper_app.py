@@ -20,9 +20,7 @@ def test_weather_shopper_app(test_mobile_obj):
         test_obj = PageFactory.get_page_object("weather shopper app")
 
         start_time = int(time.time())
-        time.sleep(5)
         temperature = test_obj.get_temperature()
-        print(temperature)
 
         if temperature < 19:
             result_flag = test_obj.view_moisturizers()
