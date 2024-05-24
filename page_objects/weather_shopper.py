@@ -33,6 +33,8 @@ class WeatherShopper(Mobile_Base_Page):
 
         return result_flag
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def view_sunscreens(self):
         "This method is to click on Sunscreen tab in the Weather Shopper application."
 
@@ -82,8 +84,10 @@ class WeatherShopper(Mobile_Base_Page):
                 product_price = self.get_text(price, dom_element_flag=True)
 
                 # Append the product name and price to the list if it is not already in the list
-                if {"name": product_name.decode(), "price": float(product_price)} not in all_products:
-                    all_products.append({"name": product_name.decode(), "price": float(product_price)})
+                if {"name": product_name.decode(),
+                    "price": float(product_price)} not in all_products:
+                    all_products.append({"name": product_name.decode(),
+                    "price": float(product_price)})
 
             # Scroll forward
             result_flag = self.scroll_forward()
@@ -112,6 +116,8 @@ class WeatherShopper(Mobile_Base_Page):
         self.write(f"Least expensive item is {least_expensive_item}")
         return least_expensive_item
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def get_most_expensive_item(self, all_items):
         "This method is to get the most expensive item from the given list of items"
 
@@ -119,11 +125,15 @@ class WeatherShopper(Mobile_Base_Page):
         self.write(f"Most expensive item is {most_expensive_item}")
         return most_expensive_item
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def add_to_cart(self,item):
         "This method is to click on Add to cart button in the Weather Shopper application."
 
         result_flag = self.scroll_to_bottom()
-        result_flag &= self.swipe_to_element(locators.recycler_view, locators.add_to_cart.format(item['name']), direction="down")
+        result_flag &= self.swipe_to_element(locators.recycler_view,
+                    locators.add_to_cart.format(item['name']),
+                    direction="down")
         result_flag &= self.click_element(locators.add_to_cart.format(item['name']))
         self.conditional_write(result_flag,
             positive=f"Successfully added {item['name']} to cart",
@@ -132,6 +142,8 @@ class WeatherShopper(Mobile_Base_Page):
 
         return result_flag
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def view_cart(self):
         "This method is to click on Cart button in the Weather Shopper application."
 
@@ -139,6 +151,8 @@ class WeatherShopper(Mobile_Base_Page):
         result_flag = self.click_element(cart)
         return result_flag
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def get_cart_total(self):
         "This method is to get the total price in the cart."
 
@@ -153,26 +167,33 @@ class WeatherShopper(Mobile_Base_Page):
             self.write(f"Total amount is {total_amount}", level='debug')
         return total_amount
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def verify_total(self, cart_total, cart_item_1=0, cart_item_2=0):
         "This method is to verify the total price in the cart."
 
         if cart_total == cart_item_1 + cart_item_2:
             return True
-        else:
-            return False
+        return False
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def change_quantity(self, item_to_change, quantity=2):
         "This method is to change the quantity of an item in the cart"
 
         result_flag = self.set_text(locators.edit_quantity.format(item_to_change), quantity)
         return result_flag
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def refresh_total_amount(self):
         "This method is to refresh the total amount in the cart."
 
         result_flag = self.click_element(locators.refresh_button)
         return result_flag
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def delete_from_cart(self, item_to_delete):
         "This method is to delete an item from the cart"
 
@@ -180,13 +201,16 @@ class WeatherShopper(Mobile_Base_Page):
         result_flag &= self.click_element(locators.delete_from_cart_button)
         return result_flag
 
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def checkout(self):
         "This method is to go to the Checkout page"
 
         result_flag = self.click_element(locators.checkout_button)
         return result_flag
 
-
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
     def enter_valid_payment_details(self, payment_details):
         "This method is to enter valid payment details"
 
