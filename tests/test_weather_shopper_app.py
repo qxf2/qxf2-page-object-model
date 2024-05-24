@@ -1,12 +1,14 @@
 """
 Automated test for Swaglabs mobile application
 """
-import os, sys, time
+
+import random
+import os
+import sys
+import time
+import pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
-import conf.mobile_bitcoin_conf as conf
-import pytest
-import random
 
 @pytest.mark.MOBILE
 def test_weather_shopper_app(test_mobile_obj):
@@ -67,7 +69,7 @@ def test_weather_shopper_app(test_mobile_obj):
             negative="Failed to add most expensive item to cart",
             level="critical")
 
-        #View cart  
+        #View cart
         result_flag = test_obj.view_cart()
         test_obj.log_result(result_flag,
             positive="Successfully visited cart page",
@@ -76,10 +78,13 @@ def test_weather_shopper_app(test_mobile_obj):
 
         #Verify cart total
         cart_total = test_obj.get_cart_total()
-        resul_flag = test_obj.verify_total(cart_total, least_expensive_item['price'], most_expensive_item['price'])
+        resul_flag = test_obj.verify_total(cart_total,
+            least_expensive_item['price'],
+            most_expensive_item['price'])
+
         test_obj.log_result(resul_flag,
             positive="Cart total is correct",
-            negative="Total is incorrect")  
+            negative="Total is incorrect")
 
         #Change quantity of least expensive item
         quantity=2
@@ -96,11 +101,13 @@ def test_weather_shopper_app(test_mobile_obj):
 
         #Verify cart total after change in quantity
         cart_total_after_change = test_obj.get_cart_total()
-        resul_flag = test_obj.verify_total(cart_total_after_change, least_expensive_item['price']*quantity, most_expensive_item['price'])        
+        resul_flag = test_obj.verify_total(cart_total_after_change,
+                least_expensive_item['price']*quantity,
+                most_expensive_item['price'])
         test_obj.log_result(resul_flag,
             positive="Total after changing quantity is accurate",
-            negative="Total after changing quantity is incorrect") 
-        
+            negative="Total after changing quantity is incorrect")
+
         #Delete item from cart
         result_flag = test_obj.delete_from_cart(most_expensive_item['name'])
         test_obj.log_result(result_flag,
@@ -109,10 +116,11 @@ def test_weather_shopper_app(test_mobile_obj):
 
         #Verify cart total after deletion
         cart_total_after_deletion = test_obj.get_cart_total()
-        resul_flag = test_obj.verify_total(cart_total_after_deletion, least_expensive_item['price']*quantity)        
+        resul_flag = test_obj.verify_total(cart_total_after_deletion,
+                 least_expensive_item['price']*quantity)
         test_obj.log_result(resul_flag,
             positive="Total after deletion is accurate",
-            negative="Total after deletion is incorrect") 
+            negative="Total after deletion is incorrect")
 
         #Checkout
         resul_flag = test_obj.checkout()
@@ -134,7 +142,7 @@ def test_weather_shopper_app(test_mobile_obj):
             positive="Successfully completed payment",
             negative="Failure to complete payment")
 
-        test_obj.write('Script duration: %d seconds\n'%(int(time.time()-start_time)))
+        test_obj.write(f'Script duration: {int(time.time() - start_time)} seconds\n')
 
         #6. Print out the results.
         test_obj.write_test_summary()
@@ -144,7 +152,7 @@ def test_weather_shopper_app(test_mobile_obj):
         actual_pass = test_obj.pass_counter
 
     except Exception as e:
-        print("Exception when trying to run test:%s" % __file__)
-        print("Python says:%s" % str(e))
+        print(f"Exception when trying to run test: {__file__}")
+        print(f"Python says: {str(e)}")
 
-    assert expected_pass == actual_pass,"Test failed: %s"%__file__
+    assert expected_pass == actual_pass, f"Test failed: {__file__}"
