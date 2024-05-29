@@ -11,11 +11,7 @@ from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.actions.mouse_button import MouseButton 
-
-
+from selenium.webdriver.common.actions.mouse_button import MouseButton
 
 class Borg:
     #The borg design pattern is to share state
@@ -152,14 +148,14 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
            start_x = scroll_group_location['x'] + scroll_group_size['width'] * 0.4
            start_y = scroll_group_location['y'] + scroll_group_size['height'] * 0.4
 
-           # 20% from the top of the element    
-           end_x = scroll_group_location['x'] + scroll_group_size['width'] * 0.2     
+           # 20% from the top of the element
+           end_x = scroll_group_location['x'] + scroll_group_size['width'] * 0.2  
            end_y = scroll_group_location['y'] + scroll_group_size['height'] * 0.2
-           
+
            #Get the search element locator
            path = self.split_locator(search_element_locator)
 
-           #Perform swipes in a loop until the searchelement is found 
+           #Perform swipes in a loop until the searchelement is found
            for _ in range(max_swipes):
                 #Return when search element is located
                 try:
@@ -169,7 +165,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
                         return result_flag
                 except:
                     pass
-                
+
                 # Perform swipe based on direction
                 if direction == "up":
                     self.driver.swipe(start_x=center_x, start_y=start_y, end_x=center_x, end_y=end_y, duration=200)
@@ -202,7 +198,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             zoom_element_location = zoom_element.location
             zoom_x = zoom_element_location['x']
             zoom_y = zoom_element_location['y']
-            
+
             #Get the zoom element size and center
             zoom_element_size = zoom_element.size
             center_x = zoom_x + zoom_element_size['width'] / 2
@@ -291,7 +287,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         ressult_flag = False
         try:
             # Convert element locator to WebDriver element
-            web_element = self.get_element(element)            
+            web_element = self.get_element(element)
             # Perform long press gesture
             action = ActionChains(self.driver)
             action.click_and_hold(web_element).pause(duration).release().perform()
@@ -300,7 +296,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         except Exception as e:
             # Log error if any exception occurs
             self.write(str(e), 'debug')
-            self.exceptions.append("Error while performing long press gesture.")        
+            self.exceptions.append("Error while performing long press gesture.")      
         return ressult_flag
 
     def drag_and_drop(self, source_locator, destination_locator):
@@ -358,16 +354,16 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             print("Driver orientation",self.driver.orientation)
             # Capture the current orientation before switching
             initial_orientation = self.driver.orientation
-            
+
             if initial_orientation == orientation:
                 self.write("Screen orientation is already " + orientation, 'debug')
                 return False
             # Switch orientation
             self.driver.orientation = orientation
-            
+
             # Capture the orientation after switching
             new_orientation = self.driver.orientation
-            
+
             # Verify if orientation has changed
             if new_orientation != initial_orientation:
                 return True
@@ -382,8 +378,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         Scroll to the bottom of the page.
         """
         result_flag = False
-        try:       
-            element = self.driver.find_elements(AppiumBy.ANDROID_UIAUTOMATOR,value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToEnd(10)')	
+        try:
+            self.driver.find_elements(AppiumBy.ANDROID_UIAUTOMATOR,value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToEnd(10)')
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
@@ -396,7 +392,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         """
         result_flag = False
         try:
-            scrollable_element_locator = self.driver.find_element(by=AppiumBy.ANDROID_UIAUTOMATOR, value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToBeginning(10)')
+            self.driver.find_element(by=AppiumBy.ANDROID_UIAUTOMATOR, value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToBeginning(10)')
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
@@ -412,7 +408,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
 
         result_flag = False
         try:
-            element = self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollBackward(150)')	
+            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollBackward(150)')
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
@@ -424,7 +420,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
 
         result_flag = False
         try:
-            element = self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollForward()')	
+            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollForward()')
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
@@ -437,14 +433,9 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         result_flag = False
         try:
             ui_automator_expression = f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollTextIntoView("{search_text}")'
-            element = self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR, value=ui_automator_expression)
+            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR, value=ui_automator_expression)
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
             self.exceptions.append("An exception occured when scrolling forward")
         return result_flag
-
-
-
-
-
