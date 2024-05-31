@@ -118,7 +118,6 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         "Visit the page base_url + url"
         self.wait(wait_time)
 
-
     def conditional_write(self,flag,positive,negative,level='debug',pre_format="  - "):
         "Write out either the positive or the negative message based on flag"
         if flag is True:
@@ -131,33 +130,19 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
     def swipe_to_element(self,scroll_group_locator, search_element_locator, max_swipes=20, direction="up"):
         result_flag = False
         try:
-           #Get the scroll group
-           scroll_group = self.get_element(scroll_group_locator)
+            #Get the scroll view group
+            scroll_group = self.get_element(scroll_group_locator)
 
-           #Get the initial element location
-           scroll_group_location = scroll_group.location
+            #Get the swipe coordinates
+            coordinates = self.swipe_coordinates(scroll_group)
+            start_x, start_y, end_x, end_y, center_x, center_y = (coordinates[key] for key in ["start_x", "start_y",
+                                                                "end_x", "end_y", "center_x", "center_y"])
+            #Get the search element locator
+            path = self.split_locator(search_element_locator)
 
-           #Get the initial element size
-           scroll_group_size = scroll_group.size
-
-           #Get the center of the initial element
-           center_x = scroll_group_location['x'] + scroll_group_size['width'] / 2
-           center_y = scroll_group_location['y'] + scroll_group_size['height'] / 2
-
-           # 40% from the top of the element
-           start_x = scroll_group_location['x'] + scroll_group_size['width'] * 0.4
-           start_y = scroll_group_location['y'] + scroll_group_size['height'] * 0.4
-
-           # 20% from the top of the element
-           end_x = scroll_group_location['x'] + scroll_group_size['width'] * 0.2  
-           end_y = scroll_group_location['y'] + scroll_group_size['height'] * 0.2
-
-           #Get the search element locator
-           path = self.split_locator(search_element_locator)
-
-           #Perform swipes in a loop until the searchelement is found
-           for _ in range(max_swipes):
-                #Return when search element is located
+            #Perform swipes in a loop until the searchelement is found
+            for _ in range(max_swipes):
+                    #Return when search element is located
                 try:
                     element = self.driver.find_element(*path)
                     if element.is_displayed():
@@ -167,24 +152,66 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
                     pass
 
                 # Perform swipe based on direction
-                if direction == "up":
-                    self.driver.swipe(start_x=center_x, start_y=start_y, end_x=center_x, end_y=end_y, duration=200)
-                elif direction == "down":
-                    self.driver.swipe(start_x=center_x, start_y=end_y, end_x=center_x, end_y=start_y, duration=200)
-                elif direction == "left":
-                    self.driver.swipe(start_x=start_x, start_y=center_y, end_x=end_x, end_y=center_y, duration=200)
-                elif direction == "right":
-                    self.driver.swipe(start_x=end_x, start_y=center_y, end_x=start_x, end_y=center_y, duration=200)
+                self.perform_swipe(direction, start_x, start_y, 
+                                end_x, end_y, center_x, center_y, duration=200)
 
-           self.conditional_write(result_flag,
-                            positive='Located the element: %s' % search_element_locator,
-                            negative='Could not locate the element %s after swiping.' % search_element_locator)
+            self.conditional_write(result_flag,
+                                positive='Located the element: %s' % search_element_locator,
+                                negative='Could not locate the element %s after swiping.' % search_element_locator)
 
-           return result_flag
+            return result_flag
 
         except Exception as e:
             self.write(str(e), 'debug')
             self.exceptions.append("Error while swiping to element - '%s' " % search_element_locator)
+
+    def swipe_coordinates(self, scroll_group):
+        "Calculate the swipe coordinates from the element locator"
+
+        try:
+            #Get the initial element location
+            scroll_group_location = scroll_group.location
+
+            #Get the initial element size
+            scroll_group_size = scroll_group.size
+
+            #Get the center of the initial element
+            center_x = scroll_group_location['x'] + scroll_group_size['width'] / 2
+            center_y = scroll_group_location['y'] + scroll_group_size['height'] / 2
+
+            # 40% from the top of the element
+            start_x = scroll_group_location['x'] + scroll_group_size['width'] * 0.4
+            start_y = scroll_group_location['y'] + scroll_group_size['height'] * 0.4
+
+            # 20% from the top of the element
+            end_x = scroll_group_location['x'] + scroll_group_size['width'] * 0.2
+            end_y = scroll_group_location['y'] + scroll_group_size['height'] * 0.2
+
+            coordinates = {"start_x": start_x, "start_y": start_y,
+                            "end_x": end_x, "end_y": end_y, 
+                            "center_x": center_x, "center_y": center_y}
+
+            return coordinates
+
+        except Exception as e:
+            self.write(str(e), 'debug')
+            self.exceptions.append("Error while calculating swipe coordinates - '%s' " % search_element_locator)
+
+    def perform_swipe(self, direction, start_x, start_y, end_x, end_y, center_x, center_y, duration):
+        "Perform swipe based on the direction"
+        try:
+            if direction == "up":
+                self.driver.swipe(start_x=center_x, start_y=start_y, end_x=center_x, end_y=end_y, duration=duration)
+            elif direction == "down":
+                self.driver.swipe(start_x=center_x, start_y=end_y, end_x=center_x, end_y=start_y, duration=duration)
+            elif direction == "left":
+                self.driver.swipe(start_x=start_x, start_y=center_y, end_x=end_x, end_y=center_y, duration=duration)
+            elif direction == "right":
+                self.driver.swipe(start_x=end_x, start_y=center_y, end_x=start_x, end_y=center_y, duration=duration)
+
+        except Exception as e:
+            self.write(str(e), 'debug')
+            self.exceptions.append("Error while performing swipe")
 
     def zoom_in(self, element_locator):
         """
@@ -296,7 +323,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         except Exception as e:
             # Log error if any exception occurs
             self.write(str(e), 'debug')
-            self.exceptions.append("Error while performing long press gesture.")      
+            self.exceptions.append("Error while performing long press gesture.")
         return ressult_flag
 
     def drag_and_drop(self, source_locator, destination_locator):
