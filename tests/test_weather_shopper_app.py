@@ -105,7 +105,8 @@ def test_weather_shopper_app(test_mobile_obj):
         print(f"Exception when trying to run test: {__file__}")
         print(f"Python says: {str(e)}")
 
-    assert expected_pass == actual_pass, f"Test failed: {__file__}"
+    if expected_pass != actual_pass:
+        raise AssertionError(f"Test failed: {__file__}")
 
 def visit_product_page(test_mobile_obj, temperature):
     "Visit the product page"

@@ -146,9 +146,11 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
                 try:
                     element = self.driver.find_element(*path)
                     if element.is_displayed():
+                        self.write('Element found', 'debug')
                         result_flag = True
                         return result_flag
                 except Exception:
+                    self.write('Element not found, swiping again', 'debug')
                     pass
 
                 # Perform swipe based on direction
