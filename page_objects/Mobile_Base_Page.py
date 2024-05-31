@@ -152,18 +152,19 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
                     pass
 
                 # Perform swipe based on direction
-                self.perform_swipe(direction, start_x, start_y, 
-                                end_x, end_y, center_x, center_y, duration=200)
+                self.perform_swipe(direction, start_x, start_y,
+                    end_x, end_y, center_x, center_y, duration=200)
 
-            self.conditional_write(result_flag,
-                                positive='Located the element: %s' % search_element_locator,
-                                negative='Could not locate the element %s after swiping.' % search_element_locator)
-
+            self.conditional_write(
+                result_flag,
+                positive=f'Located the element: {search_element_locator}',
+                negative=f'Could not locate the element {search_element_locator} after swiping.'
+            )
             return result_flag
 
         except Exception as e:
             self.write(str(e), 'debug')
-            self.exceptions.append("Error while swiping to element - '%s' " % search_element_locator)
+            self.exceptions.append(f'Error while swiping to element - {search_element_locator}')
 
     def swipe_coordinates(self, scroll_group):
         "Calculate the swipe coordinates from the element locator"
@@ -195,7 +196,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
 
         except Exception as e:
             self.write(str(e), 'debug')
-            self.exceptions.append("Error while calculating swipe coordinates - '%s' " % search_element_locator)
+            self.exceptions.append("Error while calculating swipe coordinates")
 
     def perform_swipe(self, direction, start_x, start_y, end_x, end_y, center_x, center_y, duration):
         "Perform swipe based on the direction"
@@ -221,15 +222,11 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             #Get the element to be zoomed
             zoom_element = self.get_element(element_locator)
 
-            #Get the zoom element location
-            zoom_element_location = zoom_element.location
-            zoom_x = zoom_element_location['x']
-            zoom_y = zoom_element_location['y']
-
-            #Get the zoom element size and center
+            #Get the center of the element
+            coordinates = self.get_element_center(zoom_element)
+            center_x = coordinates['center_x']
+            center_y = coordinates['center_y']
             zoom_element_size = zoom_element.size
-            center_x = zoom_x + zoom_element_size['width'] / 2
-            center_y = zoom_y + zoom_element_size['height'] / 2
 
             #Perform zoom
             actions = ActionChains(self.driver)
@@ -268,15 +265,11 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             #Get the element to be zoomed
             zoom_element = self.get_element(zoom_element_locator)
 
-            #Get the zoom element location
-            zoom_element_location = zoom_element.location
-            zoom_x = zoom_element_location['x']
-            zoom_y = zoom_element_location['y']
-
-            #Get the zoom element size and center
+            #Get the center of the element
+            coordinates = self.get_element_center(zoom_element)
+            center_x = coordinates['center_x']
+            center_y = coordinates['center_y']
             zoom_element_size = zoom_element.size
-            center_x = zoom_x + zoom_element_size['width'] / 2
-            center_y = zoom_y + zoom_element_size['height'] / 2
 
             #Perform zoom
             actions = ActionChains(self.driver)
@@ -307,6 +300,28 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             self.write(str(e), 'debug')
             self.exceptions.append("An exception occured when zooming out")
 
+    def get_element_center(self, element):
+        """
+        Get the coordinates of the element to be zoomed.
+        """
+        try:
+            #Get the zoom element location
+            element_location = element.location
+            element_x = element_location['x']
+            element_y = element_location['y']
+
+            #Get the zoom element size and center
+            element_size = element.size
+            center_x = element_x + element_size['width'] / 2
+            center_y = element_y + element_size['height'] / 2
+            coordinates = {"center_x": center_x, "center_y": center_y}
+
+            return coordinates
+
+        except Exception as e:
+            self.write(str(e), 'debug')
+            self.exceptions.append("An exception occured when getting the element coordinates")
+
     def long_press(self, element, duration=5):
         """
         Perform a long press gesture on the specified element.
@@ -331,74 +346,31 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         Perform drag and drop gesture.
         """
         try:
+            # Get the center of the source element
             source_element = self.get_element(source_locator)
-            source_element_location = source_element.location
+            source_coordinates = self.get_element_center(source_element)
+            source_center_x = source_coordinates['center_x']
+            source_center_y = source_coordinates['center_y']
 
-            source_x = source_element_location['x']
-            source_y = source_element_location['y']
-
-            source_element_size = source_element.size
-            source_center_x = source_x + source_element_size['width'] / 2
-            source_center_y = source_y + source_element_size['height'] / 2
-
+            # Get the center of the destination element
             destination_element = self.get_element(destination_locator)
-            destination_element_location = destination_element.location
+            destination_coordinates = self.get_element_center(destination_element)
+            destination_center_x = destination_coordinates['center_x']
+            destination_center_y = destination_coordinates['center_y']
 
-            destination_x = destination_element_location['x']
-            destination_y = destination_element_location['y']
-
-            destination_element_size = destination_element.size
-            destination_center_x = destination_x + destination_element_size['width'] / 2
-            destination_center_y = destination_y + destination_element_size['height'] / 2
-
+            # Perform drag and drop gesture
             actions = ActionChains(self.driver)
             finger1 = actions.w3c_actions.add_pointer_input('touch', 'finger1')
-
             finger1.create_pointer_move(x=source_center_x, y=source_center_y)
             finger1.create_pointer_down(button=MouseButton.LEFT)
             finger1.create_pause(1)
             finger1.create_pointer_move(x=destination_center_x, y=destination_center_y, duration=500)
             finger1.create_pointer_up(button=MouseButton.LEFT)
-
             actions.perform()
 
-            element_post_drop = self.get_element(source_locator)
-            element_post_drop_location = element_post_drop.location
-            if element_post_drop_location != source_element_location:
-                return True
-            else:
-                self.write("Element did not move after drag and drop", 'debug')
-                return False
         except Exception as e:
             self.write(str(e), 'debug')
             self.exceptions.append("An exception occured when performing drag and drop")
-
-    def switch_screen_orientation(self, orientation='LANDSCAPE'):
-        """
-        Switch screen orientation.
-        """
-        try:
-            print("Driver orientation",self.driver.orientation)
-            # Capture the current orientation before switching
-            initial_orientation = self.driver.orientation
-
-            if initial_orientation == orientation:
-                self.write("Screen orientation is already " + orientation, 'debug')
-                return False
-            # Switch orientation
-            self.driver.orientation = orientation
-
-            # Capture the orientation after switching
-            new_orientation = self.driver.orientation
-
-            # Verify if orientation has changed
-            if new_orientation != initial_orientation:
-                return True
-            else:
-                return False
-        except Exception as e:
-            self.write(str(e), 'debug')
-            self.exceptions.append("An exception occured when switching screen orientation")
 
     def scroll_to_bottom(self):
         """
@@ -406,7 +378,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         """
         result_flag = False
         try:
-            self.driver.find_elements(AppiumBy.ANDROID_UIAUTOMATOR,value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToEnd(10)')
+            self.driver.find_elements(AppiumBy.ANDROID_UIAUTOMATOR,
+                value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToEnd(10)')
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
@@ -419,7 +392,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
         """
         result_flag = False
         try:
-            self.driver.find_element(by=AppiumBy.ANDROID_UIAUTOMATOR, value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToBeginning(10)')
+            self.driver.find_element(by=AppiumBy.ANDROID_UIAUTOMATOR,
+                value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToBeginning(10)')
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
@@ -435,7 +409,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
 
         result_flag = False
         try:
-            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollBackward(150)')
+            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,
+                value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollBackward(150)')
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
@@ -447,20 +422,8 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
 
         result_flag = False
         try:
-            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollForward()')
-            result_flag = True
-        except Exception as e:
-            self.write(str(e),'debug')
-            self.exceptions.append("An exception occured when scrolling forward")
-        return result_flag
-
-    def scroll_into_view(self, search_text):
-        "Scroll backward"
-
-        result_flag = False
-        try:
-            ui_automator_expression = f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollTextIntoView("{search_text}")'
-            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR, value=ui_automator_expression)
+            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,
+                value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollForward()')
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
