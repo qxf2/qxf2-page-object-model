@@ -3,7 +3,7 @@ Automated test for Weather Shopper mobile application
 """
 
 # pylint: disable=E0401, C0413
-import random
+import secrets
 import time
 import os
 import sys
@@ -120,7 +120,7 @@ def visit_product_page(test_mobile_obj, temperature):
         product = "Sunscreens"
 
     else:
-        skin_product = random.choice(['Moisturizers', 'Sunscreens'])
+        skin_product = secrets.choice(['Moisturizers', 'Sunscreens'])
         if skin_product == 'Moisturizers':
             result_flag = test_mobile_obj.view_moisturizers()
             product = "Moisturizers"

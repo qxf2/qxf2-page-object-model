@@ -148,7 +148,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
                     if element.is_displayed():
                         result_flag = True
                         return result_flag
-                except:
+                except Exception:
                     pass
 
                 # Perform swipe based on direction
