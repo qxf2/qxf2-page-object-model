@@ -216,9 +216,9 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             self.write(str(e), 'debug')
             self.exceptions.append("Error while performing swipe")
 
-    def zoom_in(self, element_locator):
+    def zoom(self, element_locator, zoom_direction="in"):
         """
-        Perform zoom in gesture.
+        Perform zoom gesture.
         """
         try:
             #Get the element to be zoomed
@@ -231,23 +231,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             zoom_element_size = zoom_element.size
 
             #Perform zoom
-            actions = ActionChains(self.driver)
-            finger1 = actions.w3c_actions.add_pointer_input('touch', 'finger1')
-            finger2 = actions.w3c_actions.add_pointer_input('touch', 'finger2')
-
-            finger1.create_pointer_move(x=center_x - 100, y=center_y)
-            finger1.create_pointer_down(button=MouseButton.LEFT)
-            finger1.create_pause(0.5)
-            finger1.create_pointer_move(x=center_x - 500, y=center_y, duration=50)
-            finger1.create_pointer_up(button=MouseButton.LEFT)
-
-            finger2.create_pointer_move(x=center_x + 100, y=center_y)
-            finger2.create_pointer_down(button=MouseButton.LEFT)
-            finger2.create_pause(0.5)
-            finger2.create_pointer_move(x=center_x + 500, y=center_y, duration=50)
-            finger2.create_pointer_up(button=MouseButton.LEFT)
-
-            actions.perform()
+            self.perform_zoom(zoom_direction, center_x, center_y)
 
             size_after_zoom = zoom_element.size
             if size_after_zoom != zoom_element_size:
@@ -257,50 +241,39 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
 
         except Exception as e:
             self.write(str(e), 'debug')
-            self.exceptions.append("An exception occured when zooming in")
+            self.exceptions.append("An exception occurred when zooming")
 
-    def zoom_out(self, zoom_element_locator):
+    def perform_zoom(self, zoom_direction, center_x, center_y):
         """
-        Perform zoom out gesture.
+        Execute zoom based on the zoom direction.
         """
         try:
-            #Get the element to be zoomed
-            zoom_element = self.get_element(zoom_element_locator)
-
-            #Get the center of the element
-            coordinates = self.get_element_center(zoom_element)
-            center_x = coordinates['center_x']
-            center_y = coordinates['center_y']
-            zoom_element_size = zoom_element.size
-
-            #Perform zoom
+            start_offset = 400
+            end_offset = 100
             actions = ActionChains(self.driver)
             finger1 = actions.w3c_actions.add_pointer_input('touch', 'finger1')
             finger2 = actions.w3c_actions.add_pointer_input('touch', 'finger2')
 
-            finger1.create_pointer_move(x=center_x-400, y=center_y)
+            if zoom_direction == "in":
+                start_offset = 100
+                end_offset = 400
+            finger1.create_pointer_move(x=center_x - start_offset, y=center_y)
             finger1.create_pointer_down(button=MouseButton.LEFT)
             finger1.create_pause(0.5)
-            finger1.create_pointer_move(x=center_x-100, y=center_y, duration=500)
+            finger1.create_pointer_move(x=center_x - end_offset, y=center_y, duration=500)
             finger1.create_pointer_up(button=MouseButton.LEFT)
-
-            finger2.create_pointer_move(x=center_x+400, y=center_y)
+            
+            finger2.create_pointer_move(x=center_x + start_offset, y=center_y)
             finger2.create_pointer_down(button=MouseButton.LEFT)
             finger2.create_pause(0.5)
-            finger2.create_pointer_move(x=center_x+100, y=center_y, duration=500)
+            finger2.create_pointer_move(x=center_x + end_offset, y=center_y, duration=500)
             finger2.create_pointer_up(button=MouseButton.LEFT)
 
             actions.perform()
 
-            size_after_zoom = zoom_element.size
-            if size_after_zoom != zoom_element_size:
-                return True
-            else:
-                return False
-
         except Exception as e:
             self.write(str(e), 'debug')
-            self.exceptions.append("An exception occured when zooming out")
+            self.exceptions.append("An exception occured when performing the zooming")
 
     def get_element_center(self, element):
         """
@@ -374,60 +347,64 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             self.write(str(e), 'debug')
             self.exceptions.append("An exception occured when performing drag and drop")
 
-    def scroll_to_bottom(self):
+    def scroll_to_bottom(self, scroll_amount=10):
         """
         Scroll to the bottom of the page.
         """
         result_flag = False
         try:
             self.driver.find_elements(AppiumBy.ANDROID_UIAUTOMATOR,
-                value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToEnd(10)')
+            value=f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToEnd({scroll_amount})')
             result_flag = True
         except Exception as e:
-            self.write(str(e),'debug')
-            self.exceptions.append("An exception occured when scrolling to bottom of page")
+            self.write(str(e), 'debug')
+            self.exceptions.append("An exception occurred when scrolling to the bottom of the page")
         return result_flag
 
-    def scroll_to_top(self):
+    def scroll_to_top(self, scroll_amount=10):
         """
         Scroll to the top of the page.
         """
         result_flag = False
         try:
             self.driver.find_element(by=AppiumBy.ANDROID_UIAUTOMATOR,
-                value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToBeginning(10)')
+            value=f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToBeginning({scroll_amount})')
             result_flag = True
         except Exception as e:
             self.write(str(e),'debug')
             self.exceptions.append("An exception occured when scrolling to top of page")
         return result_flag
 
+    def scroll_backward(self, distance=150):
+        "Scroll backward"
+
+        result_flag = False
+        try:
+            self.driver.find_element(
+                AppiumBy.ANDROID_UIAUTOMATOR,
+                value=f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollBackward({distance})'
+            )
+            result_flag = True
+        except Exception as e:
+            self.write(str(e), 'debug')
+            self.exceptions.append("An exception occurred when scrolling backward")
+        return result_flag
+
+    def scroll_forward(self, distance=150):
+        "Scroll forward"
+
+        result_flag = False
+        try:
+            self.driver.find_element(
+                AppiumBy.ANDROID_UIAUTOMATOR,
+                value=f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollForward({distance})'
+            )
+            result_flag = True
+        except Exception as e:
+            self.write(str(e), 'debug')
+            self.exceptions.append("An exception occurred when scrolling forward")
+        return result_flag
+
     def start(self):
         "Dummy method to be over-written by child classes"
         pass
-
-    def scroll_backward(self):
-        "Scroll backward"
-
-        result_flag = False
-        try:
-            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,
-                value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollBackward(150)')
-            result_flag = True
-        except Exception as e:
-            self.write(str(e),'debug')
-            self.exceptions.append("An exception occured when scrolling backward")
-        return result_flag
-
-    def scroll_forward(self):
-        "Scroll backward"
-
-        result_flag = False
-        try:
-            self.driver.find_element(AppiumBy.ANDROID_UIAUTOMATOR,
-                value='new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollForward()')
-            result_flag = True
-        except Exception as e:
-            self.write(str(e),'debug')
-            self.exceptions.append("An exception occured when scrolling forward")
-        return result_flag
