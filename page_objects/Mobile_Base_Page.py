@@ -262,7 +262,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             finger1.create_pause(0.5)
             finger1.create_pointer_move(x=center_x - end_offset, y=center_y, duration=500)
             finger1.create_pointer_up(button=MouseButton.LEFT)
-            
+
             finger2.create_pointer_move(x=center_x + start_offset, y=center_y)
             finger2.create_pointer_down(button=MouseButton.LEFT)
             finger2.create_pause(0.5)
