@@ -211,21 +211,23 @@ class OpenAPISpecParser():
         self.logger = logger_obj
         # Generate Final dict usable against a Jinja2 template from the OpenAPI Spec
         self._fdict = {}
-        # _fdict structure:
-        # {
-        #   module_name1:{
-        #               class_name1:{
-        #                           instance_methods: [],
-        #                           url_method_name: str
-        #                           }
-        #               }
-        #   module_name2:{
-        #               class_name1:{
-        #                           instance_methods: [],
-        #                           url_method_name: str
-        #                           }
-        #               }
-        # }
+        """
+        _fdict structure:
+        {
+           module_name1:{
+                       class_name1:{
+                                   instance_methods: [],
+                                   url_method_name: str
+                                   }
+                       }
+           module_name2:{
+                       class_name1:{
+                                   instance_methods: [],
+                                   url_method_name: str
+                                   }
+                       }
+        }
+        """
         try: # <- Outer level try-catch to prevent exception chaining
             spec_dict, _ = read_from_filename(spec_file)
             validate_spec(spec_dict)
