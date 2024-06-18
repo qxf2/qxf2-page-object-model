@@ -3,6 +3,7 @@ Qxf2 Services: A plug-n-play class for logging.
 This class wraps around Python's loguru module.
 """
 import os, inspect
+import sys
 import logging
 from loguru import logger
 import re
@@ -75,15 +76,21 @@ class Base_Logging():
     def write(self,msg,level='info',trace_back=None):
         "Write out a message"
         #fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead
+        logger.remove()
+        #test_module_name = str(self.get_calling_module())
+        #Create new logging instance
+        logger.add(sys.stdout,format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}")
         all_stack_frames = inspect.stack()
         #print('all_stack_frames',all_stack_frames)
         for stack_frame in all_stack_frames[2:]:
             #print (stack_frame)
             if 'Base_Page' not in stack_frame[1] and 'logging_objects' not in stack_frame[1]:
                 break
+        file_name = stack_frame[1]
         fname = stack_frame[3]
-        d = {'caller_func': fname}
+        d = {'caller_func': fname, 'file_name': file_name}
 
+        # print(inspect.stack()[2])
         if self.rp_logger:
             if level.lower()== 'debug':
                 self.rp_logger.debug(msg=msg)
@@ -104,8 +111,9 @@ class Base_Logging():
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
             logger.debug("{module} | {msg}", module=module, msg=msg)
         elif level.lower() == 'info':
+            file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.info("{module} | {msg}", module=module, msg=msg)
+            logger.info("{file_name}| {module} | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'warn' or level.lower() == 'warning':
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
             logger.warning("{module} | {msg}", module=module, msg=msg)
