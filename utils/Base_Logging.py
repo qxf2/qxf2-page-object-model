@@ -87,6 +87,8 @@ class Base_Logging():
             if 'Base_Page' not in stack_frame[1] and 'logging_objects' not in stack_frame[1]:
                 break
         file_name = stack_frame[1]
+        modified_path = file_name.split("qxf2-page-object-model")[1]
+        file_name = "qxf2-page-object-model" + modified_path
         fname = stack_frame[3]
         d = {'caller_func': fname, 'file_name': file_name}
 
@@ -108,21 +110,25 @@ class Base_Logging():
 
         exception_source = self.get_exception_module(trace_back)
         if level.lower() == 'debug':
+            file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.debug("{module} | {msg}", module=module, msg=msg)
+            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'info':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.info("{file_name}| {module} | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'warn' or level.lower() == 'warning':
+            file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.warning("{module} | {msg}", module=module, msg=msg)
+            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'error':
+            file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.error("{module} | {msg}", module=module, msg=msg)
+            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'critical':
+            file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.critical("{module} | {msg}", module=module, msg=msg)
+            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
         else:
             logger.critical("Unknown level passed for the msg: {}", msg)
 
