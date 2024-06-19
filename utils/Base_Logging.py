@@ -13,13 +13,14 @@ class Base_Logging():
     "A plug-n-play class for logging"
     def __init__(self,log_file_name=None,level="DEBUG",format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module} | {message}"):
         "Constructor for the logging class"
+        logger.remove()
+        logger.add(sys.stderr,format="<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <level>{message}</level>")
         self.log_file_name=log_file_name
         self.log_file_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
         self.level=level
         self.format=format
         self.set_log(self.log_file_name,self.level,self.format)
         self.rp_logger = None
-
 
     def set_log(self,log_file_name,level,format,test_module_name=None):
         "Add an handler sending log messages to a sink"
@@ -32,10 +33,10 @@ class Base_Logging():
         else:
             log_file_name = self.log_file_dir + os.sep + log_file_name
 
-        logger.add(log_file_name,level=level,format=format,
+        logger.add(log_file_name,level=level,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
         # Create temporary log files for consolidating log data of all tests of a session to a single file
-        logger.add(log_file_name + '-temp',level=level,format=format,
+        logger.add(log_file_name + '-temp',level=level,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
@@ -76,10 +77,12 @@ class Base_Logging():
     def write(self,msg,level='info',trace_back=None):
         "Write out a message"
         #fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead
-        logger.remove()
+        #logger.remove()
         #test_module_name = str(self.get_calling_module())
         #Create new logging instance
-        logger.add(sys.stdout,format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}")
+        #logger.add(sys.stderr,format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}")
+
+        #logger._core.handlers[3].format = "{time:YYYY-MM-DD} | {level} | {message}"
         all_stack_frames = inspect.stack()
         #print('all_stack_frames',all_stack_frames)
         for stack_frame in all_stack_frames[2:]:
@@ -112,23 +115,23 @@ class Base_Logging():
         if level.lower() == 'debug':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(ansi=True).debug("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'info':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(ansi=True).info("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'warn' or level.lower() == 'warning':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(ansi=True).warn("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'error':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(ansi=True).error("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'critical':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.info("{file_name}::{module} | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(ansi=True).critical("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         else:
             logger.critical("Unknown level passed for the msg: {}", msg)
 
