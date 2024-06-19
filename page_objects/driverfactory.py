@@ -9,17 +9,19 @@ from selenium.webdriver.remote.webdriver import RemoteConnection
 from appium import webdriver as mobile_webdriver
 from dotenv import load_dotenv
 from appium.options.android import UiAutomator2Options
-from page_objects.drivers.remote_options import RemoteOptions
+from integrations.remote_options import RemoteOptions
 from page_objects.drivers.local_browsers import LocalBrowsers
 from conf import ports_conf
 from conf import screenshot_conf
 from .capabilities import Capabilities
 from conf import remote_url_conf
+from integrations.lambdatest import LambdaTestRunner
 
 load_dotenv('.env.remote')
 localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost
 browserstack_url=remote_url_conf.browserstack_url
 saucelabs_url=remote_url_conf.saucelabs_url
+
 
 class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
     """Class contains methods for getting web drivers and setting up remote testing platforms."""
@@ -43,31 +45,18 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
 
         return web_driver
 
-    def get_browser(self, browser, browser_version):
-        """Select the browser."""
-
-        if browser.lower() == 'ff' or browser.lower() == 'firefox':
-            desired_capabilities = self.firefox(browser_version)
-        elif browser.lower() == 'ie':
-            desired_capabilities = self.explorer(browser_version)
-        elif browser.lower() == 'chrome':
-            desired_capabilities = self.chrome(browser_version)
-        elif browser.lower() == 'opera':
-            desired_capabilities = self.opera(browser_version)
-        elif browser.lower() == 'safari':
-            desired_capabilities = self.safari(browser_version)
-        else:
-            print("\nDriverFactory does not know the browser\t%s\n"%(browser))
-
-        return desired_capabilities
-
-
     def select_remote_platform(self, remote_flag, os_name, os_version, browser,
                                browser_version, remote_project_name, remote_build_name):
         """Select the remote platform to run the test when the remote_flag is Y."""
         try:
             if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS':
                 web_driver = self.run_browserstack(os_name, os_version, browser, browser_version,
+                                                   remote_project_name, remote_build_name)
+            elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT':
+                print("Inside select remote platform")
+                print("browser version =", browser_version)
+                runner = LambdaTestRunner()
+                web_driver = runner.run_lambdatest(os_name, os_version, browser, browser_version,
                                                    remote_project_name, remote_build_name)
             else:
                 web_driver = self.run_sauce_lab(os_name, os_version, browser, browser_version)
@@ -110,8 +99,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         web_driver = webdriver.Remote(command_executor=browserstack_url, options=options)
 
         return web_driver
-
-
+    
     def run_sauce_lab(self, os_name, os_version, browser, browser_version):
         """Run the test in sauce labs when remote flag is 'Y'."""
         #Get the sauce labs credentials from sauce.credentials file
