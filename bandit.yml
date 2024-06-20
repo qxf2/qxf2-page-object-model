@@ -1,0 +1,3 @@
+# Skip flagging assert statement inclusion in test during Codacy check
+assert_used:
+  skips: ['*/test_*.py']
