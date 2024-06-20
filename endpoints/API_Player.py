@@ -230,3 +230,37 @@ class API_Player(Results):
             msg = "unknown reason"
 
         return {'result_flag': result_flag, 'msg': msg}
+
+    # Async methods
+    async def async_get_cars(self, auth_details=None):
+        "get available cars asynchronously"
+        headers = self.set_header_details(auth_details)
+        result = await self.api_obj.get_cars_async(headers)
+        result_flag = True if result["response"] == 200 else False
+        return result_flag
+
+    async def async_get_car(self, car_name, brand, auth_details=None):
+        "gets a given car details"
+        url_params = {'car_name': car_name, 'brand': brand}
+        url_params_encoded = urllib.parse.urlencode(url_params)
+        headers = self.set_header_details(auth_details)
+        response = await self.api_obj.get_car_async(url_params=url_params_encoded,
+                                              headers=headers)
+        result_flag = True if response['response'] == 200 else False
+        return result_flag
+
+    async def async_add_car(self, car_details, auth_details=None):
+        "adds a new car"
+        data = car_details
+        headers = self.set_header_details(auth_details)
+        response = await self.api_obj.add_car_async(data=data,
+                                                    headers=headers)
+        result_flag = True if response['response'] == 200 else False
+        return result_flag
+
+    async def async_get_registered_cars(self, auth_details=None):
+        "get registered cars"
+        headers = self.set_header_details(auth_details)
+        response = await self.api_obj.get_registered_cars_async(headers=headers)
+        result_flag = True if response['response'] == 200 else False
+        return result_flag
