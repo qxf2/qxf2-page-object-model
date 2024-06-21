@@ -1,6 +1,6 @@
 import os
 from selenium import webdriver
-from integrations.remote_options import RemoteOptions
+from integrations.cross_browsers.remote_options import RemoteOptions
 from conf import remote_url_conf
 
 class LambdaTestRunner(RemoteOptions):
