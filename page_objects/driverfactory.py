@@ -33,12 +33,12 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         self.os_name = os_name
 
     def get_web_driver(self, remote_flag, os_name, os_version, browser,
-                       browser_version, remote_project_name, remote_build_name):
+                       browser_version, remote_project_name, remote_build_name, testname):
         """Return the appropriate driver."""
         if remote_flag.lower() == 'y':
             web_driver = self.select_remote_platform(remote_flag, os_name, os_version,
                                                      browser, browser_version, remote_project_name,
-                                                     remote_build_name)
+                                                     remote_build_name, testname)
 
         elif remote_flag.lower() == 'n':
             web_driver = self.run_local(browser)
@@ -46,18 +46,16 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         return web_driver
 
     def select_remote_platform(self, remote_flag, os_name, os_version, browser,
-                               browser_version, remote_project_name, remote_build_name):
+                               browser_version, remote_project_name, remote_build_name, testname):
         """Select the remote platform to run the test when the remote_flag is Y."""
         try:
             if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS':
                 web_driver = self.run_browserstack(os_name, os_version, browser, browser_version,
                                                    remote_project_name, remote_build_name)
             elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT':
-                print("Inside select remote platform")
-                print("browser version =", browser_version)
                 runner = LambdaTestRunner()
                 web_driver = runner.run_lambdatest(os_name, os_version, browser, browser_version,
-                                                   remote_project_name, remote_build_name)
+                                                   remote_project_name, remote_build_name, testname)
             else:
                 web_driver = self.run_sauce_lab(os_name, os_version, browser, browser_version)
 
