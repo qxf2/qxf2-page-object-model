@@ -15,10 +15,9 @@ from utils import interactive_mode
 load_dotenv()
 
 @pytest.fixture
-def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
+def test_obj(request, base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
-
         if interactivemode_flag.lower() == "y":
             default_flag = interactive_mode.set_default_flag_gui(browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag)
             if default_flag == False:
@@ -27,7 +26,7 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
         test_obj.set_calling_module(testname)
         #Setup and register a driver
-        test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name)
+        test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name, testname)
 
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -45,9 +44,20 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
             test_obj.set_rp_logger(reportportal_service)
 
         yield test_obj
+        
         #Teardown
-        test_obj.wait(3)
-        test_obj.teardown()
+        def fin():
+            if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
+                if request.node.rep_call.failed:
+                    test_obj.teardown("fail")
+                else:
+                    test_obj.teardown("pass")
+
+            else:
+                test_obj.wait(3)
+                test_obj.teardown()
+                    
+        request.addfinalizer(fin)
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -110,6 +120,17 @@ def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_u
     except Exception as e:
         print("Exception when trying to run test:%s" % __file__)
         print("Python says:%s" % str(e))
+
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    # this sets the result as a test attribute for LambdaTest reporting.
+    # execute all other hooks to obtain the report object
+    outcome = yield
+    rep = outcome.get_result()
+
+    # set a report attribute for each phase of a call, which can
+    # be "setup", "call", "teardown"
+    setattr(item, "rep_" + rep.when, rep)
 
 @pytest.fixture
 def testname(request):

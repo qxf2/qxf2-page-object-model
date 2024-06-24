@@ -27,12 +27,12 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         self.os_name = os_name
 
     def get_web_driver(self, remote_flag, os_name, os_version, browser,
-                       browser_version, remote_project_name, remote_build_name):
+                       browser_version, remote_project_name, remote_build_name, testname):
         """Return the appropriate driver."""
         if remote_flag.lower() == 'y':
             web_driver = self.select_remote_platform(remote_flag, os_name, os_version,
                                                      browser, browser_version, remote_project_name,
-                                                     remote_build_name)
+                                                     remote_build_name, testname)
 
         elif remote_flag.lower() == 'n':
             web_driver = self.get_local_driver(browser)
@@ -40,7 +40,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         return web_driver
     
     def select_remote_platform(self, remote_flag, os_name, os_version, browser,
-                               browser_version, remote_project_name, remote_build_name):
+                               browser_version, remote_project_name, remote_build_name, testname):
         """Select the remote platform to run the test when the remote_flag is Y."""
         try:
             if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS':
@@ -51,7 +51,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
             elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT':
                 runner = LambdaTestRunner()
                 web_driver = runner.run_lambdatest(os_name, os_version, browser, browser_version,
-                                                   remote_project_name, remote_build_name)
+                                                   remote_project_name, remote_build_name, testname)
             else:
                 from integrations.cross_browsers.saucelab_runner import SauceLabRunner
                 runner = SauceLabRunner()
