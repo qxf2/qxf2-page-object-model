@@ -44,6 +44,9 @@ class PageFactory():
         elif page_name == "weather shopper app":
             from page_objects.weather_shopper import WeatherShopper
             test_obj = WeatherShopper()
+        elif page_name == "weather shopper payment page":
+            from page_objects.weather_shopper_payment import WeatherShopperPayment
+            test_obj = WeatherShopperPayment()
         return test_obj
 
 
