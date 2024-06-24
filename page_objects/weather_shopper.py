@@ -6,7 +6,6 @@ import re
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 from .Mobile_Base_Page import Mobile_Base_Page
-from weather_shopper_payment import WeatherShopperPayment
 
 class WeatherShopper(Mobile_Base_Page):
     "Page object for Weathershopper application."
@@ -185,6 +184,14 @@ class WeatherShopper(Mobile_Base_Page):
         "This method is to go to the Checkout page"
 
         result_flag = self.click_element(locators.checkout_button)
+        result_flag &= self.check_redirect()
+        return result_flag
+
+    def check_redirect(self):
+        "This method is to check if we have been redirected to the bitcoin real time price page."
+        self.switch_page("weather shopper payment page")
+        result_flag = True
+
         return result_flag
 
 
