@@ -16,7 +16,7 @@ class RemoteOptions():
         """Set web browser as firefox."""
         options = FirefoxOptions()
         options.browser_version = browser_version
-        
+
         return options
 
     @staticmethod
@@ -42,7 +42,7 @@ class RemoteOptions():
         options.browser_version = browser_version
 
         return options
-    
+
     def get_browser(self, browser, browser_version):
         """Select the browser."""
         if browser.lower() == 'ff' or browser.lower() == 'firefox':
@@ -51,16 +51,14 @@ class RemoteOptions():
             desired_capabilities = self.explorer(browser_version)
         elif browser.lower() == 'chrome':
             desired_capabilities = self.chrome(browser_version)
-        elif browser.lower() == 'opera':
-            desired_capabilities = self.opera(browser_version)
         elif browser.lower() == 'safari':
             desired_capabilities = self.safari(browser_version)
         else:
-            print("\nDriverFactory does not know the browser\t%s\n" % browser)
+            print(f"\nDriverFactory does not know the browser\t{browser}\n")
             desired_capabilities = None
 
         return desired_capabilities
-    
+
     def remote_project_name(self, desired_capabilities, remote_project_name):
         """Set remote project name for browserstack."""
         desired_capabilities['projectName'] = remote_project_name
@@ -73,12 +71,10 @@ class RemoteOptions():
         desired_capabilities['buildName'] = remote_build_name+"_"+str(datetime.now().strftime("%c"))
 
         return desired_capabilities
-    
+
     def set_capabilities_options(self, desired_capabilities, url):
         """Set the capabilities options for the mobile driver."""
         capabilities_options = UiAutomator2Options().load_capabilities(desired_capabilities)
         mobile_driver = mobile_webdriver.Remote(command_executor=url,options=capabilities_options)
 
         return mobile_driver
-    
-    

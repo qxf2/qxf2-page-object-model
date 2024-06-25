@@ -9,13 +9,10 @@ from dotenv import load_dotenv
 from integrations.cross_browsers.remote_options import RemoteOptions
 from page_objects.drivers.local_browsers import LocalBrowsers
 from conf import ports_conf
-from integrations.cross_browsers.lambdatest import LambdaTestRunner
-
-
+from integrations.cross_browsers.lambdatest_runner import LambdaTestRunner
 
 load_dotenv('.env.remote')
 localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost
-
 
 class DriverFactory(RemoteOptions, LocalBrowsers):
     """Class contains methods for getting web drivers and setting up remote testing platforms."""
@@ -50,7 +47,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                                                    remote_project_name, remote_build_name)
             elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT':
                 runner = LambdaTestRunner()
-                web_driver = runner.run_lambdatest(os_name, os_version, browser, browser_version,
+                web_driver = runner.get_lambdatest_webdriver(os_name, os_version, browser, browser_version,
                                                    remote_project_name, remote_build_name, testname)
             else:
                 from integrations.cross_browsers.saucelab_runner import SauceLabRunner
@@ -80,7 +77,6 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
 
         return local_driver
 
-
     def get_mobile_driver(self, mobile_os_name, mobile_os_version, device_name, app_package,
                    app_activity, remote_flag, device_flag, app_name, app_path,
                    ud_id, org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name):
@@ -105,7 +101,6 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
                                          app_package, no_reset_flag, ud_id, org_id, signing_id, appium_version)
 
         return mobile_driver
-
 
     def get_android_driver(self, remote_flag, desired_capabilities, app_path, app_name, appium_version,
                 app_package, app_activity, device_flag):
@@ -181,7 +176,6 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         print('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
         print('\033[91m'+"\nPython says:%s"%str(exception)+'\033[0m')
         print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
-
 
     def get_firefox_driver(self):
         """Return the Firefox driver."""
