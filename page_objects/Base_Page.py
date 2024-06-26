@@ -241,7 +241,7 @@ class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, 
             if name is not None:
                 self.driver.switch_to.frame(name)
             elif index is not None:
-                self.driver.switch_to.frame(driver.find_elements(By.TAG_NAME,("iframe")[index]))
+                self.driver.switch_to.frame(self.driver.find_elements(By.TAG_NAME,("iframe")[index]))
             result_flag = True
 
         except Exception as e:
@@ -250,19 +250,6 @@ class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, 
             self.exceptions.append("Error when switching to frame")
 
         return result_flag
-
-    def _get_locator(key):
-        "fetches locator from the locator conf"
-        value = None
-        try:
-            path_conf_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'conf', 'locators.conf'))
-            if path_conf_file is not None:
-                value = Conf_Reader.get_value(path_conf_file, key)
-        except Exception as e:
-            print (str(e))
-            self.exceptions.append("Error when fetching locator from the locator.conf")
-
-        return value
 
     def get_element_attribute_value(self,element,attribute_name):
         "Return the elements attribute value if present"
@@ -376,4 +363,3 @@ class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, 
         "Overwrite this method in your Page module if you want to visit a specific URL"
         pass
 
-    _get_locator = staticmethod(_get_locator)
