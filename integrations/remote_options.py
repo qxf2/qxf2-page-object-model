@@ -44,7 +44,7 @@ class RemoteOptions():
         options.browser_version = browser_version
 
         return options
-    
+
     def get_browser(self, browser, browser_version):
         """Select the browser."""
         if browser.lower() == 'ff' or browser.lower() == 'firefox':

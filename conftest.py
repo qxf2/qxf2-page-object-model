@@ -44,7 +44,7 @@ def test_obj(request, base_url, browser, browser_version, os_version, os_name, r
             test_obj.set_rp_logger(reportportal_service)
 
         yield test_obj
-        
+
         #Teardown
         def fin():
             if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':

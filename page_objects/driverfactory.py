@@ -97,7 +97,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers, Capabilities):
         web_driver = webdriver.Remote(command_executor=browserstack_url, options=options)
 
         return web_driver
-    
+
     def run_sauce_lab(self, os_name, os_version, browser, browser_version):
         """Run the test in sauce labs when remote flag is 'Y'."""
         #Get the sauce labs credentials from sauce.credentials file

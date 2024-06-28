@@ -27,7 +27,7 @@ class LambdaTestRunner(RemoteOptions):
 
         # Set LambdaTest platform
         options.platformName = f"{os_name} {os_version}"
-        
+
         lambdatest_options = {}
         lambdatest_options = self.lambdatest_credentials(lambdatest_options)
         lambdatest_options["video"] = True
@@ -38,7 +38,7 @@ class LambdaTestRunner(RemoteOptions):
         lambdatest_options["name"] = testname
         lambdatest_options["w3c"] = True
         lambdatest_options["plugin"] = "python-pytest"
-        
+
         options.set_capability('LT:options', lambdatest_options)
         web_driver = webdriver.Remote(command_executor=self.lambdatest_url, options=options)
 
@@ -68,4 +68,4 @@ class LambdaTestRunner(RemoteOptions):
                 time.sleep(delay)
             else:
                 raise Exception(f"Failed to fetch session details. Status code: {response.status_code}, Response: {response.text}")
-        raise Exception(f"Failed to fetch session details after {retries} retries.")    
+        raise Exception(f"Failed to fetch session details after {retries} retries.")
