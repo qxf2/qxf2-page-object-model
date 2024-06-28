@@ -82,6 +82,6 @@ payment_card_expiry = "id,expiration_date_edit_text"
 payment_card_cvv = "id,cvv_edit_text"
 pay_button = "id,pay_button"
 payment_success = "xpath,//android.widget.TextView[@text='Payment Successful']"
-
+recommendation_text = "id,recommendationTextView"
 image_of_moisturizer = "xpath,//android.widget.TextView[@text='Wilhelm Aloe Hydration Lotion']/parent::*/android.widget.ImageView"
 image_of_sunscreen = "xpath,//android.widget.TextView[@text='Robert Herbals Sunblock SPF-40']/parent::*/android.widget.ImageView"

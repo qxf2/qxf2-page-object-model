@@ -11,6 +11,7 @@ import pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 
+
 @pytest.mark.MOBILE
 def test_weather_shopper_app(test_mobile_obj):
     "Run the test."
@@ -92,6 +93,42 @@ def test_weather_shopper_app(test_mobile_obj):
         test_mobile_obj.log_result(result_flag,
                                 positive="Successfully completed payment",
                                 negative="Failure to complete payment")
+
+        # Print out the results.
+        test_mobile_obj.write(f'Script duration: {int(time.time() - start_time)} seconds\n')
+        test_mobile_obj.write_test_summary()
+
+        # Teardown and Assertion.
+        expected_pass = test_mobile_obj.result_counter
+        actual_pass = test_mobile_obj.pass_counter
+
+    except Exception as e:
+        print(f"Exception when trying to run test: {__file__}")
+        print(f"Python says: {str(e)}")
+
+    if expected_pass != actual_pass:
+        raise AssertionError(f"Test failed: {__file__}")
+
+
+@pytest.mark.MOBILE
+@pytest.mark.SMOKE
+def test_recommendation_text(test_mobile_obj):
+    "Run the test."
+    try:
+        # Initialize flags for tests summary.
+        expected_pass = 0
+        actual_pass = -1
+
+        # Create a test object.
+        test_mobile_obj = PageFactory.get_page_object("weather shopper app")
+        start_time = int(time.time())
+
+        # verify the recommendation text
+        result_flag = test_mobile_obj.verify_recommendation_text(test_mobile_obj)
+        test_mobile_obj.log_result(result_flag,
+                                    positive="Successfully verified the recommendation text",
+                                    negative="Recommendation text verification failed",
+                                    level="debug")
 
         # Print out the results.
         test_mobile_obj.write(f'Script duration: {int(time.time() - start_time)} seconds\n')
