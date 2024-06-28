@@ -305,7 +305,3 @@ class Selenium_Action_Objects:
         else:
             self.driver.quit()
             self.reset()
-
-        
-
-

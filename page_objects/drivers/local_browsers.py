@@ -72,7 +72,7 @@ class LocalBrowsers():
         local_driver = webdriver.Chrome(options=options)
 
         return local_driver
-    
+
     def app_details(self, desired_capabilities, app_package, app_activity):
         desired_capabilities['appPackage'] = app_package
         desired_capabilities['appActivity'] = app_activity
@@ -91,7 +91,7 @@ class LocalBrowsers():
             desired_capabilities['xcodeOrgId'] = org_id
             desired_capabilities['xcodeSigningId'] = signing_id
         return desired_capabilities
-    
+
     def set_mobile_device(self, mobile_os_name, mobile_os_version, device_name):
         """Setup the mobile device."""
         desired_capabilities = {}

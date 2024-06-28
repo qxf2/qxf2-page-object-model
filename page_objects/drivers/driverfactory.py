@@ -35,7 +35,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
             web_driver = self.get_local_driver(browser)
 
         return web_driver
-    
+
     def select_remote_platform(self, remote_flag, os_name, os_version, browser,
                                browser_version, remote_project_name, remote_build_name, testname):
         """Select the remote platform to run the test when the remote_flag is Y."""
@@ -164,7 +164,7 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
             self.print_exception(exception, remote_flag)
 
         return mobile_driver
-    
+
     @staticmethod
     def print_exception(exception, remote_flag):
         """Print out the exception message and suggest the solution based on the remote flag."""
