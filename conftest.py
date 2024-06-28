@@ -56,7 +56,7 @@ def test_obj(request, base_url, browser, browser_version, os_version, os_name, r
             else:
                 test_obj.wait(3)
                 test_obj.teardown()
-                    
+
         request.addfinalizer(fin)
 
     except Exception as e:

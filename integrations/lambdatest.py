@@ -52,7 +52,7 @@ class LambdaTestRunner(RemoteOptions):
         print(f"Session url: {self.session_url}")
 
         return web_driver
-    
+
     def get_session_url_with_retries(self, session_id, retries=5, delay=2):
         """Fetch the session URL using the LambdaTest API with retries."""
         import requests,time

@@ -68,7 +68,7 @@ class RemoteOptions():
         """Set platform for saucelab."""
         options.platform_name = os_name + ' '+os_version
         return options
-    
+
     @staticmethod
     def sauce_upload(app_path, app_name):
         """Upload the apk to the sauce temperory storage."""
