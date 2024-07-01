@@ -27,23 +27,26 @@ class WeatherShopper(Mobile_Base_Page):
         temperature = self.get_temperature()
         recommendation = locators.recommendation_text
         recommendation_text = self.get_text(recommendation)
+        # Ensure recommendation_text is a string
+        if isinstance(recommendation_text, bytes):
+            recommendation_text = recommendation_text.decode('utf-8')
+
+        recommendation_text = recommendation_text.strip().replace('\n', '')
+
         if temperature <= 19:
-            expected_recommendation = "Its cold! Consider Buying moisturizers"
+            expected_recommendation = "It's cold! Consider buying moisturizers"
         elif temperature >= 20 and temperature <= 33:
             expected_recommendation = "Choose products based on your skin type and condition"
-        elif temperature >= 34:
-            expected_recommendation = "Its hot! Stay hydrated and use sunscreen"   
+        else:
+            expected_recommendation = "It's hot!  Stay hydrated and use sunscreen"
 
-        #assert expected_recommendation in recommendation_text, \
-        #    f"Expected recommendation '{expected_recommendation}' not found in '{recommendation_text}'"   
-        result_flag = True if expected_recommendation in recommendation_text else False
+        result_flag = expected_recommendation in recommendation_text
         self.conditional_write(result_flag,
             positive='Successfully validated recommendation text',
             negative='Failed to validate recommendation text',
-            level='debug') 
+            level='debug')
 
-        return result_flag     
-        
+        return result_flag
 
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
