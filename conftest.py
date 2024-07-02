@@ -537,7 +537,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
                 # Send html formatted email body message with pytest report as an attachment
                 email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
-                from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
+                from integrations.reporting_tools import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
             if  terminalreporter.config.getoption("--summary").lower() == 'y':
                 from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel
