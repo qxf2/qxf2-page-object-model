@@ -11,18 +11,17 @@ from reportportal_client import RPLogger, RPLogHandler
 
 class Base_Logging():
     "A plug-n-play class for logging"
-    def __init__(self,log_file_name=None,level="DEBUG",format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}"):
+    def __init__(self,log_file_name=None,level="DEBUG"):
         "Constructor for the logging class"
         logger.remove()
         logger.add(sys.stderr,format="<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <level>{message}</level>")
         self.log_file_name=log_file_name
         self.log_file_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'..','log'))
         self.level=level
-        self.format=format
-        self.set_log(self.log_file_name,self.level,self.format)
+        self.set_log(self.log_file_name,self.level)
         self.rp_logger = None
 
-    def set_log(self,log_file_name,level,format,test_module_name=None):
+    def set_log(self,log_file_name,level,format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",test_module_name=None):
         "Add an handler sending log messages to a sink"
         if test_module_name is None:
             test_module_name = self.get_calling_module()
@@ -80,11 +79,13 @@ class Base_Logging():
         for stack_frame in all_stack_frames[2:]:
             if 'Base_Page' not in stack_frame[1] and 'logging_objects' not in stack_frame[1]:
                 break
-        file_name = stack_frame[1]
-        modified_path = file_name.split("qxf2-page-object-model")[-1]
-        file_name = modified_path
+        module_path = stack_frame[1]
+        modified_path = module_path.split("qxf2-page-object-model")[-1]
+        if module_path == modified_path:
+            modified_path = module_path.split("project")[-1]
+
         fname = stack_frame[3]
-        d = {'caller_func': fname, 'file_name': file_name}
+        d = {'caller_func': fname, 'file_name': modified_path}
 
         if self.rp_logger:
             if level.lower()== 'debug':
