@@ -21,7 +21,7 @@ class Base_Logging():
         self.set_log(self.log_file_name,self.level)
         self.rp_logger = None
 
-    def set_log(self,log_file_name,level,format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",test_module_name=None):
+    def set_log(self,log_file_name,level,log_format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",test_module_name=None):
         "Add an handler sending log messages to a sink"
         if test_module_name is None:
             test_module_name = self.get_calling_module()
@@ -32,10 +32,10 @@ class Base_Logging():
         else:
             log_file_name = self.log_file_dir + os.sep + log_file_name
 
-        logger.add(log_file_name,level=level, format=format,
+        logger.add(log_file_name,level=level, format=log_format,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
         # Create temporary log files for consolidating log data of all tests of a session to a single file
-        logger.add(log_file_name + '-temp',level=level, format=format,
+        logger.add(log_file_name + '-temp',level=level, format=log_format,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
