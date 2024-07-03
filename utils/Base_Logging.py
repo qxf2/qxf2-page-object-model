@@ -11,7 +11,7 @@ from reportportal_client import RPLogger, RPLogHandler
 
 class Base_Logging():
     "A plug-n-play class for logging"
-    def __init__(self,log_file_name=None,level="DEBUG",format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {module} | {message}"):
+    def __init__(self,log_file_name=None,level="DEBUG",format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}"):
         "Constructor for the logging class"
         logger.remove()
         logger.add(sys.stderr,format="<green>{time:YYYY-MM-DD HH:mm:ss.SSS}</green> | <level>{level: <8}</level> | <level>{message}</level>")
@@ -33,10 +33,10 @@ class Base_Logging():
         else:
             log_file_name = self.log_file_dir + os.sep + log_file_name
 
-        logger.add(log_file_name,level=level,
+        logger.add(log_file_name,level=level, format=format,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
         # Create temporary log files for consolidating log data of all tests of a session to a single file
-        logger.add(log_file_name + '-temp',level=level,
+        logger.add(log_file_name + '-temp',level=level, format=format,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
@@ -76,17 +76,8 @@ class Base_Logging():
 
     def write(self,msg,level='info',trace_back=None):
         "Write out a message"
-        #fname = inspect.stack()[2][3] #May be use a entry-exit decorator instead
-        #logger.remove()
-        #test_module_name = str(self.get_calling_module())
-        #Create new logging instance
-        #logger.add(sys.stderr,format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}")
-
-        #logger._core.handlers[3].format = "{time:YYYY-MM-DD} | {level} | {message}"
         all_stack_frames = inspect.stack()
-        #print('all_stack_frames',all_stack_frames)
         for stack_frame in all_stack_frames[2:]:
-            #print (stack_frame)
             if 'Base_Page' not in stack_frame[1] and 'logging_objects' not in stack_frame[1]:
                 break
         file_name = stack_frame[1]
@@ -95,7 +86,6 @@ class Base_Logging():
         fname = stack_frame[3]
         d = {'caller_func': fname, 'file_name': file_name}
 
-        # print(inspect.stack()[2])
         if self.rp_logger:
             if level.lower()== 'debug':
                 self.rp_logger.debug(msg=msg)
