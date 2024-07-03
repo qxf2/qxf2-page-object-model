@@ -81,8 +81,8 @@ class Base_Logging():
             if 'Base_Page' not in stack_frame[1] and 'logging_objects' not in stack_frame[1]:
                 break
         file_name = stack_frame[1]
-        modified_path = file_name.split("qxf2-page-object-model")[1]
-        file_name = "qxf2-page-object-model" + modified_path
+        modified_path = file_name.split("qxf2-page-object-model")[-1]
+        file_name = modified_path
         fname = stack_frame[3]
         d = {'caller_func': fname, 'file_name': file_name}
 
