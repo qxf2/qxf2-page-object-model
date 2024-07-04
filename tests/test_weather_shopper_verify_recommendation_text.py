@@ -3,7 +3,6 @@ Automated test for Weather Shopper application recommndation app
 """
 
 # pylint: disable=E0401, C0413
-import secrets
 import time
 import os
 import sys
@@ -19,7 +18,7 @@ def test_recommendation_text(test_mobile_obj):
     try:
         # Initialize flags for tests summary.
         expected_pass = 0
-        actual_pass = -1 
+        actual_pass = -1
 
         # Create a test object.
         test_mobile_obj = PageFactory.get_page_object("weather shopper app")
@@ -27,14 +26,14 @@ def test_recommendation_text(test_mobile_obj):
 
         # Verify the recommendation text.
         result_flag = test_mobile_obj.verify_recommendation_text()
-        
+
         test_mobile_obj.log_result(result_flag,
                                    positive="Successfully verified the recommendation text",
                                    negative="Recommendation text verification failed",
                                    level="debug")
 
         # Teardown and Assertion.
-        expected_pass = 1 
+        expected_pass = 1
         actual_pass = test_mobile_obj.pass_counter if result_flag else 0
 
         # Print out the results.
@@ -44,7 +43,7 @@ def test_recommendation_text(test_mobile_obj):
     except Exception as e:
         print(f"Exception when trying to run test: {__file__}")
         print(f"Python says: {str(e)}")
-        raise 
+        raise
 
     if expected_pass != actual_pass:
         raise AssertionError(f"Test failed: {__file__}")
