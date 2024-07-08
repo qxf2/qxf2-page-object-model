@@ -3,11 +3,11 @@ Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
 import unittest,os,inspect
-from .drivers.driverfactory import DriverFactory
-from .core_helpers.selenium_action_objects import Selenium_Action_Objects
-from .core_helpers.logging_objects import Logging_Objects
-from .core_helpers.remote_objects import Remote_Objects
-from .core_helpers.screenshot_objects import Screenshot_Objects
+from core_helpers.drivers.driverfactory import DriverFactory
+from .selenium_action_objects import Selenium_Action_Objects
+from .logging_objects import Logging_Objects
+from .remote_objects import Remote_Objects
+from .screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
 
 class Borg:

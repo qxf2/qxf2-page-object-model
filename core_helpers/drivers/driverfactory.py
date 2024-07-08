@@ -7,7 +7,7 @@ import sys
 from selenium import webdriver
 from dotenv import load_dotenv
 from integrations.cross_browsers.remote_options import RemoteOptions
-from page_objects.drivers.local_browsers import LocalBrowsers
+from .local_browsers import LocalBrowsers
 from conf import ports_conf
 from integrations.cross_browsers.lambdatest_runner import LambdaTestRunner
 
