@@ -33,7 +33,7 @@ class Borg:
 # Get the Base URL from the conf file
 base_url = conf.base_url_conf
 
-class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
+class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self,base_url):
