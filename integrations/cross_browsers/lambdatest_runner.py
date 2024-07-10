@@ -35,6 +35,7 @@ class LambdaTestRunner(RemoteOptions):
         lambdatest_options["visual"] = True
         lambdatest_options["network"] = True
         lambdatest_options["w3c"] = True
+        lambdatest_options["console"] = True
         lambdatest_options["plugin"] = "python-pytest"
 
         return lambdatest_options
@@ -59,7 +60,7 @@ class LambdaTestRunner(RemoteOptions):
         # Get the session ID and session URL and print it
         self.session_id = web_driver.session_id
         self.session_url = self.get_session_url_with_retries(self.session_id)
-        print(f"\n LambdaTest Session ID: {self.session_id}")
+        print(f"\nLambdaTest Session ID: {self.session_id}")
         print(f"LambdaTest Session url: {self.session_url}")
 
         return web_driver
