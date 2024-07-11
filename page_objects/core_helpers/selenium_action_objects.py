@@ -129,11 +129,14 @@ class Selenium_Action_Objects:
 
         return result_flag
 
-    def get_text(self,locator):
+    def get_text(self,locator, dom_element_flag=False):
         "Return the text for a given path or the 'None' object if the element is not found"
         text = ''
         try:
-            text = self.get_element(locator).text
+            if dom_element_flag is False:
+                text = self.get_element(locator).text
+            else:
+                text = locator.text
         except Exception as e:
             self.write(e)
             self.exceptions.append("Error when getting text from the path-'%s' in the conf/locators.conf file"%locator)
