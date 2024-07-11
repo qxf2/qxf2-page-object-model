@@ -21,6 +21,13 @@ class CleanUpRepo:
             os.remove(file_name)
             self.logger.write(f'{file_name} deleted')
 
+    def delete_directory(self, dir_name):
+        """The method will delete a particular directory along with its content"""
+        import shutil
+        if os.path.exists(dir_name) and os.path.isdir(dir_name):
+            shutil.rmtree(dir_name)
+            self.logger.write(f'{dir_name} deleted')
+
     def delete_files_in_dir(self, directory, files):
         """The method will delete files in a particular directory"""
         for file_name in files:
@@ -34,6 +41,7 @@ class CleanUpRepo:
     def run_cleanup(self):
         """Runs the utility to delete example files and logs the operation."""
         self.logger.write("Running utility to delete the files")
+        self.delete_directory(conf.PAGE_OBJECTS_EXAMPLES_DIR)
         self.delete_files_used_in_example()
         self.logger.write(
             f'All the files related to the sample example from Page Object Model have been removed from {conf.dir_list} folders.\n'
