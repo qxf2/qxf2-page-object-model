@@ -3,6 +3,7 @@ Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
 import unittest,os,inspect
+import time
 from .driverfactory import DriverFactory
 from .core_helpers.selenium_action_objects import Selenium_Action_Objects
 from .core_helpers.logging_objects import Logging_Objects
@@ -10,6 +11,7 @@ from .core_helpers.remote_objects import Remote_Objects
 from .core_helpers.screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
 from appium.webdriver.common.appiumby import AppiumBy
+from appium.common.exceptions import NoSuchContextException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.actions.mouse_button import MouseButton
 
@@ -404,6 +406,71 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             self.write(str(e), 'debug')
             self.exceptions.append("An exception occurred when scrolling forward")
         return result_flag
+
+    def switch_context(self, context_name=None, retries=3):
+        "Switch context in Android app"
+        result_flag = False
+        try:
+            if self.driver.current_context == "WEBVIEW_chrome":
+                time.sleep(1) # Wait on the Chrome tab for a sec before closing, useful for UI debugging
+                for handle in self.driver.window_handles: # Get all open tabs
+                    self.driver.switch_to.window(handle)
+                    # Close the Chrome webview tab,prevents incorrect URL returned in current_url method due to multiple tabs being present
+                    self.driver.close()
+                self.write("Closed current tab on Webview","debug")
+            # Wait to check if the intended context becomes available
+            # This is a fail safe, implemented to address corner case where the context might be avialable after a sec or two
+            for attempt in range(1,retries+1):
+                if not context_name in self.driver.contexts:
+                    self.write(f"Intended context {context_name} not present in available contexts {self.driver.contexts}, retry attempt {attempt}", "debug")
+                    time.sleep(attempt)
+            # Switch context
+            self.driver.switch_to.context(context_name)
+            result_flag = True if self.driver.current_context == context_name else False
+        except NoSuchContextException:
+            self.write(f"No {context_name} context present", 'debug')
+            self.exceptions.append("No Such Context exception occured when switching context")
+        except Exception as err:
+            self.write(str(err), 'debug')
+            self.exceptions.append("An exception occured when switching context")
+        return result_flag
+
+    def handle_chrome_welcome_page(self, accept_button, turn_off_sync_button):
+        "Click on accept button Chrome welcome screen"
+        # Handle cases where the Welcome page can be present/not-present
+        try:
+            time.sleep(2) # The welcome screen prompts appear on the screen slowly unfortunately
+            accept_button_locator = self.split_locator(accept_button)
+            accept_button_element = self.driver.find_element(*accept_button_locator)
+            accept_button_element.click()
+            self.write("Clicked on Chrome Welcome Dismiss button", "debug")
+            time.sleep(3) # Wait longer, probability of having to turn off sync are high
+        except:
+            self.write("Chrome Welcome Dismiss button not present, ignoring click", "debug")
+            time.sleep(1) # Wait less, turn off sync might already have been clicked
+        try:
+            turn_off_sync_button_locator = self.split_locator(turn_off_sync_button)
+            turn_off_sync_button_element = self.driver.find_element(*turn_off_sync_button_locator)
+            turn_off_sync_button_element.click()
+            self.write("Clicked on Turn off sync", "debug")
+            time.sleep(1)
+        except:
+            self.write("Turn off sync not present, ignoring click", "debug")
+
+    def navigate_back_to_app(self, native_context="NATIVE_APP"):
+        "Navigate back to app from a  webview"
+        try:
+            # Navigating back to the app can be done in native context only
+            if self.driver.current_context == native_context:
+                # Check if switching context itself takes control back to app, happens in Google API <=34
+                if self.driver.current_activity != ".MainActivity":
+                    self.driver.back()
+                self.write("Navigated back to the app", "debug")
+            else:
+                self.write("Unable to navigate to app")
+        except Exception as err:
+            self.write(f"Unable to navigate back to app, due to {err}", "debug")
+            self.exceptions.append("An exception occured when navigating back to the app")
 
     def start(self):
         "Dummy method to be over-written by child classes"
