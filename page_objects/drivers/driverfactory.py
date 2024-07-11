@@ -7,14 +7,14 @@ import sys
 from selenium import webdriver
 from dotenv import load_dotenv
 from integrations.cross_browsers.remote_options import RemoteOptions
-from page_objects.drivers.local_browsers import LocalBrowsers
+from page_objects.drivers.local_options import LocalOptions
 from conf import ports_conf
 from integrations.cross_browsers.lambdatest_runner import LambdaTestRunner
 
 load_dotenv('.env.remote')
 localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost
 
-class DriverFactory(RemoteOptions, LocalBrowsers):
+class DriverFactory(RemoteOptions, LocalOptions):
     """Class contains methods for getting web drivers and setting up remote testing platforms."""
 
     def __init__(self, browser='ff', browser_version=None, os_name=None):
@@ -176,33 +176,3 @@ class DriverFactory(RemoteOptions, LocalBrowsers):
         print('\033[91m'+"\nException when trying to get remote webdriver:%s"%sys.modules[__name__]+'\033[0m')
         print('\033[91m'+"\nPython says:%s"%str(exception)+'\033[0m')
         print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
-
-    def get_firefox_driver(self):
-        """Return the Firefox driver."""
-        driver = webdriver.Firefox(firefox_profile=self.set_firefox_profile())
-        return driver
-
-    def set_firefox_profile(self):
-        """Setup firefox with the right preferences and return a profile."""
-        try:
-            self.download_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'downloads'))
-            if not os.path.exists(self.download_dir):
-                os.makedirs(self.download_dir)
-        except Exception as exception:
-            print("Exception when trying to set directory structure")
-            print(str(exception))
-
-        profile = webdriver.firefox.firefox_profile.FirefoxProfile()
-        set_pref = profile.set_preference
-        set_pref('browser.download.folderList', 2)
-        set_pref('browser.download.dir', self.download_dir)
-        set_pref('browser.download.useDownloadDir', True)
-        set_pref('browser.helperApps.alwaysAsk.force', False)
-        set_pref('browser.helperApps.neverAsk.openFile',
-                 'text/csv,application/octet-stream,application/pdf')
-        set_pref('browser.helperApps.neverAsk.saveToDisk',
-                 'text/csv,application/vnd.ms-excel,application/pdf,application/csv,application/octet-stream')
-        set_pref('plugin.disable_full_page_plugin_for_types', 'application/pdf')
-        set_pref('pdfjs.disabled', True)
-
-        return profile
