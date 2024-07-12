@@ -38,9 +38,15 @@ class Remote_Objects:
         from integrations.reporting_tools import Tesults # pylint: disable=import-error,import-outside-toplevel
         self.tesult_object = Tesults
 
-    def add_tesults_case(self, name, desc, suite, result_flag, msg='', files=[], params={}, custom={}):
+    def add_tesults_case(self, name, desc, suite, result_flag, msg='', files=None, params=None, custom=None):
         "Update Tesults with test results"
         import os # pylint: disable=import-error,import-outside-toplevel
+        if files is None:
+            files = []
+        if params is None:
+            params = {}
+        if custom is None:
+            custom = {}
         if self.tesults_flag is True:
             result = "unknown"
             failReason = ""
