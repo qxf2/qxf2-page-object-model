@@ -27,7 +27,7 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         test_obj.set_calling_module(testname)
         #Setup and register a driver
         test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name, testname)
-        
+
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:

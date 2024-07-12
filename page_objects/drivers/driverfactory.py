@@ -4,7 +4,6 @@ This module gets the webdrivers for different browsers and sets up the remote te
 """
 import os
 import sys
-from selenium import webdriver
 from dotenv import load_dotenv
 from integrations.cross_browsers.remote_options import RemoteOptions
 from page_objects.drivers.local_options import LocalOptions
