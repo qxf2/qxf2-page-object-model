@@ -38,6 +38,25 @@ class Remote_Objects:
         from integrations.reporting_tools import Tesults # pylint: disable=import-error,import-outside-toplevel
         self.tesult_object = Tesults
 
+    def add_tesults_case(self, name, desc, suite, result_flag, msg='', files=[], params={}, custom={}):
+        "Update Tesults with test results"
+        import os # pylint: disable=import-error,import-outside-toplevel
+        if self.tesults_flag is True:
+            result = "unknown"
+            failReason = ""
+            if result_flag == True:
+                result = "pass"
+            if result_flag == False:
+                result = "fail"
+                failReason = msg
+            for image in self.images:
+                files.append(self.screenshot_dir + os.sep + image + '.png')
+            self.images = []
+            caseObj = {'name': name, 'suite': suite, 'desc': desc, 'result': result, 'reason': failReason, 'files': files, 'params': params}
+            for key, value in custom.items():
+                caseObj[key] = str(value)
+            self.tesult_object.add_test_case(caseObj)
+
     def report_to_testrail(self,case_id,test_run_id,result_flag,msg=''):
         "Update Test Rail"
         if self.testrail_flag is True:
