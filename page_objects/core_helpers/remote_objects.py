@@ -10,6 +10,7 @@ class Remote_Objects:
         self.tesults_flag = False
         self.browserstack_flag = False
         self.test_run_id = None
+        self.images = []
 
     def register_browserstack(self):
         "Register Browser Stack with Page"
