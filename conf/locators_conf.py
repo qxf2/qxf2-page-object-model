@@ -60,6 +60,7 @@ bitcoin_price_page_heading = "xpath,//android.widget.TextView[@text='Real Time P
 bitcoin_price_in_usd = "xpath,//android.widget.TextView[@resource-id='com.dudam.rohan.bitcoininfo:id/doller_value']"
 
 #Weather Shopper
+mock_payment_page_heading = "xpath,//android.widget.TextView[@text='Mocked Payment Gateway']"
 temperature = "id,textHome"
 moisturizers = "xpath,//android.widget.TextView[@text='Moisturizers']"
 sunscreens = "xpath,//android.widget.TextView[@text='Sunscreens']"
@@ -85,3 +86,4 @@ payment_success = "xpath,//android.widget.TextView[@text='Payment Successful']"
 
 image_of_moisturizer = "xpath,//android.widget.TextView[@text='Wilhelm Aloe Hydration Lotion']/parent::*/android.widget.ImageView"
 image_of_sunscreen = "xpath,//android.widget.TextView[@text='Robert Herbals Sunblock SPF-40']/parent::*/android.widget.ImageView"
+payment_invalid_email = "//*[contains(text(), 'Invalid email. Please enter valid email')]"

@@ -9,7 +9,7 @@ from .Mobile_Base_Page import Mobile_Base_Page
 
 class WeatherShopper(Mobile_Base_Page):
     "Page object for Weathershopper application."
-
+    mock_payment_page_heading = locators.mock_payment_page_heading
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
     def get_temperature(self):
@@ -180,17 +180,21 @@ class WeatherShopper(Mobile_Base_Page):
         result_flag &= self.click_element(locators.delete_from_cart_button)
         return result_flag
 
-    def checkout(self):
+    def checkout(self,expected_mock_payment_page_heading):
         "This method is to go to the Checkout page"
 
         result_flag = self.click_element(locators.checkout_button)
-        result_flag &= self.check_redirect()
+        result_flag &= self.check_redirect(expected_mock_payment_page_heading)
         return result_flag
-
-    def check_redirect(self):
-        "This method is to check if we have been redirected to the bitcoin real time price page."
-        self.switch_page("weather shopper payment page")
-        result_flag = True
+    
+    @Wrapit._screenshot
+    def check_redirect(self, expected_mock_payment_page_heading):
+        "This method is to check if we have been redirected to the weather shopper mock payment page."
+        result_flag = False
+        mock_payment_page_heading = self.get_text_by_locator(self.mock_payment_page_heading)
+        if mock_payment_page_heading.decode('utf-8') == expected_mock_payment_page_heading:
+            result_flag = True
+            self.switch_page("weather shopper payment page")
 
         return result_flag
 
