@@ -26,6 +26,7 @@ TEST_FILES_DELETE = ['test_example_table.py',
     'test_api_example.py',
     'test_mobile_bitcoin_price.py',
     'test_successive_form_creation.py',
-    'test_example_form.py']
+    'test_example_form.py',
+    'test_accessibility.py']
 
 file_list = [CONF_FILES_DELETE, ENDPOINTS_FILES_DELETE, TEST_FILES_DELETE]

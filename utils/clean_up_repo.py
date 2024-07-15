@@ -23,7 +23,7 @@ class CleanUpRepo:
 
     def delete_directory(self, dir_name):
         """The method will delete a particular directory along with its content"""
-        import shutil
+        import shutil # pylint: disable=import-error,import-outside-toplevel
         if os.path.exists(dir_name) and os.path.isdir(dir_name):
             shutil.rmtree(dir_name)
             self.logger.write(f'{dir_name} deleted')
