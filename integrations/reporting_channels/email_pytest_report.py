@@ -1,5 +1,5 @@
 """
-Qxf2 Services: Utility script to send pytest test report email
+Qxf2 Services: Script to send pytest test report email
 * Supports both text and html formatted messages
 * Supports text, html, image, audio files as an attachment
 
@@ -10,10 +10,12 @@ Note:
 * We added subject, email body message as per our need. You can update that as per your requirement.
 * To generate html formatted test report, you need to use pytest-html plugin. 
 - To install it use command: pip install pytest-html
+* To email test report with our framework use following command from the root of repo
+- e.g. pytest -s -v --email_pytest_report y --html = log/pytest_report.html
 * To generate pytest_report.html file use following command from the root of repo 
 - e.g. py.test --html = log/pytest_report.html
 * To generate pytest_report.log file use following command from the root of repo 
-- e.g. py.test -k example_form -r F -v > log/pytest_report.log
+- e.g. py.test -k example_form -v > log/pytest_report.log
 """
 import os
 import sys
