@@ -11,11 +11,11 @@ Note:
 * To generate html formatted test report, you need to use pytest-html plugin. 
 - To install it use command: pip install pytest-html
 * To email test report with our framework use following command from the root of repo
-- e.g. pytest -s -v --email_pytest_report y --html = log/pytest_report.html
+- e.g. pytest -s -v --email_pytest_report y --html=log/pytest_report.html
 * To generate pytest_report.html file use following command from the root of repo 
-- e.g. py.test --html = log/pytest_report.html
+- e.g. pytest --html = log/pytest_report.html
 * To generate pytest_report.log file use following command from the root of repo 
-- e.g. py.test -k example_form -v > log/pytest_report.log
+- e.g. pytest -k example_form -v > log/pytest_report.log
 """
 import os
 import sys
@@ -27,7 +27,10 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
 import mimetypes
+from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+load_dotenv()
 
 class EmailPytestReport:
     "Class to email pytest report"
@@ -38,7 +41,7 @@ class EmailPytestReport:
         self.username = os.getenv('app_username')
         self.password = os.getenv('app_password')
         self.sender = os.getenv('sender')
-        self.targets = os.getenv('targets')
+        self.targets = eval(os.getenv('targets'))  # pylint: disable=eval-used
 
 
     def get_test_report_data(self,html_body_flag= True,report_file_path= 'default'):
@@ -158,6 +161,9 @@ class EmailPytestReport:
             #add attachment to email
             attachment = self.get_attachment(report_file_path)
             message.attach(attachment)
+
+        if not self.targets or not isinstance(self.targets, list):
+            raise ValueError("Targets must be a non-empty list of email addresses.")
 
         message['From'] = self.sender
         message['To'] = ', '.join(self.targets)
