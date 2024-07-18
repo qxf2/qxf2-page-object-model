@@ -15,7 +15,7 @@ from utils import interactive_mode
 load_dotenv()
 
 @pytest.fixture
-def test_obj(request, base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
+def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower() == "y":
@@ -31,7 +31,7 @@ def test_obj(request, base_url, browser, browser_version, os_version, os_name, r
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_obj.register_testrail()
@@ -46,22 +46,23 @@ def test_obj(request, base_url, browser, browser_version, os_version, os_name, r
         yield test_obj
 
         #Teardown
-        def fin():
-            if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
-                if request.node.rep_call.failed:
-                    test_obj.teardown("fail")
-                else:
-                    test_obj.teardown("pass")
-
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
+            if test_obj.pass_counter == test_obj.result_counter:
+                test_obj.execute_javascript("lambda-status=passed")
+                test_obj.teardown()
             else:
-                test_obj.wait(3)
+                test_obj.execute_javascript("lambda-status=failed")
                 test_obj.teardown()
 
-        request.addfinalizer(fin)
+        else:
+            test_obj.wait(3)
+            test_obj.teardown()
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
+            test_obj.execute_javascript("lambda-status=error")
 
 @pytest.fixture
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, remote_project_name, remote_build_name):
@@ -81,7 +82,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest --testrail_flag Y -R 100\n"+'\033[0m')
+                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_mobile_obj.register_testrail()
@@ -120,17 +121,6 @@ def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_u
     except Exception as e:
         print("Exception when trying to run test:%s" % __file__)
         print("Python says:%s" % str(e))
-
-@pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-    # this sets the result as a test attribute for LambdaTest reporting.
-    # execute all other hooks to obtain the report object
-    outcome = yield
-    rep = outcome.get_result()
-
-    # set a report attribute for each phase of a call, which can
-    # be "setup", "call", "teardown"
-    setattr(item, "rep_" + rep.when, rep)
 
 @pytest.fixture
 def testname(request):
@@ -537,7 +527,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
                 # Send html formatted email body message with pytest report as an attachment
                 email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
-                from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
+                from integrations.reporting_tools import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
             if  terminalreporter.config.getoption("--summary").lower() == 'y':
                 from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel

@@ -304,24 +304,6 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
 
         return result_flag
 
-    def add_tesults_case(self, name, desc, suite, result_flag, msg='', files=[], params={}, custom={}):
-        "Update Tesults with test results"
-        if self.tesults_flag is True:
-            result = "unknown"
-            failReason = ""
-            if result_flag == True:
-                result = "pass"
-            if result_flag == False:
-                result = "fail"
-                failReason = msg
-            for image in self.images:
-                files.append(self.screenshot_dir + os.sep + image + '.png')
-            self.images = []
-            caseObj = {'name': name, 'suite': suite, 'desc': desc, 'result': result, 'reason': failReason, 'files': files, 'params': params}
-            for key, value in custom.items():
-                caseObj[key] = str(value)
-            self.tesult_object.add_test_case(caseObj)
-
     def read_browser_console_log(self):
         "Read Browser Console log"
         log = None

@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.options import Options
 import sys
 from selenium import webdriver
 
-class LocalBrowsers():
+class LocalOptions():
     """Class contains methods for getting webfrivers for various browsers."""
 
     @staticmethod
