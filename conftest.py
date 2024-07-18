@@ -31,7 +31,7 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_obj.register_testrail()
@@ -82,7 +82,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest --testrail_flag Y -R 100\n"+'\033[0m')
+                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_mobile_obj.register_testrail()
@@ -527,7 +527,7 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
                 # Send html formatted email body message with pytest report as an attachment
                 email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
-                from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
+                from integrations.reporting_tools import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
             if  terminalreporter.config.getoption("--summary").lower() == 'y':
                 from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel
