@@ -45,6 +45,24 @@ class RemoteOptions():
 
         return options
 
+    def get_browser(self, browser, browser_version):
+        """Select the browser."""
+        if browser.lower() == 'ff' or browser.lower() == 'firefox':
+            desired_capabilities = self.firefox(browser_version)
+        elif browser.lower() == 'ie':
+            desired_capabilities = self.explorer(browser_version)
+        elif browser.lower() == 'chrome':
+            desired_capabilities = self.chrome(browser_version)
+        elif browser.lower() == 'opera':
+            desired_capabilities = self.opera(browser_version)
+        elif browser.lower() == 'safari':
+            desired_capabilities = self.safari(browser_version)
+        else:
+            print("\nDriverFactory does not know the browser\t%s\n" % browser)
+            desired_capabilities = None
+
+        return desired_capabilities
+
     @staticmethod
     def saucelab_platform(options, os_name, os_version):
         """Set platform for saucelab."""
