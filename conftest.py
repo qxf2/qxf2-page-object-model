@@ -44,17 +44,6 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
             test_obj.set_rp_logger(reportportal_service)
 
         yield test_obj
-<<<<<<< HEAD
-=======
-
-        #Teardown
-        def fin():
-            if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
-                if request.node.rep_call.failed:
-                    test_obj.teardown("fail")
-                else:
-                    test_obj.teardown("pass")
->>>>>>> integrate_lambdatest
 
         #Teardown
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
@@ -65,13 +54,9 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
                 test_obj.execute_javascript("lambda-status=failed")
                 test_obj.teardown()
 
-<<<<<<< HEAD
         else:
             test_obj.wait(3)
             test_obj.teardown()
-=======
-        request.addfinalizer(fin)
->>>>>>> integrate_lambdatest
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
