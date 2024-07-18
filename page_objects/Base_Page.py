@@ -5,7 +5,7 @@ There are useful wrappers for common Selenium operations
 
 from selenium.webdriver.common.by import By
 import os,inspect
-from .driverfactory import DriverFactory
+from .drivers.driverfactory import DriverFactory
 from .core_helpers.selenium_action_objects import Selenium_Action_Objects
 from .core_helpers.remote_objects import Remote_Objects
 from .core_helpers.logging_objects import Logging_Objects

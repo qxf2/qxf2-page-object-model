@@ -290,19 +290,7 @@ class Selenium_Action_Objects:
 
         return result_flag
 
-    def teardown(self, test_status = None):
+    def teardown(self):
         "Tears down the driver"
-        import os
-        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and test_status is not None:
-            if test_status == "fail":
-                # You can perform actions based on test failure
-                self.driver.execute_script("lambda-status=failed")
-            elif test_status == "pass":
-                # You can perform actions based on test success
-                self.driver.execute_script("lambda-status=passed")
-            self.driver.quit()
-            self.reset()
-        else:
-            self.driver.quit()
-            self.reset()
-
+        self.driver.quit()
+        self.reset()
