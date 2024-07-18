@@ -81,5 +81,4 @@ class LambdaTestRunner(RemoteOptions):
             else:
                 print(f"Retrying... Status code: {response.status_code}, Response: {response.text}")
                 time.sleep(delay)
-
         raise Exception(f"Failed to fetch session details after {retries} retries.")
