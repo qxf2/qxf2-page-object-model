@@ -6,7 +6,7 @@ import os
 import sys
 from dotenv import load_dotenv
 from integrations.cross_browsers.remote_options import RemoteOptions
-from page_objects.drivers.local_options import LocalOptions
+from .local_options import LocalOptions
 from conf import ports_conf
 from integrations.cross_browsers.lambdatest_runner import LambdaTestRunner
 
