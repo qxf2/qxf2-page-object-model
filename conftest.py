@@ -7,8 +7,6 @@ from dotenv import load_dotenv
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
-from utils import post_test_reports_to_slack
-from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
 from utils import interactive_mode
 
@@ -520,10 +518,12 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
     try:
         if not hasattr(terminalreporter.config, 'workerinput'):
             if  terminalreporter.config.getoption("--slack_flag").lower() == 'y':
+                from integrations.reporting_channels import post_test_reports_to_slack # pylint: disable=import-error,import-outside-toplevel
                 post_test_reports_to_slack.post_reports_to_slack()
             if terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
+                from integrations.reporting_channels.email_pytest_report import EmailPytestReport # pylint: disable=import-error,import-outside-toplevel
                 #Initialize the Email_Pytest_Report object
-                email_obj = Email_Pytest_Report()
+                email_obj = EmailPytestReport()
                 # Send html formatted email body message with pytest report as an attachment
                 email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
