@@ -7,8 +7,6 @@ from dotenv import load_dotenv
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
-from utils import post_test_reports_to_slack
-from utils.email_pytest_report import Email_Pytest_Report
 from endpoints.API_Player import API_Player
 from utils import interactive_mode
 
@@ -18,7 +16,6 @@ load_dotenv()
 def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
-
         if interactivemode_flag.lower() == "y":
             default_flag = interactive_mode.set_default_flag_gui(browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag)
             if default_flag == False:
@@ -27,12 +24,12 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
         test_obj.set_calling_module(testname)
         #Setup and register a driver
-        test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name)
+        test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name, testname)
 
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest -X Y -R 100\n"+'\033[0m')
+                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_obj.register_testrail()
@@ -45,13 +42,25 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
             test_obj.set_rp_logger(reportportal_service)
 
         yield test_obj
+
         #Teardown
-        test_obj.wait(3)
-        test_obj.teardown()
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
+            if test_obj.pass_counter == test_obj.result_counter:
+                test_obj.execute_javascript("lambda-status=passed")
+                test_obj.teardown()
+            else:
+                test_obj.execute_javascript("lambda-status=failed")
+                test_obj.teardown()
+
+        else:
+            test_obj.wait(3)
+            test_obj.teardown()
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
+            test_obj.execute_javascript("lambda-status=error")
 
 @pytest.fixture
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, remote_project_name, remote_build_name):
@@ -71,7 +80,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using -R flag and try again. for eg: pytest --testrail_flag Y -R 100\n"+'\033[0m')
+                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_mobile_obj.register_testrail()
@@ -509,14 +518,16 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
     try:
         if not hasattr(terminalreporter.config, 'workerinput'):
             if  terminalreporter.config.getoption("--slack_flag").lower() == 'y':
+                from integrations.reporting_channels import post_test_reports_to_slack # pylint: disable=import-error,import-outside-toplevel
                 post_test_reports_to_slack.post_reports_to_slack()
             if terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
+                from integrations.reporting_channels.email_pytest_report import EmailPytestReport # pylint: disable=import-error,import-outside-toplevel
                 #Initialize the Email_Pytest_Report object
-                email_obj = Email_Pytest_Report()
+                email_obj = EmailPytestReport()
                 # Send html formatted email body message with pytest report as an attachment
                 email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
-                from utils import Tesults # pylint: disable=import-error,import-outside-toplevel
+                from integrations.reporting_tools import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
             if  terminalreporter.config.getoption("--summary").lower() == 'y':
                 from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel

@@ -5,11 +5,11 @@ There are useful wrappers for common Selenium operations
 
 from selenium.webdriver.common.by import By
 import os,inspect
-from .driverfactory import DriverFactory
-from .core_helpers.selenium_action_objects import Selenium_Action_Objects
-from .core_helpers.remote_objects import Remote_Objects
-from .core_helpers.logging_objects import Logging_Objects
-from .core_helpers.screenshot_objects import Screenshot_Objects
+from core_helpers.drivers.driverfactory import DriverFactory
+from .selenium_action_objects import Selenium_Action_Objects
+from .remote_objects import Remote_Objects
+from .logging_objects import Logging_Objects
+from .screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
 import conf.base_url_conf
 from utils import accessibility_util
@@ -33,7 +33,7 @@ class Borg:
 # Get the Base URL from the conf file
 base_url = conf.base_url_conf
 
-class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
+class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self,base_url):
@@ -79,11 +79,11 @@ class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, 
         "Switch the underlying class to the required Page"
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
 
-    def register_driver(self,remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name):
+    def register_driver(self,remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name,testname):
         "Register the driver with Page."
         self.set_screenshot_dir(os_name,os_version,browser,browser_version) # Create screenshot directory
         self.set_log_file()
-        self.driver = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name)
+        self.driver = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name,testname)
         self.driver.implicitly_wait(5)
         self.driver.maximize_window()
 
@@ -241,7 +241,7 @@ class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, 
             if name is not None:
                 self.driver.switch_to.frame(name)
             elif index is not None:
-                self.driver.switch_to.frame(driver.find_elements(By.TAG_NAME,("iframe")[index]))
+                self.driver.switch_to.frame(self.driver.find_elements(By.TAG_NAME,("iframe")[index]))
             result_flag = True
 
         except Exception as e:
@@ -250,19 +250,6 @@ class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, 
             self.exceptions.append("Error when switching to frame")
 
         return result_flag
-
-    def _get_locator(key):
-        "fetches locator from the locator conf"
-        value = None
-        try:
-            path_conf_file = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'conf', 'locators.conf'))
-            if path_conf_file is not None:
-                value = Conf_Reader.get_value(path_conf_file, key)
-        except Exception as e:
-            print (str(e))
-            self.exceptions.append("Error when fetching locator from the locator.conf")
-
-        return value
 
     def get_element_attribute_value(self,element,attribute_name):
         "Return the elements attribute value if present"
@@ -317,24 +304,6 @@ class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, 
 
         return result_flag
 
-    def add_tesults_case(self, name, desc, suite, result_flag, msg='', files=[], params={}, custom={}):
-        "Update Tesults with test results"
-        if self.tesults_flag is True:
-            result = "unknown"
-            failReason = ""
-            if result_flag == True:
-                result = "pass"
-            if result_flag == False:
-                result = "fail"
-                failReason = msg
-            for image in self.images:
-                files.append(self.screenshot_dir + os.sep + image + '.png')
-            self.images = []
-            caseObj = {'name': name, 'suite': suite, 'desc': desc, 'result': result, 'reason': failReason, 'files': files, 'params': params}
-            for key, value in custom.items():
-                caseObj[key] = str(value)
-            self.tesult_object.add_test_case(caseObj)
-
     def read_browser_console_log(self):
         "Read Browser Console log"
         log = None
@@ -376,4 +345,3 @@ class Base_Page(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, 
         "Overwrite this method in your Page module if you want to visit a specific URL"
         pass
 
-    _get_locator = staticmethod(_get_locator)

@@ -13,7 +13,11 @@ A simple IMAP util that will help us with account activation
 3. Enhance get_latest_email_uid to make all parameters optional
 """
 #The import statements import: standard Python modules,conf
-import os,sys,time,imaplib,email
+import os
+import sys
+import time
+import imaplib
+import email
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 class Email_Util:
