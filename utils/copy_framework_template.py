@@ -1,78 +1,127 @@
+r"""
+This script would copy the required framework files from the input source to
+the input destination given by the user.
+1. Copy root files from POM to the newly created destination directory.
+2. Create the sub-folder to copy files from POM\conf.
+3. Create the sub-folder to copy files from POM\page_objects.
+4. Create the sub-folder to copy files and folders from POM\utils.
+5. Create the sub-folder to copy files and folders from POM\core_helpers
+6. Create the sub-folder to copy files and folders from POM\integrations
+7. Create the sub-folder to copy files from POM\tests
+
+From root directory, run following command to execute the script correctly.
+python utils/copy_framework_template.py -s . -d ../copy_pom_temp/
+
 """
-This script would copy the required framework files from the input source to the input destination given by the user.
-1. Copy files from POM to the newly created destination directory.
-2. Verify if the destination directory is created and create the sub-folder to copy files from POM\Conf.
-3. Verify if the destination directory is created and create the sub-folder to copy files from POM\Page_Objects.
-4. Verify if the destination directory is created and create the sub-folder to copy files from POM\Utils.
-"""
-import os,sys
+
+import os
+import sys
 import shutil
 from optparse import OptionParser
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from conf import copy_framework_template_conf as conf
 
-def copy_framework_template(src_folder,dst_folder):
-	"run the test"
-	#1. Copy files from POM to the newly created destination directory.
-	#1a. Get details from conf file
-	src_files_list = conf.src_files_list
+def copy_selected_files(file_list,dst_folder):
+	"copy selected files into destination folder"
+	# Create the new destination directory
+	if not os.path.exists(dst_folder):
+		os.makedirs(dst_folder)
 
-	#1b. Create the new destination directory
-	os.makedirs(dst_folder)
-
-	#1c. Check if destination folder exists and then copy files
+	# Check if destination folder exists and then copy files
 	if os.path.exists(dst_folder):
-		for every_src_file in src_files_list:
+		for every_src_file in file_list:
 			shutil.copy2(every_src_file,dst_folder)
 
-	#2. Verify if the destination directory is created and create the sub-folder to copy files from POM\Conf.
-	#2a. Get details from conf file for Conf
+
+def copy_contents(src_folder, dst_folder, exclude_dirs=None):
+    "Copy all content from source directory to destination directory"
+    if exclude_dirs is None:
+        exclude_dirs = ['__pycache__']
+
+    # Create destination folder if it doesn't exist
+    if not os.path.exists(dst_folder):
+        os.makedirs(dst_folder)
+
+    for root, dirs, files in os.walk(src_folder):
+        # Exclude specified directories
+        dirs[:] = [d for d in dirs if d not in exclude_dirs]
+
+        # Calculate relative path
+        rel_path = os.path.relpath(root, src_folder)
+        dst_path = os.path.join(dst_folder, rel_path)
+
+        # Create directories in the destination folder
+        if not os.path.exists(dst_path):
+            os.makedirs(dst_path)
+
+        # Copy files
+        for file in files:
+            src_file = os.path.join(root, file)
+            dst_file = os.path.join(dst_path, file)
+            shutil.copy2(src_file, dst_file)
+
+
+def copy_framework_template(src_folder,dst_folder):
+	"Copy files from POM to the destination directory path."
+	# Get details from conf file
+	src_files_list = conf.src_files_list # root files list to copy
+	#copy selected files from source root
+	copy_selected_files(src_files_list,dst_folder)
+
+	#2. Create the sub-folder to copy files from POM\conf.
+	# Get details from conf file for Conf
 	src_conf_files_list = conf.src_conf_files_list
-	dst_folder_conf = conf.dst_folder_conf
+	dst_folder_conf = os.path.abspath(os.path.join(dst_folder,'conf'))
+	#copy selected files from source conf directory
+	copy_selected_files(src_conf_files_list,dst_folder_conf)
 
-	#2b. Create the conf sub-folder
-	if os.path.exists(dst_folder):
-		os.mkdir(dst_folder_conf)
-
-	#2c. Check if conf folder exists and then copy files
-	if os.path.exists(dst_folder_conf):
-		for every_src_conf_file in src_conf_files_list:
-			shutil.copy2(every_src_conf_file,dst_folder_conf)
-
-	#3. Verify if the destination directory is created and create the sub-folder to copy files from POM\Page_Objects.
-	#3a. Get details from conf file for Page_Objects
+	#3. Create the sub-folder to copy files from POM\page_objects.
+	#3 Get details from conf file for Page_Objects
 	src_page_objects_files_list = conf.src_page_objects_files_list
-	dst_folder_page_objects = conf.dst_folder_page_objects
+	dst_folder_page_objects = os.path.abspath(os.path.join(dst_folder,'page_objects'))
+	#copy selected files from source page_objeccts directory
+	copy_selected_files(src_page_objects_files_list,dst_folder_page_objects)
 
-	#3b. Create the page_object sub-folder
-	if os.path.exists(dst_folder):
-		os.mkdir(dst_folder_page_objects)
+	#4. Create the sub-folder to copy files from POM\utils.
+	# utils directory paths
+	src_folder_utils = os.path.abspath(os.path.join(src_folder,'utils'))
+	dst_folder_utils = os.path.abspath(os.path.join(dst_folder,'utils'))
+	#copy all contents from source utils directory
+	copy_contents(src_folder_utils,dst_folder_utils)
 
-	#3c. Check if page_object folder exists and then copy files
-	if os.path.exists(dst_folder_page_objects):
-		for every_src_page_objects_file in src_page_objects_files_list:
-			shutil.copy2(every_src_page_objects_file,dst_folder_page_objects)
+	#5. Create the sub-folder to copy files from POM\core_helpers
+	# core helpers directory paths
+	src_folder_core_helpers = os.path.abspath(os.path.join(src_folder,'core_helpers'))
+	dst_folder_core_helpers = os.path.abspath(os.path.join(dst_folder,'core_helpers'))
+	#copy all contents from source core_helpers directory
+	copy_contents(src_folder_core_helpers,dst_folder_core_helpers)
 
-	#4. Verify if the destination directory is created and create the sub-folder to copy files from POM\Utils.
-	#4a. Get details from conf file for Utils folder
-	src_utils_files_list = conf.src_utils_files_list
-	dst_folder_utils = conf.dst_folder_utils
+	#6. Create the sub-folder to copy files from POM\integrations
+	# integrations directory paths
+	src_folder_integrations = os.path.abspath(os.path.join(src_folder,'integrations'))
+	dst_folder_integrations = os.path.abspath(os.path.join(dst_folder,'integrations'))
+	#copy all contents from source integrations directory
+	copy_contents(src_folder_integrations,dst_folder_integrations)
 
-	#4b. Create the utils destination directory
-	if os.path.exists(dst_folder):
-		os.mkdir(dst_folder_utils)
+	#7. Create the sub-folder to copy files from POM\tests.
+	# Get details from conf file for Conf
+	src_tests_files_list = conf.src_tests_files_list
+	dst_folder_tests = os.path.abspath(os.path.join(dst_folder,'tests'))
+	#copy selected files from source page_objeccts directory
+	copy_selected_files(src_tests_files_list,dst_folder_tests)
 
-	#4c. Check if utils folder exists and then copy files
-	if os.path.exists(dst_folder_utils):
-		for every_src_utils_file in src_utils_files_list:
-			shutil.copy2(every_src_utils_file,dst_folder_utils)
+	print(f"Template copied to destination {os.path.abspath(dst_folder)} successfully")
+
 
 #---START OF SCRIPT
 if __name__=='__main__':
 	#run the test
 	parser=OptionParser()
-	parser.add_option("-s","--source",dest="src",help="The name of the source folder: ie, POM",default="POM")
-	parser.add_option("-d","--destination",dest="dst",help="The name of the destination folder: ie, client name",default="Myntra")
+	parser.add_option("-s","--source",dest="src",
+                   help="The name of the source folder: ie, POM",default=".")
+	parser.add_option("-d","--destination",dest="dst",
+                    help="The name of the destination folder: ie, client name",
+                    default="../copy_pom_templete/")
 	(options,args) = parser.parse_args()
 
 	copy_framework_template(options.src,options.dst)
