@@ -106,23 +106,23 @@ class Base_Logging():
         if level.lower() == 'debug':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.opt(ansi=True).debug("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(colors=True).debug("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'info':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.opt(ansi=True).info("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(colors=True).info("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'warn' or level.lower() == 'warning':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.opt(ansi=True).warn("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(colors=True).warn("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'error':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.opt(ansi=True).error("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(colors=True).error("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'critical':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.opt(ansi=True).critical("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(colors=True).critical("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         else:
             logger.critical("Unknown level passed for the msg: {}", msg)
 
