@@ -1,3 +1,4 @@
+
 import datetime
 import email
 import re
@@ -131,12 +132,18 @@ class Message():
     def parse_subject(self, encoded_subject):
         dh = decode_header(encoded_subject)
         default_charset = 'ASCII'
-        return ''.join([ unicode(t[0], t[1] or default_charset) for t in dh ])
+        return ''.join([ str(t[0], t[1] or default_charset) for t in dh ])
 
     def parse(self, raw_message):
         raw_headers = raw_message[0]
         raw_email = raw_message[1]
 
+        # Ensure raw_email is decoded if it's in bytes
+        print(f"Raw email type before decode: {type(raw_email)}")
+        if isinstance(raw_email, bytes):
+            raw_email = raw_email.decode('utf-8')
+        print(f"Raw email type after decode: {type(raw_email)}")
+        
         self.message = email.message_from_string(raw_email)
         self.headers = self.parse_headers(self.message)
 
@@ -166,20 +173,23 @@ class Message():
         if re.search(r'X-GM-MSGID (\d+)', raw_headers):
             self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)[0]
 
-
         # Parse attachments into attachment objects array for this message
         self.attachments = [
             Attachment(attachment) for attachment in self.message._payload
-                if not isinstance(attachment, basestring) and attachment.get('Content-Disposition') is not None
+                if not isinstance(attachment, str) and attachment.get('Content-Disposition') is not None
         ]
+
 
 
     def fetch(self):
         if not self.message:
             response, results = self.gmail.imap.uid('FETCH', self.uid, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-
+            print(f"Raw fetch results: {results}")
+            if isinstance(results[0], bytes):
+                print(f"Bytes detected in fetch results: {results[0]}")
+                results[0] = results[0].decode('utf-8')
+                print(f"Decoded fetch results: {results[0]}")
             self.parse(results[0])
-
         return self.message
 
     # returns a list of fetched messages (both sent and received) in chronological order
