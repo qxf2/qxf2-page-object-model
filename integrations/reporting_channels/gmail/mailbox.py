@@ -8,6 +8,7 @@ messages.
 import re
 from .message import Message
 from .utf import encode as encode_utf7, decode as decode_utf7
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Mailbox():
     "Mailbox class provides methods for email operations."
@@ -32,7 +33,18 @@ class Mailbox():
         self.name = decode_utf7(value)
 
     def mail(self, prefetch=False, **kwargs):
+<<<<<<< HEAD
         "Searches and returns a list of emails matching the specified search criteria."
+=======
+        logging.debug(f"Mail method called with kwargs: {kwargs}")
+
+        # Ensure the type of mailbox name
+        logging.debug(f"Mailbox name type: {type(self.name)}")
+        if isinstance(self.name, bytes):
+            decoded_name = self.name.decode('utf-7')
+            logging.debug(f"Decoded mailbox name: {decoded_name}")
+
+>>>>>>> e921eeb (partial working draft fix for gmail utils issues)
         search = ['ALL']
 
         if kwargs.get('read'):
