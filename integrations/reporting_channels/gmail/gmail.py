@@ -1,10 +1,14 @@
 from __future__ import absolute_import
 import re
 import imaplib
+import logging
+from email.header import decode_header
 
-from .mailbox import Mailbox
-from .utf import encode as encode_utf7, decode as decode_utf7
-from .exceptions import *
+from integrations.reporting_channels.gmail.mailbox import Mailbox
+from integrations.reporting_channels.gmail.utf import encode as encode_utf7, decode as decode_utf7
+from integrations.reporting_channels.gmail.exceptions import *
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Gmail():
     # GMail IMAP defaults
@@ -50,19 +54,27 @@ class Gmail():
         return self.imap
 
 
+    # Add fetch_mailboxes method in the Gmail class
     def fetch_mailboxes(self):
-        response, mailbox_list = self.imap.list()
+        response, data = self.imap.list()
         if response == 'OK':
-            for mailbox in mailbox_list:
-                mailbox_name = mailbox.split('"/"')[-1].replace('"', '').strip()
-                mailbox = Mailbox(self)
-                mailbox.external_name = mailbox_name
-                self.mailboxes[mailbox_name] = mailbox
+            mailboxes = []
+            for item in data:
+                decoded_item = decode_utf7(item)
+                # Extract the mailbox name
+                mailbox_name = decoded_item.split(' "/" ')[-1]
+                mailboxes.append(mailbox_name.strip('"'))
+            return mailboxes
+        else:
+            raise Exception("Failed to fetch mailboxes.")
+
 
     def use_mailbox(self, mailbox):
         if mailbox:
             self.imap.select(mailbox)
         self.current_mailbox = mailbox
+        return Mailbox(self, mailbox)
+
 
     def mailbox(self, mailbox_name):
         if mailbox_name not in self.mailboxes:

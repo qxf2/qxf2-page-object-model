@@ -1,9 +1,11 @@
+import re
+import logging
 from .message import Message
 from .utf import encode as encode_utf7, decode as decode_utf7
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class Mailbox():
-
     def __init__(self, gmail, name="INBOX"):
         self.name = name
         self.gmail = gmail
@@ -23,6 +25,14 @@ class Mailbox():
         self.name = decode_utf7(value)
 
     def mail(self, prefetch=False, **kwargs):
+        logging.debug(f"Mail method called with kwargs: {kwargs}")
+
+        # Ensure the type of mailbox name
+        logging.debug(f"Mailbox name type: {type(self.name)}")
+        if isinstance(self.name, bytes):
+            decoded_name = self.name.decode('utf-7')
+            logging.debug(f"Decoded mailbox name: {decoded_name}")
+
         search = ['ALL']
 
         kwargs.get('read')   and search.append('SEEN')
@@ -57,10 +67,11 @@ class Mailbox():
         kwargs.get('query') and search.extend([kwargs.get('query')])
 
         emails = []
-        # print search
-        response, data = self.gmail.imap.uid('SEARCH', *search)
+        search_criteria = ' '.join(search).encode('utf-8')  # Ensure the search criteria are byte strings
+
+        response, data = self.gmail.imap.uid('SEARCH', None, search_criteria)
         if response == 'OK':
-            uids = filter(None, data[0].split(' ')) # filter out empty strings
+            uids = filter(None, data[0].split(b' '))  # filter out empty strings
 
             for uid in uids:
                 if not self.messages.get(uid):
@@ -78,10 +89,9 @@ class Mailbox():
     # WORK IN PROGRESS. NOT FOR ACTUAL USE
     def threads(self, prefetch=False, **kwargs):
         emails = []
-        response, data = self.gmail.imap.uid('SEARCH', 'ALL')
+        response, data = self.gmail.imap.uid('SEARCH', None, 'ALL'.encode('utf-8'))
         if response == 'OK':
-            uids = data[0].split(' ')
-
+            uids = data[0].split(b' ')
 
             for uid in uids:
                 if not self.messages.get(uid):
@@ -89,12 +99,12 @@ class Mailbox():
                 emails.append(self.messages[uid])
 
             if prefetch:
-                fetch_str = ','.join(uids)
+                fetch_str = ','.join(uids).encode('utf-8')
                 response, results = self.gmail.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-                for index in xrange(len(results) - 1):
+                for index in range(len(results) - 1):
                     raw_message = results[index]
-                    if re.search(r'UID (\d+)', raw_message[0]):
-                        uid = re.search(r'UID (\d+)', raw_message[0]).groups(1)[0]
+                    if re.search(rb'UID (\d+)', raw_message[0]):
+                        uid = re.search(rb'UID (\d+)', raw_message[0]).groups(1)[0]
                         self.messages[uid].parse(raw_message)
 
         return emails
