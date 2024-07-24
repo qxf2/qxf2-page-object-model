@@ -77,7 +77,7 @@ class Base_Logging():
         "Write out a message"
         all_stack_frames = inspect.stack()
         for stack_frame in all_stack_frames[2:]:
-            if 'Base_Page' not in stack_frame[1] and 'logging_objects' not in stack_frame[1]:
+            if all(helper not in stack_frame[1] for helper in ['web_app_helper', 'mobile_app_helper', 'logging_objects']):
                 break
         module_path = stack_frame[1]
         modified_path = module_path.split("qxf2-page-object-model")[-1]
