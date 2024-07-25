@@ -136,10 +136,6 @@ class Message():
             return []
 
     def parse_subject(self, encoded_subject):
-        if encoded_subject is None:
-            print("Encoded subject is None")  
-            return "No Subject" 
-        
         dh = decode_header(encoded_subject)
         default_charset = 'ASCII'
         subject_parts = []
@@ -170,6 +166,7 @@ class Message():
             raise ValueError("Decoded raw_email is not a string")
         try:
             self.message = email.message_from_string(raw_email)
+
         except Exception as e:
             print(f"Error creating email message: {e}")
             raise
@@ -181,10 +178,13 @@ class Message():
 
         if self.message.get_content_maintype() == "multipart":
             for content in self.message.walk():
+                print(f"Content type: {content.get_content_type()}")
                 if content.get_content_type() == "text/plain":
                     self.body = content.get_payload(decode=True)
+                    print(f"Plain text body: {self.body}")
                 elif content.get_content_type() == "text/html":
                     self.html = content.get_payload(decode=True)
+                    print(f"HTML body: {self.html}")
         elif self.message.get_content_maintype() == "text":
             self.body = self.message.get_payload()
 
@@ -193,10 +193,15 @@ class Message():
         self.flags = self.parse_flags(raw_headers)
         self.labels = self.parse_labels(raw_headers)
 
-        if re.search(r'X-GM-THRID (\d+)', raw_headers):
-            self.thread_id = re.search(r'X-GM-THRID (\d+)', raw_headers).groups(1)[0]
-        if re.search(r'X-GM-MSGID (\d+)', raw_headers):
-            self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)[0]
+        thread_id_match = re.search(r'X-GM-THRID (\d+)', raw_headers)
+        if thread_id_match:
+            self.thread_id = thread_id_match.group(1)
+            print(f"Thread ID: {self.thread_id}")
+        
+        message_id_match = re.search(r'X-GM-MSGID (\d+)', raw_headers)
+        if message_id_match:
+            self.message_id = message_id_match.group(1)
+            print(f"Message ID: {self.message_id}")
 
         self.attachments = [
             Attachment(attachment) for attachment in self.message.get_payload()
