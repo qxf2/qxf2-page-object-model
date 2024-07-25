@@ -157,7 +157,6 @@ class Message():
             else:
                 subject_parts.append(part)
         parsed_subject = ''.join(subject_parts)
-        print(f"Parsed subject: {parsed_subject}")
         return parsed_subject
     
 # working demo part
@@ -184,7 +183,6 @@ class Message():
         self.fr = self.message.get('from')
         self.delivered_to = self.message.get('delivered_to')
         self.subject = self.parse_subject(self.message.get('subject'))
-        print(f"Parse subject: {self.subject}")  
 
         if self.message.get_content_maintype() == "multipart":
             for content in self.message.walk():
@@ -203,21 +201,15 @@ class Message():
         self.flags = self.parse_flags(raw_headers)
         self.labels = self.parse_labels(raw_headers)
 
-        thread_id_match = re.search(r'X-GM-THRID (\d+)', raw_headers)
-        if thread_id_match:
-            self.thread_id = thread_id_match.group(1)
-            print(f"Thread ID: {self.thread_id}")
-        
-        message_id_match = re.search(r'X-GM-MSGID (\d+)', raw_headers)
-        if message_id_match:
-            self.message_id = message_id_match.group(1)
-            print(f"Message ID: {self.message_id}")
+        if re.search(r'X-GM-THRID (\d+)', raw_headers):
+            self.thread_id = re.search(r'X-GM-THRID (\d+)', raw_headers).groups(1)[0]
+        if re.search(r'X-GM-MSGID (\d+)', raw_headers):
+            self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)[0]
 
         self.attachments = [
             Attachment(attachment) for attachment in self.message.get_payload()
                 if not isinstance(attachment, str) and attachment.get('Content-Disposition') is not None
         ]
-        print(f"Attachments: {[attachment.name for attachment in self.attachments]}")
 
     def fetch(self):
         if not self.message:
