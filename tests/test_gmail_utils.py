@@ -11,8 +11,16 @@ def main():
     gmail = Gmail()
     gmail.connect()
 
-    username = "username"
-    password = "password"
+    username = "Username"
+    password = "Password"
+    
+    
+            # inbox_mailbox = gmail.use_mailbox('INBOX')
+            # message_uids = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] 
+            # messages = {uid: Message(inbox_mailbox, uid) for uid in message_uids}
+            # fetched_messages = gmail.fetch_multiple_messages(messages)
+            # for uid, msg in fetched_messages.items():
+            #     print(f"Message UID: {uid}, Subject: {msg.subject}")
 
     try:
         if gmail.login(username, password):
@@ -35,7 +43,9 @@ def main():
                     if messages:
                         msg = messages[0]
                         fetched_msg = msg.fetch()
-                        print(f"Message subject: {fetched_msg.subject}")
+                        print(f"Message subject from test script: {fetched_msg.subject}")
+                    else:
+                        print("No messages found in INBOX.")
                     
                     message_uids = [msg.uid.decode('utf-8') if isinstance(msg.uid, bytes) else msg.uid for msg in messages]
                     print(f"Messages in INBOX: {message_uids}")
