@@ -136,6 +136,10 @@ class Message():
             return []
 
     def parse_subject(self, encoded_subject):
+        if encoded_subject is None:
+            print("Encoded subject is None")  
+            return "No Subject" 
+        
         dh = decode_header(encoded_subject)
         default_charset = 'ASCII'
         subject_parts = []
@@ -151,6 +155,7 @@ class Message():
         parsed_subject = ''.join(subject_parts)
         return parsed_subject
 
+# working demo part
     def parse(self, raw_message):
         raw_headers = raw_message[0]
         raw_email = raw_message[1]
@@ -165,7 +170,6 @@ class Message():
             raise ValueError("Decoded raw_email is not a string")
         try:
             self.message = email.message_from_string(raw_email)
-
         except Exception as e:
             print(f"Error creating email message: {e}")
             raise
@@ -205,7 +209,8 @@ class Message():
             self.parse(results[0])
         return self.message
 
-    # returns a list of fetched messages (both sent and received) in chronological order
+
+    # returns a list of fetched messages (both sent and received) in chrological order
     def fetch_thread(self):
         self.fetch()
         original_mailbox = self.mailbox

@@ -13,26 +13,6 @@ def main():
 
     username = "username"
     password = "password"
-    
-    # if gmail.login(username, password):
-    #     print("Login successful!")
-    #     try:
-    #         test_mailboxes = ["INBOX", '"[Gmail]/All Mail"', '"[Gmail]/Sent Mail"']
-    #         for mailbox in test_mailboxes:
-    #             try:
-    #                 gmail.use_mailbox(mailbox)
-    #                 print(f"{mailbox} selected successfully!")
-    #             except Exception as e:
-    #                 print(f"Error selecting {mailbox}: {e}")
-    #     except Exception as e:
-    #         print(f"Error during mailbox operations: {e}")
-    
-            # inbox_mailbox = gmail.use_mailbox('INBOX')
-            # message_uids = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] 
-            # messages = {uid: Message(inbox_mailbox, uid) for uid in message_uids}
-            # fetched_messages = gmail.fetch_multiple_messages(messages)
-            # for uid, msg in fetched_messages.items():
-            #     print(f"Message UID: {uid}, Subject: {msg.subject}")
 
     try:
         if gmail.login(username, password):
@@ -47,17 +27,27 @@ def main():
             
             try:
                 inbox_mailbox = gmail.use_mailbox('INBOX')
-                print(f"Type of inbox_mailbox: {type(inbox_mailbox)}")
-
                 if isinstance(inbox_mailbox, Mailbox):
-                    print(f"INBOX selected successfully!")
+                    print("INBOX selected successfully!")
                     messages = inbox_mailbox.mail()
-                    print(f"Messages in INBOX: {[msg.uid.decode('utf-8') if isinstance(msg.uid, bytes) else msg.uid for msg in messages]}")
+                    print(f"Number of messages in INBOX: {len(messages)}")
 
                     if messages:
-                        msg = messages[0]  # Use a valid UID
-                        msg.fetch()
-                        print(f"Message subject: {msg.subject}")
+                        msg = messages[0]
+                        fetched_msg = msg.fetch()
+                        print(f"Message subject: {fetched_msg.subject}")
+                    
+                    message_uids = [msg.uid.decode('utf-8') if isinstance(msg.uid, bytes) else msg.uid for msg in messages]
+                    print(f"Messages in INBOX: {message_uids}")
+                    
+                    if messages:
+                        messages_dict = {msg.uid: msg for msg in messages}                        
+                        fetched_messages = gmail.fetch_multiple_messages(messages_dict)
+                        print(f"Fetched messages: {fetched_messages}")
+
+                        for uid, message in fetched_messages.items():
+                            subject = getattr(message, 'subject', 'No subject attribute')
+                            print(f"UID: {uid}, Subject: {subject}")
                 else:
                     print(f"Error: Expected Mailbox instance, got {type(inbox_mailbox)}.")
             except Exception as e:
