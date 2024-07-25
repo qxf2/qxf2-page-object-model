@@ -193,15 +193,10 @@ class Message():
         self.flags = self.parse_flags(raw_headers)
         self.labels = self.parse_labels(raw_headers)
 
-        thread_id_match = re.search(r'X-GM-THRID (\d+)', raw_headers)
-        if thread_id_match:
-            self.thread_id = thread_id_match.group(1)
-            print(f"Thread ID: {self.thread_id}")
-        
-        message_id_match = re.search(r'X-GM-MSGID (\d+)', raw_headers)
-        if message_id_match:
-            self.message_id = message_id_match.group(1)
-            print(f"Message ID: {self.message_id}")
+        if re.search(r'X-GM-THRID (\d+)', raw_headers):
+            self.thread_id = re.search(r'X-GM-THRID (\d+)', raw_headers).groups(1)[0]
+        if re.search(r'X-GM-MSGID (\d+)', raw_headers):
+            self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)[0]
 
         self.attachments = [
             Attachment(attachment) for attachment in self.message.get_payload()
