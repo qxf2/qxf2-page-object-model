@@ -30,6 +30,7 @@ class Gmail():
         self.logged_in = False
         self.mailboxes = {}
         self.current_mailbox = None
+        # self.messages = {}
 
 
         # self.connect()
@@ -162,32 +163,23 @@ class Gmail():
     def fetch_multiple_messages(self, messages):
         if not isinstance(messages, dict):
             raise Exception('Messages must be a dictionary')
-        
-        keys = [key.decode('utf-8') if isinstance(key, bytes) else key for key in messages.keys()]
         fetch_str = ','.join(messages.keys())
         response, results = self.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
         for index in range(len(results) - 1):
             raw_message = results[index]
             if re.search(rb'UID (\d+)', raw_message[0]):
-                uid = re.search(rb'UID (\d+)', raw_message[0]).groups(1)
-                print(uid)
-                self.messages[uid].parse(raw_message)
+                uid = re.search(rb'UID (\d+)', raw_message[0]).groups(1)[0]
+                print(f'type of" {uid}": {type(uid)}')
+                converted_uid = str(uid[0])
+                # convertedParsedUID = uid[0].split(b' ')
+
+
+                print(f'converted uid {converted_uid}: {type(converted_uid)}')
+
+                messages[converted_uid].parse(raw_message)
+                print("messages",messages)
 
         return messages
-
-        # for raw_message in results:
-        #     if isinstance(raw_message, tuple) and len(raw_message) > 1:
-        #         raw_message_metadata = raw_message[0]
-        #         raw_message_data = raw_message[1]
-
-        #         uid_match = re.search(rb'UID (\d+)', raw_message_metadata)
-        #         if uid_match:
-        #             uid = uid_match.group(1).decode('utf-8')
-        #             if uid in messages:
-        #                 messages[uid].parse(raw_message_data)
-        #             else:
-        #                 print(f"UID {uid} not found in messages")  
-        # return messages
 
     def labels(self, require_unicode=False):
         keys = self.mailboxes.keys()
