@@ -12,16 +12,18 @@ import os
 from integrations.reporting_channels.gmail.gmail import Gmail
 from integrations.reporting_channels.gmail.message import Message 
 from integrations.reporting_channels.gmail.mailbox import Mailbox
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
+from dotenv import load_dotenv
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+load_dotenv()
 
 
 def main():
     gmail = Gmail()
     gmail.connect()
 
-    username = "USERNAME"
-    password = "PASSWORD"
+    username = os.getenv('app_username')
+    password = os.getenv('app_password')
 
     try:
         if gmail.login(username, password):

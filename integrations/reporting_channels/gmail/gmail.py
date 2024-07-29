@@ -180,27 +180,27 @@ class Gmail():
     def fetch_multiple_messages(self, messages):
         if not isinstance(messages, dict):
             raise Exception('Messages must be a dictionary')
-        
+
         fetch_str = ','.join(messages.keys())
         response, results = self.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-        
+
         for raw_message in results:
-            if isinstance(raw_message, tuple) and re.search(rb'UID (\d+)', raw_message[0]):
+            if isinstance(raw_message, tuple):
                 uid_match = re.search(rb'UID (\d+)', raw_message[0])
                 if uid_match:
-                    uid = uid_match.group(1).decode('utf-8')  
-                    # Ensure keys in messages are strings
+                    uid = uid_match.group(1).decode('utf-8')
                     if uid in messages:
-                        messages[uid].parse(raw_message)  
+                        messages[uid].parse(raw_message)
                     else:
-                        print(f'UID {uid} not found in messages dictionary')
+                        logging.warning(f'UID {uid} not found in messages dictionary')
                 else:
-                    print('UID not found in raw message')
+                    logging.warning('UID not found in raw message')
+            elif isinstance(raw_message, bytes):
+                continue
             else:
-                print('Invalid raw message format')
+                logging.warning('Invalid raw message format')
 
         return messages
-
 
     def labels(self, require_unicode=False):
         keys = self.mailboxes.keys()
