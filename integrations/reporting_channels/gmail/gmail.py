@@ -190,7 +190,6 @@ class Gmail():
                         messages[uid].parse(raw_message)
         return messages
 
-
     def labels(self, require_unicode=False):
         "Returns a list of all available mailbox names."
         keys = self.mailboxes.keys()
