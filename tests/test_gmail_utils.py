@@ -20,8 +20,8 @@ def main():
     gmail = Gmail()
     gmail.connect()
 
-    username = "Username"
-    password = "Password"
+    username = 'username'
+    password = 'password'
 
     try:
         if gmail.login(username, password):
@@ -49,22 +49,20 @@ def main():
                         print("No messages found in SPAM.")
                     
                     message_uids = [msg.uid.decode('utf-8') if isinstance(msg.uid, bytes) else msg.uid for msg in messages]
-                    print(f"Messages in SPAM: {message_uids}")
+                    print(f"fetched message UIDs: {message_uids}")
                     
                     if messages:
                         messages_dict = {msg.uid: msg for msg in messages}
+
                         fetched_messages = gmail.fetch_multiple_messages(messages_dict)
-                        print(f"Fetched messages: {fetched_messages}")
+                        print(f"Fetched multiple messages: {fetched_messages}")
 
                         for uid, message in fetched_messages.items():
                             subject = getattr(message, 'subject', 'No subject attribute')
                             print(f"UID: {uid}, Subject: {subject}")
                     
-                    # message_uids = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'] 
-                    # messages_dict = {uid: Message(inbox_mailbox, uid) for uid in message_uids}                    
-                    # fetched_messages = gmail.fetch_multiple_messages(messages_dict)
-                    # for uid, msg in fetched_messages.items():
-                    #     print(f"Message UID: {uid}, Subject: {msg.get('subject')}")
+                        # for uid, msg in fetched_messages.items():
+                        #     print(f"Message UID: {uid}, Subject: {msg.get('subject')}")
 
                 else:
                     print(f"Error: Expected Mailbox instance, got {type(inbox_mailbox)}.")
