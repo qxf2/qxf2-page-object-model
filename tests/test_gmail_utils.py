@@ -20,8 +20,8 @@ def main():
     gmail = Gmail()
     gmail.connect()
 
-    username = 'username'
-    password = 'password'
+    username = "USERNAME"
+    password = "PASSWORD"
 
     try:
         if gmail.login(username, password):
@@ -48,21 +48,17 @@ def main():
                     else:
                         print("No messages found in SPAM.")
                     
-                    message_uids = [msg.uid.decode('utf-8') if isinstance(msg.uid, bytes) else msg.uid for msg in messages]
-                    print(f"fetched message UIDs: {message_uids}")
+                    # message_uids = [msg.uid.decode('utf-8') if isinstance(msg.uid, bytes) else msg.uid for msg in messages]
+                    # print(f"fetched message UIDs: {message_uids}")
                     
                     if messages:
-                        messages_dict = {msg.uid: msg for msg in messages}
-
+                        messages_dict = {msg.uid.decode('utf-8'): msg for msg in messages}
                         fetched_messages = gmail.fetch_multiple_messages(messages_dict)
                         print(f"Fetched multiple messages: {fetched_messages}")
 
                         for uid, message in fetched_messages.items():
                             subject = getattr(message, 'subject', 'No subject attribute')
                             print(f"UID: {uid}, Subject: {subject}")
-                    
-                        # for uid, msg in fetched_messages.items():
-                        #     print(f"Message UID: {uid}, Subject: {msg.get('subject')}")
 
                 else:
                     print(f"Error: Expected Mailbox instance, got {type(inbox_mailbox)}.")
