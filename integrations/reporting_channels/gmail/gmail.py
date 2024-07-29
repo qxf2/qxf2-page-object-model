@@ -179,9 +179,6 @@ class Gmail():
         if not isinstance(messages, dict):
             raise Exception('Messages must be a dictionary')
         fetch_str = ','.join(messages.keys())
-        print(f'type of messages: {type(self.messages)}')
-
-        print(f'type of fetch_str: {type(fetch_str)}')
         response, results = self.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
 
         for raw_message in results:
