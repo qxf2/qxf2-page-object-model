@@ -182,9 +182,6 @@ class Gmail():
             raise Exception('Messages must be a dictionary')
         
         fetch_str = ','.join(messages.keys())
-        print(f'type of messages: {type(self.messages)}')
-
-        print(f'type of fetch_str: {type(fetch_str)}')
         response, results = self.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
         
         for raw_message in results:
@@ -192,11 +189,8 @@ class Gmail():
                 uid_match = re.search(rb'UID (\d+)', raw_message[0])
                 if uid_match:
                     uid = uid_match.group(1).decode('utf-8')  
-                    print(f'Parsed message with UID: type {type(uid)} value {uid}')
-                    print(f'raw message: type {type(raw_message)}')  
                     # Ensure keys in messages are strings
                     if uid in messages:
-                        print(f'UID {uid} found in messages dictionary')
                         messages[uid].parse(raw_message)  
                     else:
                         print(f'UID {uid} not found in messages dictionary')
