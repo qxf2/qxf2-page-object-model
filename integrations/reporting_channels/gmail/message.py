@@ -178,13 +178,10 @@ class Message():
 
         if self.message.get_content_maintype() == "multipart":
             for content in self.message.walk():
-                print(f"Content type: {content.get_content_type()}")
                 if content.get_content_type() == "text/plain":
                     self.body = content.get_payload(decode=True)
-                    print(f"Plain text body: {self.body}")
                 elif content.get_content_type() == "text/html":
                     self.html = content.get_payload(decode=True)
-                    print(f"HTML body: {self.html}")
         elif self.message.get_content_maintype() == "text":
             self.body = self.message.get_payload()
 
