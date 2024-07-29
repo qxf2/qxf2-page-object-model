@@ -30,7 +30,7 @@ class Gmail():
         self.logged_in = False
         self.mailboxes = {}
         self.current_mailbox = None
-        # self.messages = {}
+        self.messages = {}
 
 
         # self.connect()
@@ -160,26 +160,53 @@ class Gmail():
             self.use_mailbox(from_mailbox)
         self.imap.uid('COPY', uid, to_mailbox)
 
+    # def fetch_multiple_messages(self, messages):
+    #     if not isinstance(messages, dict):
+    #         raise Exception('Messages must be a dictionary')
+    #     fetch_str = ','.join(messages.keys())
+    #     response, results = self.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
+    #     for index in range(len(results) - 1):
+    #         raw_message = results[index]
+    #         if re.search(rb'UID (\d+)', raw_message[0]):
+    #             uid = re.search(rb'UID (\d+)', raw_message[0]).groups(1)[0]
+    #             print(f'type of" {uid}": {type(uid)}')
+    #             converted_uid = str(uid[0])
+    #             # convertedParsedUID = uid[0].split(b' ')
+    #             self.messages[uid].parse(raw_message)
+    #             print("messages",messages)
+
+    #     return messages
+
     def fetch_multiple_messages(self, messages):
         if not isinstance(messages, dict):
             raise Exception('Messages must be a dictionary')
+        
         fetch_str = ','.join(messages.keys())
+        print(f'type of messages: {type(self.messages)}')
+
+        print(f'type of fetch_str: {type(fetch_str)}')
         response, results = self.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-        for index in range(len(results) - 1):
-            raw_message = results[index]
-            if re.search(rb'UID (\d+)', raw_message[0]):
-                uid = re.search(rb'UID (\d+)', raw_message[0]).groups(1)[0]
-                print(f'type of" {uid}": {type(uid)}')
-                converted_uid = str(uid[0])
-                # convertedParsedUID = uid[0].split(b' ')
-
-
-                print(f'converted uid {converted_uid}: {type(converted_uid)}')
-
-                messages[converted_uid].parse(raw_message)
-                print("messages",messages)
+        
+        for raw_message in results:
+            if isinstance(raw_message, tuple) and re.search(rb'UID (\d+)', raw_message[0]):
+                uid_match = re.search(rb'UID (\d+)', raw_message[0])
+                if uid_match:
+                    uid = uid_match.group(1).decode('utf-8')  
+                    print(f'Parsed message with UID: type {type(uid)} value {uid}')
+                    print(f'raw message: type {type(raw_message)}')  
+                    # Ensure keys in messages are strings
+                    if uid in messages:
+                        print(f'UID {uid} found in messages dictionary')
+                        messages[uid].parse(raw_message)  
+                    else:
+                        print(f'UID {uid} not found in messages dictionary')
+                else:
+                    print('UID not found in raw message')
+            else:
+                print('Invalid raw message format')
 
         return messages
+
 
     def labels(self, require_unicode=False):
         keys = self.mailboxes.keys()
