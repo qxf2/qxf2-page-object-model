@@ -25,13 +25,8 @@ class Mailbox():
         self.name = decode_utf7(value)
 
     def mail(self, prefetch=False, **kwargs):
-        logging.debug(f"Mail method called with kwargs: {kwargs}")
-
-        # Ensure the type of mailbox name
-        logging.debug(f"Mailbox name type: {type(self.name)}")
         if isinstance(self.name, bytes):
             decoded_name = self.name.decode('utf-7')
-            logging.debug(f"Decoded mailbox name: {decoded_name}")
 
         search = ['ALL']
 
