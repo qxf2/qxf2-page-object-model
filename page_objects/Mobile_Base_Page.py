@@ -441,8 +441,10 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             self.write(str(e),'debug')
             self.exceptions.append("An exception occured when scrolling forward")
         return result_flag
-
-
+ 
+    
+    
+    
 
 
 

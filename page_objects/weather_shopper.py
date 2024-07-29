@@ -4,9 +4,10 @@ Page object for Weathershopper application.
 # pylint: disable = W0212,E0401
 import re
 import conf.locators_conf as locators
+import conf.mobile_bitcoin_conf as bitlocator
 from utils.Wrapit import Wrapit
 from .Mobile_Base_Page import Mobile_Base_Page
-
+expected_mock_payment_page_heading = bitlocator.expected_mock_payment_page_heading
 class WeatherShopper(Mobile_Base_Page):
     "Page object for Weathershopper application."
     mock_payment_page_heading = locators.mock_payment_page_heading
@@ -180,7 +181,7 @@ class WeatherShopper(Mobile_Base_Page):
         result_flag &= self.click_element(locators.delete_from_cart_button)
         return result_flag
 
-    def checkout(self,expected_mock_payment_page_heading):
+    def checkout(self):
         "This method is to go to the Checkout page"
 
         result_flag = self.click_element(locators.checkout_button)

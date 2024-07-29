@@ -86,4 +86,3 @@ payment_success = "xpath,//android.widget.TextView[@text='Payment Successful']"
 
 image_of_moisturizer = "xpath,//android.widget.TextView[@text='Wilhelm Aloe Hydration Lotion']/parent::*/android.widget.ImageView"
 image_of_sunscreen = "xpath,//android.widget.TextView[@text='Robert Herbals Sunblock SPF-40']/parent::*/android.widget.ImageView"
-payment_invalid_email = "//*[contains(text(), 'Invalid email. Please enter valid email')]"
