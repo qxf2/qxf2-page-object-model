@@ -5,9 +5,9 @@ Page object for Weathershopper application.
 import re
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
-from .Mobile_Base_Page import Mobile_Base_Page
+from core_helpers.mobile_app_helper import Mobile_App_Helper
 
-class WeatherShopper(Mobile_Base_Page):
+class WeatherShopper(Mobile_App_Helper):
     "Page object for Weathershopper application."
 
     @Wrapit._exceptionHandler
