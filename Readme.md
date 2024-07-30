@@ -63,7 +63,7 @@ Templates for.env files are provided.
 Kindly fill in the credentials and rename the files according to the specified format.
 
 * env_conf to .env 
-	Tesults, TestRail, Gmail , Report portal crentials details can be entered here.
+	Tesults, TestRail, Gmail , Report portal and Slack credentials details can be entered here.
 * env_ssh_conf to .env.ssh
     ssh server credentials used by the SSHKeywords keyword to connect to remote servers.
 * env_remote to .env.remote 

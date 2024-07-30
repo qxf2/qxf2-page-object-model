@@ -6,10 +6,10 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
-from .Mobile_Base_Page import Mobile_Base_Page
+from core_helpers.mobile_app_helper import Mobile_App_Helper
 
 
-class Bitcoin_Main_Page(Mobile_Base_Page):
+class Bitcoin_Main_Page(Mobile_App_Helper):
     "Page object bitcoin main page."
 
     #Locators of the mobile page elements.

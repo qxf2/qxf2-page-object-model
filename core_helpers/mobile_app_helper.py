@@ -3,11 +3,11 @@ Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
 import unittest,os,inspect
-from .driverfactory import DriverFactory
-from .core_helpers.selenium_action_objects import Selenium_Action_Objects
-from .core_helpers.logging_objects import Logging_Objects
-from .core_helpers.remote_objects import Remote_Objects
-from .core_helpers.screenshot_objects import Screenshot_Objects
+from core_helpers.drivers.driverfactory import DriverFactory
+from .selenium_action_objects import Selenium_Action_Objects
+from .logging_objects import Logging_Objects
+from .remote_objects import Remote_Objects
+from .screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.common.action_chains import ActionChains
@@ -30,7 +30,7 @@ class Borg:
         return result_flag
 
 
-class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
+class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self):
@@ -75,7 +75,7 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
 
     def register_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version,remote_project_name,remote_build_name,orientation):
         "Register the mobile driver"
-        self.driver = self.driver_obj.run_mobile(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version,remote_project_name,remote_build_name,orientation)
+        self.driver = self.driver_obj.get_mobile_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version,remote_project_name,remote_build_name, orientation)
         self.set_screenshot_dir() # Create screenshot directory
         self.set_log_file()
         self.start()

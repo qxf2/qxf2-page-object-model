@@ -297,5 +297,3 @@ class Selenium_Action_Objects:
         "Tears down the driver"
         self.driver.quit()
         self.reset()
-
-
