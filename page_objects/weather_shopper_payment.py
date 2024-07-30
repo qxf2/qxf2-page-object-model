@@ -5,7 +5,7 @@ import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 from .Mobile_Base_Page import Mobile_Base_Page
 import pytesseract
-from PIL import Image, ImageEnhance
+from PIL import Image
 import glob
 
 class WeatherShopperPayment(Mobile_Base_Page):
@@ -38,7 +38,8 @@ class WeatherShopperPayment(Mobile_Base_Page):
         result_flag &= self.set_text(locators.payment_card_cvv, payment_details["card_cvv"])
         result_flag &= self.click_element(locators.pay_button)
         result_flag &= self.click_element(locators.payment_email)
-
+        #page_source = self.get_source_code()
+        #print(f"Source code:\n", page_source)
         return result_flag
     
     @Wrapit._exceptionHandler

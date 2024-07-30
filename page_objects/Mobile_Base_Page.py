@@ -441,10 +441,13 @@ class Mobile_Base_Page(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_
             self.write(str(e),'debug')
             self.exceptions.append("An exception occured when scrolling forward")
         return result_flag
- 
     
-    
-    
-
-
+    def get_source_code(self):
+        "to get the source code of the page"
+        try:
+            source = self.driver.page_source
+            return source
+        except Exception as e:
+            self.write(str(e), 'debug')
+            self.exceptions.append("An exception occured when getting source")
 
