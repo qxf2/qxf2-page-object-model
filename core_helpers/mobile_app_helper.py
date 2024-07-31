@@ -86,10 +86,12 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
     def get_calling_module(self):
         "Get the name of the calling module"
         return self.calling_module
-    
+
+
     def set_calling_module(self,name):
         "Set the test name"
-        self.calling_module = name 
+        self.calling_module = name
+
 
     def set_screenshot_dir(self):
         "Set the screenshot directory"
