@@ -85,18 +85,11 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
 
     def get_calling_module(self):
         "Get the name of the calling module"
-        calling_file = inspect.stack()[-1][1]
-        if 'runpy' in calling_file:
-            calling_file = inspect.stack()[5][3]
-
-        calling_filename = calling_file.split(os.sep)
-
-        #This logic bought to you by windows + cygwin + git bash
-        if len(calling_filename) == 1: #Needed for
-            calling_filename = calling_file.split('/')
-        self.calling_module = calling_filename[-1].split('.')[0]
         return self.calling_module
-
+    
+    def set_calling_module(self,name):
+        "Set the test name"
+        self.calling_module = name 
 
     def set_screenshot_dir(self):
         "Set the screenshot directory"
