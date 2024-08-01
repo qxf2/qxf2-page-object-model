@@ -5,10 +5,10 @@ Page objects for cart page in Weathershopper application.
 import re
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
-from core_helpers.mobile_app_helper import Mobile_App_Helper    
+from core_helpers.mobile_app_helper import Mobile_App_Helper
 
 class WeatherShopperCartPage(Mobile_App_Helper):
-    "Page object for the cart page in Weathershopper application."  
+    "Page object for the cart page in Weathershopper application."
 
     @Wrapit._exceptionHandler
     @Wrapit._screenshot

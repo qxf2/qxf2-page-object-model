@@ -2,7 +2,6 @@
 Page objects for the product page in Weathershopper application.
 """
 # pylint: disable = W0212,E0401
-import re
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 from core_helpers.mobile_app_helper import Mobile_App_Helper
