@@ -10,6 +10,7 @@ import sys
 import pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
+import conf.weather_shopper_mobile_conf as conf
 
 @pytest.mark.MOBILE
 def test_weather_shopper_app(test_mobile_obj):
@@ -20,7 +21,7 @@ def test_weather_shopper_app(test_mobile_obj):
         actual_pass = -1
 
         # Create a test object.
-        test_mobile_obj = PageFactory.get_page_object("weather shopper app")
+        test_mobile_obj = PageFactory.get_page_object("weathershopper home page")
         start_time = int(time.time())
 
         # Run test steps
@@ -87,11 +88,43 @@ def test_weather_shopper_app(test_mobile_obj):
                                     negative="Failed to checkout",
                                     level="critical")
 
-        #Verify payment
-        result_flag = verify_payment(test_mobile_obj)
+        #Enter payment details
+        payment_details = conf.valid_payment_details
+        result_flag = test_mobile_obj.select_payment_method(payment_details["card_type"])
         test_mobile_obj.log_result(result_flag,
-                                positive="Successfully completed payment",
-                                negative="Failure to complete payment")
+                                positive="Successfully selected payment method",
+                                negative="Failed to select payment method")
+
+        result_flag = test_mobile_obj.enter_email(payment_details["email"])
+        test_mobile_obj.log_result(result_flag,
+                            positive="Successfully entered email",
+                            negative="Failed to enter email")
+
+        result_flag = test_mobile_obj.enter_card_number(payment_details["card_number"])
+        test_mobile_obj.log_result(result_flag,
+                               positive="Successfully entered card number",
+                               negative="Failed to enter card number")
+
+        result_flag = test_mobile_obj.enter_card_expiry(payment_details["card_expiry"])
+        test_mobile_obj.log_result(result_flag,
+                               positive="Successfully entered card expiry",
+                               negative="Failed to enter card expiry")
+
+        result_flag = test_mobile_obj.enter_card_cvv(payment_details["card_cvv"])
+        test_mobile_obj.log_result(result_flag,
+                               positive="Successfully entered card CVV",
+                               negative="Failed to enter card CVV")
+
+        result_flag = test_mobile_obj.submit_payment()
+        test_mobile_obj.log_result(result_flag,
+                               positive="Successfully submitted payment",
+                               negative="Failed to submit payment")
+
+        result_flag = test_mobile_obj.verify_payment_success()
+        test_mobile_obj.log_result(result_flag,
+                               positive="Payment was successful",
+                               negative="Payment was not successful")
+
 
         # Print out the results.
         test_mobile_obj.write(f'Script duration: {int(time.time() - start_time)} seconds\n')
@@ -215,15 +248,3 @@ def checkout(test_mobile_obj):
 
     return result_flag
 
-def verify_payment(test_mobile_obj):
-    "Submit payment details and verify payment"
-    # Enter valid payment details and submit payment
-    payment_details = {
-    "card_type": "Debit Card",
-    "email": "qxf2tester@example.com",
-    "card_number": "1234567890123456",
-    "card_expiry": "12/25",
-    "card_cvv": "123"
-    }
-    result_flag = test_mobile_obj.enter_valid_payment_details(payment_details)
-    return result_flag
