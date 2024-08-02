@@ -26,17 +26,16 @@ src_conf_file3 = os.path.abspath(os.path.join(os.path.dirname(__file__),'browser
 src_conf_file4 = os.path.abspath(os.path.join(os.path.dirname(__file__),'clean_up_repo_conf.py'))
 src_conf_file5 = os.path.abspath(os.path.join(os.path.dirname(__file__),'gpt_summarization_prompt.py'))
 src_conf_file6 = os.path.abspath(os.path.join(os.path.dirname(__file__),'locators_conf.py'))
-src_conf_file7 = os.path.abspath(os.path.join(os.path.dirname(__file__),'os_details.config'))
-src_conf_file8 = os.path.abspath(os.path.join(os.path.dirname(__file__),'ports_conf.py'))
-src_conf_file9 = os.path.abspath(os.path.join(os.path.dirname(__file__),'remote_url_conf.py'))
-src_conf_file10 = os.path.abspath(os.path.join(os.path.dirname(__file__),'screenshot_conf.py'))
-src_conf_file11 = os.path.abspath(os.path.join(os.path.dirname(__file__),'snapshot_dir_conf.py'))
-src_conf_file12 = os.path.abspath(os.path.join(os.path.dirname(__file__),'__init__.py'))
+src_conf_file7 = os.path.abspath(os.path.join(os.path.dirname(__file__),'ports_conf.py'))
+src_conf_file8 = os.path.abspath(os.path.join(os.path.dirname(__file__),'remote_url_conf.py'))
+src_conf_file9 = os.path.abspath(os.path.join(os.path.dirname(__file__),'screenshot_conf.py'))
+src_conf_file10 = os.path.abspath(os.path.join(os.path.dirname(__file__),'snapshot_dir_conf.py'))
+src_conf_file11 = os.path.abspath(os.path.join(os.path.dirname(__file__),'__init__.py'))
 
 #src Conf file list:
 src_conf_files_list = [src_conf_file1,src_conf_file2,src_conf_file3,src_conf_file4,src_conf_file5,
                        src_conf_file6,src_conf_file7,src_conf_file8,src_conf_file9,src_conf_file10,
-                       src_conf_file11,src_conf_file12]
+                       src_conf_file11]
 
 #Page_Objects
 #files from src page_objects:
