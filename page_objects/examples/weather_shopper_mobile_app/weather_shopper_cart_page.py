@@ -63,7 +63,7 @@ class WeatherShopperCartPage(Mobile_App_Helper):
         result_flag &= self.click_element(locators.delete_from_cart_button)
         self.conditional_write(result_flag,
             positive=f"Successfully deleted {item_to_delete} from cart",
-            negative=f"Failed to delete item from cart",
+            negative="Failed to delete item from cart",
             level='debug')
         return result_flag
 
