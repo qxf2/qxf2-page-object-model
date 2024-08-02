@@ -195,9 +195,8 @@ def verify_cart(test_mobile_obj, least_expensive_item, most_expensive_item):
     "Verify cart total"
     # Verify cart total
     cart_total = test_mobile_obj.get_cart_total()
-    result_flag = test_mobile_obj.verify_total(cart_total,
-                                               least_expensive_item['price'],
-                                               most_expensive_item['price'])
+    item_prices = [least_expensive_item['price'], most_expensive_item['price']]
+    result_flag = test_mobile_obj.verify_total(cart_total, item_prices)
 
     return result_flag
 
@@ -219,9 +218,8 @@ def change_quantity_and_verify(test_mobile_obj, least_expensive_item,
 
     # Verify cart total after change in quantity
     cart_total_after_change = test_mobile_obj.get_cart_total()
-    result_flag = test_mobile_obj.verify_total(cart_total_after_change,
-                                               least_expensive_item['price'] * quantity,
-                                               most_expensive_item['price'])
+    item_prices = [least_expensive_item['price'] * quantity, most_expensive_item['price']]
+    result_flag = test_mobile_obj.verify_total(cart_total_after_change, item_prices)
 
     return result_flag
 
@@ -236,8 +234,8 @@ def delete_item_and_verify(test_mobile_obj, least_expensive_item, most_expensive
 
     # Verify cart total after deletion
     cart_total_after_deletion = test_mobile_obj.get_cart_total()
-    result_flag = test_mobile_obj.verify_total(cart_total_after_deletion,
-                                               least_expensive_item['price'] * quantity)
+    item_prices = [least_expensive_item['price'] * quantity]
+    result_flag = test_mobile_obj.verify_total(cart_total_after_deletion, item_prices)
 
     return result_flag
 

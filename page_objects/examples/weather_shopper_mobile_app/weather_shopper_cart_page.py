@@ -28,10 +28,10 @@ class WeatherShopperCartPage(Mobile_App_Helper):
 
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
-    def verify_total(self, cart_total, cart_item_1=0, cart_item_2=0):
+    def verify_total(self, cart_total, cart_items=[]):
         "This method is to verify the total price in the cart."
 
-        if cart_total == cart_item_1 + cart_item_2:
+        if cart_total == sum(cart_items):
             return True
         return False
 
