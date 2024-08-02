@@ -16,8 +16,8 @@ python utils/copy_framework_template.py -s . -d ../copy_pom_temp/
 
 import os
 import sys
+import argparse
 import shutil
-from optparse import OptionParser
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from conf import copy_framework_template_conf as conf
 
@@ -116,12 +116,13 @@ def copy_framework_template(src_folder,dst_folder):
 #---START OF SCRIPT
 if __name__=='__main__':
 	#run the test
-	parser=OptionParser()
-	parser.add_option("-s","--source",dest="src",
+	parser=argparse.ArgumentParser(description="Copy framework template.")
+	parser.add_argument("-s","--source",dest="src",
                    help="The name of the source folder: ie, POM",default=".")
-	parser.add_option("-d","--destination",dest="dst",
+	parser.add_argument("-d","--destination",dest="dst",
                     help="The name of the destination folder: ie, client name",
                     default="../copy_pom_templete/")
-	(options,args) = parser.parse_args()
+	args = parser.parse_args()
 
-	copy_framework_template(options.src,options.dst)
+	copy_framework_template(args.src,args.dst)
+
