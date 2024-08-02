@@ -27,7 +27,7 @@ class WeatherShopperCartPage(Mobile_App_Helper):
 
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
-    def verify_total(self, cart_total, cart_items=[]):
+    def verify_total(self, cart_total, cart_items):
         "This method is to verify the total price in the cart."
         if cart_total == sum(cart_items):
             return True
@@ -50,8 +50,8 @@ class WeatherShopperCartPage(Mobile_App_Helper):
         "This method is to refresh the total amount in the cart."
         result_flag = self.click_element(locators.refresh_button)
         self.conditional_write(result_flag,
-            positive=f"Successfully clicked on refresh button",
-            negative=f"Failed to click on refresh button",
+            positive="Successfully clicked on refresh button",
+            negative="Failed to click on refresh button",
             level='debug')
         return result_flag
 
@@ -63,7 +63,7 @@ class WeatherShopperCartPage(Mobile_App_Helper):
         result_flag &= self.click_element(locators.delete_from_cart_button)
         self.conditional_write(result_flag,
             positive=f"Successfully deleted {item_to_delete} from cart",
-            negative=f"Failed to delete {item_to_delete} from cart",
+            negative=f"Failed to delete item from cart",
             level='debug')
         return result_flag
 
@@ -73,8 +73,8 @@ class WeatherShopperCartPage(Mobile_App_Helper):
         "This method is to go to the Checkout page"
         result_flag = self.click_element(locators.checkout_button)
         self.conditional_write(result_flag,
-            positive=f"Successfully clicked on checkout button",
-            negative=f"Failed to click on checkout button",
+            positive="Successfully clicked on checkout button",
+            negative="Failed to click on checkout button",
             level='debug')
         self.switch_page("weathershopper payment page")
         return result_flag
