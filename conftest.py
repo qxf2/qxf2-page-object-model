@@ -63,7 +63,7 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
             test_obj.execute_javascript("lambda-status=error")
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, remote_project_name, remote_build_name):
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, testname, remote_project_name, remote_build_name):
 
     "Return an instance of Base Page that knows about the third party integrations"
     try:
@@ -73,7 +73,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
             mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path)
 
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
-
+        test_mobile_obj.set_calling_module(testname)
         #Setup and register a driver
         test_mobile_obj.register_driver(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, app_name, app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name)
 
