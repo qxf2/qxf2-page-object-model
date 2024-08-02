@@ -8,7 +8,6 @@ from core_helpers.mobile_app_helper import Mobile_App_Helper
 
 class WeatherShopperHomePage(Mobile_App_Helper):
     "Page objects for home page in Weathershopper application."
-
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
     def get_temperature(self):
@@ -22,7 +21,6 @@ class WeatherShopperHomePage(Mobile_App_Helper):
     @Wrapit._screenshot
     def view_moisturizers(self):
         "This method is to click on Moisturizer tab in the Weather Shopper application."
-
         moisturizers = locators.moisturizers
         result_flag = self.click_element(moisturizers)
         self.conditional_write(result_flag,
@@ -36,7 +34,6 @@ class WeatherShopperHomePage(Mobile_App_Helper):
     @Wrapit._screenshot
     def view_sunscreens(self):
         "This method is to click on Sunscreen tab in the Weather Shopper application."
-
         sunscreens = locators.sunscreens
         result_flag = self.click_element(sunscreens)
         self.conditional_write(result_flag,

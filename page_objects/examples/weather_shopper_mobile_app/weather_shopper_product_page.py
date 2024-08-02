@@ -13,7 +13,6 @@ class WeatherShopperProductPage(Mobile_App_Helper):
     @Wrapit._screenshot
     def zoom_in_product_image(self, product_type):
         "This method is to zoom in the product image in the Weather Shopper application."
-
         if product_type == "Moisturizers":
             product_image = locators.image_of_moisturizer
             result_flag = self.click_element(product_image)
@@ -32,7 +31,6 @@ class WeatherShopperProductPage(Mobile_App_Helper):
     @Wrapit._screenshot
     def get_all_products(self):
         "This method is to get all items from product page."
-
         all_products = []
         max_scrolls = 50
         for attempt in range(max_scrolls):
@@ -73,7 +71,6 @@ class WeatherShopperProductPage(Mobile_App_Helper):
     @Wrapit._screenshot
     def get_least_expensive_item(self, all_items):
         "This method is to get the least expensive item from the given list of items"
-
         least_expensive_item = min(all_items, key=lambda x: x['price'])
         self.write(f"Least expensive item is {least_expensive_item}")
         return least_expensive_item
@@ -82,7 +79,6 @@ class WeatherShopperProductPage(Mobile_App_Helper):
     @Wrapit._screenshot
     def get_most_expensive_item(self, all_items):
         "This method is to get the most expensive item from the given list of items"
-
         most_expensive_item = max(all_items, key=lambda x: x['price'])
         self.write(f"Most expensive item is {most_expensive_item}")
         return most_expensive_item
@@ -91,7 +87,6 @@ class WeatherShopperProductPage(Mobile_App_Helper):
     @Wrapit._screenshot
     def add_to_cart(self,item):
         "This method is to click on Add to cart button in the Weather Shopper application."
-
         result_flag = self.scroll_to_bottom()
         result_flag &= self.swipe_to_element(locators.recycler_view,
                     locators.add_to_cart.format(item['name']),
@@ -108,7 +103,6 @@ class WeatherShopperProductPage(Mobile_App_Helper):
     @Wrapit._screenshot
     def view_cart(self):
         "This method is to click on Cart button in the Weather Shopper application."
-
         cart = locators.cart
         result_flag = self.click_element(cart)
         self.switch_page("weathershopper cart page")
