@@ -32,62 +32,22 @@ We've implemented some version of this framework at several [clients](https://qx
 
 Looking for ways to automate your __UI__ and __API__ tests quickly and effectively? You've come to the right place. By harnessing __AI__ and __code auto-generation__ capabilities, we've developed solutions that significantly decrease the time needed to create a fully functional test suite. For further information, please refer to the following links.
 * [Qxf2's Gen AI test automation service](https://qxf2.com/qait)
-* [Qxf2's API test automation service](https://qxf2.com/api-tests-autogenerate.html)
+* [Qxf2's API test automation service](https://qxf2.com/api-tests-autogenerate.html)  
 
 ------
 Setup
 ------
 
-The setup for our open-sourced Python test automation framework is fairly simple. Don't get fooled by the length of this section. We have documented the setup instructions in detail so even beginners can get started.
+The setup for our open-sourced Python test automation framework is fairly simple. We have documented the setup instructions in detail so even beginners can get started.
 
 The setup has four parts:
 
-1. Prerequisites
-2. Setup for GUI/Selenium automation
-3. Setup for Mobile/Appium automation
-4. Setup for API automation
+1. [Prerequisites](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#1-Prerequisites)
+2. [Setup for GUI/Selenium automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#2-setup-for-guiselenium-automation)
+3. [Setup for Mobile/Appium automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#3-setup-for-mobileappium-automation)
+4. [Setup for API automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#4-setup-for-api-automation)
 
-__1. Prerequisites__
-
-a) Install Python 3.x
-
-b) Add Python 3.x to your PATH environment variable
-
-c) If you do not have it already, get pip (NOTE: Most recent Python distributions come with pip)
-
-d) pip install -r requirements.txt to install dependencies
-
-e)configure environmental variables 
-
-Templates for.env files are provided.
-Kindly fill in the credentials and rename the files according to the specified format.
-
-* env_conf to .env 
-	Tesults, TestRail, Gmail , Report portal and Slack credentials details can be entered here.
-* env_ssh_conf to .env.ssh
-    ssh server credentials used by the SSHKeywords keyword to connect to remote servers.
-* env_remote to .env.remote 
-    Remote WebDriver Server Details (BrowserStack/SauceLabs).
-
-If you ran into some problems on step (d), please report them as an issue or email Arun(mak@qxf2.com).
-
-
-__2. Setup for GUI/Selenium automation__
-
-
-a) Get setup with your browser driver. If you don't know how to, please try:
-
-   > [For Chrome](https://googlechromelabs.github.io/chrome-for-testing/)
-
-   > [For Firefox](https://github.com/mozilla/geckodriver/releases)
-
-#Note: Check Firefox version & Selenium version compatibility before downloading geckodriver.
-
-__If your setup goes well__, you should be to run a simple test with this command:
-
-1. Chrome: `python -m pytest -k example_form --browser Chrome`
-
-2. Firefox: `python -m pytest -k example_form --browser Firefox`
+Above links redirects to our github wiki pages.
 
 __Optional steps__ for integrating with third-party tools:
 
@@ -100,34 +60,6 @@ __Optional steps__ for integrating with third-party tools:
 * [Run Python integration tests on CircleCI ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#circleci)
 * [Post Python automation test results on Slack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Slack)
 * [Email pytest report with Gmail](https://github.com/qxf2/qxf2-page-object-model/wiki/Email-pytest-report-with-Gmail)
-
-
-__3. Setup for Mobile/Appium automation__
-
-
-a) [Install appium globally using npm](https://appium.io/docs/en/latest/quickstart/install/)
-
-b) [Download and Install Android Studio and create an emulator](https://developer.android.com/studio/index.html)
-
-c) [Install Java JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-
-d) [Install the appium Python client library](https://pypi.python.org/pypi/Appium-Python-Client)
-pip install Appium-Python-Client
-
-__If your setup goes well__, you should be to run a simple mobile test with this command after starting the Appium and Android emulator:
-`python -m pytest -k mobile_bitcoin_price --mobile_os_version $Emulator_OS_Version --device_name $Emulator_Name`
-
-__Optional steps__ for more details on setting up appium and running tests on Android or iOS refer to below links:
-* [Get started with mobile automation: Appium & Python](https://qxf2.com/blog/appium-mobile-automation/)
-* [Get Set Test an iOS app using Appium and Python](https://qxf2.com/blog/get-set-test-an-ios-app-using-appium-and-python/)
-
-
-__4. Setup for API automation__
-
-There are no extra setup steps for API automation. To verify, run test_api_example now using command "pytest -k api -s"
-
-__Optional steps__ for more details on setting up API and running tests refer to below link:
-* [Easily Maintainable API Test Automation Framework](https://qxf2.com/blog/easily-maintainable-api-test-automation-framework/)
 
 -------------------
 Repository details
@@ -158,11 +90,11 @@ Directory structure of our current Templates
 
    |_ .env and .env.remote: For credential details. Refer env_conf and env_remote file and rename it to .env and .env_conf. 
 ```
+for more details about the structure, refer our wiki page [here](https://github.com/qxf2/qxf2-page-object-model/wiki/Repository-details) 
+
 ---------------------------
 COMMANDS FOR RUNNING TESTS
 ---------------------------
-
-
 ### a) General Command
 `python -m pytest [options]`
 
@@ -205,7 +137,7 @@ COMMANDS FOR RUNNING TESTS
 - **`--slack_flag`**  
   *Posts pytest reports on the Slack channel.*  
   **Example:**  
-  `python -m pytest --slack_flag Y -v > log/pytest_report.log`
+  `python -m pytest --slack_flag Y -v > log/pytest_report.log`  
   This will send the pytest-report on configued slack channel at the end of test run.
 
 - **`-n`**  
@@ -259,7 +191,7 @@ COMMANDS FOR RUNNING TESTS
 	**Note:** For running the test along with ReportPortal, update the .env file with report portal credential details and run the above command. Refer our wiki page for more details: [Integration with ReportPortal](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-ReportPortal) 
 
 - **Run Tests along with TestRail**  
-	`python -m pytest -k example --testrail_flag Y`  
+	`python -m pytest -k example --testrail_flag Y --test_run_id <testrail run id>`  
 	**Note:** For running the test along with TestRail, update the .env file with TestRails credential details and run the above command. Refer our wiki page for more details: [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-TestRail-using-Python)
 
 - **Post test results on Slack**  
@@ -269,7 +201,6 @@ COMMANDS FOR RUNNING TESTS
 - **Email pytest report with Gmail**  
 	`pytest -s -v --email_pytest_report y --html=log/pytest_report.html`  
 	**Note:** For setup and other details, refer our wiki page: [Email pytest report with Gmail](https://github.com/qxf2/qxf2-page-object-model/wiki/Email-pytest-report-with-Gmail)
-
 
 --------
 ISSUES?
