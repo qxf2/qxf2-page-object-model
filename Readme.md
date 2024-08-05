@@ -92,11 +92,14 @@ __If your setup goes well__, you should be to run a simple test with this comman
 __Optional steps__ for integrating with third-party tools:
 
 * [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-TestRail-using-Python)
+* [Integration with ReportPortal](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-ReportPortal) 
 * [Integrate our Python GUI/web automation framework with BrowserStack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#browserstack)
 * [Integrate our Python Selenium automation framework with Sauce Labs ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#sauce-labs)
+* [Integrate our Python GUI/web automation framework with LambdaTest](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services#lambdatest)
 * [Run Python integration tests on Jenkins ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#jenkins)
 * [Run Python integration tests on CircleCI ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-CI-Tools#circleci)
-* [Post Python automation test results on Slack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Utilities#slack-integration)
+* [Post Python automation test results on Slack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Slack)
+* [Email pytest report with Gmail](https://github.com/qxf2/qxf2-page-object-model/wiki/Email-pytest-report-with-Gmail)
 
 
 __3. Setup for Mobile/Appium automation__
@@ -129,57 +132,144 @@ __Optional steps__ for more details on setting up API and running tests refer to
 -------------------
 Repository details
 -------------------
-a) Directory structure of our current Templates
-
+Directory structure of our current Templates
+```
    ./
 
-	|__conf: For all configurations 	
+   |_ conf: For all configurations files
+   
+   |_ core_helpers: Contains our web app and mobile app helpers and DriverFactory  
 
-	|__log: Log files for all tests
+   |_ endpoints: Contains our Base Mechanize, different End Points, API Player, API Interface
 
-	|__page_objects: Contains our Base Page, different Page Objects, DriverFactory, PageFactory
+   |_ integrations: Contains cross-browsers, reporting tools and reporting channel integrations (BrowserStack, SauceLabs, Lambdatest, TestRail, Tesults, Slack, Gmail) 
 
-	|__endpoints: Contains our Base Mechanize, different End Points, API Player, API Interface
+   |_ log: Log files for all tests
 
-	|__screenshots: For screen shots
+   |_ page_objects: Contains our PageFactory, different Page Objects examples
 
-	|__tests: Put your tests in here
+   |_ screenshots: For screenshots
 
-	|__utils: All utility modules (email_util,TestRail, BrowserStack, Base Logger, post_test_reports_to_slack) are kept in this folder
+   |_ tests: Put your tests here
 
+   |_ utils: All utility modules (ssh_util, compare csv, compare images, Base Logger, etc) are kept in this folder
 
+   |_ conftest.py: Configuration file to add different fixtures used in py.test
+
+   |_ .env and .env.remote: For credential details. Refer env_conf and env_remote file and rename it to .env and .env_conf. 
+```
 ---------------------------
 COMMANDS FOR RUNNING TESTS
 ---------------------------
 
-a)py.test [options]
 
-	-s	used to display the output on the screen			E.g: python -m pytest -s (This will run all the tests in the directory and subdirectories)
-	--base_url  used to run against specific URL			E.g: python -m pytest --base_url http://YOUR_localhost_URL (This will run against your local instance)
-	--remote_flag  used to run tests on Browserstack/Sauce Lab	E.g: python -m pytest -s --remote_flag Y -U https://qxf2.com
-	--browser all	used to run the test against multiple browser 			E.g:python -m pytest ---browser all(This will run each test against the list of browsers specified in the conftest.py file,firefox and chrome in our case)
-	--ver/-O	used to run against different browser versions/os versions	E.g: python -m pytest --ver 44 -O 8 (This will run each test 4 times in different browser version(default=45 & 44) and OS(default=7 & 8) combination)
-	-h	help for more options 						E.g: python -m pytest -h
-	-k      used to run tests which match the given substring expresion 	E.g: python -m pytest -k table  (This will trigger test_example_table.py test)
-	--slack_flag	used to post pytest reports on the Slack channel		E.g: python -m pytest --slack_flag Y -v > log/pytest_report.log
-	-n 	used to run tests in parallel					E.g: python -m pytest -n 3 -v (This will run three tests in parallel)
-	--tesults 	used to report test results to tesults			E.g: python -m pytest test_example_form.py --tesults Y(This will report test report to tesults)
-	--interactive_mode_flag	used to run the tests interactively
-		E.g:  python -m pytest tests/test_example_form.py --interactive_mode_flag Y(This option will allow the user to pick the desired configuration to run the test, from the menu displayed)
+### a) General Command
+`python -m pytest [options]`
 
-	Note: If you wish to run the test with interactive mode on git bash for windows, please make sure to set your bash alias by adding the following command to bash_rc `alias python='winpty python.exe'`
-	--summary used to summarize the pytest results in the form of a html report        Eg: python -m pytest -k example_table --summary y
-	Note: You would need to provide your OPENAI_API_KEY    export OPENAI_API_KEY=<your-key>
+### Options
 
+- **`--app_url`**  
+  *Runs against a specific URL.*  
+  **Example:**  
+  `python -m pytest --app_url http://YOUR_localhost_URL`  
+  This will run against your local instance.
 
-b)python -m pytest tests/test_example_form.py (can also be used to run standalone test)
+- **`--remote_flag`**  
+  *Runs tests on Browserstack/LambdaTest/Sauce Labs.*  
+  **Example:**  
+  `python -m pytest -s --remote_flag Y --app_url https://qxf2.com`
 
-c)python -m pytest tests/test_example_form.py --browser Chrome (to run against chrome)
+- **`--browser all`**  
+  *Runs the tests against multiple browsers.*  
+  **Example:**  
+  `python -m pytest --browser all`  
+  This will run each test against the list of browsers specified in the `conf/browser_os_name_conf.py` file (e.g., Firefox and Chrome).
 
-d)python -m pytest tests/test_api_example.py (make sure to run sample cars-api available at qxf2/cars-api repository before api test run)
+- **`--ver / --os_name / --os_version`**  
+  *Runs against different browser versions/OS and OS versions.*  
+  **Example:**  
+  `python -m pytest --ver 120 --os_name windows --os_version 11 --remote_flag y`  
+  This will run each test with defalut browser (chrome) and provided combination (browser version 120 windows 11)
 
-e)python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version (android version) --device_name (simulator) --app_path (.apk location on local) --remote_flag Y (to run Mobile test case on Broswerstack)
-NOTE: For running tests in Browserstack, need to update Username/Accesskey from Browserstack Account to .env.remote .
+- **`-h`**  
+  *Displays help for more options.*  
+  **Example:**  
+  `python -m pytest -h`
+
+- **`-k`**  
+  *Runs tests matching the given substring expression.*  
+  **Example:**  
+  `python -m pytest -k table`  
+  This will trigger tests that match the pattern, such as `test_example_table.py`.
+
+- **`--slack_flag`**  
+  *Posts pytest reports on the Slack channel.*  
+  **Example:**  
+  `python -m pytest --slack_flag Y -v > log/pytest_report.log`
+  This will send the pytest-report on configued slack channel at the end of test run.
+
+- **`-n`**  
+  *Runs tests in parallel.*  
+  **Example:**  
+  `python -m pytest -n 3 -v`  
+  This will run three tests in parallel.
+
+- **`--tesults`**  
+  *Reports test results to Tesults.*  
+  **Example:**  
+  `python -m pytest tests/test_example_form.py --tesults Y`
+
+- **`--interactive_mode_flag`**  
+  *Runs the tests interactively.*  
+  **Example:**  
+  `python -m pytest tests/test_example_form.py --interactive_mode_flag Y`  
+  This option allows the user to pick the desired configuration to run the test from a menu displayed.
+
+  **Note:** If you wish to run the test in interactive mode on Git Bash for Windows, set your bash alias by adding the following command to `.bashrc`:  
+  `alias python='winpty python.exe'`
+
+- **`--summary`**  
+  *Summarizes the pytest results in an HTML report.*  
+  **Example:**  
+  `python -m pytest -k example_table --summary y`  
+  **Note:** You need to provide your `OPENAI_API_KEY` using `export OPENAI_API_KEY=<your-key>`.
+
+### b) Specific Commands
+
+- **Standalone Test**  
+	`python -m pytest tests/test_example_form.py`
+
+- **Run Against Specific Browser**  
+	`python -m pytest tests/test_example_form.py --browser Chrome`
+
+- **API Test**  
+	`python -m pytest tests/test_api_example.py`  
+	**Note:** Ensure the sample `cars-api` is available at `qxf2/cars-api` repository before running the API test.
+
+- **Mobile Test Run on Browserstack/Sauce Labs**  
+	`python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version <android version> --device_name <simulator> --app_path <.apk location on local> --remote_flag Y`  
+	**Note:** For running tests on Browserstack/Sauce Labs, update the Browser_Plaform, Username and AccessKey in `.env.remote` from your Browserstack/Sauce Labs account. Refer our wiki page for more details: [Integrate our Python Selenium automation framework with Cloud Services ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Cloud-Services)
+
+- **Run Test along with Tesults**  
+	`python -m pytest tests/test_example_form.py --tesults Y`  
+	**Note:** For running the test along with Tesults, update the .env file with target_token and run the above command. Refer env_conf file for configuration.
+		
+- **Run Tests along with ReportPortal**  
+	`python -m pytest -k example --reportportal`  
+	**Note:** For running the test along with ReportPortal, update the .env file with report portal credential details and run the above command. Refer our wiki page for more details: [Integration with ReportPortal](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-ReportPortal) 
+
+- **Run Tests along with TestRail**  
+	`python -m pytest -k example --testrail_flag Y`  
+	**Note:** For running the test along with TestRail, update the .env file with TestRails credential details and run the above command. Refer our wiki page for more details: [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-TestRail-using-Python)
+
+- **Post test results on Slack**  
+	`pytest -k example_form --slack_flag y -v > log/pytest_report.log`  
+	**Note:** For setup and other details, refer our wiki page: [Post Python automation test results on Slack ](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-Slack)  
+
+- **Email pytest report with Gmail**  
+	`pytest -s -v --email_pytest_report y --html=log/pytest_report.html`  
+	**Note:** For setup and other details, refer our wiki page: [Email pytest report with Gmail](https://github.com/qxf2/qxf2-page-object-model/wiki/Email-pytest-report-with-Gmail)
+
 
 --------
 ISSUES?
