@@ -57,3 +57,25 @@ class Cars_API_Endpoints:
 			'url':url,
 			'response':json_response['json_response']
 		}
+
+	# Async methods
+	async def get_cars_async(self,headers):
+		"Get the list of cars"
+		url = self.cars_url()
+		response = await self.async_get(url,headers=headers)
+		return response
+
+
+	async def add_car_async(self,data,headers):
+		"Add a new car"
+		url = self.cars_url('/add')
+		response = await self.async_post(url,json=data,headers=headers)
+		return response
+
+
+	async def get_car_async(self,url_params,headers):
+		"Get car using URL params"
+		url = self.cars_url('/find?')+url_params
+		response = await self.async_get(url,headers=headers)
+		return response
+

@@ -39,3 +39,12 @@ class Registration_API_Endpoints:
 		'url':url,
 		'response':json_response['json_response']
 		}
+
+
+	# Async methods
+	async def get_registered_cars_async(self,headers):
+		"Get registered cars"
+		url = self.registration_url('')
+		response = await self.async_get(url,headers=headers)
+		return response
+
