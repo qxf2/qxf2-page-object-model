@@ -34,16 +34,8 @@ class WeatherShopperProductPage(Mobile_App_Helper):
             product_names = self.get_elements(locators.product_name)
             product_prices = self.get_elements(locators.product_price)
 
-            # Loop through the products and store the product names and prices in a list
-            for name, price in zip(product_names, product_prices):
-                product_name = self.get_text(name, dom_element_flag=True)
-                product_price = self.get_text(price, dom_element_flag=True)
-
-                # Append the product name and price to the list if it is not already in the list
-                if {"name": product_name.decode(),
-                    "price": float(product_price)} not in all_products:
-                    all_products.append({"name": product_name.decode(),
-                    "price": float(product_price)})
+            # Store the product names and prices in a list
+            all_products = self.store_products_in_list(all_products, product_names, product_prices)
 
             # Scroll forward
             result_flag = self.scroll_forward()
@@ -61,6 +53,19 @@ class WeatherShopperProductPage(Mobile_App_Helper):
             positive='Successfully scrolled to the end of the page',
             negative='Failed to scroll to the end of the page',
             level='debug')
+        return all_products
+
+    def store_products_in_list(self, all_products, product_names, product_prices):
+        "This method is to store the products in view to a list."
+        for name, price in zip(product_names, product_prices):
+            product_name = self.get_text(name, dom_element_flag=True)
+            product_price = self.get_text(price, dom_element_flag=True)
+
+            # Append the product name and price to the list if it is not already in the list
+            if {"name": product_name.decode(),
+                "price": float(product_price)} not in all_products:
+                all_products.append({"name": product_name.decode(),
+                "price": float(product_price)})
         return all_products
 
     @Wrapit._exceptionHandler
