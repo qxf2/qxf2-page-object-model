@@ -94,6 +94,6 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
         result_flag &= self.enter_email(email)
         result_flag &= self.enter_card_number(card_number)
         result_flag &= self.enter_card_expiry(card_expiry)
-        result_flag &= self.enter_card_cvv(card_cvv)        
+        result_flag &= self.enter_card_cvv(card_cvv)
         result_flag &= self.submit_payment()
         return result_flag

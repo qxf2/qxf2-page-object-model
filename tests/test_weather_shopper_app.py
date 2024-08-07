@@ -188,8 +188,8 @@ def test_weather_shopper_app(test_mobile_obj):
 
         #Enter payment details
         payment_details = conf.valid_payment_details
-        result_flag = test_mobile_obj.submit_payment_details(payment_details["card_type"], 
-                        payment_details["email"], payment_details["card_number"], 
+        result_flag = test_mobile_obj.submit_payment_details(payment_details["card_type"],
+                        payment_details["email"], payment_details["card_number"],
                         payment_details["card_expiry"], payment_details["card_cvv"])
 
         test_mobile_obj.log_result(result_flag,
