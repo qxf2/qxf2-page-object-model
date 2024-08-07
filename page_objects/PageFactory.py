@@ -41,6 +41,18 @@ class PageFactory():
             from page_objects.examples.bitcoin_mobile_app.bitcoin_price_page import Bitcoin_Price_Page
             test_obj = Bitcoin_Price_Page()
             #"New pages added needs to be updated in the get_all_page_names method too"
+        elif page_name == "weathershopper home page":
+            from page_objects.examples.weather_shopper_mobile_app.weather_shopper_home_page import WeatherShopperHomePage
+            test_obj = WeatherShopperHomePage()
+        elif page_name == "weathershopper products page":
+            from page_objects.examples.weather_shopper_mobile_app.weather_shopper_product_page import WeatherShopperProductPage
+            test_obj = WeatherShopperProductPage()
+        elif page_name == "weathershopper payment page":
+            from page_objects.examples.weather_shopper_mobile_app.weather_shopper_payment_page import WeatherShopperPaymentPage
+            test_obj = WeatherShopperPaymentPage()
+        elif page_name == "weathershopper cart page":
+            from page_objects.examples.weather_shopper_mobile_app.weather_shopper_cart_page import WeatherShopperCartPage
+            test_obj = WeatherShopperCartPage()
         return test_obj
 
 

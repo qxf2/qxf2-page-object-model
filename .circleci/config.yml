@@ -19,6 +19,8 @@ jobs:
 
         - run: openssl aes-256-cbc -d -md sha256 -in ./conf/env_remote_enc -out ./.env.remote -pass env:KEY
 
+        - run: git clone https://github.com/qxf2/weather-shopper-app-apk.git
+
         - run: git clone https://github.com/qxf2/cars-api.git
 
         - run: pip install flask

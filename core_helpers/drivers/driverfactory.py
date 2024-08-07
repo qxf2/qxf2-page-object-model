@@ -78,10 +78,10 @@ class DriverFactory(RemoteOptions, LocalOptions):
 
     def get_mobile_driver(self, mobile_os_name, mobile_os_version, device_name, app_package,
                    app_activity, remote_flag, device_flag, app_name, app_path,
-                   ud_id, org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name):
+                   ud_id, org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name, orientation):
         """Specify the mobile device configurations and get the mobile driver."""
         #setup mobile device
-        desired_capabilities = self.set_mobile_device(mobile_os_name, mobile_os_version, device_name)
+        desired_capabilities = self.set_mobile_device(mobile_os_name, mobile_os_version, device_name, orientation)
 
         if remote_project_name is not None:
             desired_capabilities = self.remote_project_name(desired_capabilities, remote_project_name)
