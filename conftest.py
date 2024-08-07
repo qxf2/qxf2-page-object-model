@@ -604,10 +604,10 @@ def pytest_generate_tests(metafunc):
 def pytest_addoption(parser):
     "Method to add the option to ini."
     try:
-        parser.addini("rp_uuid",'help',type="pathlist")
-        parser.addini("rp_endpoint",'help',type="pathlist")
-        parser.addini("rp_project",'help',type="pathlist")
-        parser.addini("rp_launch",'help',type="pathlist")
+        #parser.addini("rp_uuid",'help',type="pathlist")
+        #parser.addini("rp_endpoint",'help',type="pathlist")
+        #parser.addini("rp_project",'help',type="pathlist")
+        #parser.addini("rp_launch",'help',type="pathlist")
 
         parser.addoption("--browser",
                             dest="browser",
