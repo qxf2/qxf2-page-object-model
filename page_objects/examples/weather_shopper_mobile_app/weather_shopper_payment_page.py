@@ -14,8 +14,8 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
         "Enter the card CVV"
         result_flag = self.set_text(locators.payment_card_cvv, card_cvv)
         self.conditional_write(result_flag,
-            positive='Successfully set the card CVV',
-            negative='Failed to set the card CVV',
+            positive=f'Successfully set the card CVV: {card_cvv}',
+            negative=f'Failed to set the card CVV: {card_cvv}',
             level='debug')
         return result_flag
 
@@ -25,8 +25,8 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
         "Enter the card expiry date"
         result_flag = self.set_text(locators.payment_card_expiry, card_expiry)
         self.conditional_write(result_flag,
-            positive='Successfully set the card expiry date',
-            negative='Failed to set the card expiry date',
+            positive=f'Successfully set the card expiry date: {card_expiry}',
+            negative=f'Failed to set the card expiry date: {card_expiry}',
             level='debug')
         return result_flag
 
@@ -36,8 +36,8 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
         "Enter the email address"
         result_flag = self.set_text(locators.payment_email, email)
         self.conditional_write(result_flag,
-            positive='Successfully set the email address',
-            negative='Failed to set the email address',
+            positive=f'Successfully set the email address: {email}',
+            negative=f'Failed to set the email address: {email}',
             level='debug')
         return result_flag
 
@@ -47,8 +47,8 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
         "Enter the card number"
         result_flag = self.set_text(locators.payment_card_number, card_number)
         self.conditional_write(result_flag,
-            positive='Successfully set the card number',
-            negative='Failed to set the card number',
+            positive=f'Successfully set the card number: {card_number}',
+            negative=f'Failed to set the card number: {card_number}',
             level='debug')
         return result_flag
 
@@ -59,8 +59,8 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
         result_flag = self.click_element(locators.payment_method_dropdown)
         result_flag &= self.click_element(locators.payment_card_type.format(card_type))
         self.conditional_write(result_flag,
-            positive='Successfully clicked on the payment method',
-            negative='Failed to click on payment method',
+            positive=f'Successfully selected the payment method: {card_type}',
+            negative=f'Failed to select the payment method: {card_type}',
             level='debug')
         return result_flag
 
@@ -80,5 +80,20 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
     def verify_payment_success(self):
         "Verify if the payment was successful"
         result_flag = self.get_element(locators.payment_success, verbose_flag=False) is not None
+        self.conditional_write(result_flag,
+            positive='Payment was successful',
+            negative='Payment failed',
+            level='debug')
         return result_flag
-        
+
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
+    def submit_payment_details(self,card_type,email,card_number,card_expiry,card_cvv):
+        "Submit the form"
+        result_flag = self.select_payment_method(card_type)
+        result_flag &= self.enter_email(email)
+        result_flag &= self.enter_card_number(card_number)
+        result_flag &= self.enter_card_expiry(card_expiry)
+        result_flag &= self.enter_card_cvv(card_cvv)        
+        result_flag &= self.submit_payment()
+        return result_flag

@@ -188,41 +188,19 @@ def test_weather_shopper_app(test_mobile_obj):
 
         #Enter payment details
         payment_details = conf.valid_payment_details
-        result_flag = test_mobile_obj.select_payment_method(payment_details["card_type"])
-        test_mobile_obj.log_result(result_flag,
-                                positive="Successfully selected payment method",
-                                negative="Failed to select payment method")
+        result_flag = test_mobile_obj.submit_payment_details(payment_details["card_type"], 
+                        payment_details["email"], payment_details["card_number"], 
+                        payment_details["card_expiry"], payment_details["card_cvv"])
 
-        result_flag = test_mobile_obj.enter_email(payment_details["email"])
         test_mobile_obj.log_result(result_flag,
-                            positive="Successfully entered email",
-                            negative="Failed to enter email")
+                                positive="Successfully submitted payment details",
+                                negative="Failed to submit payment details")
 
-        result_flag = test_mobile_obj.enter_card_number(payment_details["card_number"])
-        test_mobile_obj.log_result(result_flag,
-                               positive="Successfully entered card number",
-                               negative="Failed to enter card number")
-
-        result_flag = test_mobile_obj.enter_card_expiry(payment_details["card_expiry"])
-        test_mobile_obj.log_result(result_flag,
-                               positive="Successfully entered card expiry",
-                               negative="Failed to enter card expiry")
-
-        result_flag = test_mobile_obj.enter_card_cvv(payment_details["card_cvv"])
-        test_mobile_obj.log_result(result_flag,
-                               positive="Successfully entered card CVV",
-                               negative="Failed to enter card CVV")
-
-        result_flag = test_mobile_obj.submit_payment()
-        test_mobile_obj.log_result(result_flag,
-                               positive="Successfully submitted payment",
-                               negative="Failed to submit payment")
-
+        #Verify if payment was successful
         result_flag = test_mobile_obj.verify_payment_success()
         test_mobile_obj.log_result(result_flag,
                                positive="Payment was successful",
                                negative="Payment was not successful")
-
 
         # Print out the results.
         test_mobile_obj.write(f'Script duration: {int(time.time() - start_time)} seconds\n')
