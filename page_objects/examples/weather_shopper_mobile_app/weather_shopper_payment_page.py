@@ -8,16 +8,25 @@ from core_helpers.mobile_app_helper import Mobile_App_Helper
 
 class WeatherShopperPaymentPage(Mobile_App_Helper):
     "Page objects for payment page in Weathershopper application."
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
+    def enter_card_cvv(self, card_cvv):
+        "Enter the card CVV"
+        result_flag = self.set_text(locators.payment_card_cvv, card_cvv)
+        self.conditional_write(result_flag,
+            positive='Successfully set the card CVV',
+            negative='Failed to set the card CVV',
+            level='debug')
+        return result_flag
 
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
-    def select_payment_method(self, card_type):
-        "Select the payment method"
-        result_flag = self.click_element(locators.payment_method_dropdown)
-        result_flag &= self.click_element(locators.payment_card_type.format(card_type))
+    def enter_card_expiry(self, card_expiry):
+        "Enter the card expiry date"
+        result_flag = self.set_text(locators.payment_card_expiry, card_expiry)
         self.conditional_write(result_flag,
-            positive='Successfully clicked on the payment method',
-            negative='Failed to click on payment method',
+            positive='Successfully set the card expiry date',
+            negative='Failed to set the card expiry date',
             level='debug')
         return result_flag
 
@@ -45,23 +54,13 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
 
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
-    def enter_card_expiry(self, card_expiry):
-        "Enter the card expiry date"
-        result_flag = self.set_text(locators.payment_card_expiry, card_expiry)
+    def select_payment_method(self, card_type):
+        "Select the payment method"
+        result_flag = self.click_element(locators.payment_method_dropdown)
+        result_flag &= self.click_element(locators.payment_card_type.format(card_type))
         self.conditional_write(result_flag,
-            positive='Successfully set the card expiry date',
-            negative='Failed to set the card expiry date',
-            level='debug')
-        return result_flag
-
-    @Wrapit._exceptionHandler
-    @Wrapit._screenshot
-    def enter_card_cvv(self, card_cvv):
-        "Enter the card CVV"
-        result_flag = self.set_text(locators.payment_card_cvv, card_cvv)
-        self.conditional_write(result_flag,
-            positive='Successfully set the card CVV',
-            negative='Failed to set the card CVV',
+            positive='Successfully clicked on the payment method',
+            negative='Failed to click on payment method',
             level='debug')
         return result_flag
 
@@ -82,3 +81,4 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
         "Verify if the payment was successful"
         result_flag = self.get_element(locators.payment_success, verbose_flag=False) is not None
         return result_flag
+        

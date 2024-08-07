@@ -8,23 +8,19 @@ from core_helpers.mobile_app_helper import Mobile_App_Helper
 
 class WeatherShopperProductPage(Mobile_App_Helper):
     "Page objects for product page in Weathershopper application."
-
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
-    def zoom_in_product_image(self, product_type):
-        "This method is to zoom in the product image in the Weather Shopper application."
-        if product_type == "Moisturizers":
-            product_image = locators.image_of_moisturizer
-            result_flag = self.click_element(product_image)
-        else:
-            product_image = locators.image_of_sunscreen
-            result_flag = self.click_element(product_image)
-
+    def add_to_cart(self,item):
+        "This method is to click on Add to cart button in the Weather Shopper application."
+        result_flag = self.scroll_to_bottom()
+        result_flag &= self.swipe_to_element(locators.recycler_view,
+                    locators.add_to_cart.format(item['name']),
+                    direction="down")
+        result_flag &= self.click_element(locators.add_to_cart.format(item['name']))
         self.conditional_write(result_flag,
-            positive='Successfully zoomed in product image',
-            negative='Failed to zoom in product image',
+            positive=f"Successfully added {item['name']} to cart",
+            negative=f"Failed to add {item['name']} to cart",
             level='debug')
-
         return result_flag
 
     @Wrapit._exceptionHandler
@@ -85,25 +81,26 @@ class WeatherShopperProductPage(Mobile_App_Helper):
 
     @Wrapit._exceptionHandler
     @Wrapit._screenshot
-    def add_to_cart(self,item):
-        "This method is to click on Add to cart button in the Weather Shopper application."
-        result_flag = self.scroll_to_bottom()
-        result_flag &= self.swipe_to_element(locators.recycler_view,
-                    locators.add_to_cart.format(item['name']),
-                    direction="down")
-        result_flag &= self.click_element(locators.add_to_cart.format(item['name']))
-        self.conditional_write(result_flag,
-            positive=f"Successfully added {item['name']} to cart",
-            negative=f"Failed to add {item['name']} to cart",
-            level='debug')
-
-        return result_flag
-
-    @Wrapit._exceptionHandler
-    @Wrapit._screenshot
     def view_cart(self):
         "This method is to click on Cart button in the Weather Shopper application."
         cart = locators.cart
         result_flag = self.click_element(cart)
         self.switch_page("weathershopper cart page")
+        return result_flag
+
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
+    def zoom_in_product_image(self, product_type):
+        "This method is to zoom in the product image in the Weather Shopper application."
+        if product_type == "Moisturizers":
+            product_image = locators.image_of_moisturizer
+            result_flag = self.click_element(product_image)
+        else:
+            product_image = locators.image_of_sunscreen
+            result_flag = self.click_element(product_image)
+
+        self.conditional_write(result_flag,
+            positive='Successfully zoomed in product image',
+            negative='Failed to zoom in product image',
+            level='debug')
         return result_flag
