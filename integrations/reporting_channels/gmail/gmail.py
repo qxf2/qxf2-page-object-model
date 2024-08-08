@@ -29,7 +29,6 @@ class Gmail():
         self.logged_in = False
         self.mailboxes = {}
         self.current_mailbox = None
-        self.messages = {}
 
 
         # self.connect()
