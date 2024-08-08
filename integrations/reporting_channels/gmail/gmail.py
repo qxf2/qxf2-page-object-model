@@ -1,10 +1,13 @@
 from __future__ import absolute_import
 import re
 import imaplib
+import logging
+from email.header import decode_header
+from integrations.reporting_channels.gmail.mailbox import Mailbox
+from integrations.reporting_channels.gmail.utf import encode as encode_utf7, decode as decode_utf7
+from integrations.reporting_channels.gmail.exceptions import *
 
-from .mailbox import Mailbox
-from .utf import encode as encode_utf7, decode as decode_utf7
-from .exceptions import *
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Gmail():
     # GMail IMAP defaults
@@ -50,19 +53,27 @@ class Gmail():
         return self.imap
 
 
+    # Add fetch_mailboxes method in the Gmail class
     def fetch_mailboxes(self):
-        response, mailbox_list = self.imap.list()
+        response, data = self.imap.list()
         if response == 'OK':
-            for mailbox in mailbox_list:
-                mailbox_name = mailbox.split('"/"')[-1].replace('"', '').strip()
-                mailbox = Mailbox(self)
-                mailbox.external_name = mailbox_name
-                self.mailboxes[mailbox_name] = mailbox
+            mailboxes = []
+            for item in data:
+                decoded_item = decode_utf7(item)
+                # Extract the mailbox name
+                mailbox_name = decoded_item.split(' "/" ')[-1]
+                mailboxes.append(mailbox_name.strip('"'))
+            return mailboxes
+        else:
+            raise Exception("Failed to fetch mailboxes.")
+
 
     def use_mailbox(self, mailbox):
         if mailbox:
             self.imap.select(mailbox)
         self.current_mailbox = mailbox
+        return Mailbox(self, mailbox)
+
 
     def mailbox(self, mailbox_name):
         if mailbox_name not in self.mailboxes:
@@ -148,16 +159,29 @@ class Gmail():
         self.imap.uid('COPY', uid, to_mailbox)
 
     def fetch_multiple_messages(self, messages):
-        fetch_str =  ','.join(messages.keys())
+        if not isinstance(messages, dict):
+            raise Exception('Messages must be a dictionary')
+
+        fetch_str = ','.join(messages.keys())
         response, results = self.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-        for index in xrange(len(results) - 1):
-            raw_message = results[index]
-            if re.search(r'UID (\d+)', raw_message[0]):
-                uid = re.search(r'UID (\d+)', raw_message[0]).groups(1)[0]
-                messages[uid].parse(raw_message)
+
+        for raw_message in results:
+            if isinstance(raw_message, tuple):
+                uid_match = re.search(rb'UID (\d+)', raw_message[0])
+                if uid_match:
+                    uid = uid_match.group(1).decode('utf-8')
+                    if uid in messages:
+                        messages[uid].parse(raw_message)
+                    else:
+                        logging.warning(f'UID {uid} not found in messages dictionary')
+                else:
+                    logging.warning('UID not found in raw message')
+            elif isinstance(raw_message, bytes):
+                continue
+            else:
+                logging.warning('Invalid raw message format')
 
         return messages
-
 
     def labels(self, require_unicode=False):
         keys = self.mailboxes.keys()

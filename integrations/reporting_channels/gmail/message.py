@@ -118,33 +118,69 @@ class Message():
         return hdrs
 
     def parse_flags(self, headers):
-        return list(ParseFlags(headers))
-        # flags = re.search(r'FLAGS \(([^\)]*)\)', headers).groups(1)[0].split(' ')
+        try:
+            match = re.search(r'FLAGS \((.*?)\)', headers)
+            if match:
+                flags = match.group(1).split()
+                return flags
+            else:
+                return []
+        except Exception as e:
+            print(f"Error parsing flags: {e}")
+            return []
 
     def parse_labels(self, headers):
-        if re.search(r'X-GM-LABELS \(([^\)]+)\)', headers):
-            labels = re.search(r'X-GM-LABELS \(([^\)]+)\)', headers).groups(1)[0].split(' ')
-            return map(lambda l: l.replace('"', '').decode("string_escape"), labels)
-        else:
-            return list()
+        try:
+            match = re.search(r'X-GM-LABELS \((.*?)\)', headers)
+            if match:
+                labels = match.group(1).split()
+                labels = [label.replace('"', '') for label in labels]
+                return labels
+            else:
+                return []
+        except Exception as e:
+            print(f"Error parsing labels: {e}")
+            return []
 
     def parse_subject(self, encoded_subject):
         dh = decode_header(encoded_subject)
         default_charset = 'ASCII'
-        return ''.join([ unicode(t[0], t[1] or default_charset) for t in dh ])
-
+        subject_parts = []
+        for part, encoding in dh:
+            if isinstance(part, bytes):
+                try:
+                    subject_parts.append(part.decode(encoding or default_charset))
+                except Exception as e:
+                    print(f"Error decoding part {part} with encoding {encoding}: {e}")
+                    subject_parts.append(part.decode(default_charset, errors='replace'))
+            else:
+                subject_parts.append(part)
+        parsed_subject = ''.join(subject_parts)
+        return parsed_subject
+    
     def parse(self, raw_message):
         raw_headers = raw_message[0]
         raw_email = raw_message[1]
 
-        self.message = email.message_from_string(raw_email)
-        self.headers = self.parse_headers(self.message)
+        if isinstance(raw_headers, bytes):
+            raw_headers = raw_headers.decode('utf-8', errors='replace')
 
-        self.to = self.message['to']
-        self.fr = self.message['from']
-        self.delivered_to = self.message['delivered_to']
+        if isinstance(raw_email, bytes):
+            raw_email = raw_email.decode('utf-8', errors='replace')  
 
-        self.subject = self.parse_subject(self.message['subject'])
+        if not isinstance(raw_email, str):
+            raise ValueError("Decoded raw_email is not a string")
+        try:
+            self.message = email.message_from_string(raw_email)
+
+        except Exception as e:
+            print(f"Error creating email message: {e}")
+            raise
+
+        self.to = self.message.get('to')
+        self.fr = self.message.get('from')
+        self.delivered_to = self.message.get('delivered_to')
+        self.subject = self.parse_subject(self.message.get('subject'))
 
         if self.message.get_content_maintype() == "multipart":
             for content in self.message.walk():
@@ -158,7 +194,6 @@ class Message():
         self.sent_at = datetime.datetime.fromtimestamp(time.mktime(email.utils.parsedate_tz(self.message['date'])[:9]))
 
         self.flags = self.parse_flags(raw_headers)
-
         self.labels = self.parse_labels(raw_headers)
 
         if re.search(r'X-GM-THRID (\d+)', raw_headers):
@@ -166,18 +201,14 @@ class Message():
         if re.search(r'X-GM-MSGID (\d+)', raw_headers):
             self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)[0]
 
-
-        # Parse attachments into attachment objects array for this message
         self.attachments = [
-            Attachment(attachment) for attachment in self.message._payload
-                if not isinstance(attachment, basestring) and attachment.get('Content-Disposition') is not None
+            Attachment(attachment) for attachment in self.message.get_payload()
+                if not isinstance(attachment, str) and attachment.get('Content-Disposition') is not None
         ]
-
 
     def fetch(self):
         if not self.message:
             response, results = self.gmail.imap.uid('FETCH', self.uid, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-
             self.parse(results[0])
 
         return self.message
