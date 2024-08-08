@@ -11,7 +11,6 @@ Prerequisites:
 import sys
 import os
 from integrations.reporting_channels.gmail.gmail import Gmail
-from integrations.reporting_channels.gmail.message import Message 
 from integrations.reporting_channels.gmail.mailbox import Mailbox
 from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -83,14 +82,15 @@ def test_gmail_util():
         else:
             print("No messages found in SPAM.")
 
-        # Log out and clean up
+    except Exception as e:
+        print("Exception when trying to run test: %s" %__file__)
+        print("Python says: %s" % str(e))
+
+    finally:
+        # logout
         gmail.logout()
         print("Logged out!")
         expected_pass += 1
         actual_pass += 1
 
-    except Exception as e:
-        print("Exception when trying to run test: %s" % __file__)
-        print("Python says: %s" % str(e))
-
-    assert expected_pass == actual_pass, "Test failed: %s" % __file__
+    assert expected_pass == actual_pass, "Test failed: %s" %__file__
