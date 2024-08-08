@@ -1,9 +1,6 @@
 import re
-import logging
 from .message import Message
 from .utf import encode as encode_utf7, decode as decode_utf7
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-
 
 class Mailbox():
     def __init__(self, gmail, name="INBOX"):
