@@ -1,4 +1,3 @@
-
 import datetime
 import email
 import re
@@ -159,7 +158,6 @@ class Message():
         parsed_subject = ''.join(subject_parts)
         return parsed_subject
     
-# working demo part
     def parse(self, raw_message):
         raw_headers = raw_message[0]
         raw_email = raw_message[1]
@@ -215,8 +213,7 @@ class Message():
 
         return self.message
 
-
-    # returns a list of fetched messages (both sent and received) in chrological order
+    # returns a list of fetched messages (both sent and received) in chronological order
     def fetch_thread(self):
         self.fetch()
         original_mailbox = self.mailbox
