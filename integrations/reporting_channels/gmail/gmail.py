@@ -157,23 +157,6 @@ class Gmail():
             self.use_mailbox(from_mailbox)
         self.imap.uid('COPY', uid, to_mailbox)
 
-    # def fetch_multiple_messages(self, messages):
-    #     if not isinstance(messages, dict):
-    #         raise Exception('Messages must be a dictionary')
-    #     fetch_str = ','.join(messages.keys())
-    #     response, results = self.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-    #     for index in range(len(results) - 1):
-    #         raw_message = results[index]
-    #         if re.search(rb'UID (\d+)', raw_message[0]):
-    #             uid = re.search(rb'UID (\d+)', raw_message[0]).groups(1)[0]
-    #             print(f'type of" {uid}": {type(uid)}')
-    #             converted_uid = str(uid[0])
-    #             # convertedParsedUID = uid[0].split(b' ')
-    #             self.messages[uid].parse(raw_message)
-    #             print("messages",messages)
-
-    #     return messages
-
     def fetch_multiple_messages(self, messages):
         "Fetches and parses multiple messages given a dictionary of `Message` objects."
         if not isinstance(messages, dict):

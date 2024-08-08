@@ -2,11 +2,12 @@
 This is an example automated test to check gmail utils
 Our automated test will do the following:
     #login to gmail and fetch mailboxes
-    #After fetching the mail box ,select INBOX and fetch messages print the number of messages and the subject of the first message
+    #After fetching the mail box ,select and fetch messages and print the number of messages and the subject of the messages
 
 Prerequisites:
     - Gmail account with app password
 """
+
 import sys
 import os
 from integrations.reporting_channels.gmail.gmail import Gmail
@@ -14,65 +15,82 @@ from integrations.reporting_channels.gmail.message import Message
 from integrations.reporting_channels.gmail.mailbox import Mailbox
 from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import pytest
 
 load_dotenv()
 
-
-def main():
-    gmail = Gmail()
-    gmail.connect()
-
-    username = os.getenv('app_username')
-    password = os.getenv('app_password')
-
+@pytest.mark.GMAIL
+def test_gmail_util():    
     try:
-        if gmail.login(username, password):
-            print("Login successful!")
-            
-            mailboxes = gmail.fetch_mailboxes()
-            print(f"Fetched mailboxes: {mailboxes}")
-            
-            if mailboxes:
-                for mailbox_name in mailboxes:
-                    print(f"Mailbox found: {mailbox_name}")
-            
-            try:
-                inbox_mailbox = gmail.use_mailbox('[Gmail]/Spam')
-                if isinstance(inbox_mailbox, Mailbox):
-                    print("SPAM selected successfully!")
-                    messages = inbox_mailbox.mail()
-                    print(f"Number of messages in SPAM: {len(messages)}")
+        # Initialize flags for test summary
+        expected_pass = 0
+        actual_pass = 0
 
-                    if messages:
-                        msg = messages[0]
-                        fetched_msg = msg.fetch()
-                        print(f"Fetching Message subject from test script: {fetched_msg.get('subject')}")
-                    else:
-                        print("No messages found in SPAM.")
-                    
-                    # message_uids = [msg.uid.decode('utf-8') if isinstance(msg.uid, bytes) else msg.uid for msg in messages]
-                    # print(f"fetched message UIDs: {message_uids}")
-                    
-                    if messages:
-                        messages_dict = {msg.uid.decode('utf-8'): msg for msg in messages}
-                        fetched_messages = gmail.fetch_multiple_messages(messages_dict)
-                        print(f"Fetched multiple messages: {fetched_messages}")
+        # Initialize Gmail class instance
+        gmail = Gmail()
+        gmail.connect()
 
-                        for uid, message in fetched_messages.items():
-                            subject = getattr(message, 'subject', 'No subject attribute')
-                            print(f"UID: {uid}, Subject: {subject}")
+        username = os.getenv('app_username')
+        password = os.getenv('app_password')
 
-                else:
-                    print(f"Error: Expected Mailbox instance, got {type(inbox_mailbox)}.")
-            except Exception as e:
-                print(f"An error occurred: {e}") 
+        # Attempt to log in
+        result_flag = gmail.login(username, password)
+        assert result_flag, "Login failed!"
+        print("Login successful!")
+        expected_pass += 1
+        actual_pass += 1
 
-    except Exception as e:
-        print(f"An error occurred: {e}")
+        # Fetch and print mailboxes
+        mailboxes = gmail.fetch_mailboxes()
+        assert mailboxes, "Failed to fetch mailboxes!"
+        print(f"Fetched mailboxes: {mailboxes}")
+        expected_pass += 1
+        actual_pass += 1
 
-    finally:
+        # Select the SPAM mailbox
+        inbox_mailbox = gmail.use_mailbox('[Gmail]/Spam')
+        assert isinstance(inbox_mailbox, Mailbox), f"Error: Expected Mailbox instance, got {type(inbox_mailbox)}."
+        print("SPAM selected successfully!")
+        expected_pass += 1
+        actual_pass += 1
+
+        # Fetch and print number of messages in SPAM
+        messages = inbox_mailbox.mail()
+        print(f"Number of messages in SPAM: {len(messages)}")
+        expected_pass += 1
+        actual_pass += 1
+
+        if messages:
+            # Fetch and print the subject of the first message
+            msg = messages[0]
+            fetched_msg = msg.fetch()
+            assert 'subject' in fetched_msg, "Subject not found in fetched message!"
+            print(f"Fetching Message subject from test script: {fetched_msg.get('subject')}")
+            expected_pass += 1
+            actual_pass += 1
+
+            # Fetch and print subjects of multiple messages
+            messages_dict = {msg.uid.decode('utf-8'): msg for msg in messages}
+            fetched_messages = gmail.fetch_multiple_messages(messages_dict)
+            assert fetched_messages, "Failed to fetch multiple messages!"
+            print(f"Fetched multiple messages: {fetched_messages}")
+            expected_pass += 1
+            actual_pass += 1
+
+            for uid, message in fetched_messages.items():
+                subject = getattr(message, 'subject', 'No subject attribute')
+                print(f"UID: {uid}, Subject: {subject}")
+        else:
+            print("No messages found in SPAM.")
+
+        # Log out and clean up
         gmail.logout()
         print("Logged out!")
+        expected_pass += 1
+        actual_pass += 1
 
-if __name__ == "__main__":
-    main()
+    except Exception as e:
+        print("Exception when trying to run test: %s" % __file__)
+        print("Python says: %s" % str(e))
+
+    assert expected_pass == actual_pass, "Test failed: %s" % __file__
