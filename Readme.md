@@ -74,7 +74,7 @@ Directory structure of our current Templates
 
    |_ endpoints: Contains our Base Mechanize, different End Points, API Player, API Interface
 
-   |_ integrations: Contains cross-browsers, reporting tools and reporting channel integrations (BrowserStack, SauceLabs, Lambdatest, TestRail, Tesults, Slack, Gmail) 
+   |_ integrations: Contains cross-browsers (BrowserStack, SauceLabs, Lambdatest), reporting tools (TestRail, Tesults) and reporting channel integrations (Slack, Gmail) 
 
    |_ log: Log files for all tests
 
@@ -90,7 +90,7 @@ Directory structure of our current Templates
 
    |_ .env and .env.remote: For credential details. Refer env_conf and env_remote file and rename it to .env and .env_conf. 
 ```
-for more details about the structure, refer our wiki page [here](https://github.com/qxf2/qxf2-page-object-model/wiki/Repository-details) 
+For more details about the structure, refer our wiki page [here](https://github.com/qxf2/qxf2-page-object-model/wiki/Repository-details) 
 
 ---------------------------
 COMMANDS FOR RUNNING TESTS
@@ -118,10 +118,10 @@ COMMANDS FOR RUNNING TESTS
   This will run each test against the list of browsers specified in the `conf/browser_os_name_conf.py` file (e.g., Firefox and Chrome).
 
 - **`--ver / --os_name / --os_version`**  
-  *Runs against different browser versions/OS and OS versions.*  
+  *Runs against different browser versions, OS platform and OS versions.*  
   **Example:**  
   `python -m pytest --ver 120 --os_name windows --os_version 11 --remote_flag y`  
-  This will run each test with defalut browser (chrome) and provided combination (browser version 120 windows 11)
+  This will run each test with default browser (chrome) and provided combination (browser version 120 windows 11)
 
 - **`-h`**  
   *Displays help for more options.*  
@@ -188,11 +188,11 @@ COMMANDS FOR RUNNING TESTS
 		
 - **Run Tests along with ReportPortal**  
 	`python -m pytest -k example --reportportal`  
-	**Note:** For running the test along with ReportPortal, update the .env file with report portal credential details and run the above command. Refer our wiki page for more details: [Integration with ReportPortal](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-ReportPortal) 
+	**Note:** For running the test along with ReportPortal, update the .env file with ReportPortal credential details and run the above command. Refer our wiki page for more details: [Integration with ReportPortal](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-ReportPortal) 
 
 - **Run Tests along with TestRail**  
 	`python -m pytest -k example --testrail_flag Y --test_run_id <testrail run id>`  
-	**Note:** For running the test along with TestRail, update the .env file with TestRails credential details and run the above command. Refer our wiki page for more details: [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-TestRail-using-Python)
+	**Note:** For running the test along with TestRail, update the .env file with TestRail credential details and run the above command. Refer our wiki page for more details: [Integrate our Python test automation framework with Testrail](https://github.com/qxf2/qxf2-page-object-model/wiki/Integration-with-TestRail-using-Python)
 
 - **Post test results on Slack**  
 	`pytest -k example_form --slack_flag y -v > log/pytest_report.log`  
