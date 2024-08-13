@@ -428,7 +428,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
         except Exception as err:
             self.write(str(err), 'debug')
             self.exceptions.append("An exception occured when switching context")
-        return result_flag   
+        return result_flag
 
     def handle_chrome_welcome_page(self, accept_button, turn_off_sync_button):
         "Click on accept button Chrome welcome screen"
@@ -440,6 +440,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             accept_button_element.click()
             self.write("Clicked on Chrome Welcome Dismiss button", "debug")
             time.sleep(3) # Wait longer, probability of having to turn off sync are high
+        # pylint: disable=W0702
         except:
             self.write("Chrome Welcome Dismiss button not present, ignoring click", "debug")
             time.sleep(1) # Wait less, turn off sync might already have been clicked
@@ -449,6 +450,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             turn_off_sync_button_element.click()
             self.write("Clicked on Turn off sync", "debug")
             time.sleep(1)
+        # pylint: disable=W0702
         except:
             self.write("Turn off sync not present, ignoring click", "debug")
 
