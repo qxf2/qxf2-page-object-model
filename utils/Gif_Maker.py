@@ -2,7 +2,7 @@
 Qxf2 Services: This utility is for creating a GIF of all the screenshots captured during current test run
 
 """
-import imageio
+import imageio.v2 as imageio
 import os
 
 

@@ -24,7 +24,7 @@ def test_weather_shopper_menu_options(test_mobile_obj):
         actual_pass = -1
 
         # Create a test object.
-        test_mobile_obj = PageFactory.get_page_object("weather shopper app")
+        test_mobile_obj = PageFactory.get_page_object("weathershopper home page")
         test_mobile_obj.switch_to_app_context()
         start_time = int(time.time())
 
@@ -93,7 +93,7 @@ def test_weather_shopper_menu_options(test_mobile_obj):
                                    level="critical")
 
         # Go back to the app
-        test_mobile_obj = PageFactory.get_page_object("weather shopper app")
+        test_mobile_obj = PageFactory.get_page_object("weathershopper home page")
         test_mobile_obj.switch_to_app_context()
         test_mobile_obj.navigate_back_to_app()
 
@@ -120,7 +120,7 @@ def test_weather_shopper_menu_options(test_mobile_obj):
                                    level="critical")
 
         # Go back to the app
-        test_mobile_obj = PageFactory.get_page_object("weather shopper app")
+        test_mobile_obj = PageFactory.get_page_object("weathershopper home page")
         test_mobile_obj.switch_to_app_context()
         test_mobile_obj.navigate_back_to_app()
 
@@ -148,7 +148,7 @@ def test_weather_shopper_menu_options(test_mobile_obj):
                                    level="critical")
 
         # Go back to the app
-        test_mobile_obj = PageFactory.get_page_object("weather shopper app")
+        test_mobile_obj = PageFactory.get_page_object("weathershopper home page")
         test_mobile_obj.switch_to_app_context()
         test_mobile_obj.navigate_back_to_app()
 
@@ -175,7 +175,7 @@ def test_weather_shopper_menu_options(test_mobile_obj):
                                    level="critical")
 
         # Go back to the app
-        test_mobile_obj = PageFactory.get_page_object("weather shopper app")
+        test_mobile_obj = PageFactory.get_page_object("weathershopper home page")
         test_mobile_obj.switch_to_app_context()
         test_mobile_obj.navigate_back_to_app()
 
