@@ -5,6 +5,9 @@ Page object for the payment page in Weathershopper application.
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 from core_helpers.mobile_app_helper import Mobile_App_Helper
+import pytesseract
+from PIL import Image, ImageEnhance, ImageFilter
+import glob
 
 class WeatherShopperPaymentPage(Mobile_App_Helper):
     "Page objects for payment page in Weathershopper application."
@@ -97,3 +100,99 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
         result_flag &= self.enter_card_cvv(card_cvv)
         result_flag &= self.submit_payment()
         return result_flag
+    """
+    navigate_to_field - Navigating the cursor to the field
+    and taking the screenshot of the error prompt. 
+    """
+    @Wrapit._exceptionHandler
+    def navigate_to_field(self, fieldname,screenshotname):
+        if fieldname == locators.fieldnames[0]:
+            result_flag = self.click_element(locators.payment_email)
+            self.hide_keyboard()
+            self.save_screenshot(screenshot_name=screenshotname)
+        elif fieldname == locators.fieldnames[1]:
+            result_flag = self.click_element(locators.payment_card_number)
+            self.hide_keyboard()
+            self.save_screenshot(screenshot_name=screenshotname)
+        elif fieldname == locators.fieldnames[2]:
+            self.click_element(locators.payment_email)
+            result_flag = self.click_element(locators.payment_card_expiry)
+            self.hide_keyboard()
+            self.save_screenshot(screenshot_name=screenshotname)
+        elif fieldname == locators.fieldnames[3]:
+            self.click_element(locators.payment_email)
+            result_flag = self.click_element(locators.payment_card_cvv)
+            self.hide_keyboard()
+            self.save_screenshot(screenshot_name=screenshotname)
+        else:
+            self.click_element(locators.payment_email)
+            result_flag = self.click_element(locators.payment_card_expiry)
+            self.hide_keyboard()
+            self.save_screenshot(screenshot_name=screenshotname)
+            
+        return result_flag
+
+    """
+    image_to_string() - the method extracts the text from the 
+    image using tesseract.
+    find_string() - search the string
+    preprocess_image() - to enhance the image contrast 
+    """
+    @Wrapit._exceptionHandler
+    def image_to_string(self, image_path, substring):
+        # Use glob to find the file
+        files = glob.glob(image_path)
+        if files:
+            # Assuming there is only one file matching the pattern
+            file_path = files[0]
+            print(f"Found file: {file_path}")
+            try: 
+                # Load the image
+                image = Image.open(file_path)
+                #image.show()
+                try:
+                    # Enhance the image before OCR
+                    image = self.preprocess_image(image)
+                    # Perform OCR on the enhanced image
+                    text = pytesseract.image_to_string(image)
+                    #print(f"Extracted text:", text)
+                    try:
+                        result_flag = self.find_string(text,substring)
+                        return result_flag
+                    except Exception as e:
+                            print(f"Error during string search: {e}")
+                            return result_flag
+                except Exception as e:
+                        print(f"Error during OCR process: {e}")
+                        return result_flag
+            except Exception as e:
+                    print(f"Error opening image file: {e}")
+                    return False
+        else:
+            print(f"No matching file found.")
+
+    @Wrapit._exceptionHandler
+    def find_string(self,text,substring):
+            # Check if the substring is in the input string
+            if substring in text:
+                print(f"Substring:",substring)
+                return True
+            else:
+                return False
+    
+    def preprocess_image(self, image):
+        try:
+            # Convert to grayscale
+            grayscale_image = image.convert('L')
+
+            # Enhance contrast
+            enhancer = ImageEnhance.Contrast(grayscale_image)
+            enhanced_image = enhancer.enhance(2)  # Adjust contrast factor as needed
+
+            # Apply a filter to sharpen the image
+            sharpened_image = enhanced_image.filter(ImageFilter.SHARPEN)
+
+            return sharpened_image
+        except Exception as e:
+            print(f"Error during image preprocessing: {e}")
+            return image  # Return original image if preprocessing fails

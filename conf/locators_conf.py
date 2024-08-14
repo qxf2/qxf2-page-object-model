@@ -74,7 +74,8 @@ refresh_button = "id,refreshButton"
 checkbox = "xpath,//android.widget.TextView[@text='{}']/ancestor::android.widget.LinearLayout/preceding-sibling::android.widget.CheckBox"
 delete_from_cart_button = "id,deleteSelectedButton"
 checkout_button = "id,checkoutButton"
-payment_method_dropdown = "xpath,//android.widget.TextView[@text='Select Payment Method']"
+#payment_method_dropdown = "xpath,//android.widget.TextView[@text='Select Payment Method']"
+payment_method_dropdown = "id,payment_method_spinner"
 payment_card_type = "xpath,//android.widget.CheckedTextView[@text='{}']"
 payment_email = "id,email_edit_text"
 payment_card_number = "id,card_number_edit_text"
@@ -82,6 +83,9 @@ payment_card_expiry = "id,expiration_date_edit_text"
 payment_card_cvv = "id,cvv_edit_text"
 pay_button = "id,pay_button"
 payment_success = "xpath,//android.widget.TextView[@text='Payment Successful']"
-
 image_of_moisturizer = "xpath,//android.widget.TextView[@text='Wilhelm Aloe Hydration Lotion']/parent::*/android.widget.ImageView"
 image_of_sunscreen = "xpath,//android.widget.TextView[@text='Robert Herbals Sunblock SPF-40']/parent::*/android.widget.ImageView"
+
+# mock payment screen field names defined as a list.
+# Used this list to navigate the cursor on the field.
+fieldnames = ["email","card number","date","cvv"]
