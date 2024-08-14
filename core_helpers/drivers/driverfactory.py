@@ -25,29 +25,31 @@ class DriverFactory(RemoteOptions, LocalOptions):
     def get_web_driver(self, remote_flag, os_name, os_version, browser,
                        browser_version, remote_project_name, remote_build_name, testname):
         """Return the appropriate driver."""
+        session_url = None
         if remote_flag.lower() == 'y':
-            web_driver = self.select_remote_platform(remote_flag, os_name, os_version,
+            web_driver, session_url = self.select_remote_platform(remote_flag, os_name, os_version,
                                                      browser, browser_version, remote_project_name,
                                                      remote_build_name, testname)
 
         elif remote_flag.lower() == 'n':
             web_driver = self.get_local_driver(browser)
 
-        return web_driver
+        return web_driver,session_url
 
     def select_remote_platform(self, remote_flag, os_name, os_version, browser,
                                browser_version, remote_project_name, remote_build_name, testname):
         """Select the remote platform to run the test when the remote_flag is Y."""
         try:
+            session_url = None
             if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS':
                 from integrations.cross_browsers.browserstack_runner import BrowserStackRunner
                 runner = BrowserStackRunner()
-                web_driver = runner.get_browserstack_webdriver(os_name, os_version, browser, browser_version,
-                                                   remote_project_name, remote_build_name)
+                web_driver,session_url = runner.get_browserstack_webdriver(os_name, os_version, browser, browser_version,
+                                                    remote_project_name, remote_build_name)
             elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT':
                 runner = LambdaTestRunner()
-                web_driver = runner.get_lambdatest_webdriver(os_name, os_version, browser, browser_version,
-                                                   remote_project_name, remote_build_name, testname)
+                web_driver,session_url = runner.get_lambdatest_webdriver(os_name, os_version, browser, browser_version,
+                                                    remote_project_name, remote_build_name, testname)
             else:
                 from integrations.cross_browsers.saucelab_runner import SauceLabRunner
                 runner = SauceLabRunner()
@@ -56,7 +58,7 @@ class DriverFactory(RemoteOptions, LocalOptions):
         except Exception as exception:
             self.print_exception(exception, remote_flag)
 
-        return web_driver
+        return web_driver,session_url
 
     def get_local_driver(self, browser):
         """Run the test on local system."""
@@ -92,21 +94,22 @@ class DriverFactory(RemoteOptions, LocalOptions):
 
         #Check wether the OS is android or iOS and get the mobile driver
         if mobile_os_name in 'Android':
-            mobile_driver = self.get_android_driver(remote_flag, desired_capabilities, app_path, app_name,
+            mobile_driver,session_url = self.get_android_driver(remote_flag, desired_capabilities, app_path, app_name,
                                          appium_version, app_package, app_activity, device_flag)
 
         elif mobile_os_name == 'iOS':
-            mobile_driver = self.get_ios_driver(remote_flag, desired_capabilities, app_path, app_name,
+            mobile_driver,session_url = self.get_ios_driver(remote_flag, desired_capabilities, app_path, app_name,
                                          app_package, no_reset_flag, ud_id, org_id, signing_id, appium_version)
 
-        return mobile_driver
+        return mobile_driver,session_url
 
     def get_android_driver(self, remote_flag, desired_capabilities, app_path, app_name, appium_version,
                 app_package, app_activity, device_flag):
         """Gets mobile driver for either local or remote setup of Android devices."""
+        session_url = None
         #Get the driver when test is run on a remote platform
         if remote_flag.lower() == 'y':
-            mobile_driver = self.remote_mobile_platform(remote_flag, app_path, app_name, desired_capabilities,
+            mobile_driver,session_url = self.remote_mobile_platform(remote_flag, app_path, app_name, desired_capabilities,
                                                         appium_version)
 
         #Get the driver when test is run on local setup
@@ -121,14 +124,15 @@ class DriverFactory(RemoteOptions, LocalOptions):
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
-        return mobile_driver
+        return mobile_driver,session_url
 
     def get_ios_driver(self, remote_flag, desired_capabilities, app_path, app_name,app_package, no_reset_flag,
                         ud_id, org_id, signing_id, appium_version):
         """Gets mobile driver for either local or remote setup of Android devices."""
         #Get the driver when test is run on a remote platform
+        session_url = None
         if remote_flag.lower() == 'y':
-            mobile_driver = self.remote_mobile_platform(remote_flag, app_path, app_name,
+            mobile_driver,session_url = self.remote_mobile_platform(remote_flag, app_path, app_name,
                                                         desired_capabilities, appium_version)
 
         #Get the driver when test is run on local setup
@@ -140,7 +144,7 @@ class DriverFactory(RemoteOptions, LocalOptions):
             except Exception as exception:
                 self.print_exception(exception, remote_flag)
 
-        return mobile_driver
+        return mobile_driver,session_url
 
     def remote_mobile_platform(self, remote_flag, app_path, app_name, desired_capabilities, appium_version):
         """
@@ -148,6 +152,7 @@ class DriverFactory(RemoteOptions, LocalOptions):
         remote mobile driver.
         """
         try:
+            session_url = None
             #Gets driver when test is run on Saucelab
             if os.getenv('REMOTE_BROWSER_PLATFORM') == 'SL':
                 from integrations.cross_browsers.saucelab_runner import SauceLabRunner
@@ -157,12 +162,12 @@ class DriverFactory(RemoteOptions, LocalOptions):
             else:
                 from integrations.cross_browsers.browserstack_runner import BrowserStackRunner
                 runner = BrowserStackRunner()
-                mobile_driver = runner.get_browserstack_mobile_driver(app_path, app_name, desired_capabilities,
+                mobile_driver,session_url = runner.get_browserstack_mobile_driver(app_path, app_name, desired_capabilities,
                                                                         appium_version)
         except Exception as exception:
             self.print_exception(exception, remote_flag)
 
-        return mobile_driver
+        return mobile_driver,session_url
 
     @staticmethod
     def print_exception(exception, remote_flag):
