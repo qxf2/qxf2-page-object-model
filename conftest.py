@@ -603,7 +603,6 @@ def pytest_generate_tests(metafunc):
 
 def pytest_addoption(parser):
     "Method to add the option to ini."
-    
     try:
         parser.addoption("--browser",
                             dest="browser",
