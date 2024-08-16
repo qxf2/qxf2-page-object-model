@@ -92,11 +92,12 @@ class LocalOptions():
             desired_capabilities['xcodeSigningId'] = signing_id
         return desired_capabilities
 
-    def set_mobile_device(self, mobile_os_name, mobile_os_version, device_name):
+    def set_mobile_device(self, mobile_os_name, mobile_os_version, device_name, orientation):
         """Setup the mobile device."""
         desired_capabilities = {}
         desired_capabilities['platformName'] = mobile_os_name
         desired_capabilities['platformVersion'] = mobile_os_version
         desired_capabilities['deviceName'] = device_name
+        desired_capabilities['orientation'] = orientation
 
         return desired_capabilities

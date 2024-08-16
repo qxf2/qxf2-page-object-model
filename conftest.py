@@ -63,19 +63,19 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
             test_obj.execute_javascript("lambda-status=error")
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, testname, remote_project_name, remote_build_name):
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, testname, remote_project_name, remote_build_name, orientation):
 
     "Return an instance of Base Page that knows about the third party integrations"
     try:
 
         if interactivemode_flag.lower()=="y":
 
-            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path)
+            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path, orientation)
 
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
         test_mobile_obj.set_calling_module(testname)
         #Setup and register a driver
-        test_mobile_obj.register_driver(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, app_name, app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name)
+        test_mobile_obj.register_driver(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, app_name, app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name, orientation)
 
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -437,6 +437,16 @@ def summary_flag(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(error))
 
+@pytest.fixture
+def orientation(request):
+    "pytest fixture for device orientation"
+    try:
+        return request.config.getoption("--orientation")
+
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
+
 def pytest_sessionstart(session):
     """
     Perform cleanup at the start of the test session.
@@ -594,11 +604,6 @@ def pytest_generate_tests(metafunc):
 def pytest_addoption(parser):
     "Method to add the option to ini."
     try:
-        parser.addini("rp_uuid",'help',type="pathlist")
-        parser.addini("rp_endpoint",'help',type="pathlist")
-        parser.addini("rp_project",'help',type="pathlist")
-        parser.addini("rp_launch",'help',type="pathlist")
-
         parser.addoption("--browser",
                             dest="browser",
                             action="append",
@@ -657,16 +662,16 @@ def pytest_addoption(parser):
                             default="Android")
         parser.addoption("--mobile_os_version",
                             dest="mobile_os_version",
-                            help="Enter version of operating system of mobile: 8.1.0",
-                            default="8.0")
+                            help="Enter version of operating system of mobile: 11.0",
+                            default="11.0")
         parser.addoption("--device_name",
                             dest="device_name",
                             help="Enter device name. Ex: Emulator, physical device name",
-                            default="Samsung Galaxy S9")
+                            default="Samsung Galaxy S21")
         parser.addoption("--app_package",
                             dest="app_package",
-                            help="Enter name of app package. Ex: bitcoininfo",
-                            default="com.dudam.rohan.bitcoininfo")
+                            help="Enter name of app package. Ex: com.dudam.rohan.bitcoininfo",
+                            default="com.qxf2.weathershopper")
         parser.addoption("--app_activity",
                             dest="app_activity",
                             help="Enter name of app activity. Ex: .MainActivity",
@@ -685,8 +690,8 @@ def pytest_addoption(parser):
                             help="Y or N. 'Y' if you want to report results with Tesults")
         parser.addoption("--app_name",
                             dest="app_name",
-                            help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk.",
-                            default="Bitcoin Info_com.dudam.rohan.bitcoininfo.apk")
+                            help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk",
+                            default="app-release-v1.2.apk")
         parser.addoption("--ud_id",
                             dest="ud_id",
                             help="Enter your iOS device UDID which is required to run appium test in iOS device",
@@ -709,7 +714,7 @@ def pytest_addoption(parser):
         parser.addoption("--appium_version",
                             dest="appium_version",
                             help="The appium version if its run in BrowserStack",
-                            default="1.17.0")
+                            default="2.4.1")
 
         parser.addoption("--interactive_mode_flag",
                             dest="questionary",
@@ -719,6 +724,10 @@ def pytest_addoption(parser):
                             dest="summary",
                             default="n",
                             help="Generate pytest results summary using LLM (GPT): y or n")
+        parser.addoption("--orientation",
+                            dest="orientation",
+                            default=None,
+                            help="Enter LANDSCAPE to change device orientation to landscape")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
