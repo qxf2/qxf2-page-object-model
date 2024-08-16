@@ -46,25 +46,26 @@ class BrowserStack_Library():
         return sessions
 
 
-    def get_active_session_id_and_url(self):
+    def get_active_session_details(self):
         "Return the session ID of the first active session"
-        session_id = None
+        session_details = None
         sessions = self.get_sessions()
         for session in sessions:
             #Get session id of the first session with status = running
             if session['automation_session']['status']=='running':
-                session_id = session['automation_session']['hashed_id']
-                session_url = session['automation_session']['browser_url']
+                session_details = session['automation_session']
+                #session_id = session['automation_session']['hashed_id']
+                #session_url = session['automation_session']['browser_url']
                 break
 
-        return session_id,session_url
+        return session_details
 
 
     def get_session_logs(self, timeout=10):
         "Return the session log in text format"
-        build_id = self.get_build_id()
-        session_id,session_url = self.get_active_session_id_and_url()
-        session_log = requests.get(f'{self.browserstack_api_server_url}/builds/{build_id}/sessions/{session_id}/logs',auth=self.auth,timeout=timeout).text
+        session_details = self.get_active_session_details()
+        session_log_url = session_details['logs']
+        session_log = requests.get(f'{session_log_url}',auth=self.auth,timeout=timeout).text
 
         return session_log
 

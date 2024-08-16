@@ -63,9 +63,13 @@ class BrowserStackRunner(RemoteOptions):
     def get_current_session_url(self, web_driver):
         "Get current session url"
         import json
-        response = web_driver.execute_script('browserstack_executor: {"action": "getSessionDetails"}')
-        jsonResponse = json.loads(response)
-        session_url = jsonResponse['browser_url']
+        current_session = web_driver.execute_script('browserstack_executor: {"action": "getSessionDetails"}')
+        session_details = json.loads(current_session)
+        # Check if 'public_url' exists and is not None
+        if 'public_url' in session_details and session_details['public_url'] is not None:
+            session_url = session_details['public_url']
+        else:
+            session_url = session_details['browser_url']
 
         return session_url
 
