@@ -11,8 +11,9 @@ class Logging_Objects:
         self.msg_list = []
         self.exceptions = []
         self.browserstack_flag = False
+        #self.api_test_flag = True
 
-    def write_test_summary(self):
+    def write_test_summary(self, test_type = None):
         "Print out a useful, human readable summary"
         self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
         self.write('Total number of checks passed=%d\n----------------------\n************************\n\n'%self.pass_counter)
@@ -28,6 +29,8 @@ class Logging_Objects:
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
+        
+        #if self.api_test_flag is False:
         self.make_gif()
         if self.gif_file_name is not None:
             self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
@@ -36,6 +39,7 @@ class Logging_Objects:
     def write(self,msg,level='info', trace_back=None):
         "Log the message"
         msg = str(msg)
+        #if self.api_test_flag is False:
         self.msg_list.append('%-8s:  '%level.upper() + msg)
         if self.browserstack_flag is True:
             if self.browserstack_msg not in msg:
@@ -50,10 +54,13 @@ class Logging_Objects:
         self.result_counter += 1
         self.pass_counter += 1
 
-    def set_log_file(self):
+    def set_log_file(self, log_file_path=None):
         "set the log file"
-        self.log_name = self.testname + '.log'
-        self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
+        if log_file_path == None:
+            self.log_name = self.testname + '.log'
+            self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
+        else:
+            self.log_obj = Base_Logging(log_file_name=log_file_path, level=logging.DEBUG)
 
     def log_result(self,flag,positive,negative,level='info'):
         "Write out the result of the test"
