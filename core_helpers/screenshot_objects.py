@@ -9,13 +9,10 @@ import conf.screenshot_conf as conf
 class Screenshot_Objects:
     def __init__(self):
         self.tesults_flag = False
-        self.browserstack_flag = False
         self.images = []
 
     def save_screenshot(self,screenshot_name,pre_format="      #Debug screenshot: "):
         "Take a screenshot"
-        if self.browserstack_flag is True and conf.BS_ENABLE_SCREENSHOTS is False:
-            return
         if os.path.exists(self.screenshot_dir + os.sep + screenshot_name+'.png'):
             for i in range(1,100):
                 if os.path.exists(self.screenshot_dir + os.sep +screenshot_name+'_'+str(i)+'.png'):
@@ -25,11 +22,8 @@ class Screenshot_Objects:
                     break
         screenshot_name = self.screenshot_dir + os.sep + screenshot_name+'.png'
         self.driver.get_screenshot_as_file(screenshot_name)
-	    #self.conditional_write(flag=True,positive= screenshot_name + '.png',negative='', pre_format=pre_format)
         if self.rp_logger:
             self.save_screenshot_reportportal(screenshot_name)
-        if self.browserstack_flag is True:
-            self.append_latest_image(screenshot_name)
         if self.tesults_flag is True:
             self.images.append(screenshot_name)
 

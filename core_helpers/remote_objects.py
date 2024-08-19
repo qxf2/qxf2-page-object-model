@@ -8,15 +8,8 @@ class Remote_Objects:
         self.msg_list = []
         self.testrail_flag = False
         self.tesults_flag = False
-        self.browserstack_flag = False
         self.test_run_id = None
         self.images = []
-
-    def register_browserstack(self):
-        "Register Browser Stack with Page"
-        self.browserstack_flag = True
-        from integrations.cross_browsers.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
-        self.browserstack_obj = BrowserStack_Library()
 
     def register_testrail(self):
         "Register TestRail with Page"
@@ -24,14 +17,6 @@ class Remote_Objects:
         self.testrail_flag = True
         self.testrail_object = Test_Rail()
         self.write('Automation registered with TestRail',level='debug')
-
-    def append_latest_image(self,screenshot_name):
-        "Get image url list from Browser Stack"
-        screenshot_url = self.browserstack_obj.get_latest_screenshot_url()
-        image_dict = {}
-        image_dict['name'] = screenshot_name
-        image_dict['url'] = screenshot_url
-        self.image_url_list.append(image_dict)
 
     def register_tesults(self):
         "Register Tesults with Page"
@@ -69,10 +54,10 @@ class Remote_Objects:
         if self.testrail_flag is True:
             msg += '\n'.join(self.msg_list)
             msg = msg + "\n"
-            if self.browserstack_flag is True:
-                for image in self.image_url_list:
-                    msg += '\n' + '[' + image['name'] + ']('+ image['url']+')'
-                msg += '\n\n' + '[' + 'Watch Replay On BrowserStack' + ']('+ self.session_url+')'
+            # if self.browserstack_flag is True:
+            #     for image in self.image_url_list:
+            #         msg += '\n' + '[' + image['name'] + ']('+ image['url']+')'
+            #     msg += '\n\n' + '[' + 'Watch Replay On BrowserStack' + ']('+ self.session_url+')'
             self.testrail_object.update_testrail(case_id,test_run_id,result_flag,msg=msg)
         self.image_url_list = []
         self.msg_list = []

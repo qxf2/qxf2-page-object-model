@@ -68,22 +68,3 @@ class BrowserStack_Library():
         session_log = requests.get(f'{session_log_url}',auth=self.auth,timeout=timeout).text
 
         return session_log
-
-
-    def get_latest_screenshot_url(self):
-        "Get the URL of the latest screenshot"
-        session_log = self.get_session_logs()
-
-        #Process the text to locate the URL of the last screenshot
-        #Extract the https://s2.amazonaws from example lines:
-        #2016-2-9 4:42:39:52 RESPONSE {"state":"success","sessionId":"f77e1de6e4f42a72e6a6ecfd80ed07b95036ca35","hCode":29018101,"value":"https://s3.amazonaws.com/testautomation/f77e1de6e4f42a72e6a6ecfd80ed07b95036ca35/screenshot-selenium-b14d4ec62a.png","class":"org.openqa.selenium.remote.Response","status":0}
-        #[2016-2-9 4:42:45:892] REQUEST [[2016-2-9 4:42:45:892]] GET /session/f77e1de6e4f42a72e6a6ecfd80ed07b95036ca35/title {}
-        #2016-2-9 4:42:45:957 RESPONSE {"state":"success","sessionId":"f77e1de6e4f42a72e6a6ecfd80ed07b95036ca35","hCode":19687124,"value":"New Member Registration & Signup - Chess.com","class":"org.openqa.selenium.remote.Response","status":0}
-
-        screenshot_request = session_log.split('screenshot {}')[-1]
-        response_result = screenshot_request.split('REQUEST')[0]
-        image_url = response_result.split('https://')[-1]
-        image_url = image_url.split('.png')[0]
-        screenshot_url = 'https://' + image_url + '.png'
-
-        return screenshot_url
