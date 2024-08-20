@@ -46,16 +46,16 @@ def test_gmail_util():
         expected_pass += 1
         actual_pass += 1
 
-        # Select the SPAM mailbox
-        inbox_mailbox = gmail.use_mailbox('[Gmail]/Spam')
+        # Select the Inbox mailbox
+        inbox_mailbox = gmail.use_mailbox('Inbox')
         assert isinstance(inbox_mailbox, Mailbox), f"Error: Expected Mailbox instance, got {type(inbox_mailbox)}."
-        print("SPAM selected successfully!")
+        print("Inbox selected successfully!")
         expected_pass += 1
         actual_pass += 1
 
-        # Fetch and print number of messages in SPAM
+        # Fetch and print number of messages in Inbox
         messages = inbox_mailbox.mail()
-        print(f"Number of messages in SPAM: {len(messages)}")
+        print(f"Number of messages in Inbox: {len(messages)}")
         expected_pass += 1
         actual_pass += 1
 
