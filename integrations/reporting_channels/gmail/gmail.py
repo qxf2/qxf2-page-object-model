@@ -7,21 +7,30 @@ based on different criteria, managing labels, and handling authentication.
 """
 
 from __future__ import absolute_import
+import os
+import sys
 import re
 import imaplib
+import logging
+from email.header import decode_header
+from dotenv import load_dotenv
 from integrations.reporting_channels.gmail.mailbox import Mailbox
 from integrations.reporting_channels.gmail.utf import encode as encode_utf7, decode as decode_utf7
 from integrations.reporting_channels.gmail.exceptions import *
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+load_dotenv()
+
 
 class Gmail():
     "Class interact with Gmail using IMAP"
     # GMail IMAP defaults
-    GMAIL_IMAP_HOST = 'imap.gmail.com'
+    GMAIL_IMAP_HOST = os.getenv('imaphost')
     GMAIL_IMAP_PORT = 993
 
     # GMail SMTP defaults
-    GMAIL_SMTP_HOST = "smtp.gmail.com"
-    GMAIL_SMTP_PORT = 587
+    # TODO: implement SMTP functions
+    GMAIL_SMTP_HOST = os.getenv('smtp_ssl_host')
+    GMAIL_SMTP_PORT = os.getenv('smtp_ssl_port')
 
     def __init__(self):
         self.username = None
@@ -162,7 +171,7 @@ class Gmail():
         if not isinstance(messages, dict):
             raise Exception('Messages must be a dictionary')
         fetch_str = ','.join(messages.keys())
-        response, results = self.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
+        response, results = self.imap.uid('FETCH', fetch_str, '(UID BODY.PEEK[] FLAGS)')
 
         for raw_message in results:
             if isinstance(raw_message, tuple):
