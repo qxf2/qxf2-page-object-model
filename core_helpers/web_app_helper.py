@@ -36,7 +36,7 @@ base_url = conf.base_url_conf
 class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
 
-    def __init__(self,base_url):
+    def __init__(self,base_url,api_test_flag=False):
         "Constructor"
         Borg.__init__(self)
         if self.is_first_time():
@@ -55,6 +55,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             self.test_run_id = None
             self.reset()
         self.base_url = base_url
+        self.api_test_flag = api_test_flag
         self.driver_obj = DriverFactory()
         if self.driver is not None:
             self.start() #Visit and initialize xpaths for the appropriate page

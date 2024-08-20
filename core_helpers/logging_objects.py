@@ -11,7 +11,6 @@ class Logging_Objects:
         self.msg_list = []
         self.exceptions = []
         self.browserstack_flag = False
-        #self.api_test_flag = True
 
     def write_test_summary(self, test_type = None):
         "Print out a useful, human readable summary"
@@ -30,16 +29,15 @@ class Logging_Objects:
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
 
-        #if self.api_test_flag is False:
-        self.make_gif()
-        if self.gif_file_name is not None:
-            self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
-            self.write('************************')
+        if self.api_test_flag is False:
+            self.make_gif()
+            if self.gif_file_name is not None:
+                self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
+                self.write('************************')
 
     def write(self,msg,level='info', trace_back=None):
         "Log the message"
         msg = str(msg)
-        #if self.api_test_flag is False:
         self.msg_list.append('%-8s:  '%level.upper() + msg)
         if self.browserstack_flag is True:
             if self.browserstack_msg not in msg:
