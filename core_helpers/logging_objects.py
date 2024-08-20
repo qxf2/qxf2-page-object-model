@@ -29,7 +29,7 @@ class Logging_Objects:
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
-        
+
         #if self.api_test_flag is False:
         self.make_gif()
         if self.gif_file_name is not None:
