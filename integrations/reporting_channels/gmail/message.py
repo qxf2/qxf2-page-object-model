@@ -205,7 +205,7 @@ class Message():
 
     def fetch(self):
         if not self.message:
-            response, results = self.gmail.imap.uid('FETCH', self.uid, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
+            response, results = self.gmail.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[] FLAGS)')
             self.parse(results[0])
         return self.message
 
