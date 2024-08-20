@@ -12,7 +12,7 @@ class Logging_Objects:
         self.exceptions = []
         self.browserstack_flag = False
 
-    def write_test_summary(self, test_type = None):
+    def write_test_summary(self):
         "Print out a useful, human readable summary"
         self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
         self.write('Total number of checks passed=%d\n----------------------\n************************\n\n'%self.pass_counter)
