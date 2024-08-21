@@ -15,7 +15,7 @@ import pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from conf import api_example_conf
 
-@pytest.mark.API
+@pytest.mark.asyncio
 # Skip running the test if Python version < 3.11
 @pytest.mark.skipif(sys.version_info < (3,11),
                     reason="requires Python3.11 or higher")
