@@ -46,14 +46,14 @@ def test_gmail_util():
         expected_pass += 1
         actual_pass += 1
 
-        # Select the Inbox mailbox
+        # Select the INBOX mailbox
         inbox_mailbox = gmail.use_mailbox('Inbox')
         assert isinstance(inbox_mailbox, Mailbox), f"Error: Expected Mailbox instance, got {type(inbox_mailbox)}."
-        print("Inbox selected successfully!")
+        print("INBOX selected successfully!")
         expected_pass += 1
         actual_pass += 1
 
-        # Fetch and print number of messages in Inbox
+        # Fetch and print number of messages in INBOX
         messages = inbox_mailbox.mail()
         print(f"Number of messages in Inbox: {len(messages)}")
         expected_pass += 1
@@ -67,6 +67,16 @@ def test_gmail_util():
             print(f"Fetching Message subject from test script: {fetched_msg.get('subject')}")
             expected_pass += 1
             actual_pass += 1
+            
+            msg.fetch()
+            thread_messages = msg.fetch_thread()
+            if thread_messages is not None:
+                print(f"Number of messages in thread: {len(thread_messages)}")
+                for message in thread_messages:
+                    subject = getattr(message, 'subject', 'No subject attribute')
+                    print(f"Thread message subject: {subject}")
+            else:
+                print("No messages found in thread.")
 
             # Fetch and print subjects of multiple messages
             messages_dict = {msg.uid.decode('utf-8'): msg for msg in messages}
@@ -80,7 +90,7 @@ def test_gmail_util():
                 subject = getattr(message, 'subject', 'No subject attribute')
                 print(f"UID: {uid}, Subject: {subject}")
         else:
-            print("No messages found in SPAM.")
+            print("No messages found in INBOX.")
 
     except Exception as e:
         print("Exception when trying to run test: %s" %__file__)

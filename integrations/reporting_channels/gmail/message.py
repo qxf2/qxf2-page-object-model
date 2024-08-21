@@ -149,12 +149,7 @@ class Message():
                 subject_parts.append(part)
         parsed_subject = ''.join(subject_parts)
         return parsed_subject
-<<<<<<< HEAD
-
-# working demo part
-=======
     
->>>>>>> 5309cf0 (code cleanup)
     def parse(self, raw_message):
         raw_headers = raw_message[0]
         raw_email = raw_message[1]
@@ -205,7 +200,7 @@ class Message():
 
     def fetch(self):
         if not self.message:
-            response, results = self.gmail.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[] FLAGS)')
+            response, results = self.gmail.imap.uid('FETCH', self.uid, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
             self.parse(results[0])
         return self.message
 
