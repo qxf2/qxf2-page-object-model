@@ -15,7 +15,7 @@ class Remote_Objects:
     def register_browserstack(self):
         "Register Browser Stack with Page"
         self.browserstack_flag = True
-        from utils.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
+        from integrations.cross_browsers.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
         self.browserstack_obj = BrowserStack_Library()
 
     def register_testrail(self):
