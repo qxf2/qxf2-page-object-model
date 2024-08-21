@@ -6,15 +6,15 @@ c) maintains the test context/state
 """
 from base64 import b64encode
 from .API_Interface import API_Interface
-from core_helpers.web_app_helper import Web_App_Helper
+from core_helpers.logging_objects import Logging_Objects
 import urllib.parse
 
-class API_Player(Web_App_Helper):
+class API_Player(Logging_Objects):
     "The class that maintains the test context/state"
 
     def __init__(self, url, log_file_path=None, session_flag=False):
         "Constructor"
-        super(API_Player, self).__init__(base_url=url, api_test_flag=True)
+        super(API_Player, self).__init__(base_url=url)
         self.set_log_file(log_file_path)
         self.api_obj = API_Interface(url=url, session_flag=session_flag)
 
