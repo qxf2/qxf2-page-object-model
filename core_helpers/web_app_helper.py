@@ -4,7 +4,7 @@ There are useful wrappers for common Selenium operations
 """
 
 from selenium.webdriver.common.by import By
-import os,inspect
+import os
 from core_helpers.drivers.driverfactory import DriverFactory
 from .selenium_action_objects import Selenium_Action_Objects
 from .remote_objects import Remote_Objects
