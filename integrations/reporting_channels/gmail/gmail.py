@@ -1,13 +1,9 @@
 from __future__ import absolute_import
 import re
 import imaplib
-import logging
-from email.header import decode_header
 from integrations.reporting_channels.gmail.mailbox import Mailbox
 from integrations.reporting_channels.gmail.utf import encode as encode_utf7, decode as decode_utf7
 from integrations.reporting_channels.gmail.exceptions import *
-
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class Gmail():
     # GMail IMAP defaults
@@ -55,15 +51,15 @@ class Gmail():
 
     # Add fetch_mailboxes method in the Gmail class
     def fetch_mailboxes(self):
-        response, data = self.imap.list()
+        response, mailbox_list = self.imap.list()
         if response == 'OK':
-            mailboxes = []
-            for item in data:
-                decoded_item = decode_utf7(item)
-                # Extract the mailbox name
-                mailbox_name = decoded_item.split(' "/" ')[-1]
-                mailboxes.append(mailbox_name.strip('"'))
-            return mailboxes
+            mailbox_list = [item.decode('utf-8') if isinstance(item, bytes) else item for item in mailbox_list]
+            for mailbox in mailbox_list:
+                mailbox_name = mailbox.split('"/"')[-1].replace('"', '').strip()
+                mailbox = Mailbox(self)
+                mailbox.external_name = mailbox_name
+                self.mailboxes[mailbox_name] = mailbox
+            return list(self.mailboxes.keys())
         else:
             raise Exception("Failed to fetch mailboxes.")
 
@@ -172,15 +168,6 @@ class Gmail():
                     uid = uid_match.group(1).decode('utf-8')
                     if uid in messages:
                         messages[uid].parse(raw_message)
-                    else:
-                        logging.warning(f'UID {uid} not found in messages dictionary')
-                else:
-                    logging.warning('UID not found in raw message')
-            elif isinstance(raw_message, bytes):
-                continue
-            else:
-                logging.warning('Invalid raw message format')
-
         return messages
 
     def labels(self, require_unicode=False):
