@@ -52,9 +52,19 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
                 test_obj.execute_javascript("lambda-status=failed")
                 test_obj.teardown()
 
+        elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
+            response = upload_test_logs_to_browserstack(test_obj.log_name,test_obj.session_url)
+            if response.status_code == 200:
+                test_obj.write("Log file uploaded to BrowserStack session successfully.")
+            else:
+                test_obj.write(f"Failed to upload log file. Status code: {response.status_code}")
+                test_obj.write(response.text)
+
+            test_obj.teardown()
+
         else:
             test_obj.wait(3)
-            test_obj.teardown()
+            test_obj.teardown()   
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -91,6 +101,14 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
 
         yield test_mobile_obj
 
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
+            response = upload_test_logs_to_browserstack(test_mobile_obj.log_name,test_mobile_obj.session_url,appium_test = True)
+            if response.status_code == 200:
+                test_mobile_obj.write("Log file uploaded to BrowserStack session successfully.")
+            else:
+                test_mobile_obj.write(f"Failed to upload log file. Status code: {response.status_code}")
+                test_mobile_obj.write(response.text)
+
         #Teardown
         test_mobile_obj.wait(3)
         test_mobile_obj.teardown()
@@ -119,6 +137,17 @@ def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_u
     except Exception as e:
         print("Exception when trying to run test:%s" % __file__)
         print("Python says:%s" % str(e))
+
+def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False):
+    "Upload log file to provided BrowserStack session"
+    from integrations.cross_browsers.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
+    browserstack_obj = BrowserStack_Library()
+    log_file_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'log'))
+    log_file = log_file_dir + os.sep + 'temp_' + log_name 
+    session_id = browserstack_obj.extract_session_id(session_url)
+    response = browserstack_obj.upload_terminal_logs(log_file,session_id,appium_test)
+
+    return response
 
 @pytest.fixture
 def testname(request):
@@ -452,23 +481,24 @@ def pytest_sessionstart(session):
     Perform cleanup at the start of the test session.
     Delete the consolidated log file and temporary log files if present.
     """
-    source_directory = "log"
-    log_file_name = "*.log-temp"
-    consolidated_log_file = os.path.join(source_directory, "consolidated_log.txt")
+    if not hasattr(session.config, "workerinput"):  # Executes during the main session only
+        source_directory = "log"
+        log_file_name = "temp_*.log"
+        consolidated_log_file = os.path.join(source_directory, "consolidated_log.txt")
 
-    # Delete the consolidated log file
-    if os.path.exists(consolidated_log_file):
-        try:
-            os.remove(consolidated_log_file)
-        except OSError as error:
-            print(f"Error removing existing consolidated log file: {error}")
+        # Delete the consolidated log file
+        if os.path.exists(consolidated_log_file):
+            try:
+                os.remove(consolidated_log_file)
+            except OSError as error:
+                print(f"Error removing existing consolidated log file: {error}")
 
-    # Delete all temporary log files if present
-    for temp_log_file in glob.glob(os.path.join(source_directory, log_file_name)):
-        try:
-            os.remove(temp_log_file)
-        except OSError as error:
-            print(f"Error removing temporary log file: {error}")
+        # Delete all temporary log files if present
+        for temp_log_file in glob.glob(os.path.join(source_directory, log_file_name)):
+            try:
+                os.remove(temp_log_file)
+            except OSError as error:
+                print(f"Error removing temporary log file: {error}")
 
 def pytest_sessionfinish(session, exitstatus):
     """
@@ -476,30 +506,30 @@ def pytest_sessionfinish(session, exitstatus):
     The temporary log files are consolidated into a single log file 
     and later deleted.
     """
-    source_directory = "log"
-    log_file_name = "*.log-temp"
+    if not hasattr(session.config, "workerinput"):  # Executes during the main session only
+        source_directory = "log"
+        log_file_name = "temp_*.log"
+        consolidated_log_file = os.path.join(source_directory, "consolidated_log.txt")
 
-    consolidated_log_file = os.path.join(source_directory, "consolidated_log.txt")
+        #Detach all handlers from the logger inorder to release the file handle
+        #which can be used for deleting the temp files later
+        logger.remove(None)
 
-    #Detach all handlers from the logger inorder to release the file handle
-    #which can be used for deleting the temp files later
-    logger.remove(None)
-
-    #Consolidate the temporary log files into the consolidated log file
-    try:
-        with open(consolidated_log_file, "a") as final_log:
-            for file_name in glob.glob(os.path.join(source_directory, log_file_name)):
-                source_file = None
-                try:
-                    with open(file_name, "r") as source_file:
-                        shutil.copyfileobj(source_file, final_log)
-                    os.remove(file_name)
-                except FileNotFoundError as error:
-                    print(f"Temporary log file not found: {error}")
-                except Exception as error:
-                    print(f"Error processing the temporary log file: {error}")
-    except OSError as error:
-        print(f"Error processing consolidated log file: {error}")
+        #Consolidate the temporary log files into the consolidated log file
+        try:
+            with open(consolidated_log_file, "a") as final_log:
+                for file_name in glob.glob(os.path.join(source_directory, log_file_name)):
+                    source_file = None
+                    try:
+                        with open(file_name, "r") as source_file:
+                            shutil.copyfileobj(source_file, final_log)
+                        os.remove(file_name)
+                    except FileNotFoundError as error:
+                        print(f"Temporary log file not found: {error}")
+                    except Exception as error:
+                        print(f"Error processing the temporary log file: {error}")
+        except OSError as error:
+            print(f"Error processing consolidated log file: {error}")
 
 @pytest.hookimpl()
 def pytest_configure(config):

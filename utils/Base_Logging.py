@@ -21,6 +21,7 @@ class Base_Logging():
         self.set_log(self.log_file_name,self.level)
         self.rp_logger = None
 
+
     def set_log(self,log_file_name,level,log_format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}",test_module_name=None):
         "Add an handler sending log messages to a sink"
         if test_module_name is None:
@@ -29,13 +30,15 @@ class Base_Logging():
             os.makedirs(self.log_file_dir)
         if log_file_name is None:
             log_file_name = self.log_file_dir + os.sep + test_module_name + '.log'
+            temp_log_file_name = self.log_file_dir + os.sep + 'temp_' + test_module_name + '.log'
         else:
+            temp_log_file_name = self.log_file_dir + os.sep + 'temp_' + log_file_name
             log_file_name = self.log_file_dir + os.sep + log_file_name
 
         logger.add(log_file_name,level=level, format=log_format,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
         # Create temporary log files for consolidating log data of all tests of a session to a single file
-        logger.add(log_file_name + '-temp',level=level, format=log_format,
+        logger.add(temp_log_file_name,level=level, format=log_format,
         rotation="30 days", filter=None, colorize=None, serialize=False, backtrace=True, enqueue=False, catch=True)
 
 
@@ -125,6 +128,7 @@ class Base_Logging():
             logger.opt(colors=True).critical("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         else:
             logger.critical("Unknown level passed for the msg: {}", msg)
+
 
     def get_exception_module(self,trace_back):
         "Get the actual name of the calling module where exception arises"
