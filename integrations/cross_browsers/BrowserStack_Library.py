@@ -10,11 +10,13 @@ a) Handle expired sessions better
 """
 import os
 import requests
+from conf import remote_url_conf
+
 class BrowserStack_Library():
     "BrowserStack library to interact with BrowserStack artifacts"
     def __init__(self):
         "Constructor for the BrowserStack library"
-        self.browserstack_url = "https://www.browserstack.com/automate/"
+        self.browserstack_api_server_url = remote_url_conf.browserstack_api_server_url
         self.auth = self.get_auth()
 
 
@@ -27,50 +29,43 @@ class BrowserStack_Library():
         return auth
 
 
-    def get_build_id(self):
+    def get_build_id(self,timeout=10):
         "Get the build ID"
-        self.build_url = self.browserstack_url + "builds.json"
-        builds = requests.get(self.build_url, auth=self.auth).json()
+        build_url = self.browserstack_api_server_url + "builds.json?status=running"
+        builds = requests.get(build_url, auth=self.auth, timeout=timeout).json()
         build_id =  builds[0]['automation_build']['hashed_id']
 
         return build_id
 
 
-    def get_sessions(self):
+    def get_sessions(self,timeout=10):
         "Get a JSON object with all the sessions"
         build_id = self.get_build_id()
-        sessions= requests.get(self.browserstack_url + 'builds/%s/sessions.json'%build_id, auth=self.auth).json()
+        sessions= requests.get(f'{self.browserstack_api_server_url}/builds/{build_id}/sessions.json?browserstack_status=running', auth=self.auth, timeout=timeout).json()
 
         return sessions
 
 
-    def get_active_session_id(self):
+    def get_active_session_details(self):
         "Return the session ID of the first active session"
-        session_id = None
+        session_details = None
         sessions = self.get_sessions()
         for session in sessions:
             #Get session id of the first session with status = running
             if session['automation_session']['status']=='running':
-                session_id = session['automation_session']['hashed_id']
+                session_details = session['automation_session']
+                #session_id = session['automation_session']['hashed_id']
+                #session_url = session['automation_session']['browser_url']
                 break
 
-        return session_id
+        return session_details
 
 
-    def get_session_url(self):
-        "Get the session URL"
-        build_id = self.get_build_id()
-        session_id = self.get_active_session_id()
-        session_url = self.browserstack_url + 'builds/%s/sessions/%s'%(build_id,session_id)
-
-        return session_url
-
-
-    def get_session_logs(self):
+    def get_session_logs(self, timeout=10):
         "Return the session log in text format"
-        build_id = self.get_build_id()
-        session_id = self.get_active_session_id()
-        session_log = requests.get(self.browserstack_url + 'builds/%s/sessions/%s/logs'%(build_id,session_id),auth=self.auth).text
+        session_details = self.get_active_session_details()
+        session_log_url = session_details['logs']
+        session_log = requests.get(f'{session_log_url}',auth=self.auth,timeout=timeout).text
 
         return session_log
 
