@@ -64,7 +64,7 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
 
         else:
             test_obj.wait(3)
-            test_obj.teardown()   
+            test_obj.teardown()
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -143,7 +143,7 @@ def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False)
     from integrations.cross_browsers.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
     browserstack_obj = BrowserStack_Library()
     log_file_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'log'))
-    log_file = log_file_dir + os.sep + 'temp_' + log_name 
+    log_file = log_file_dir + os.sep + 'temp_' + log_name
     session_id = browserstack_obj.extract_session_id(session_url)
     response = browserstack_obj.upload_terminal_logs(log_file,session_id,appium_test)
 
@@ -166,7 +166,7 @@ def testname(request):
 def browser(request):
     "pytest fixture for browser"
     try:
-       return request.config.getoption("--browser")
+        return request.config.getoption("--browser")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -447,8 +447,8 @@ def reportportal_service(request):
     "pytest service fixture for reportportal"
     reportportal_pytest_service = None
     try:
-       if request.config.getoption("--reportportal"):
-           reportportal_pytest_service = request.node.config.py_test_service
+        if request.config.getoption("--reportportal"):
+            reportportal_pytest_service = request.node.config.py_test_service
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
