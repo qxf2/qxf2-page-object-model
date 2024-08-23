@@ -191,7 +191,7 @@ class Message():
         if re.search(r'X-GM-THRID (\d+)', raw_headers):
             self.thread_id = re.search(r'X-GM-THRID (\d+)', raw_headers).groups(1)[0]
         if re.search(r'X-GM-MSGID (\d+)', raw_headers):
-            self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)[0]
+            self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)
 
         self.attachments = [
             Attachment(attachment) for attachment in self.message.get_payload()

@@ -88,7 +88,6 @@ class Gmail():
         if mailbox_name not in self.mailboxes:
             mailbox_name = encode_utf7(mailbox_name)
         mailbox = self.mailboxes.get(mailbox_name)
-
         if mailbox and not self.current_mailbox == mailbox_name:
             self.use_mailbox(mailbox_name)
 
