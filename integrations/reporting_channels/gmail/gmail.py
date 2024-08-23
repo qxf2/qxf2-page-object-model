@@ -61,15 +61,15 @@ class Gmail():
 
     # Add fetch_mailboxes method in the Gmail class
     def fetch_mailboxes(self):
-        response, data = self.imap.list()
+        response, mailbox_list = self.imap.list()
         if response == 'OK':
-            mailboxes = []
-            for item in data:
-                decoded_item = decode_utf7(item)
-                # Extract the mailbox name
-                mailbox_name = decoded_item.split(' "/" ')[-1]
-                mailboxes.append(mailbox_name.strip('"'))
-            return mailboxes
+            mailbox_list = [item.decode('utf-8') if isinstance(item, bytes) else item for item in mailbox_list]
+            for mailbox in mailbox_list:
+                mailbox_name = mailbox.split('"/"')[-1].replace('"', '').strip()
+                mailbox = Mailbox(self)
+                mailbox.external_name = mailbox_name
+                self.mailboxes[mailbox_name] = mailbox
+            return list(self.mailboxes.keys())
         else:
             raise Exception("Failed to fetch mailboxes.")
 
@@ -85,7 +85,6 @@ class Gmail():
         if mailbox_name not in self.mailboxes:
             mailbox_name = encode_utf7(mailbox_name)
         mailbox = self.mailboxes.get(mailbox_name)
-
         if mailbox and not self.current_mailbox == mailbox_name:
             self.use_mailbox(mailbox_name)
 

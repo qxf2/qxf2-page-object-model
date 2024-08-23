@@ -198,15 +198,12 @@ class Message():
 
         thread_match = re.search(r'X-GM-THRID (\d+)', raw_headers)
         if thread_match:
-            self.thread_id = thread_match.group(1)[0]
-            print(f"Parsed thread ID: {self.thread_id}")
-        else:
-            print("No thread ID found in headers")
+            self.thread_id = thread_match.group(1)
 
         # if re.search(r'X-GM-THRID (\d+)', raw_headers):
         #     self.thread_id = re.search(r'X-GM-THRID (\d+)', raw_headers).groups(1)[0]
         if re.search(r'X-GM-MSGID (\d+)', raw_headers):
-            self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)[0]
+            self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)
 
         self.attachments = [
             Attachment(attachment) for attachment in self.message.get_payload()
@@ -215,93 +212,42 @@ class Message():
 
     def fetch(self):
         if not self.message:
-            response, results = self.gmail.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[] FLAGS X-GM-THRID)')
+            response, results = self.gmail.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[] X-GM-THRID)')
             self.parse(results[0])
 
         return self.message
 
     # returns a list of fetched messages (both sent and received) in chronological order
-    # def fetch_thread(self):
-    #     self.fetch()
-    #     original_mailbox = self.mailbox
-    #     self.gmail.use_mailbox(original_mailbox.name)
-
-    #     # fetch and cache messages from inbox or other received mailbox
-    #     response, results = self.gmail.imap.uid('SEARCH', None, '(X-GM-THRID ' + self.thread_id + ')')
-    #     received_messages = {}
-    #     uids = results[0].split(' ')
-    #     if response == 'OK':
-    #         for uid in uids: received_messages[uid] = Message(original_mailbox, uid)
-    #         self.gmail.fetch_multiple_messages(received_messages)
-    #         self.mailbox.messages.update(received_messages)
-
-    #     # fetch and cache messages from 'sent'
-    #     self.gmail.use_mailbox('[Gmail]/Sent Mail')
-    #     response, results = self.gmail.imap.uid('SEARCH', None, '(X-GM-THRID ' + self.thread_id + ')')
-    #     sent_messages = {}
-    #     uids = results[0].split(' ')
-    #     if response == 'OK':
-    #         for uid in uids: sent_messages[uid] = Message(self.gmail.mailboxes['[Gmail]/Sent Mail'], uid)
-    #         self.gmail.fetch_multiple_messages(sent_messages)
-    #         self.gmail.mailboxes['[Gmail]/Sent Mail'].messages.update(sent_messages)
-
-    #     self.gmail.use_mailbox(original_mailbox.name)
-
-    #     # combine and sort sent and received messages
-    #     return sorted(dict(received_messages.items() + sent_messages.items()).values(), key=lambda m: m.sent_at)
-    
     def fetch_thread(self):
-        # Fetch the current message
         self.fetch()
         original_mailbox = self.mailbox
         self.gmail.use_mailbox(original_mailbox.name)
-        
+
+        # fetch and cache messages from inbox or other received mailbox
+        response, results = self.gmail.imap.uid('SEARCH', None, '(X-GM-THRID ' + self.thread_id + ')')
         received_messages = {}
+        uids = results[0].decode('utf-8').split(' ')
+        if response == 'OK':
+            for uid in uids: received_messages[uid] = Message(original_mailbox, uid)
+            self.gmail.fetch_multiple_messages(received_messages)
+            self.mailbox.messages.update(received_messages)
+
+        # fetch and cache messages from 'sent'
+        self.gmail.use_mailbox('"[Gmail]/Sent Mail"')
+        response, results = self.gmail.imap.uid('SEARCH', None, '(X-GM-THRID ' + self.thread_id + ')')
         sent_messages = {}
+        uids = results[0].decode('utf-8').split(' ')
+        if response == 'OK':
+            for uid in uids: sent_messages[uid] = Message(self.gmail.mailboxes['[Gmail]/Sent Mail'], uid)
+            self.gmail.fetch_multiple_messages(sent_messages)
+            self.gmail.mailboxes['[Gmail]/Sent Mail'].messages.update(sent_messages)
 
-        # Fetch received messages
-        try:
-            response, results = self.gmail.imap.uid('SEARCH', None, f'(X-GM-THRID {self.thread_id})')
-            if response == 'OK':
-                uids = results[0].split()
-                for uid in uids:
-                    if uid:
-                        uid_str = uid.decode('utf-8') if isinstance(uid, bytes) else uid
-                        received_messages[uid_str] = Message(original_mailbox, uid_str)
-                self.gmail.fetch_multiple_messages(received_messages)
-                self.mailbox.messages.update(received_messages)
-            else:
-                print("Failed to search received messages")
-        except Exception as e:
-            print(f"Error fetching received messages: {e}")
-
-        # Fetch sent messages
-        try:
-            self.gmail.use_mailbox('[Gmail]/Sent Mail')
-            response, results = self.gmail.imap.uid('SEARCH', None, f'(X-GM-THRID {self.thread_id})')
-            if response == 'OK':
-                uids = results[0].split()
-                for uid in uids:
-                    if uid:
-                        uid_str = uid.decode('utf-8') if isinstance(uid, bytes) else uid
-                        sent_messages[uid_str] = Message(self.gmail.mailboxes['[Gmail]/Sent Mail'], uid_str)
-                        # sent_messages[uid] = Message(self.gmail.mailboxes['[Gmail]/Sent Mail'], uid)
-                self.gmail.fetch_multiple_messages(sent_messages)
-                self.gmail.mailboxes['[Gmail]/Sent Mail'].messages.update(sent_messages)
-            else:
-                print("Failed to search sent messages")
-        except Exception as e:
-            print(f"Error fetching sent messages: {e}")
-
-        # Restore the original mailbox
         self.gmail.use_mailbox(original_mailbox.name)
 
-        # Combine and sort sent and received messages
+        # combine and sort sent and received messages
         combined_messages = {**received_messages, **sent_messages}
         sorted_messages = sorted(combined_messages.values(), key=lambda m: m.sent_at)
-
         return sorted_messages
-
 
 class Attachment:
 
