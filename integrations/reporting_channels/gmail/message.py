@@ -199,9 +199,6 @@ class Message():
         thread_match = re.search(r'X-GM-THRID (\d+)', raw_headers)
         if thread_match:
             self.thread_id = thread_match.group(1)
-
-        # if re.search(r'X-GM-THRID (\d+)', raw_headers):
-        #     self.thread_id = re.search(r'X-GM-THRID (\d+)', raw_headers).groups(1)[0]
         if re.search(r'X-GM-MSGID (\d+)', raw_headers):
             self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)
 
