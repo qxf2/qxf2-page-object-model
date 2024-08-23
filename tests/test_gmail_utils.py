@@ -5,21 +5,20 @@ Our automated test will do the following:
     #After fetching the mail box ,select and fetch messages and print the number of messages and the subject of the messages
 
 Prerequisites:
-    - Gmail account with app password
+    - Email account with app password
 """
-
-import sys
 import os
+import sys
+import pytest
 from integrations.reporting_channels.gmail.gmail import Gmail
 from integrations.reporting_channels.gmail.mailbox import Mailbox
 from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-import pytest
 
 load_dotenv()
 
 @pytest.mark.GMAIL
-def test_gmail_util():    
+def test_gmail_util():
     try:
         # Initialize flags for test summary
         expected_pass = 0
@@ -71,7 +70,7 @@ def test_gmail_util():
             msg.fetch()
             thread_messages = msg.fetch_thread()
             if thread_messages is not None:
-                print(f"Number of messages in thread: {len(thread_messages)}")
+                print(f"Number of messages in Thread: {len(thread_messages)}")
                 for message in thread_messages:
                     subject = getattr(message, 'subject', 'No subject attribute')
                     print(f"Thread message subject: {subject}")
@@ -82,13 +81,12 @@ def test_gmail_util():
             messages_dict = {msg.uid.decode('utf-8'): msg for msg in messages}
             fetched_messages = gmail.fetch_multiple_messages(messages_dict)
             assert fetched_messages, "Failed to fetch multiple messages!"
-            print(f"Fetched multiple messages: {fetched_messages}")
             expected_pass += 1
             actual_pass += 1
 
             for uid, message in fetched_messages.items():
                 subject = getattr(message, 'subject', 'No subject attribute')
-                print(f"UID: {uid}, Subject: {subject}")
+                print(f"UID: {uid}, Email Subject: {subject}")
         else:
             print("No messages found in INBOX.")
 
