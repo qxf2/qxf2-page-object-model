@@ -298,7 +298,6 @@ class Selenium_Action_Objects:
         self.driver.quit()
         self.reset()
     
-    # to minimise the keyboard on the screen.
     def hide_keyboard(self):
         # To minimise the keyboard.
         self.driver.hide_keyboard()

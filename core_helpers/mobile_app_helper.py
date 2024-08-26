@@ -403,12 +403,12 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
     def start(self):
         "Dummy method to be over-written by child classes"
         pass
-    # to get source code of the app.
+    
     def get_source_code(self):
-            "to get the source code of the Mobile page"
-            try:
-                source = self.driver.page_source
-                return source
-            except Exception as e:
-                self.write(str(e), 'debug')
-                self.exceptions.append("An exception occured when getting source")
+        "To get the source code of the Mobile app page"
+        try:
+            source = self.driver.page_source
+            return source
+        except Exception as e:
+            self.write(str(e), 'debug')
+            self.exceptions.append("An exception occured when getting source")
