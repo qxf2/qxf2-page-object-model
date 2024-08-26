@@ -127,33 +127,6 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
 
         return result_flag
 
-        """
-        if fieldname == locators.fieldnames[0]:
-            result_flag = self.click_element(locators.payment_email)
-            self.hide_keyboard()
-            self.save_screenshot(screenshot_name=screenshotname)
-        elif fieldname == locators.fieldnames[1]:
-            result_flag = self.click_element(locators.payment_card_number)
-            self.hide_keyboard()
-            self.save_screenshot(screenshot_name=screenshotname)
-        elif fieldname == locators.fieldnames[2]:
-            self.click_element(locators.payment_email)
-            result_flag = self.click_element(locators.payment_card_expiry)
-            self.hide_keyboard()
-            self.save_screenshot(screenshot_name=screenshotname)
-        elif fieldname == locators.fieldnames[3]:
-            self.click_element(locators.payment_email)
-            result_flag = self.click_element(locators.payment_card_cvv)
-            self.hide_keyboard()
-            self.save_screenshot(screenshot_name=screenshotname)
-        else:
-            self.click_element(locators.payment_email)
-            result_flag = self.click_element(locators.payment_card_expiry)
-            self.hide_keyboard()
-            self.save_screenshot(screenshot_name=screenshotname)
-        return result_flag
-        """
-
     @Wrapit._exceptionHandler
     def image_to_string(self, image_path, substring):
         """

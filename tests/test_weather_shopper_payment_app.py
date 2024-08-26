@@ -182,6 +182,7 @@ def test_weather_shopper_payment_app(test_mobile_obj):
         test_mobile_obj.log_result(result_flag,
             positive="Successfully completed conversion",
             negative="Failure to complete conversion")
+
         """
         time.sleep(10)
         #Enter payment details - expiry date field validation
@@ -265,5 +266,3 @@ def test_weather_shopper_payment_app(test_mobile_obj):
 
     if expected_pass != actual_pass:
         raise AssertionError(f"Test failed: {__file__}")
-    
-    

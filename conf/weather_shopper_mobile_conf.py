@@ -6,7 +6,7 @@ valid_payment_details = {
 "card_cvv": "123"
 }
 
-# Defining dictionaries with invalid field entries 
+# Defining dictionaries with invalid field entries
 
 invalid_email_in_payment_details = {
 "card_type": "Debit Card",
