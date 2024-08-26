@@ -56,6 +56,7 @@ class BrowserStackRunner(RemoteOptions):
             post_json_data = json.loads(post_response.text)
             #Get the app url of the newly uploaded apk
             app_url = post_json_data['app_url']
+            
             return app_url
 
         except Exception as exception:
