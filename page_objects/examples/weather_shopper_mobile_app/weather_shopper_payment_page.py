@@ -1,7 +1,7 @@
 """
 Page object for the payment page in Weathershopper application.
 """
-# pylint: disable = W0212,E0401,W0104,R0913
+# pylint: disable = W0212,E0401,W0104,R0913,R1710
 import glob
 from PIL import Image, ImageEnhance, ImageFilter
 import pytesseract
@@ -141,30 +141,16 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
             # Assuming there is only one file matching the pattern
             file_path = files[0]
             print(f"Found file: {file_path}")
-            try:
-                # Load the image
-                image = Image.open(file_path)
 
-                try:
-                    # Enhance the image before OCR
-                    image = self.preprocess_image(image)
-                    # Perform OCR on the enhanced image
-                    text = pytesseract.image_to_string(image)
+            # Load the image
+            image = Image.open(file_path)
+            # Enhance the image before OCR
+            image = self.preprocess_image(image)
+            # Perform OCR on the enhanced image
+            text = pytesseract.image_to_string(image)
+            result_flag = self.find_string(text,substring)
+            return result_flag
 
-                    try:
-                        result_flag = self.find_string(text,substring)
-                        return result_flag
-                    except Exception as strser:
-                        print(f"Error during string search: {strser}")
-                        return result_flag
-                except Exception as ocrproc:
-                    print(f"Error during OCR process: {ocrproc}")
-                    return result_flag
-            except Exception as opima:
-                print(f"Error opening image file: {opima}")
-                return False
-        else:
-            print(f"No matching file found:{file_path}")
 
     @Wrapit._exceptionHandler
     def find_string(self,text,substring):

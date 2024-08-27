@@ -15,7 +15,7 @@ and Invalid month"
 Due to inconsistency behavior of tessract(OCR), the code is commented for expiry
 date, cvv, expiry date future date validation.
 """
-# pylint: disable=E0401, C0413
+# pylint: disable=E0401,C0413,C0301
 import secrets
 import time
 import os
@@ -177,81 +177,11 @@ def test_weather_shopper_payment_app(test_mobile_obj):
                                    positive="Successfully navigated to cardnumber field",
                                    negative="Failed to navigate to cardnumber field")
 
-        result_flag = test_mobile_obj.image_to_string(payment_details["image_path"], 
-                      payment_details["substring"])
+        result_flag = test_mobile_obj.image_to_string(payment_details["image_path"],                      payment_details["substring"])
         test_mobile_obj.log_result(result_flag,
             positive="Successfully completed conversion",
             negative="Failure to complete conversion")
 
-        """
-        time.sleep(10)
-        #Enter payment details - expiry date field validation
-        payment_details = conf.invalid_expirydate_in_payment_details
-        result_flag = test_mobile_obj.submit_payment_details(payment_details["card_type"],
-                        payment_details["email"], payment_details["card_number"],
-                        payment_details["card_expiry"], payment_details["card_cvv"])
-
-        test_mobile_obj.log_result(result_flag,
-                                positive="Successfully submitted payment details",
-                                negative="Failed to submit payment details")
-
-        result_flag = test_mobile_obj.navigate_to_field(fieldname="date", screenshotname="navigate_to_cardexpiry_field")
-        test_mobile_obj.log_result(result_flag,
-                                   positive="Successfully navigated to expiry date field",
-                                   negative="Failed to navigate to expiry date field")
-
-        result_flag = test_mobile_obj.image_to_string(payment_details["image_path"], 
-                      payment_details["substring"])
-        test_mobile_obj.log_result(result_flag,
-            positive="Successfully completed conversion",
-            negative="Failure to complete conversion")
-        
-
-        #Enter payment details - expiration date in future validation
-        payment_details = conf.invalid_futuredate_in_payment_details
-        result_flag = test_mobile_obj.submit_payment_details(payment_details["card_type"],
-                        payment_details["email"], payment_details["card_number"],
-                        payment_details["card_expiry"], payment_details["card_cvv"])
-
-        test_mobile_obj.log_result(result_flag,
-                                positive="Successfully submitted payment details",
-                                negative="Failed to submit payment details")
-
-        result_flag = test_mobile_obj.navigate_to_field(fieldname="future date",screenshotname="navigate_to_futuredate_field")
-        test_mobile_obj.log_result(result_flag,
-                                   positive="Successfully navigated to expirydate(futuredate) field",
-                                   negative="Failed to navigate to expirydate(futuredate) field")
-
-        time.sleep(10)
-        result_flag = test_mobile_obj.image_to_string(payment_details["image_path"], 
-                      payment_details["substring"])
-        test_mobile_obj.log_result(result_flag,
-            positive="Successfully completed conversion",
-            negative="Failure to complete conversion")
-
-        
-        #Enter payment details - cvv field validation
-        payment_details = conf.invalid_cvv_in_payment_details
-        result_flag = test_mobile_obj.submit_payment_details(payment_details["card_type"],
-                        payment_details["email"], payment_details["card_number"],
-                        payment_details["card_expiry"], payment_details["card_cvv"])
-
-        test_mobile_obj.log_result(result_flag,
-                                positive="Successfully submitted payment details",
-                                negative="Failed to submit payment details")
-
-        result_flag = test_mobile_obj.navigate_to_field(fieldname="cvv",screenshotname="navigate_to_cardcvv_field")
-        test_mobile_obj.log_result(result_flag,
-                                   positive="Successfully navigated to cvv field",
-                                   negative="Failed to navigate to cvv field")
-        
-        time.sleep(10)
-        result_flag = test_mobile_obj.image_to_string(payment_details["image_path"], 
-                      payment_details["substring"])
-        test_mobile_obj.log_result(result_flag,
-            positive="Successfully completed conversion",
-            negative="Failure to complete conversion")
-        """
         # Print out the results.
         test_mobile_obj.write(f'Script duration: {int(time.time() - start_time)} seconds\n')
         test_mobile_obj.write_test_summary()
