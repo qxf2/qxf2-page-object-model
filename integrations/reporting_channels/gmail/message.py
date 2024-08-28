@@ -216,15 +216,29 @@ class Message():
         original_mailbox = self.mailbox
         self.gmail.use_mailbox(original_mailbox.name)
 
+<<<<<<< HEAD
         # fetch and cache messages from inbox or other received mailbox
         response, results = self.gmail.imap.uid('SEARCH', None, '(X-GM-THRID ' + self.thread_id + ')')
         received_messages = {}
         uids = results[0].split(' ')
         if response == 'OK':
             for uid in uids: received_messages[uid] = Message(original_mailbox, uid)
-            self.gmail.fetch_multiple_messages(received_messages)
-            self.mailbox.messages.update(received_messages)
+=======
+        combined_messages = {}
 
+        # Fetch messages from the current mailbox (inbox or other received mailbox)
+        response, results = self.gmail.imap.uid('SEARCH', None, f'(X-GM-THRID {self.thread_id})')
+        if response == 'OK' and results and results[0]:
+            uids = results[0].decode('utf-8').split(' ')
+            received_messages = {uid: Message(original_mailbox, uid) for uid in uids}
+>>>>>>> f7ede50 (working draft for featch threads for 0 or more than 1)
+            self.gmail.fetch_multiple_messages(received_messages)
+            combined_messages.update(received_messages)
+        else:
+            print(f"No received messages found with thread ID: {self.thread_id} in {self.gmail.current_mailbox}.")
+            received_messages = {}
+
+<<<<<<< HEAD
         # fetch and cache messages from 'sent'
         self.gmail.use_mailbox('[Gmail]/Sent Mail')
         response, results = self.gmail.imap.uid('SEARCH', None, '(X-GM-THRID ' + self.thread_id + ')')
@@ -232,11 +246,35 @@ class Message():
         uids = results[0].split(' ')
         if response == 'OK':
             for uid in uids: sent_messages[uid] = Message(self.gmail.mailboxes['[Gmail]/Sent Mail'], uid)
+=======
+        # Fetch messages from the sent mail folder
+        self.gmail.use_mailbox('"[Gmail]/Sent Mail"')
+        response, results = self.gmail.imap.uid('SEARCH', None, f'(X-GM-THRID {self.thread_id})')
+        if response == 'OK' and results and results[0]:
+            uids = results[0].decode('utf-8').split(' ')
+            sent_messages = {uid: Message(self.gmail.mailboxes['[Gmail]/Sent Mail'], uid) for uid in uids}
+>>>>>>> f7ede50 (working draft for featch threads for 0 or more than 1)
             self.gmail.fetch_multiple_messages(sent_messages)
-            self.gmail.mailboxes['[Gmail]/Sent Mail'].messages.update(sent_messages)
+            combined_messages.update(sent_messages)
+        else:
+            print(f"No sent messages found with thread ID: {self.thread_id} in [Gmail]/Sent Mail.")
+            sent_messages = {}
 
+        # Revert to the original mailbox
         self.gmail.use_mailbox(original_mailbox.name)
+<<<<<<< HEAD
         return sorted(dict(received_messages.items() + sent_messages.items()).values(), key=lambda m: m.sent_at)
+=======
+
+        # Combine and sort messages if any were found
+        if combined_messages:
+            sorted_messages = sorted(combined_messages.values(), key=lambda m: m.sent_at)
+            return sorted_messages
+        else:
+            print("No messages found in the thread.")
+            return None
+
+>>>>>>> f7ede50 (working draft for featch threads for 0 or more than 1)
 
 class Attachment:
     "Attachment class methods for email attachment."
