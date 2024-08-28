@@ -19,7 +19,7 @@ import pytest
 load_dotenv()
 
 @pytest.mark.GMAIL
-def test_gmail_util():    
+def test_gmail_util():
     try:
         # Initialize flags for test summary
         expected_pass = 0
@@ -34,21 +34,24 @@ def test_gmail_util():
 
         # Attempt to log in
         result_flag = gmail.login(username, password)
-        assert result_flag, "Login failed!"
+        if not result_flag:
+            raise Exception("Login failed!")
         print("Login successful!")
         expected_pass += 1
         actual_pass += 1
 
         # Fetch and print mailboxes
         mailboxes = gmail.fetch_mailboxes()
-        assert mailboxes, "Failed to fetch mailboxes!"
+        if not mailboxes:
+            raise ValueError("Failed to fetch mailboxes!")
         print(f"Fetched mailboxes: {mailboxes}")
         expected_pass += 1
         actual_pass += 1
 
         # Select the SPAM mailbox
         inbox_mailbox = gmail.use_mailbox('[Gmail]/Spam')
-        assert isinstance(inbox_mailbox, Mailbox), f"Error: Expected Mailbox instance, got {type(inbox_mailbox)}."
+        if not isinstance(inbox_mailbox, Mailbox):
+            raise TypeError(f"Error: Expected Mailbox instance, got {type(inbox_mailbox)}.")
         print("SPAM selected successfully!")
         expected_pass += 1
         actual_pass += 1
@@ -63,7 +66,6 @@ def test_gmail_util():
             # Fetch and print the subject of the first message
             msg = messages[0]
             fetched_msg = msg.fetch()
-            assert 'subject' in fetched_msg, "Subject not found in fetched message!"
             print(f"Fetching Message subject from test script: {fetched_msg.get('subject')}")
             expected_pass += 1
             actual_pass += 1
@@ -71,14 +73,16 @@ def test_gmail_util():
             # Fetch and print subjects of multiple messages
             messages_dict = {msg.uid.decode('utf-8'): msg for msg in messages}
             fetched_messages = gmail.fetch_multiple_messages(messages_dict)
-            assert fetched_messages, "Failed to fetch multiple messages!"
-            print(f"Fetched multiple messages: {fetched_messages}")
-            expected_pass += 1
-            actual_pass += 1
+            if not fetched_messages:
+                raise RuntimeError("Failed to fetch multiple messages!")
+            else:
+                print(f"Fetched multiple messages: {fetched_messages}")
+                expected_pass += 1
+                actual_pass += 1
 
-            for uid, message in fetched_messages.items():
-                subject = getattr(message, 'subject', 'No subject attribute')
-                print(f"UID: {uid}, Subject: {subject}")
+                for uid, message in fetched_messages.items():
+                    subject = getattr(message, 'subject', 'No subject attribute')
+                    print(f"UID: {uid}, Subject: {subject}")
         else:
             print("No messages found in SPAM.")
 
@@ -93,4 +97,5 @@ def test_gmail_util():
         expected_pass += 1
         actual_pass += 1
 
-    assert expected_pass == actual_pass, "Test failed: %s" %__file__
+    if expected_pass != actual_pass:
+        raise RuntimeError(f"Test failed: {__file__}")

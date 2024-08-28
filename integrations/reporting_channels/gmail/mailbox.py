@@ -22,9 +22,6 @@ class Mailbox():
         self.name = decode_utf7(value)
 
     def mail(self, prefetch=False, **kwargs):
-        if isinstance(self.name, bytes):
-            decoded_name = self.name.decode('utf-7')
-
         search = ['ALL']
 
         kwargs.get('read')   and search.append('SEEN')
