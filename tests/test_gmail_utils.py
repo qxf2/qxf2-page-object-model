@@ -69,7 +69,7 @@ def test_gmail_util():
             
             msg.fetch()
             thread_messages = msg.fetch_thread()
-            if thread_messages is not None:
+            if thread_messages:
                 print(f"Number of messages in Thread: {len(thread_messages)}")
                 for message in thread_messages:
                     subject = getattr(message, 'subject', 'No subject attribute')
