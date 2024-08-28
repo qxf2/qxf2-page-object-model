@@ -1,41 +1,42 @@
-import os,pytest,sys
+import os
+import sys
+import pytest
 import glob
 import shutil
 from loguru import logger
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from dotenv import load_dotenv
 from page_objects.PageFactory import PageFactory
-from conf import browser_os_name_conf
-from conf import base_url_conf
+from conf import browser_os_name_conf, base_url_conf
 from endpoints.API_Player import API_Player
 from utils import interactive_mode
 
+# Ensure environment variables are loaded
 load_dotenv()
 
 @pytest.fixture
 def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
-    "Return an instance of Base Page that knows about the third party integrations"
+    """Return an instance of Base Page that knows about the third party integrations"""
     try:
         if interactivemode_flag.lower() == "y":
             default_flag = interactive_mode.set_default_flag_gui(browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag)
-            if default_flag == False:
-                browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag = interactive_mode.ask_questions_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
+            if not default_flag:
+                browser, browser_version, remote_flag, os_name, os_version, testrail_flag, tesults_flag = interactive_mode.ask_questions_gui(browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag)
 
-        test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
+        test_obj = PageFactory.get_page_object("Zero", base_url=base_url)
         test_obj.set_calling_module(testname)
-        #Setup and register a driver
+        # Setup and register a driver
         test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name, testname)
 
-        #Setup TestRail reporting
-        if testrail_flag.lower()=='y':
+        # Setup TestRail reporting
+        if testrail_flag.lower() == 'y':
             if test_run_id is None:
                 test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
-            if test_run_id is not None:
+            else:
                 test_obj.register_testrail()
                 test_obj.set_test_run_id(test_run_id)
 
-        if tesults_flag.lower()=='y':
+        if tesults_flag.lower() == 'y':
             test_obj.register_tesults()
 
         if reportportal_service:
@@ -57,8 +58,8 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
             test_obj.teardown()
 
     except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+        logger.error(f"Exception when trying to run test: {__file__}")
+        logger.error(f"Python says: {str(e)}")
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("lambda-status=error")
 
@@ -82,28 +83,27 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
             if test_run_id is None:
                 test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
-            if test_run_id is not None:
+            else:
                 test_mobile_obj.register_testrail()
                 test_mobile_obj.set_test_run_id(test_run_id)
 
-        if tesults_flag.lower()=='y':
+        if tesults_flag.lower() == 'y':
             test_mobile_obj.register_tesults()
 
-        yield test_mobile_obj
 
-        #Teardown
+        yield test_mobile_obj
+        # Teardown
         test_mobile_obj.wait(3)
         test_mobile_obj.teardown()
 
     except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+        logger.error(f"Exception when trying to run test: {__file__}")
+        logger.error(f"Python says: {str(e)}")
 
 @pytest.fixture
-def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_url):
+def test_api_obj(interactivemode_flag, testname, api_url=base_url_conf.api_base_url):
     "Return an instance of Base Page that knows about the third party integrations"
-    # request.module._name__ is tests.<module_name> strip and get the module name
-    log_file = request.module.__name__.split('.')[-1] + '.log'
+    log_file = testname + ".log"
     try:
         if interactivemode_flag.lower()=='y':
             api_url,session_flag = interactive_mode.ask_questions_api(api_url)
