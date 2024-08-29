@@ -1,3 +1,4 @@
+"""
 # The contents of this file has been derived code from the Twisted project
 # (http://twistedmatrix.com/). The original author is Jp Calderone.
 
@@ -21,9 +22,9 @@
 # LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-text_type = str
-binary_type = bytes
+"""
+TEXT_TYPE = str
+BINARY_TYPE = bytes
 
 PRINTABLE = set(range(0x20, 0x26)) | set(range(0x27, 0x7f))
 
@@ -32,7 +33,7 @@ def encode(s):
 
     Despite the function's name, the output is still a unicode string.
     """
-    if not isinstance(s, text_type):
+    if not isinstance(s, TEXT_TYPE):
         return s
 
     r = []
@@ -63,9 +64,9 @@ def decode(s):
     Despite the function's name, the input may still be a unicode
     string. If the input is bytes, it's first decoded to unicode.
     """
-    if isinstance(s, binary_type):
+    if isinstance(s, BINARY_TYPE):
         s = s.decode('latin-1')
-    if not isinstance(s, text_type):
+    if not isinstance(s, TEXT_TYPE):
         return s
 
     r = []
@@ -89,11 +90,13 @@ def decode(s):
     return ''.join(r)
 
 def modified_utf7(s):
+    "Convert a string to modified UTF-7 encoding."
     # encode to utf-7: '\xff' => b'+AP8-', decode from latin-1 => '+AP8-'
     s_utf7 = s.encode('utf-7').decode('latin-1')
     return s_utf7[1:-1].replace('/', ',')
 
 def modified_deutf7(s):
+    "Convert a modified UTF-7 encoded string back to UTF-8."
     s_utf7 = '+' + s.replace(',', '/') + '-'
     # encode to latin-1: '+AP8-' => b'+AP8-', decode from utf-7 => '\xff'
     return s_utf7.encode('latin-1').decode('utf-7')
