@@ -52,13 +52,14 @@ class BrowserStackRunner(RemoteOptions):
             files = {'file': open(apk_file, 'rb')}
             post_response = requests.post(self.browserstack_app_upload_url, files=files,
                                          auth=(self.username, self.password),timeout= timeout)
+            post_response.raise_for_status()
             post_json_data = json.loads(post_response.text)
             #Get the app url of the newly uploaded apk
             app_url = post_json_data['app_url']
-        except Exception as exception:
-            print(str(exception))
+            return app_url
 
-        return app_url
+        except Exception as exception:
+            print('\033[91m'+"\nError while uploading the app:%s"%str(exception)+'\033[0m')
 
     def get_current_session_url(self, web_driver):
         "Get current session url"
