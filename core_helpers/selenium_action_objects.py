@@ -299,5 +299,12 @@ class Selenium_Action_Objects:
         self.reset()
 
     def hide_keyboard(self):
-        # To minimise the keyboard.
-        self.driver.hide_keyboard()
+        result_flag=False
+        try:
+            # To minimise the keyboard.
+            self.driver.hide_keyboard()
+            result_flag=True
+        except Exception as e:
+            print(f"An error occured during keyboard minimise: {str(e)}")
+        
+        return result_flag

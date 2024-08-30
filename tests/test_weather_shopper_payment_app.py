@@ -1,6 +1,8 @@
 """
 Automated test for Weather Shopper mobile application -
-Mock Payment screen field validations Before running this test
+Mock Payment screen field validations. 
+
+Pre-requisite: Before running this test-
 **************************************************************
 For LINUX Users, please run the below two commands from CLI
 - run: sudo apt-get update
@@ -8,12 +10,8 @@ For LINUX Users, please run the below two commands from CLI
 For Windows Users: https://github.com/UB-Mannheim/tesseract/wiki
 ****************************************************************
 The tests validates fields on the Mock Payment validation.
-The fields are : Email, cardnumber, Expiration date, CVV.
-Provided invalid values for Email, cardnumber, expiry date and cvv.
-expiry date: Two more additional validations "Expiration date not in future
-and Invalid month"
-Due to inconsistency behavior of tessract(OCR), the code is commented for expiry
-date, cvv, expiry date future date validation.
+The fields are : Email, cardnumber.
+Provided invalid values for Email, cardnumber.
 """
 # pylint: disable=E0401,C0413,C0301
 import secrets
@@ -157,7 +155,7 @@ def test_weather_shopper_payment_app(test_mobile_obj):
                                    positive="Successfully navigated to email field",
                                    negative="Failed to navigate to email field")
 
-        result_flag = test_mobile_obj.image_to_string(payment_details["image_path"],payment_details["substring"])
+        result_flag = test_mobile_obj.get_string_from_image(payment_details["image_path"],payment_details["substring"])
         test_mobile_obj.log_result(result_flag,
             positive="Successfully completed conversion",
             negative="Failure to complete conversion")
@@ -177,7 +175,7 @@ def test_weather_shopper_payment_app(test_mobile_obj):
                                    positive="Successfully navigated to cardnumber field",
                                    negative="Failed to navigate to cardnumber field")
 
-        result_flag = test_mobile_obj.image_to_string(payment_details["image_path"],                      payment_details["substring"])
+        result_flag = test_mobile_obj.get_string_from_image(payment_details["image_path"],                      payment_details["substring"])
         test_mobile_obj.log_result(result_flag,
             positive="Successfully completed conversion",
             negative="Failure to complete conversion")

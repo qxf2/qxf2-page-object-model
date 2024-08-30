@@ -108,29 +108,21 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
         Navigating the cursor to the desired field
         and capturing the screenshot of the error prompt.
         """
-        # Define the actions for each fieldname
-        field_actions = {
-            locators.fieldnames[0]: [locators.payment_email],
-            locators.fieldnames[1]: [locators.payment_card_number],
-            locators.fieldnames[2]: [locators.payment_email, locators.payment_card_expiry],
-            locators.fieldnames[3]: [locators.payment_email, locators.payment_card_cvv]
-        }
-        actions = field_actions.get(
-            fieldname, [locators.payment_email, locators.payment_card_expiry]
-        )
-        # Perform the actions
-        for action in actions:
-            result_flag = self.click_element(action)
-
-        self.hide_keyboard()
-        self.save_screenshot(screenshot_name=screenshotname)
+        if fieldname == "email":
+            result_flag = self.click_element(locators.payment_email)
+            self.hide_keyboard()
+            self.save_screenshot(screenshot_name=screenshotname)
+        else:
+            result_flag = self.click_element(locators.payment_card_number)
+            self.hide_keyboard()
+            self.save_screenshot(screenshot_name=screenshotname)
 
         return result_flag
 
     @Wrapit._exceptionHandler
-    def image_to_string(self, image_path, substring):
+    def get_string_from_image(self, image_path, substring):
         """
-        image_to_string() - The method extracts the text from the 
+        get_string_from_image() - The method extracts the text from the 
         image using tesseract.
         find_string() - Search the substring
         preprocess_image() - To enhance the image contrast 
@@ -149,6 +141,7 @@ class WeatherShopperPaymentPage(Mobile_App_Helper):
             # Perform OCR on the enhanced image
             text = pytesseract.image_to_string(image)
             result_flag = self.find_string(text,substring)
+
             return result_flag
 
 
