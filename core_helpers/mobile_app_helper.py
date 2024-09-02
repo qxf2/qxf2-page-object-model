@@ -75,9 +75,11 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
 
     def register_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version,remote_project_name,remote_build_name,orientation):
         "Register the mobile driver"
-        self.driver = self.driver_obj.get_mobile_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version,remote_project_name,remote_build_name, orientation)
+        self.driver,self.session_url = self.driver_obj.get_mobile_driver(mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version,remote_project_name,remote_build_name,orientation)
         self.set_screenshot_dir() # Create screenshot directory
         self.set_log_file()
+        if self.session_url:
+                self.write( "Cloud Session URL: " + '\n' + str(self.session_url))
         self.start()
 
 

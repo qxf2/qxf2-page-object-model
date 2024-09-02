@@ -7,10 +7,11 @@ from utils.stop_test_exception_util import Stop_Test_Exception
 from utils import Gif_Maker
 import logging
 
-class Logging_Objects():
+class Logging_Objects:
     def __init__(self):
         self.msg_list = []
         self.exceptions = []
+<<<<<<< HEAD
         self.browserstack_flag = False
         self.mini_check_counter = 0
         self.mini_check_pass_counter = 0
@@ -19,6 +20,8 @@ class Logging_Objects():
         self.failure_message_list = []
         self.screenshot_dir = None
         self.calling_module = None
+=======
+>>>>>>> master
 
     def write_test_summary(self):
         "Print out a useful, human readable summary"
@@ -46,9 +49,6 @@ class Logging_Objects():
         "Log the message"
         msg = str(msg)
         self.msg_list.append('%-8s:  '%level.upper() + msg)
-        if self.browserstack_flag is True:
-            if self.browserstack_msg not in msg:
-                self.msg_list.pop(-1) #Remove the redundant BrowserStack message
         self.log_obj.write(msg,level,trace_back)
 
     def success(self,msg,level='info',pre_format='PASS: '):
