@@ -14,7 +14,7 @@ class API_Player(Logging_Objects):
 
     def __init__(self, url, log_file_path=None, session_flag=False):
         "Constructor"
-        super(API_Player, self).__init__(base_url=url)
+        super(API_Player, self).__init__()
         self.set_log_file(log_file_path)
         self.api_obj = API_Interface(url=url, session_flag=session_flag)
 

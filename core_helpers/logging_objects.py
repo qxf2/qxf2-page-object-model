@@ -8,7 +8,7 @@ from utils import Gif_Maker
 import logging
 
 class Logging_Objects():
-    def __init__(self, base_url=None):
+    def __init__(self):
         self.msg_list = []
         self.exceptions = []
         self.browserstack_flag = False
