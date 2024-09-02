@@ -11,8 +11,6 @@ class Logging_Objects:
     def __init__(self):
         self.msg_list = []
         self.exceptions = []
-<<<<<<< HEAD
-        self.browserstack_flag = False
         self.mini_check_counter = 0
         self.mini_check_pass_counter = 0
         self.result_counter = 0
@@ -20,8 +18,6 @@ class Logging_Objects:
         self.failure_message_list = []
         self.screenshot_dir = None
         self.calling_module = None
-=======
->>>>>>> master
 
     def write_test_summary(self):
         "Print out a useful, human readable summary"
