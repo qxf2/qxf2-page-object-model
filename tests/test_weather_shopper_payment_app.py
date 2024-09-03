@@ -150,16 +150,21 @@ def test_weather_shopper_payment_app(test_mobile_obj):
                                 positive="Successfully submitted payment details",
                                 negative="Failed to submit payment details")
 
-        result_flag = test_mobile_obj.navigate_to_field(fieldname="email", screenshotname="navigate_to_email_field")
+        result_flag = test_mobile_obj.capture_payment_field_error(fieldname="email", screenshotname=payment_details["image_name"])
         test_mobile_obj.log_result(result_flag,
-                                   positive="Successfully navigated to email field",
+                                   positive="Successfully navigated and captured email field",
                                    negative="Failed to navigate to email field")
 
-        result_flag = test_mobile_obj.get_string_from_image(payment_details["image_path"],payment_details["substring"])
+        result_flag, image_text = test_mobile_obj.get_string_from_image(payment_details["image_name"])
         test_mobile_obj.log_result(result_flag,
-            positive="Successfully completed conversion",
-            negative="Failure to complete conversion")
-        time.sleep(10)
+            positive="Able to get text from image",
+            negative="Failed to get text from image")
+
+        result_flag = test_mobile_obj.compare_string(image_text, payment_details["validation_message"])
+        test_mobile_obj.log_result(result_flag,
+            positive="Text from image matches the expected text: {0}".format(payment_details["validation_message"]),
+            negative="Text from image does not match the expected text")
+
         #Enter payment details - cardnumber field validation
         payment_details = conf.invalid_cardnum_in_payment_details
         result_flag = test_mobile_obj.submit_payment_details(payment_details["card_type"],
@@ -170,15 +175,20 @@ def test_weather_shopper_payment_app(test_mobile_obj):
                                 positive="Successfully submitted payment details",
                                 negative="Failed to submit payment details")
 
-        result_flag = test_mobile_obj.navigate_to_field(fieldname="card number", screenshotname="navigate_to_cardnumber_field")
+        result_flag = test_mobile_obj.capture_payment_field_error(fieldname="card number", screenshotname=payment_details["image_name"])
         test_mobile_obj.log_result(result_flag,
-                                   positive="Successfully navigated to cardnumber field",
-                                   negative="Failed to navigate to cardnumber field")
+                                   positive="Successfully navigated and captured cardnumber field",
+                                   negative="Failed to capture cardnumber field")
 
-        result_flag = test_mobile_obj.get_string_from_image(payment_details["image_path"],                      payment_details["substring"])
+        result_flag, image_text = test_mobile_obj.get_string_from_image(payment_details["image_name"])
         test_mobile_obj.log_result(result_flag,
-            positive="Successfully completed conversion",
-            negative="Failure to complete conversion")
+            positive="Able to get text from image",
+            negative="Failed to get text from image")
+
+        result_flag = test_mobile_obj.compare_string(image_text, payment_details["validation_message"])
+        test_mobile_obj.log_result(result_flag,
+            positive="Text from image matches the expected text: {0}".format(payment_details["validation_message"]),
+            negative="Text from image does not match the expected text")
 
         # Print out the results.
         test_mobile_obj.write(f'Script duration: {int(time.time() - start_time)} seconds\n')

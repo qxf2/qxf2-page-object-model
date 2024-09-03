@@ -14,8 +14,8 @@ invalid_email_in_payment_details = {
 "card_number": "1234567890123456",
 "card_expiry": "12/25",
 "card_cvv": "123",
-"image_path": "./screenshots/test_weather_shopper_payment_app/navigate_to_email_field.png",
-"substring": "Invalid email address"
+"image_name": "navigate_to_email_field",
+"validation_message": "Invalid email address"
 }
 
 invalid_cardnum_in_payment_details = {
@@ -24,7 +24,7 @@ invalid_cardnum_in_payment_details = {
 "card_number": "1234567890",
 "card_expiry": "12/25",
 "card_cvv": "123",
-"image_path": "./screenshots/test_weather_shopper_payment_app/navigate_to_cardnumber_field.png",
-"substring": "Invalid card number"    
+"image_name": "navigate_to_cardnumber_field",
+"validation_message": "Invalid card number"
 }
 
