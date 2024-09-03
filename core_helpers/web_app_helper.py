@@ -50,7 +50,6 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             self.tesults_flag = False
             self.gif_import_flag = False
             self.images = []
-            self.browserstack_flag = False
             self.highlight_flag = False
             self.test_run_id = None
             self.reset()
@@ -83,15 +82,12 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         "Register the driver with Page."
         self.set_screenshot_dir(os_name,os_version,browser,browser_version) # Create screenshot directory
         self.set_log_file()
-        self.driver = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name,testname)
+        self.driver,self.session_url = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version,
+                                                                          remote_project_name,remote_build_name,testname)
+        if self.session_url:
+            self.write( "Cloud Session URL: " + '\n' + str(self.session_url))
         self.driver.implicitly_wait(5)
         self.driver.maximize_window()
-
-        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
-            self.register_browserstack()
-            self.session_url = self.browserstack_obj.get_session_url()
-            self.browserstack_msg = 'BrowserStack session URL:'
-            self.write( self.browserstack_msg + '\n' + str(self.session_url))
 
         self.start()
 
@@ -344,4 +340,3 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
         pass
-

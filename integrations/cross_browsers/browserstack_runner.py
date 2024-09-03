@@ -52,13 +52,27 @@ class BrowserStackRunner(RemoteOptions):
             files = {'file': open(apk_file, 'rb')}
             post_response = requests.post(self.browserstack_app_upload_url, files=files,
                                          auth=(self.username, self.password),timeout= timeout)
+            post_response.raise_for_status()
             post_json_data = json.loads(post_response.text)
             #Get the app url of the newly uploaded apk
             app_url = post_json_data['app_url']
-        except Exception as exception:
-            print(str(exception))
+            return app_url
 
-        return app_url
+        except Exception as exception:
+            print('\033[91m'+"\nError while uploading the app:%s"%str(exception)+'\033[0m')
+
+    def get_current_session_url(self, web_driver):
+        "Get current session url"
+        import json
+        current_session = web_driver.execute_script('browserstack_executor: {"action": "getSessionDetails"}')
+        session_details = json.loads(current_session)
+        # Check if 'public_url' exists and is not None
+        if 'public_url' in session_details and session_details['public_url'] is not None:
+            session_url = session_details['public_url']
+        else:
+            session_url = session_details['browser_url']
+
+        return session_url
 
     def set_os(self, desired_capabilities, os_name, os_version):
         """Set os name and os_version."""      
@@ -74,8 +88,9 @@ class BrowserStackRunner(RemoteOptions):
                                                               app_path, appium_version)
         mobile_driver = self.set_capabilities_options(desired_capabilities,
                                                       url=self.browserstack_url)
+        session_url = self.get_current_session_url(mobile_driver)
 
-        return mobile_driver
+        return mobile_driver,session_url
 
     def get_browserstack_webdriver(self, os_name, os_version, browser, browser_version,
                          remote_project_name, remote_build_name):
@@ -92,13 +107,11 @@ class BrowserStackRunner(RemoteOptions):
         #Set remote build name
         if remote_build_name is not None:
             desired_capabilities = self.remote_build_name(desired_capabilities, remote_build_name)
-        #Screenshot config
-        if screenshot_conf.BS_ENABLE_SCREENSHOTS is None:
-            screenshot_conf.BS_ENABLE_SCREENSHOTS = False
 
         desired_capabilities = self.browserstack_snapshots(desired_capabilities)
         desired_capabilities = self.browserstack_credentials(desired_capabilities)
         options.set_capability('bstack:options', desired_capabilities)
         web_driver = webdriver.Remote(command_executor=self.browserstack_url, options=options)
+        session_url = self.get_current_session_url(web_driver)
 
-        return web_driver
+        return web_driver, session_url

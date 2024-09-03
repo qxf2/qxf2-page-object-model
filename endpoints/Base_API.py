@@ -2,16 +2,18 @@
 A wrapper around Requests to make Restful API calls
 """
 
+import asyncio
 from urllib.error import HTTPError
 from urllib.error import URLError
 
 class Base_API:
     "Main base class for Requests based scripts"
 
-    def get(self, url, headers={}):
+    def get(self, url, headers=None):
         "Get request"
         json_response = None
         error = {}
+        headers = headers if headers else {}
         try:
             response = self.request_obj.get(url=url,headers=headers)
             try:
@@ -37,11 +39,11 @@ class Base_API:
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
-
-    def post(self, url,params=None, data=None,json=None,headers={}):
+    def post(self, url,params=None, data=None,json=None,headers=None):
         "Post request"
         error = {}
         json_response = None
+        headers = headers if headers else {}
         try:
             response = self.request_obj.post(url,params=params,json=json,headers=headers)
             try:
@@ -67,10 +69,11 @@ class Base_API:
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
 
-    def delete(self, url,headers={}):
+    def delete(self, url,headers=None):
         "Delete request"
         response = False
         error = {}
+        headers = headers if headers else {}
         try:
             response = self.request_obj.delete(url,headers = headers)
             try:
@@ -97,10 +100,11 @@ class Base_API:
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
 
 
-    def put(self,url,json=None, headers={}):
+    def put(self,url,json=None, headers=None):
         "Put request"
         error = {}
         response = False
+        headers = headers if headers else {}
         try:
             response = self.request_obj.put(url,json=json,headers=headers)
             try:
@@ -126,3 +130,37 @@ class Base_API:
             json_response = None
 
         return {'response': response.status_code,'text':response.text,'json_response':json_response, 'error': error}
+
+    async def async_get(self, url, headers=None):
+        "Run the blocking GET method in a thread"
+        headers = headers if headers else {}
+        response = await asyncio.to_thread(self.get, url, headers)
+        return response
+
+    async def async_post(self,
+                         url,
+                         params=None,
+                         data=None,
+                         json=None,
+                         headers=None):
+        "Run the blocking POST method in a thread"
+        headers = headers if headers else {}
+        response = await asyncio.to_thread(self.post,
+                                           url,
+                                           params,
+                                           data,
+                                           json,
+                                           headers)
+        return response
+
+    async def async_delete(self, url, headers=None):
+        "Run the blocking DELETE method in a thread"
+        headers = headers if headers else {}
+        response = await asyncio.to_thread(self.delete, url, headers)
+        return response
+
+    async def async_put(self, url, json=None, headers=None):
+        "Run the blocking PUT method in a thread"
+        headers = headers if headers else {}
+        response = await asyncio.to_thread(self.put, url, json, headers)
+        return response
