@@ -4,7 +4,6 @@ Helper class for Logging Objects
 import os,inspect
 from utils.Base_Logging import Base_Logging
 from utils.stop_test_exception_util import Stop_Test_Exception
-from utils import Gif_Maker
 import logging
 
 class Logging_Objects:
@@ -36,10 +35,11 @@ class Logging_Objects:
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
 
-        self.make_gif()
-        if self.gif_file_name is not None:
-            self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
-            self.write('************************')
+        if self.screenshot_dir is not None:
+            self.make_gif()
+            if self.gif_file_name is not None:
+                self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
+                self.write('************************')
 
     def write(self,msg,level='info', trace_back=None):
         "Log the message"
@@ -108,32 +108,10 @@ class Logging_Objects:
             else:
                 self.write(negative,level='error')
 
-    def make_gif(self):
-        "Create a gif of all the screenshots within the screenshots directory"
-        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
-
-        return self.gif_file_name
-
     def set_calling_module(self,name):
         "Set the test name"
         self.calling_module = name
 
     def get_calling_module(self):
         "Get the name of the calling module"
-        if self.calling_module is None:
-            #Try to intelligently figure out name of test when not using pytest
-            full_stack = inspect.stack()
-            index = -1
-            for stack_frame in full_stack:
-                print(stack_frame[1],stack_frame[3])
-                #stack_frame[1] -> file name
-                #stack_frame[3] -> method
-                if 'test_' in stack_frame[1]:
-                    index = full_stack.index(stack_frame)
-                    break
-            test_file = full_stack[index][1]
-            test_file = test_file.split(os.sep)[-1]
-            testname = test_file.split('.py')[0]
-            self.set_calling_module(testname)
-
         return self.calling_module

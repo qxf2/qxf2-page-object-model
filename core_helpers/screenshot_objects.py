@@ -4,6 +4,7 @@ Helper class for Screenshot Objects
 import os
 import shutil
 import conf.screenshot_conf as conf
+from utils import Gif_Maker
 
 class Screenshot_Objects:
     def __init__(self):
@@ -100,3 +101,9 @@ class Screenshot_Objects:
             self.write("Exception when trying to set screenshot directory")
             self.write(str(e))
             self.exceptions.append("Error when setting up the screenshot directory")
+
+    def make_gif(self):
+        "Create a gif of all the screenshots within the screenshots directory"
+        self.gif_file_name = Gif_Maker.make_gif(self.screenshot_dir,name=self.calling_module)
+
+        return self.gif_file_name
