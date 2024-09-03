@@ -43,7 +43,6 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             self.msg_list = []
             self.window_structure = {}
             self.testrail_flag = False
-            self.browserstack_flag = False
             self.test_run_id = None
             self.tesults_flag = False
             self.highlight_flag = False
@@ -79,7 +78,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
         self.set_screenshot_dir() # Create screenshot directory
         self.set_log_file()
         if self.session_url:
-                self.write( "Cloud Session URL: " + '\n' + str(self.session_url))
+            self.write( "Cloud Session URL: " + '\n' + str(self.session_url))
         self.start()
 
 

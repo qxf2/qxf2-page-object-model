@@ -107,9 +107,6 @@ class BrowserStackRunner(RemoteOptions):
         #Set remote build name
         if remote_build_name is not None:
             desired_capabilities = self.remote_build_name(desired_capabilities, remote_build_name)
-        #Screenshot config
-        if screenshot_conf.BS_ENABLE_SCREENSHOTS is None:
-            screenshot_conf.BS_ENABLE_SCREENSHOTS = False
 
         desired_capabilities = self.browserstack_snapshots(desired_capabilities)
         desired_capabilities = self.browserstack_credentials(desired_capabilities)
