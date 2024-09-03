@@ -54,12 +54,9 @@ class Remote_Objects:
         if self.testrail_flag is True:
             msg += '\n'.join(self.msg_list)
             msg = msg + "\n"
-            # if self.browserstack_flag is True:
-            #     for image in self.image_url_list:
-            #         msg += '\n' + '[' + image['name'] + ']('+ image['url']+')'
-            #     msg += '\n\n' + '[' + 'Watch Replay On BrowserStack' + ']('+ self.session_url+')'
+            if self.session_url is not None:
+                msg += '\n\n' + '[' + 'Watch Replay On Cloud: ' + ']('+ self.session_url +')'
             self.testrail_object.update_testrail(case_id,test_run_id,result_flag,msg=msg)
-        self.image_url_list = []
         self.msg_list = []
 
     def set_test_run_id(self,test_run_id):
