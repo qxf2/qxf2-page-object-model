@@ -591,11 +591,17 @@ def pytest_generate_tests(metafunc):
                 if metafunc.config.getoption("--browser") == ["all"]:
                     metafunc.config.option.browser = browser_os_name_conf.local_browsers
                     metafunc.parametrize("browser", metafunc.config.option.browser)
-                elif metafunc.config.getoption("--browser") == []:
+                elif metafunc.config.getoption("--browser") == [] and metafunc.config.getoption("--ver") == []:
                     metafunc.parametrize("browser",browser_os_name_conf.default_browser)
-                else:
+                elif metafunc.config.getoption("--browser") != [] and metafunc.config.getoption("--ver") == []:
                     config_list_local = [(metafunc.config.getoption("--browser")[0])]
                     metafunc.parametrize("browser", config_list_local)
+                elif metafunc.config.getoption("--browser") == [] and metafunc.config.getoption("--ver") != []:
+                    config_list_local = [(browser_os_name_conf.default_browser[0], metafunc.config.getoption("--ver")[0])]
+                    metafunc.parametrize("browser, browser_version", config_list_local)
+                else:
+                    config_list_local = [(metafunc.config.getoption("--browser")[0], metafunc.config.getoption("--ver")[0])]
+                    metafunc.parametrize("browser, browser_version", config_list_local)
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)

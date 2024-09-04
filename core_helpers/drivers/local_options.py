@@ -9,23 +9,29 @@ class LocalOptions():
     """Class contains methods for getting webfrivers for various browsers."""
 
     @staticmethod
-    def firefox_local():
+    def firefox_local(browser_version):
         """Get webdriver for firefox."""
-        local_driver = webdriver.Firefox()
+        options = webdriver.FirefoxOptions()
+        options.browser_version = browser_version
+        local_driver = webdriver.Firefox(options=options)
 
         return local_driver
 
     @staticmethod
-    def explorer_local():
+    def explorer_local(browser_version):
         """Get webdriver for internet explorer."""
+        options = webdriver.IeOptions()
+        options.browser_version = browser_version
         local_driver = webdriver.Ie()
 
         return local_driver
 
     @staticmethod
-    def chrome_local():
+    def chrome_local(browser_version):
         """Get webdriver for chrome."""
-        local_driver = webdriver.Chrome()
+        options = webdriver.ChromeOptions()
+        options.browser_version = browser_version
+        local_driver = webdriver.Chrome(options=options)
 
         return local_driver
 
@@ -55,10 +61,11 @@ class LocalOptions():
         return local_driver
 
     @staticmethod
-    def headless_chrome():
+    def headless_chrome(browser_version):
         """Set up headless chrome driver options and get webdriver for headless chrome."""
         options = Options()
         options.headless = True
+        options.browser_version = browser_version
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--disable-extensions")
         options.add_argument("--proxy-server='direct://'")
