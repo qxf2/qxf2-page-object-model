@@ -92,7 +92,7 @@ class BrowserStack_Library():
                 files = {'file': file}
                 # Make the POST request to upload the file
                 response = requests.post(url, auth=self.auth, files=files, timeout=timeout)
-                
+
             # Check if the request was successful
             if response.status_code == 200:
                 print("Log file uploaded to BrowserStack session successfully.")

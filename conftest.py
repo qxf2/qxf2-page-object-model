@@ -158,7 +158,6 @@ def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False)
     "Upload log file to provided BrowserStack session"
     try:
         from integrations.cross_browsers.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
-        
         # Initialize BrowserStack object
         browserstack_obj = BrowserStack_Library()
 
