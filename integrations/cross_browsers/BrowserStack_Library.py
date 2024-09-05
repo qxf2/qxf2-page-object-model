@@ -73,21 +73,49 @@ class BrowserStack_Library():
 
     def upload_terminal_logs(self, file_path, session_id = None, appium_test = False, timeout=30):
         "Upload the terminal log to BrowserStack"
-        if session_id is None:
-            session_details = self.get_active_session_details()
-            session_id = session_details['hashed_id']
-        # File to be uploaded
-        files = {'file': open(file_path, 'rb')}
-        if appium_test:
-            url = f'{self.browserstack_cloud_api_server_url}/app-automate/sessions/{session_id}/terminallogs'
-        else:
-            url = f'{self.browserstack_cloud_api_server_url}/automate/sessions/{session_id}/terminallogs'
-        response= requests.post(url, auth=self.auth, files=files, timeout=timeout)
-        # Check if the request was successful
-        if response.status_code == 200:
-            print("Log file uploaded to BrowserStack session successfully.")
-        else:
-            print(f"Failed to upload log file. Status code: {response.status_code}")
-            print(response.text)
+        try:
+            # Get session ID if not provided
+            if session_id is None:
+                session_details = self.get_active_session_details()
+                session_id = session_details['hashed_id']
+                if not session_id:
+                    raise ValueError("Session ID could not be retrieved. Check active session details.")
 
-        return response
+            # Determine the URL based on the type of test
+            if appium_test:
+                url = f'{self.browserstack_cloud_api_server_url}/app-automate/sessions/{session_id}/terminallogs'
+            else:
+                url = f'{self.browserstack_cloud_api_server_url}/automate/sessions/{session_id}/terminallogs'
+
+            # Open the file using a context manager to ensure it is properly closed
+            with open(file_path, 'rb') as file:
+                files = {'file': file}
+                # Make the POST request to upload the file
+                response = requests.post(url, auth=self.auth, files=files, timeout=timeout)
+                
+            # Check if the request was successful
+            if response.status_code == 200:
+                print("Log file uploaded to BrowserStack session successfully.")
+            else:
+                print(f"Failed to upload log file. Status code: {response.status_code}")
+                print(response.text)
+
+            return response
+
+        except FileNotFoundError as e:
+            print(f"Error: Log file '{file_path}' not found.")
+            return {"error": "Log file not found.", "details": str(e)}
+
+        except ValueError as e:
+            print(f"Error: {str(e)}")
+            return {"error": "Invalid session ID.", "details": str(e)}
+
+        except requests.exceptions.RequestException as e:
+            # Handle network-related errors
+            print(f"Error: Failed to upload log file to BrowserStack. Network error: {str(e)}")
+            return {"error": "Network error during file upload.", "details": str(e)}
+
+        except Exception as e:
+            # Catch any other unexpected errors
+            print(f"An unexpected error occurred: {str(e)}")
+            return {"error": "Unexpected error occurred during file upload.", "details": str(e)}

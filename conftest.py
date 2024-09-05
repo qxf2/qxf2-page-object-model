@@ -54,11 +54,19 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
 
         elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             response = upload_test_logs_to_browserstack(test_obj.log_name,test_obj.session_url)
-            if response.status_code == 200:
-                test_obj.write("Log file uploaded to BrowserStack session successfully.")
+            if isinstance(response, dict) and "error" in response:
+                # Handle the error response returned as a dictionary
+                test_obj.write(f"Error: {response['error']}",level='error')
+                if "details" in response:
+                    test_obj.write(f"Details: {response['details']}",level='error')
+                    test_obj.write("Failed to upload log file to BrowserStack",level='error')
             else:
-                test_obj.write(f"Failed to upload log file. Status code: {response.status_code}")
-                test_obj.write(response.text)
+                # Handle the case where the response is assumed to be a response object
+                if response.status_code == 200:
+                    test_obj.write("Log file uploaded to BrowserStack session successfully.")
+                else:
+                    test_obj.write(f"Failed to upload log file. Status code: {response.status_code}",level='error')
+                    test_obj.write(response.text,level='error')
 
             test_obj.teardown()
 
@@ -103,11 +111,19 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
 
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             response = upload_test_logs_to_browserstack(test_mobile_obj.log_name,test_mobile_obj.session_url,appium_test = True)
-            if response.status_code == 200:
-                test_mobile_obj.write("Log file uploaded to BrowserStack session successfully.")
+            if isinstance(response, dict) and "error" in response:
+                # Handle the error response returned as a dictionary
+                test_obj.write(f"Error: {response['error']}",level='error')
+                if "details" in response:
+                    test_obj.write(f"Details: {response['details']}",level='error')
+                    test_obj.write("Failed to upload log file to BrowserStack",level='error')
             else:
-                test_mobile_obj.write(f"Failed to upload log file. Status code: {response.status_code}")
-                test_mobile_obj.write(response.text)
+                # Handle the case where the response is assumed to be a response object
+                if response.status_code == 200:
+                    test_mobile_obj.write("Log file uploaded to BrowserStack session successfully.")
+                else:
+                    test_mobile_obj.write(f"Failed to upload log file. Status code: {response.status_code}",level='error')
+                    test_mobile_obj.write(response.text,level='error')
 
         #Teardown
         test_mobile_obj.wait(3)
@@ -140,14 +156,42 @@ def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_u
 
 def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False):
     "Upload log file to provided BrowserStack session"
-    from integrations.cross_browsers.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
-    browserstack_obj = BrowserStack_Library()
-    log_file_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'log'))
-    log_file = log_file_dir + os.sep + 'temp_' + log_name
-    session_id = browserstack_obj.extract_session_id(session_url)
-    response = browserstack_obj.upload_terminal_logs(log_file,session_id,appium_test)
+    try:
+        from integrations.cross_browsers.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
+        
+        # Initialize BrowserStack object
+        browserstack_obj = BrowserStack_Library()
 
-    return response
+        # Build log file path
+        log_file_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),'log'))
+        log_file = log_file_dir + os.sep + 'temp_' + log_name
+
+        # Check if the log file exists
+        if not os.path.isfile(log_file):
+            raise FileNotFoundError(f"Log file '{log_file}' not found.")
+        
+        # Extract session ID from the provided session URL
+        session_id = browserstack_obj.extract_session_id(session_url)
+        if not session_id:
+            raise ValueError(f"Invalid session URL provided: '{session_url}'")
+        
+        # Upload the log file to BrowserStack
+        response = browserstack_obj.upload_terminal_logs(log_file,session_id,appium_test)
+
+        return response
+    
+    except ImportError as e:
+        return {"error": "Failed to import BrowserStack_Library.", "details": str(e)}
+
+    except FileNotFoundError as e:
+        return {"error": "Log file not found.", "details": str(e)}
+
+    except ValueError as e:
+        return {"error": "Invalid session URL.", "details": str(e)}
+
+    except Exception as e:
+        # Handle any other unexpected exceptions
+        return {"error": "An unexpected error occurred while uploading logs to BrowserStack.", "details": str(e)}
 
 @pytest.fixture
 def testname(request):
