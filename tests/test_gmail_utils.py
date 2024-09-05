@@ -57,8 +57,8 @@ def fetch_subjects(gmail, messages):
         print(f"UID: {uid}, Subject: {subject}")
     return 1, 1
 
+@pytest.mark.skip(reason="currently no support on CI to test this")
 @pytest.mark.GMAIL
-# @pytest.mark.skip(reason="currently no support on CI to test this")
 def test_gmail_util():
     "Run the test"
     expected_pass = 0
