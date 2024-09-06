@@ -168,17 +168,17 @@ def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False)
         # Check if the log file exists
         if not os.path.isfile(log_file):
             raise FileNotFoundError(f"Log file '{log_file}' not found.")
-        
+
         # Extract session ID from the provided session URL
         session_id = browserstack_obj.extract_session_id(session_url)
         if not session_id:
             raise ValueError(f"Invalid session URL provided: '{session_url}'")
-        
+
         # Upload the log file to BrowserStack
         response = browserstack_obj.upload_terminal_logs(log_file,session_id,appium_test)
 
         return response
-    
+
     except ImportError as e:
         return {"error": "Failed to import BrowserStack_Library.", "details": str(e)}
 
