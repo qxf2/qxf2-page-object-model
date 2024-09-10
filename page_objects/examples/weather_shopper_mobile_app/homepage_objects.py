@@ -7,7 +7,7 @@ import secrets
 
 class HomepageObjects:
     "Page object for the home screen in Weathershopper application."
-    
+
     @Wrapit._exceptionHandler
     def visit_product_page(self, temperature):
         "Visit the product page"

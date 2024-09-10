@@ -2,7 +2,6 @@
 This class models the cart page in Weathershopper application.
 """
 # pylint: disable = W0212,E0401
-import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 from core_helpers.mobile_app_helper import Mobile_App_Helper
 from .cart_objects import CartObjects
@@ -10,6 +9,7 @@ from .cart_objects import CartObjects
 class WeatherShopperCartPage(Mobile_App_Helper, CartObjects):
     "Page objects for the cart page in Weathershopper application."
 
+    @Wrapit._exceptionHandler
     def verify_cart_total(self, items):
         "Verify cart total"
         cart_total = self.get_cart_total()
@@ -18,6 +18,7 @@ class WeatherShopperCartPage(Mobile_App_Helper, CartObjects):
 
         return result_flag
 
+    @Wrapit._exceptionHandler
     def change_quantity_and_verify(self, least_expensive_item,
                                     most_expensive_item, quantity):
         "Change quantity of item and verify cart total"
@@ -40,6 +41,7 @@ class WeatherShopperCartPage(Mobile_App_Helper, CartObjects):
 
         return result_flag
 
+    @Wrapit._exceptionHandler
     def delete_item_and_verify(self, least_expensive_item, most_expensive_item, quantity):
         "Delete item from cart and verify cart total"
         # Delete item from cart
