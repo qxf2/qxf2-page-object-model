@@ -5,7 +5,7 @@ import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 import re
 
-class CartPageObjects:
+class CartObjects:
     """
     Page Objects for the cart in Weather Shopper application
     """

@@ -5,9 +5,9 @@ This class models the cart page in Weathershopper application.
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 from core_helpers.mobile_app_helper import Mobile_App_Helper
-from .weather_shopper_cart_objects import CartPageObjects
+from .cart_objects import CartObjects
 
-class WeatherShopperCartPage(Mobile_App_Helper, CartPageObjects):
+class WeatherShopperCartPage(Mobile_App_Helper, CartObjects):
     "Page objects for the cart page in Weathershopper application."
 
     def verify_cart_total(self, items):

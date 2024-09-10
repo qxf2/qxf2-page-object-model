@@ -5,7 +5,7 @@ Page objects for the product page in Weathershopper application.
 import conf.locators_conf as locators
 from utils.Wrapit import Wrapit
 from core_helpers.mobile_app_helper import Mobile_App_Helper
-from .weather_shopper_product_objects import ProductPageObjects
+from .product_page_objects import ProductPageObjects
 from .navigation_menu_objects import NavigationMenuObjects
 
 class WeatherShopperProductPage(Mobile_App_Helper, ProductPageObjects, NavigationMenuObjects):
