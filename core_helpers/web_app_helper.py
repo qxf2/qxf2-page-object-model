@@ -50,7 +50,6 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             self.tesults_flag = False
             self.gif_import_flag = False
             self.images = []
-            self.browserstack_flag = False
             self.highlight_flag = False
             self.test_run_id = None
             self.screenshot_dir = None
@@ -90,9 +89,6 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             self.write( "Cloud Session URL: " + '\n' + str(self.session_url))
         self.driver.implicitly_wait(5)
         self.driver.maximize_window()
-
-        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
-            self.register_browserstack()
 
         self.start()
 
@@ -306,4 +302,3 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
         pass
-
