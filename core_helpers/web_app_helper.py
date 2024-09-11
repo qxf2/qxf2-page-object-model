@@ -86,7 +86,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         self.driver,self.session_url = self.driver_obj.get_web_driver(remote_flag,os_name,os_version,browser,browser_version,
                                                                           remote_project_name,remote_build_name,testname)
         if self.session_url:
-            self.write( "Cloud Session URL: " + '\n' + str(self.session_url))
+            self.write( "Cloud Session URL for test: " + self.calling_module + '\n' + str(self.session_url))
         self.driver.implicitly_wait(5)
         self.driver.maximize_window()
 
