@@ -10,15 +10,6 @@ class WeatherShopperCartPage(Mobile_App_Helper, CartObjects):
     "Page objects for the cart page in Weathershopper application."
 
     @Wrapit._exceptionHandler
-    def verify_cart_total(self, items):
-        "Verify cart total"
-        cart_total = self.get_cart_total()
-        item_prices = [item['price'] for item in items]
-        result_flag = self.verify_total(cart_total, item_prices)
-
-        return result_flag
-
-    @Wrapit._exceptionHandler
     def change_quantity_and_verify(self, least_expensive_item,
                                     most_expensive_item, quantity):
         "Change quantity of item and verify cart total"
@@ -56,3 +47,11 @@ class WeatherShopperCartPage(Mobile_App_Helper, CartObjects):
         result_flag = self.verify_total(cart_total_after_deletion, item_prices)
 
         return result_flag
+
+    @Wrapit._exceptionHandler
+    @Wrapit._screenshot
+    def verify_total(self, cart_total, cart_items):
+        "This method is to verify the total price in the cart."
+        if cart_total == sum(cart_items):
+            return True
+        return False

@@ -63,7 +63,10 @@ def test_weather_shopper_app(test_mobile_obj):
                                     level="critical")
 
         #Verify cart total
-        result_flag = test_mobile_obj.verify_cart_total(items)
+        cart_total = test_mobile_obj.get_cart_total()
+        item_prices = [item['price'] for item in items]
+        result_flag = test_mobile_obj.verify_total(cart_total, item_prices)
+
         test_mobile_obj.log_result(result_flag,
                                 positive="Cart total is correct",
                                 negative="Total is incorrect")

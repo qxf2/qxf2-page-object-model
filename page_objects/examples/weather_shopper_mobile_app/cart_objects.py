@@ -70,11 +70,3 @@ class CartObjects:
             negative="Failed to click on refresh button",
             level='debug')
         return result_flag
-
-    @Wrapit._exceptionHandler
-    @Wrapit._screenshot
-    def verify_total(self, cart_total, cart_items):
-        "This method is to verify the total price in the cart."
-        if cart_total == sum(cart_items):
-            return True
-        return False

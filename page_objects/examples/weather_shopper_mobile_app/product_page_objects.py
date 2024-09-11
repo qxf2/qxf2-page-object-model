@@ -82,20 +82,3 @@ class ProductPageObjects:
             negative='Failed to zoom in product image',
             level='debug')
         return result_flag
-
-    @Wrapit._exceptionHandler
-    @Wrapit._screenshot
-    def get_least_expensive_item(self, all_items):
-        "This method is to get the least expensive item from the given list of items"
-        least_expensive_item = min(all_items, key=lambda x: x['price'])
-        self.write(f"Least expensive item is {least_expensive_item}")
-        return least_expensive_item
-
-    @Wrapit._exceptionHandler
-    @Wrapit._screenshot
-    def get_most_expensive_item(self, all_items):
-        "This method is to get the most expensive item from the given list of items"
-        most_expensive_item = max(all_items, key=lambda x: x['price'])
-        self.write(f"Most expensive item is {most_expensive_item}")
-        return most_expensive_item
-
