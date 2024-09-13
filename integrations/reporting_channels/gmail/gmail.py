@@ -24,8 +24,8 @@ load_dotenv()
 class Gmail():
     "Class interact with Gmail using IMAP"
     # GMail IMAP defaults
-    GMAIL_IMAP_HOST = os.getenv('imaphost')
-    GMAIL_IMAP_PORT = 993
+    IMAP_HOST = os.getenv('imaphost')
+    IMAP_PORT = 993
 
     # GMail SMTP defaults
     # TODO: implement SMTP functions
@@ -52,7 +52,7 @@ class Gmail():
         #         raise Exception('Connection failure.')
         #     self.imap = None
 
-        self.imap = imaplib.IMAP4_SSL(self.GMAIL_IMAP_HOST, self.GMAIL_IMAP_PORT)
+        self.imap = imaplib.IMAP4_SSL(self.IMAP_HOST, self.IMAP_PORT)
 
         # self.smtp = smtplib.SMTP(self.server,self.port)
         # self.smtp.set_debuglevel(self.debug)
