@@ -38,7 +38,7 @@ def test_gmail_util(test_obj):
             result_flag = gmail.login(username, password)
             test_obj.log_result(result_flag,
                                 positive="Login successful",
-                                negative="Login failed due to invalid credentials")
+                                negative="Login failed")
             expected_pass += 1
             if result_flag:
                 actual_pass += 1
