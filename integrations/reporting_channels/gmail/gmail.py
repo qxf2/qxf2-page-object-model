@@ -27,16 +27,13 @@ class Gmail():
         self.username = None
         self.password = None
         self.access_token = None
-
+        
         self.imap = None
         self.smtp = None
         self.logged_in = False
         self.mailboxes = {}
         self.current_mailbox = None
-
-
         # self.connect()
-
 
     def connect(self, raise_errors=True):
         "Establishes an IMAP connection to the Gmail server."
@@ -57,7 +54,6 @@ class Gmail():
 
         return self.imap
 
-
     def fetch_mailboxes(self):
         "Retrieves and stores the list of mailboxes available in the Gmail account."
         response, mailbox_list = self.imap.list()
@@ -72,14 +68,12 @@ class Gmail():
         else:
             raise Exception("Failed to fetch mailboxes.")
 
-
     def use_mailbox(self, mailbox):
         "Selects a specific mailbox for further operations."
         if mailbox:
             self.imap.select(mailbox)
         self.current_mailbox = mailbox
         return Mailbox(self, mailbox)
-
 
     def mailbox(self, mailbox_name):
         "Returns a Mailbox object for the given mailbox name."
@@ -109,8 +103,6 @@ class Gmail():
             self.imap.delete(mailbox_name)
             del self.mailboxes[mailbox_name]
 
-
-
     def login(self, username, password):
         "Login to Gmail using the provided username and password. "
         self.username = username
@@ -118,7 +110,6 @@ class Gmail():
 
         if not self.imap:
             self.connect()
-
         try:
             imap_login = self.imap.login(self.username, self.password)
             self.logged_in = (imap_login and imap_login[0] == 'OK')
@@ -126,9 +117,6 @@ class Gmail():
                 self.fetch_mailboxes()
         except imaplib.IMAP4.error:
             raise AuthenticationError
-
-
-        # smtp_login(username, password)
 
         return self.logged_in
 
@@ -139,7 +127,6 @@ class Gmail():
 
         if not self.imap:
             self.connect()
-
         try:
             auth_string = 'user=%s\1auth=Bearer %s\1\1' % (username, access_token)
             imap_auth = self.imap.authenticate('XOAUTH2', lambda x: auth_string)
