@@ -53,6 +53,7 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
                 test_obj.teardown()
 
         elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
+            #Upload test logs to BrowserStack
             response = upload_test_logs_to_browserstack(test_obj.log_name,test_obj.session_url)
             if isinstance(response, dict) and "error" in response:
                 # Handle the error response returned as a dictionary
@@ -68,6 +69,8 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
                     test_obj.write(f"Failed to upload log file. Status code: {response.status_code}",level='error')
                     test_obj.write(response.text,level='error')
 
+            #Update test run status to respective BrowserStack session
+            update_browserstack_session_status(test_obj)
             test_obj.teardown()
 
         else:
@@ -79,6 +82,8 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         print("Python says:%s"%str(e))
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("lambda-status=error")
+        elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
+            test_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Exception occured"}}')
 
 @pytest.fixture
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, testname, remote_project_name, remote_build_name, orientation):
@@ -87,7 +92,6 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
     try:
 
         if interactivemode_flag.lower()=="y":
-
             mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path, orientation)
 
         test_mobile_obj = PageFactory.get_page_object("Zero mobile")
@@ -125,6 +129,9 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                     test_mobile_obj.write(f"Failed to upload log file. Status code: {response.status_code}",level='error')
                     test_mobile_obj.write(response.text,level='error')
 
+            #Update test run status to respective BrowserStack session
+            update_browserstack_session_status(test_mobile_obj)
+
         #Teardown
         test_mobile_obj.wait(3)
         test_mobile_obj.teardown()
@@ -153,6 +160,13 @@ def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_u
     except Exception as e:
         print("Exception when trying to run test:%s" % __file__)
         print("Python says:%s" % str(e))
+
+def update_browserstack_session_status(test_obj):
+    "Update BrowserStack session status with test run status"
+    if test_obj.pass_counter == test_obj.result_counter:
+        test_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed", "reason": "All test cases passed"}}')
+    else:
+        test_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Test failed. Look at terminal logs for more details"}}')
 
 def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False):
     "Upload log file to provided BrowserStack session"
