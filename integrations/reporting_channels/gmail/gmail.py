@@ -142,7 +142,6 @@ class Gmail():
         self.imap.logout()
         self.logged_in = False
 
-
     def label(self, label_name):
         "Retrieves a Mailbox object for the specified label (mailbox)."
         return self.mailbox(label_name)
@@ -151,7 +150,6 @@ class Gmail():
         "Searches and returns emails based on the provided search criteria."
         box = self.mailbox(mailbox_name)
         return box.mail(**kwargs)
-
 
     def copy(self, uid, to_mailbox, from_mailbox=None):
         "Copies an email with the given UID from one mailbox to another."

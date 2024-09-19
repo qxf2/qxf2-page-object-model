@@ -18,9 +18,9 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 load_dotenv()
 
-@pytest.mark.skip(reason="currently no support on CI to test this")
+# @pytest.mark.skip(reason="currently no support on CI to test this")
 @pytest.mark.GMAIL
-def test_gmail_util(test_obj):
+def test_gmail_util(test_obj, mailbox):
     "Run the Gmail utility test"
     expected_pass = 0
     actual_pass = 0
@@ -56,8 +56,7 @@ def test_gmail_util(test_obj):
         expected_pass += 1
 
         # 4. Select and fetch messages from SPAM mailbox
-        spam_mailbox_name = "[Gmail]/Spam"
-        inbox_mailbox = gmail.use_mailbox(spam_mailbox_name)
+        inbox_mailbox = gmail.use_mailbox(mailbox)
         if isinstance(inbox_mailbox, Mailbox):
             test_obj.write("SPAM mailbox selected successfully")
             actual_pass += 1

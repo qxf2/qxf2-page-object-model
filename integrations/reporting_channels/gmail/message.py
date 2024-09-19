@@ -3,12 +3,10 @@ import email
 import re
 import time
 import os
-from email.header import decode_header, make_header
-from imaplib import ParseFlags
+from email.header import decode_header
 
 class Message():
-
-
+    "Message class provides methods for mail functions."
     def __init__(self, mailbox, uid):
         self.uid = uid
         self.mailbox = mailbox
@@ -36,8 +34,6 @@ class Message():
         self.message_id = None
 
         self.attachments = None
-
-
 
     def is_read(self):
         return ('\\Seen' in self.flags)
@@ -82,7 +78,6 @@ class Message():
         self.gmail.imap.uid('STORE', self.uid, '-X-GM-LABELS', full_label)
         if full_label in self.labels: self.labels.remove(full_label)
 
-
     def is_deleted(self):
         return ('\\Deleted' in self.flags)
 
@@ -100,13 +95,10 @@ class Message():
     #     self.gmail.imap.uid('STORE', self.uid, '-FLAGS', flag)
     #     if flag in self.flags: self.flags.remove(flag)
 
-
     def move_to(self, name):
         self.gmail.copy(self.uid, name, self.mailbox.name)
         if name not in ['[Gmail]/Bin', '[Gmail]/Trash']:
             self.delete()
-
-
 
     def archive(self):
         self.move_to('[Gmail]/All Mail')
@@ -210,7 +202,6 @@ class Message():
         if not self.message:
             response, results = self.gmail.imap.uid('FETCH', self.uid, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
             self.parse(results[0])
-
         return self.message
 
     # returns a list of fetched messages (both sent and received) in chronological order
@@ -239,13 +230,10 @@ class Message():
             self.gmail.mailboxes['[Gmail]/Sent Mail'].messages.update(sent_messages)
 
         self.gmail.use_mailbox(original_mailbox.name)
-
-        # combine and sort sent and received messages
         return sorted(dict(received_messages.items() + sent_messages.items()).values(), key=lambda m: m.sent_at)
 
-
 class Attachment:
-
+    "Attachment class methods for email attachment."
     def __init__(self, attachment):
         self.name = attachment.get_filename()
         # Raw file data

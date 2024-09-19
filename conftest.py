@@ -519,6 +519,15 @@ def orientation(request):
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
 
+@pytest.fixture
+def mailbox(request):
+    "pytest fixture for use mailbox"
+    try:
+        return request.config.getoption("--mailbox")
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
+
 def pytest_sessionstart(session):
     """
     Perform cleanup at the start of the test session.
@@ -801,6 +810,10 @@ def pytest_addoption(parser):
                             dest="orientation",
                             default=None,
                             help="Enter LANDSCAPE to change device orientation to landscape")
+        parser.addoption("--mailbox",
+                         dest="mailbox",
+                         default="[Gmail]/Spam",
+                         help="Mailbox to select and fetch messages from")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
