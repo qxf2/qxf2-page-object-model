@@ -27,7 +27,6 @@ class Gmail():
         self.username = None
         self.password = None
         self.access_token = None
-        
         self.imap = None
         self.smtp = None
         self.logged_in = False
