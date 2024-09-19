@@ -593,7 +593,7 @@ def pytest_configure(config):
 
     # Set default versions for browsers that don't have versions specified
     if browser and not version:
-        for b in browser:
+        for browser_name in browser:
             version.append("latest")
 
     if os_name and not os_version:
