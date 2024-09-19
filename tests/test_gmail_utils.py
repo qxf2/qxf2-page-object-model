@@ -18,7 +18,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 load_dotenv()
 
-# @pytest.mark.skip(reason="currently no support on CI to test this")
+@pytest.mark.skip(reason="currently no support on CI to test this")
 @pytest.mark.GMAIL
 def test_gmail_util(test_obj, mailbox):
     "Run the Gmail utility test"
