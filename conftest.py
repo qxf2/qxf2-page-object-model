@@ -581,7 +581,6 @@ def pytest_configure(config):
     version = config.getoption("browser_version")
     os_name = config.getoption("os_name")
     os_version = config.getoption("os_version")
-    print(f"Browser: {browser}, Version: {version}")
 
     # Check if version is specified without a browser
     if version and not browser:
@@ -590,20 +589,21 @@ def pytest_configure(config):
     if os_version and not os_name:
         raise ValueError("You have specified an OS version without setting an OS. Please use the --os_name option to specify the OS.")
 
-    # Define default versions based on browser
-    default_versions = {
-        "firefox": "115",
-        "chrome": "121"
-    }
+    default_os_versions = browser_os_name_conf.default_os_versions
 
     # Set default versions for browsers that don't have versions specified
     if browser and not version:
         for b in browser:
-            if b.lower() in default_versions:
-                version.append(default_versions[b.lower()])
+            version.append("latest")
+
+    if os_name and not os_version:
+        for os in os_name:
+            if os.lower() in default_os_versions:
+                os_version.append(default_os_versions[os.lower()])
             else:
-                raise ValueError(f"No default version available for browser '{b}'. Please specify a version using --ver.")
-    
+                raise ValueError(f"No default version available for browser '{os}'. Please specify a version using --ver.")
+
+
     # Assign back the modified version list to config (in case it was updated)
     config.option.browser_version = version    
 
