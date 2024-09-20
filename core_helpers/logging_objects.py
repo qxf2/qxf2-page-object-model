@@ -17,20 +17,20 @@ class Logging_Objects:
         self.write('Total number of checks passed=%d\n----------------------\n************************\n\n'%self.pass_counter)
         self.write('Total number of mini-checks=%d'%self.mini_check_counter)
         self.write('Total number of mini-checks passed=%d'%self.mini_check_pass_counter)
-        failure_message_list = self.get_failure_message_list()
-        if len(failure_message_list) > 0:
-            self.write('\n--------FAILURE SUMMARY--------\n')
-            for msg in failure_message_list:
-                self.write(msg)
-        if len(self.exceptions) > 0:
-            self.exceptions = list(set(self.exceptions))
-            self.write('\n--------USEFUL EXCEPTION--------\n')
-            for (i,msg) in enumerate(self.exceptions,start=1):
-                self.write(str(i)+"- " + msg)
         self.make_gif()
         if self.gif_file_name is not None:
             self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
             self.write('************************')
+        failure_message_list = self.get_failure_message_list()
+        if len(failure_message_list) > 0:
+            self.write('\n--------FAILURE SUMMARY--------\n',level="error")
+            for msg in failure_message_list:
+                self.write(msg,level="error")
+        if len(self.exceptions) > 0:
+            self.exceptions = list(set(self.exceptions))
+            self.write('\n--------USEFUL EXCEPTION--------\n',level="error")
+            for (i,msg) in enumerate(self.exceptions,start=1):
+                self.write(str(i)+"- " + msg,level="error")
 
     def write(self,msg,level='info', trace_back=None):
         "Log the message"
@@ -60,9 +60,9 @@ class Logging_Objects:
                 self.success(negative,level="info")
         else:
             if flag is True:
-                self.success(positive,level=level)
+                self.success(positive,level="info")
             else:
-                self.failure(negative,level=level)
+                self.failure(negative,level="error")
 
     def get_failure_message_list(self):
         "Return the failure message list"
