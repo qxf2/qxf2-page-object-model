@@ -69,8 +69,6 @@ class DriverFactory(RemoteOptions, LocalOptions):
             local_driver = self.explorer_local()
         elif browser.lower() == "chrome":
             local_driver = self.chrome_local()
-        elif browser.lower() == "opera":
-            local_driver = self.opera_local()
         elif browser.lower() == "safari":
             local_driver = self.safari_local()
         elif browser.lower() == "headless-chrome":
