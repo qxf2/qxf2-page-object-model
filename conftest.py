@@ -593,19 +593,18 @@ def pytest_configure(config):
 
     # Set default versions for browsers that don't have versions specified
     if browser and not version:
-        for browser_name in browser:
-            version.append("latest")
+        version = ["latest"] * len(browser)
 
     if os_name and not os_version:
-        for os in os_name:
-            if os.lower() in default_os_versions:
-                os_version.append(default_os_versions[os.lower()])
+        for os_entry in os_name:
+            if os_entry.lower() in default_os_versions:
+                os_version.append(default_os_versions[os_entry.lower()])
             else:
-                raise ValueError(f"No default version available for browser '{os}'. Please specify a version using --ver.")
+                raise ValueError(f"No default version available for browser '{os_entry}'. Please specify a version using --ver.")
 
 
     # Assign back the modified version list to config (in case it was updated)
-    config.option.browser_version = version    
+    config.option.browser_version = version
 
     global if_reportportal
     if_reportportal =config.getoption('--reportportal')
