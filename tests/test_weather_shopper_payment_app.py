@@ -14,7 +14,7 @@ The fields are : Email, cardnumber.
 Provided invalid values for Email, cardnumber.
 """
 # pylint: disable=E0401,C0413,C0301
-import secrets
+
 import time
 import os
 import sys
@@ -22,62 +22,6 @@ import pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects.PageFactory import PageFactory
 import conf.weather_shopper_mobile_conf as conf
-
-def visit_product_page(test_mobile_obj, temperature):
-    "Visit the product page"
-    product = None
-    result_flag = False
-    if temperature < 19:
-        result_flag = test_mobile_obj.view_moisturizers()
-        product = "Moisturizers"
-
-    elif temperature > 32:
-        result_flag = test_mobile_obj.view_sunscreens()
-        product = "Sunscreens"
-
-    else:
-        skin_product = secrets.choice(['Moisturizers', 'Sunscreens'])
-        if skin_product == 'Moisturizers':
-            result_flag = test_mobile_obj.view_moisturizers()
-            product = "Moisturizers"
-        else:
-            result_flag = test_mobile_obj.view_sunscreens()
-            product = "Sunscreens"
-
-    return product, result_flag
-
-def get_items(test_mobile_obj):
-    "Get most expensive item from the page"
-
-    # Get all products from page
-    all_items = test_mobile_obj.get_all_products()
-
-    # Calculate most expensive item
-    most_expensive_item = test_mobile_obj.get_most_expensive_item(all_items)
-
-    return most_expensive_item
-
-def add_items_to_cart(test_mobile_obj, most_expensive_item):
-    "Add items to cart"
-    # Add most expensive item to cart
-    result_flag = test_mobile_obj.add_to_cart(most_expensive_item)
-
-    return result_flag
-
-def view_cart(test_mobile_obj):
-    "View cart page"
-    result_flag = test_mobile_obj.view_cart()
-
-    return result_flag
-
-def verify_cart(test_mobile_obj, most_expensive_item):
-    "Verify cart total"
-    # Verify cart total
-    cart_total = test_mobile_obj.get_cart_total()
-    item_prices = [most_expensive_item['price']]
-    result_flag = test_mobile_obj.verify_total(cart_total, item_prices)
-
-    return result_flag
 
 @pytest.mark.MOBILE
 def test_weather_shopper_payment_app(test_mobile_obj):
@@ -96,7 +40,7 @@ def test_weather_shopper_payment_app(test_mobile_obj):
         temperature = test_mobile_obj.get_temperature()
 
         #Visit the product page
-        product,result_flag = visit_product_page(test_mobile_obj, temperature)
+        product,result_flag = test_mobile_obj.visit_product_page(temperature)
 
         if product == "Moisturizers":
             test_mobile_obj.log_result(result_flag,
@@ -108,26 +52,32 @@ def test_weather_shopper_payment_app(test_mobile_obj):
                                     positive="Successfully visited sunscreens page",
                                     negative="Failed to visit sunscreens page",
                                     level="critical")
+        # Get all products from page
+        all_items = test_mobile_obj.get_all_products()
 
-        #Get most expensive item from the page
-        most_expensive_item = get_items(test_mobile_obj)
+          #Get least and most expensive item from the page
+        least_expensive_item, most_expensive_item = test_mobile_obj.get_least_and_most_expensive_items(all_items)
+        items = [least_expensive_item, most_expensive_item]
 
         #Add items to cart
-        result_flag = add_items_to_cart(test_mobile_obj, most_expensive_item)
+        result_flag = test_mobile_obj.add_items_to_cart(items)
         test_mobile_obj.log_result(result_flag,
                                     positive="Successfully added items item to cart",
                                     negative="Failed to add one or mre items to the cart",
                                     level="critical")
 
         #View cart
-        result_flag = view_cart(test_mobile_obj)
+        result_flag = test_mobile_obj.view_cart()
         test_mobile_obj.log_result(result_flag,
                                     positive="Successfully viewed cart",
                                     negative="Failed to view cart",
                                     level="critical")
 
         #Verify cart total
-        result_flag = verify_cart(test_mobile_obj, most_expensive_item)
+        cart_total = test_mobile_obj.get_cart_total()
+        item_prices = [item['price'] for item in items]
+        result_flag = test_mobile_obj.verify_total(cart_total, item_prices)
+
         test_mobile_obj.log_result(result_flag,
                                 positive="Cart total is correct",
                                 negative="Total is incorrect")
