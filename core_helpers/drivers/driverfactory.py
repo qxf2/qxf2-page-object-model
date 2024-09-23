@@ -67,8 +67,8 @@ class DriverFactory(RemoteOptions, LocalOptions):
             browser_version = None
         if browser.lower() == "ff" or browser.lower() == 'firefox':
             local_driver = self.firefox_local(browser_version)
-        elif  browser.lower() == "ie":
-            local_driver = self.explorer_local(browser_version)
+        elif  browser.lower() == "edge":
+            local_driver = self.edge_local(browser_version)
         elif browser.lower() == "chrome":
             local_driver = self.chrome_local(browser_version)
         elif browser.lower() == "opera":

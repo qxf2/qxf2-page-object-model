@@ -18,11 +18,11 @@ class LocalOptions():
         return local_driver
 
     @staticmethod
-    def explorer_local(browser_version):
-        """Get webdriver for internet explorer."""
-        options = webdriver.IeOptions()
+    def edge_local(browser_version):
+        """Get webdriver for Edge."""
+        options = webdriver.EdgeOptions()
         options.browser_version = browser_version
-        local_driver = webdriver.Ie()
+        local_driver = webdriver.Edge(options=options)
 
         return local_driver
 

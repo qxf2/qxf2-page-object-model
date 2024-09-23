@@ -130,6 +130,8 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("""browserstack_executor: {"action": "setSessionStatus",
                         "arguments": {"status":"failed", "reason": "Exception occured"}}""")
+        if browser == "edge":
+            print(f"Selenium Manager requires administrator permissions to install Microsoft {browser} in Windows automatically ")
 
 @pytest.fixture
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity,     # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
@@ -684,7 +686,7 @@ def pytest_addoption(parser):
                             dest="browser",
                             action="append",
                             default=[],
-                            help="Browser. Valid options are firefox, ie and chrome")
+                            help="Browser. Valid options are firefox, Edge and chrome")
         parser.addoption("--app_url",
                             dest="url",
                             default=base_url_conf.ui_base_url,

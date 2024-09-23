@@ -2,9 +2,8 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
-
+import inspect
 from selenium.webdriver.common.by import By
-import os,inspect
 from core_helpers.drivers.driverfactory import DriverFactory
 from .selenium_action_objects import Selenium_Action_Objects
 from .remote_objects import Remote_Objects
@@ -248,7 +247,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
     def get_element_attribute_value(self,element,attribute_name):
         "Return the elements attribute value if present"
         attribute_value = None
-        if (hasattr(element,attribute_name)):
+        if hasattr(element,attribute_name):
             attribute_value = element.get_attribute(attribute_name)
 
         return attribute_value
@@ -278,14 +277,14 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         try:
             return self.axe_util.inject()
         except Exception as e:
-             self.write(str(e),'critical')
+            self.write(str(e),'critical')
 
     def accessibility_run_axe(self):
         "Run Axe into the Page"
         try:
             return self.axe_util.run()
         except Exception as e:
-             self.write(str(e),'critical')
+            self.write(str(e),'critical')
 
     def snapshot_assert_match(self, value, snapshot_name):
         "Asserts the current value of the snapshot with the given snapshot_name"
@@ -294,7 +293,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             self.snapshot_util.assert_match(value, snapshot_name)
             result_flag = True
         except Exception as e:
-             self.write(str(e),'critical')
+            self.write(str(e),'critical')
 
         return result_flag
 
