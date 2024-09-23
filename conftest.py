@@ -687,7 +687,7 @@ def pytest_addoption(parser):
                             dest="browser",
                             action="append",
                             default=[],
-                            help="Browser. Valid options are firefox, ie and chrome")
+                            help="Browser. Valid options are firefox, Edge and chrome")
         parser.addoption("--app_url",
                             dest="url",
                             default=base_url_conf.ui_base_url,
