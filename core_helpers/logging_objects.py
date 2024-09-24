@@ -1,7 +1,6 @@
 """
 Helper class for Logging Objects
 """
-
 from utils.Base_Logging import Base_Logging
 from utils.stop_test_exception_util import Stop_Test_Exception
 import logging
@@ -10,6 +9,13 @@ class Logging_Objects:
     def __init__(self):
         self.msg_list = []
         self.exceptions = []
+        self.mini_check_counter = 0
+        self.mini_check_pass_counter = 0
+        self.result_counter = 0
+        self.pass_counter = 0
+        self.failure_message_list = []
+        self.screenshot_dir = None
+        self.calling_module = None
 
     def write_test_summary(self):
         "Print out a useful, human readable summary"
@@ -27,10 +33,12 @@ class Logging_Objects:
             self.write('\n--------USEFUL EXCEPTION--------\n')
             for (i,msg) in enumerate(self.exceptions,start=1):
                 self.write(str(i)+"- " + msg)
-        self.make_gif()
-        if self.gif_file_name is not None:
-            self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
-            self.write('************************')
+
+        if self.screenshot_dir is not None:
+            self.make_gif()
+            if self.gif_file_name is not None:
+                self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
+                self.write('************************')
 
     def write(self,msg,level='info', trace_back=None):
         "Log the message"
@@ -46,10 +54,13 @@ class Logging_Objects:
         self.result_counter += 1
         self.pass_counter += 1
 
-    def set_log_file(self):
+    def set_log_file(self, log_file_path=None):
         "set the log file"
-        self.log_name = self.testname + '.log'
-        self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
+        if log_file_path == None:
+            self.log_name = self.testname + '.log'
+            self.log_obj = Base_Logging(log_file_name=self.log_name,level=logging.DEBUG)
+        else:
+            self.log_obj = Base_Logging(log_file_name=log_file_path, level=logging.DEBUG)
 
     def log_result(self,flag,positive,negative,level='info'):
         "Write out the result of the test"
@@ -79,3 +90,27 @@ class Logging_Objects:
     def set_rp_logger(self,rp_pytest_service):
         "Set the reportportal logger"
         self.rp_logger = self.log_obj.setup_rp_logging(rp_pytest_service)
+
+    def conditional_write(self,flag,positive,negative,level='info'):
+        "Write out either the positive or the negative message based on flag"
+        self.mini_check_counter += 1
+        if level.lower() == "inverse":
+            if flag is True:
+                self.write(positive,level='error')
+            else:
+                self.write(negative,level='info')
+                self.mini_check_pass_counter += 1
+        else:
+            if flag is True:
+                self.write(positive,level='info')
+                self.mini_check_pass_counter += 1
+            else:
+                self.write(negative,level='error')
+
+    def set_calling_module(self,name):
+        "Set the test name"
+        self.calling_module = name
+
+    def get_calling_module(self):
+        "Get the name of the calling module"
+        return self.calling_module

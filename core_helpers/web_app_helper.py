@@ -4,7 +4,7 @@ There are useful wrappers for common Selenium operations
 """
 
 from selenium.webdriver.common.by import By
-import os,inspect
+import os
 from core_helpers.drivers.driverfactory import DriverFactory
 from .selenium_action_objects import Selenium_Action_Objects
 from .remote_objects import Remote_Objects
@@ -52,6 +52,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             self.images = []
             self.highlight_flag = False
             self.test_run_id = None
+            self.screenshot_dir = None
             self.reset()
         self.base_url = base_url
         self.driver_obj = DriverFactory()
@@ -99,29 +100,6 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         "Turn off the highlighting feature"
         self.highlight_flag = False
 
-    def set_calling_module(self,name):
-        "Set the test name"
-        self.calling_module = name
-
-    def get_calling_module(self):
-        "Get the name of the calling module"
-        if self.calling_module is None:
-            #Try to intelligently figure out name of test when not using pytest
-            full_stack = inspect.stack()
-            index = -1
-            for stack_frame in full_stack:
-                print(stack_frame[1],stack_frame[3])
-                #stack_frame[1] -> file name
-                #stack_frame[3] -> method
-                if 'test_' in stack_frame[1]:
-                    index = full_stack.index(stack_frame)
-                    break
-            test_file = full_stack[index][1]
-            test_file = test_file.split(os.sep)[-1]
-            testname = test_file.split('.py')[0]
-            self.set_calling_module(testname)
-
-        return self.calling_module
 
     def set_screenshot_dir(self,os_name,os_version,browser,browser_version):
         "Set the screenshot directory"
@@ -310,22 +288,6 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             self.write("Exception when reading Browser Console log")
             self.write(str(e))
             return log
-
-    def conditional_write(self,flag,positive,negative,level='info'):
-        "Write out either the positive or the negative message based on flag"
-        self.mini_check_counter += 1
-        if level.lower() == "inverse":
-            if flag is True:
-                self.write(positive,level='error')
-            else:
-                self.write(negative,level='info')
-                self.mini_check_pass_counter += 1
-        else:
-            if flag is True:
-                self.write(positive,level='info')
-                self.mini_check_pass_counter += 1
-            else:
-                self.write(negative,level='error')
 
     def execute_javascript(self,js_script,*args):
         "Execute javascipt"
