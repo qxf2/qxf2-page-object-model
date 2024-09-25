@@ -81,4 +81,7 @@ def test_gmail_util():
         raise
 
 if __name__ == "__main__":
+    if os.getenv('CIRCLECI'):
+        print("Skipping Gmail utility test in CI/CD pipeline")
+        exit(0)
     test_gmail_util()
