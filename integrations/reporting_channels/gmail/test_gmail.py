@@ -37,7 +37,7 @@ def test_gmail_util():
         except AuthenticationError as e:
             print(f"Authentication failed: Check for the login credentials {str(e)}")
             return
-        
+
         # 3. Fetch mailboxes
         mailboxes = gmail.fetch_mailboxes()
         if mailboxes:
