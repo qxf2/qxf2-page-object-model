@@ -19,7 +19,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 load_dotenv()
 
-def test_gmail_util():
+def gmail_test():
     "Run the Gmail utility test"
     try:
         # 1. Initialize Gmail object and connect
@@ -81,7 +81,4 @@ def test_gmail_util():
         raise
 
 if __name__ == "__main__":
-    if os.getenv('CIRCLECI'):
-        print("Skipping Gmail utility test in CI/CD pipeline")
-        exit(0)
-    test_gmail_util()
+    gmail_test()
