@@ -13,7 +13,7 @@ from utils import interactive_mode
 load_dotenv()
 
 @pytest.fixture
-def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
+def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag, highlighter_flag):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower() == "y":
@@ -25,6 +25,10 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         test_obj.set_calling_module(testname)
         #Setup and register a driver
         test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name, testname)
+
+        #Set highlighter
+        if highlighter_flag.lower()=='y':
+            test_obj.turn_on_highlight()
 
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -260,6 +264,16 @@ def remote_flag(request):
     "pytest fixture for browserstack/sauce flag"
     try:
         return request.config.getoption("--remote_flag")
+
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
+
+@pytest.fixture
+def highlighter_flag(request):
+    "pytest fixture for element highlighter flag"
+    try:
+        return request.config.getoption("--highlighter_flag")
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
@@ -788,7 +802,6 @@ def pytest_addoption(parser):
                             dest="appium_version",
                             help="The appium version if its run in BrowserStack",
                             default="2.4.1")
-
         parser.addoption("--interactive_mode_flag",
                             dest="questionary",
                             default="n",
@@ -801,7 +814,10 @@ def pytest_addoption(parser):
                             dest="orientation",
                             default=None,
                             help="Enter LANDSCAPE to change device orientation to landscape")
-
+        parser.addoption("--highlighter_flag",
+                            dest="highlighter_flag",
+                            default='Y',
+                            help="Y or N. 'Y' if you want turn of element highlighter")
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
