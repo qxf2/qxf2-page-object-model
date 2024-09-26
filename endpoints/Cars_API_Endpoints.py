@@ -11,51 +11,71 @@ class Cars_API_Endpoints:
 
 	def add_car(self,data,headers):
 		"Adds a new car"
-		url = self.cars_url('/add')
-		json_response = self.post(url,json=data,headers=headers)
+		try:
+			url = self.cars_url('/add')
+			json_response = self.post(url,json=data,headers=headers)
+		except Exception as e:
+			print("Python says:%s" % str(e))
+			json_response = None
 		return {
 			'url':url,
-			'response':json_response['json_response']
+			'response':json_response.json()
 		}
 
 
 	def get_cars(self,headers):
 		"gets list of cars"
-		url = self.cars_url()
-		json_response = self.get(url,headers=headers)
+		try:
+			url = self.cars_url()
+			json_response = self.get(url,headers=headers)
+		except Exception as e:
+			print("Python says:%s" % str(e))
+			json_response = None
 		return {
 			'url':url,
-			'response':json_response['json_response']
+			'response':json_response.json()
 		}
 
 
 	def get_car(self,url_params,headers):
 		"gets given car details"
-		url = self.cars_url('/find?')+url_params
-		json_response = self.get(url,headers=headers)
+		try:
+			url = self.cars_url('/find?')+url_params
+			json_response = self.get(url,headers=headers)
+		except Exception as e:
+			print("Python says:%s" % str(e))
+			json_response = None
 		return {
 			'url':url,
-			'response':json_response['json_response']
+			'response':json_response.json()
 		}
 
 
 	def update_car(self,car_name,json,headers):
 		"updates a given car"
-		url = self.cars_url('/update/%s'%car_name)
-		json_response =self.put(url,json=json,headers=headers)
+		try:
+			url = self.cars_url('/update/%s'%car_name)
+			json_response =self.put(url,json=json,headers=headers)
+		except Exception as e:
+			print("Python says:%s" % str(e))
+			json_response = None
 		return {
 			'url':url,
-			'response':json_response['json_response']
+			'response':json_response.json()
 		}
 
 
 	def remove_car(self,car_name,headers):
 		"deletes a car entry"
-		url =self.cars_url('/remove/%s'%car_name)
-		json_response = self.delete(url,headers=headers)
+		try:
+			url =self.cars_url('/remove/%s'%car_name)
+			json_response = self.delete(url,headers=headers)
+		except Exception as e:
+			print("Python says:%s" % str(e))
+			json_response = None
 		return{
 			'url':url,
-			'response':json_response['json_response']
+			'response':json_response.json()
 		}
 
 	# Async methods

@@ -12,13 +12,16 @@ class User_API_Endpoints:
 
 	def get_user_list(self,headers):
 		"get users list"
-		url = self.user_url('')
-		json_response = self.get(url,headers=headers)
+		try:
+			url = self.user_url('')
+			json_response = self.get(url,headers=headers)
+		except Exception as e:
+			print("Python says:%s" % str(e))
+			json_response = None
 		return {
                 'url':url,
-                'response':json_response['response'],
-                'error':json_response['error'],
-				'user_list':json_response['json_response']
+                'response':json_response.status_code,
+				'user_list':json_response.json()
                 }
 
 
