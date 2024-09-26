@@ -80,7 +80,7 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("lambda-status=error")
         if browser == "edge":
-            print(f"Selenium Manager requires administrator permissions to install Microsoft Edge in Windows automatically ")
+            print(f"Selenium Manager requires administrator permissions to install Microsoft {browser} in Windows automatically ")
 
 @pytest.fixture
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, testname, remote_project_name, remote_build_name, orientation):
