@@ -32,7 +32,7 @@ class LocalOptions():
         options = webdriver.ChromeOptions()
         options.browser_version = browser_version
         local_driver = webdriver.Chrome(options=options)
-
+        
         return local_driver
 
     @staticmethod
