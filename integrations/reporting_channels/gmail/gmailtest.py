@@ -46,7 +46,7 @@ def gmail_test():
             raise ValueError("Failed to fetch mailboxes!")
 
         # 4. Select and fetch messages from SPAM mailbox
-        inbox_mailbox = gmail.use_mailbox("Inbox")
+        inbox_mailbox = gmail.use_mailbox("[Gmail]/Spam")
         if isinstance(inbox_mailbox, Mailbox):
             print("SPAM mailbox selected successfully")
         else:
