@@ -95,6 +95,8 @@ class Base_Logging():
                 self.rp_logger.debug(msg=msg)
             elif level.lower()== 'info':
                 self.rp_logger.info(msg)
+            elif level.lower()== 'success':
+                self.rp_logger.info(msg)
             elif level.lower()== 'warn' or level.lower()=='warning':
                 self.rp_logger.warning(msg)
             elif level.lower()== 'error':
@@ -114,10 +116,14 @@ class Base_Logging():
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
             logger.opt(colors=True).info("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
+        elif level.lower() == 'success':
+            file_name = d['file_name']
+            module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
+            logger.opt(colors=True).success("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'warn' or level.lower() == 'warning':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source
-            logger.opt(colors=True).warn("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
+            logger.opt(colors=True).warning("<cyan>{file_name}</cyan>::<yellow>{module}</yellow> | {msg}", file_name=file_name, module=module, msg=msg)
         elif level.lower() == 'error':
             file_name = d['file_name']
             module = d['caller_func'] if d['caller_func'] != "inner" else exception_source

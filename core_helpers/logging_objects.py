@@ -28,9 +28,9 @@ class Logging_Objects:
                 self.write(msg,level="error")
         if len(self.exceptions) > 0:
             self.exceptions = list(set(self.exceptions))
-            self.write('\n--------USEFUL EXCEPTION--------\n',level="error")
+            self.write('\n--------USEFUL EXCEPTION--------\n',level="critical")
             for (i,msg) in enumerate(self.exceptions,start=1):
-                self.write(str(i)+"- " + msg,level="error")
+                self.write(str(i)+"- " + msg,level="critical")
 
     def write(self,msg,level='info', trace_back=None):
         "Log the message"
@@ -38,10 +38,8 @@ class Logging_Objects:
         self.msg_list.append('%-8s:  '%level.upper() + msg)
         self.log_obj.write(msg,level,trace_back)
 
-    def success(self,msg,level='info',pre_format='PASS: '):
+    def success(self,msg,level='success',pre_format='PASS: '):
         "Write out a success message"
-        if level.lower() == 'critical':
-            level = 'info'
         self.log_obj.write(pre_format + msg,level)
         self.result_counter += 1
         self.pass_counter += 1
@@ -57,10 +55,10 @@ class Logging_Objects:
             if flag is True:
                 self.failure(positive,level="error")
             else:
-                self.success(negative,level="info")
+                self.success(negative,level="success")
         else:
             if flag is True:
-                self.success(positive,level="info")
+                self.success(positive,level="success")
             else:
                 self.failure(negative,level="error")
 
@@ -68,7 +66,7 @@ class Logging_Objects:
         "Return the failure message list"
         return self.failure_message_list
 
-    def failure(self,msg,level='info',pre_format='FAIL: '):
+    def failure(self,msg,level='error',pre_format='FAIL: '):
         "Write out a failure message"
         self.log_obj.write(pre_format + msg,level)
         self.result_counter += 1
