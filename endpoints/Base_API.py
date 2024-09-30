@@ -3,9 +3,8 @@ A wrapper around Requests to make Restful API calls
 """
 
 import asyncio
-from urllib.error import HTTPError
 from urllib.error import URLError
-from requests.exceptions import HTTPError, RequestException, ConnectionError
+from requests.exceptions import HTTPError, RequestException
 
 class Base_API:
     "Main base class for Requests based scripts"
@@ -22,7 +21,7 @@ class Base_API:
             print(f"\033[1;31mFailed to connect to {url}. Check if the API server is up.\033[1;m")
         except RequestException as err:
             print(f"\033[1;31mAn error occurred: {err}\033[1;m")
-        return response  
+        return response
 
     def post(self, url,params=None, data=None,json=None,headers=None):
         "Post request"
