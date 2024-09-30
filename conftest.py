@@ -577,6 +577,35 @@ def pytest_sessionfinish(session, exitstatus):
 @pytest.hookimpl()
 def pytest_configure(config):
     "Sets the launch name based on the marker selected."
+    browser = config.getoption("browser")
+    version = config.getoption("browser_version")
+    os_name = config.getoption("os_name")
+    os_version = config.getoption("os_version")
+
+    # Check if version is specified without a browser
+    if version and not browser:
+        raise ValueError("You have specified a browser version without setting a browser. Please use the --browser option to specify the browser.")
+
+    if os_version and not os_name:
+        raise ValueError("You have specified an OS version without setting an OS. Please use the --os_name option to specify the OS.")
+
+    default_os_versions = browser_os_name_conf.default_os_versions
+
+    # Set default versions for browsers that don't have versions specified
+    if browser and not version:
+        version = ["latest"] * len(browser)
+
+    if os_name and not os_version:
+        for os_entry in os_name:
+            if os_entry.lower() in default_os_versions:
+                os_version.append(default_os_versions[os_entry.lower()])
+            else:
+                raise ValueError(f"No default version available for browser '{os_entry}'. Please specify a version using --ver.")
+
+
+    # Assign back the modified version list to config (in case it was updated)
+    config.option.browser_version = version
+
     global if_reportportal
     if_reportportal =config.getoption('--reportportal')
 
