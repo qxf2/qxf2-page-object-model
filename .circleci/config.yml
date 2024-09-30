@@ -27,8 +27,6 @@ jobs:
 
         - run: sudo apt-get update
 
-        - run: sudo apt-get install -y tesseract-ocr
-
         - run:
             name: Run Flask app in background
             command: |
