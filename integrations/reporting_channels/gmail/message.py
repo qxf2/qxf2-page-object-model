@@ -3,12 +3,10 @@ import email
 import re
 import time
 import os
-from email.header import decode_header, make_header
-from imaplib import ParseFlags
+from email.header import decode_header
 
 class Message():
-
-
+    "Message class provides methods for mail functions."
     def __init__(self, mailbox, uid):
         self.uid = uid
         self.mailbox = mailbox
@@ -36,8 +34,6 @@ class Message():
         self.message_id = None
 
         self.attachments = None
-
-
 
     def is_read(self):
         return ('\\Seen' in self.flags)
@@ -82,7 +78,6 @@ class Message():
         self.gmail.imap.uid('STORE', self.uid, '-X-GM-LABELS', full_label)
         if full_label in self.labels: self.labels.remove(full_label)
 
-
     def is_deleted(self):
         return ('\\Deleted' in self.flags)
 
@@ -100,13 +95,10 @@ class Message():
     #     self.gmail.imap.uid('STORE', self.uid, '-FLAGS', flag)
     #     if flag in self.flags: self.flags.remove(flag)
 
-
     def move_to(self, name):
         self.gmail.copy(self.uid, name, self.mailbox.name)
         if name not in ['[Gmail]/Bin', '[Gmail]/Trash']:
             self.delete()
-
-
 
     def archive(self):
         self.move_to('[Gmail]/All Mail')
@@ -118,33 +110,69 @@ class Message():
         return hdrs
 
     def parse_flags(self, headers):
-        return list(ParseFlags(headers))
-        # flags = re.search(r'FLAGS \(([^\)]*)\)', headers).groups(1)[0].split(' ')
+        try:
+            match = re.search(r'FLAGS \((.*?)\)', headers)
+            if match:
+                flags = match.group(1).split()
+                return flags
+            else:
+                return []
+        except Exception as e:
+            print(f"Error parsing flags: {e}")
+            return []
 
     def parse_labels(self, headers):
-        if re.search(r'X-GM-LABELS \(([^\)]+)\)', headers):
-            labels = re.search(r'X-GM-LABELS \(([^\)]+)\)', headers).groups(1)[0].split(' ')
-            return map(lambda l: l.replace('"', '').decode("string_escape"), labels)
-        else:
-            return list()
+        try:
+            match = re.search(r'X-GM-LABELS \((.*?)\)', headers)
+            if match:
+                labels = match.group(1).split()
+                labels = [label.replace('"', '') for label in labels]
+                return labels
+            else:
+                return []
+        except Exception as e:
+            print(f"Error parsing labels: {e}")
+            return []
 
     def parse_subject(self, encoded_subject):
         dh = decode_header(encoded_subject)
         default_charset = 'ASCII'
-        return ''.join([ unicode(t[0], t[1] or default_charset) for t in dh ])
+        subject_parts = []
+        for part, encoding in dh:
+            if isinstance(part, bytes):
+                try:
+                    subject_parts.append(part.decode(encoding or default_charset))
+                except Exception as e:
+                    print(f"Error decoding part {part} with encoding {encoding}: {e}")
+                    subject_parts.append(part.decode(default_charset, errors='replace'))
+            else:
+                subject_parts.append(part)
+        parsed_subject = ''.join(subject_parts)
+        return parsed_subject
 
     def parse(self, raw_message):
         raw_headers = raw_message[0]
         raw_email = raw_message[1]
 
-        self.message = email.message_from_string(raw_email)
-        self.headers = self.parse_headers(self.message)
+        if isinstance(raw_headers, bytes):
+            raw_headers = raw_headers.decode('utf-8', errors='replace')
 
-        self.to = self.message['to']
-        self.fr = self.message['from']
-        self.delivered_to = self.message['delivered_to']
+        if isinstance(raw_email, bytes):
+            raw_email = raw_email.decode('utf-8', errors='replace')
 
-        self.subject = self.parse_subject(self.message['subject'])
+        if not isinstance(raw_email, str):
+            raise ValueError("Decoded raw_email is not a string")
+        try:
+            self.message = email.message_from_string(raw_email)
+
+        except Exception as e:
+            print(f"Error creating email message: {e}")
+            raise
+
+        self.to = self.message.get('to')
+        self.fr = self.message.get('from')
+        self.delivered_to = self.message.get('delivered_to')
+        self.subject = self.parse_subject(self.message.get('subject'))
 
         if self.message.get_content_maintype() == "multipart":
             for content in self.message.walk():
@@ -158,7 +186,6 @@ class Message():
         self.sent_at = datetime.datetime.fromtimestamp(time.mktime(email.utils.parsedate_tz(self.message['date'])[:9]))
 
         self.flags = self.parse_flags(raw_headers)
-
         self.labels = self.parse_labels(raw_headers)
 
         if re.search(r'X-GM-THRID (\d+)', raw_headers):
@@ -166,20 +193,15 @@ class Message():
         if re.search(r'X-GM-MSGID (\d+)', raw_headers):
             self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)[0]
 
-
-        # Parse attachments into attachment objects array for this message
         self.attachments = [
-            Attachment(attachment) for attachment in self.message._payload
-                if not isinstance(attachment, basestring) and attachment.get('Content-Disposition') is not None
+            Attachment(attachment) for attachment in self.message.get_payload()
+                if not isinstance(attachment, str) and attachment.get('Content-Disposition') is not None
         ]
-
 
     def fetch(self):
         if not self.message:
             response, results = self.gmail.imap.uid('FETCH', self.uid, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-
             self.parse(results[0])
-
         return self.message
 
     # returns a list of fetched messages (both sent and received) in chronological order
@@ -208,13 +230,10 @@ class Message():
             self.gmail.mailboxes['[Gmail]/Sent Mail'].messages.update(sent_messages)
 
         self.gmail.use_mailbox(original_mailbox.name)
-
-        # combine and sort sent and received messages
         return sorted(dict(received_messages.items() + sent_messages.items()).values(), key=lambda m: m.sent_at)
 
-
 class Attachment:
-
+    "Attachment class methods for email attachment."
     def __init__(self, attachment):
         self.name = attachment.get_filename()
         # Raw file data
