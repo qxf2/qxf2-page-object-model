@@ -2,7 +2,7 @@
 Set the desired option for running the test on a remote platform.
 """
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.webdriver.ie.options import Options as IeOptions
+from selenium.webdriver.edge.options import Options as EdgeOptions
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.safari.options import Options as SafariOptions
 from appium.options.android import UiAutomator2Options
@@ -20,9 +20,9 @@ class RemoteOptions():
         return options
 
     @staticmethod
-    def explorer(browser_version):
-        """Set web browser as Explorer."""
-        options = IeOptions()
+    def edge(browser_version):
+        """Set web browser as Edge."""
+        options = EdgeOptions()
         options.browser_version = browser_version
 
         return options
@@ -47,8 +47,8 @@ class RemoteOptions():
         """Select the browser."""
         if browser.lower() == 'ff' or browser.lower() == 'firefox':
             desired_capabilities = self.firefox(browser_version)
-        elif browser.lower() == 'ie':
-            desired_capabilities = self.explorer(browser_version)
+        elif browser.lower() == 'edge':
+            desired_capabilities = self.edge(browser_version)
         elif browser.lower() == 'chrome':
             desired_capabilities = self.chrome(browser_version)
         elif browser.lower() == 'safari':

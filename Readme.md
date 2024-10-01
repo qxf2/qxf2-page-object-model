@@ -214,6 +214,8 @@ c) If your are using firefox 47 and above, you need to set up Geckodriver. Refer
 
 d) On Ubuntu, you may run into an issue installing the cryptography module. You need to `sudo apt-get install libssl-dev` and then run `sudo pip install -r requirements.txt`
 
+e) The Edge in Windows can not be downloaded automatically to the local cache (~/.cache/selenium) by Selenium Manager as it requires administrative access. When Edge is attempted to installed with Selenium Manager it will through ``edge can only be installed in Windows with administrator permissions.``
+
 -----------
 Continuous Integration and Support
 -----------

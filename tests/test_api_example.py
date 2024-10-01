@@ -136,9 +136,9 @@ def test_api_example(test_api_obj):
                             negative=result['msg'])
 
         # write out test summary
-        expected_pass = test_api_obj.total
-        actual_pass = test_api_obj.passed
         test_api_obj.write_test_summary()
+        expected_pass = test_api_obj.result_counter
+        actual_pass = test_api_obj.pass_counter
 
     except Exception as e:
         print(e)
