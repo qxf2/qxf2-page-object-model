@@ -20,7 +20,6 @@ class Borg:
     def __init__(self):
         self.__dict__ = self.__shared_state
 
-
     def is_first_time(self):
         "Has the child class been invoked before?"
         result_flag = False
@@ -28,7 +27,6 @@ class Borg:
             result_flag = True
 
         return result_flag
-
 
 class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
@@ -52,7 +50,6 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
         if self.driver is not None:
             self.start() #Visit and initialize xpaths for the appropriate page
 
-
     def reset(self):
         "Reset the base page object"
         self.driver = None
@@ -66,11 +63,9 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
         self.screenshot_counter = 1
         self.calling_module = None
 
-
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
         self.__class__ = PageFactory.PageFactory.get_page_object(page_name).__class__
-
 
     def register_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version,remote_project_name,remote_build_name,orientation):
         "Register the mobile driver"
@@ -81,34 +76,28 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             self.write( "Cloud Session URL for test: " + self.calling_module + '\n' + str(self.session_url))
         self.start()
 
-
     def get_driver_title(self):
         "Return the title of the current page"
         return self.driver.title
-
 
     def get_calling_module(self):
         "Get the name of the calling module"
         return self.calling_module
 
-
     def set_calling_module(self,name):
         "Set the test name"
         self.calling_module = name
-
 
     def set_screenshot_dir(self):
         "Set the screenshot directory"
         self.screenshot_dir = self.get_screenshot_dir()
         self.create_dir_screenshot = self.create_screenshot_dir(self.screenshot_dir)
 
-
     def get_screenshot_dir(self):
         "Get the name of the test"
         self.testname = self.get_test_name()
         self.screenshot_dir = self.screenshot_directory(self.testname)
         return self.screenshot_dir
-
 
     def open(self,wait_time=2):
         "Visit the page base_url + url"
@@ -117,10 +106,10 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
     def conditional_write(self,flag,positive,negative,level='debug',pre_format="  - "):
         "Write out either the positive or the negative message based on flag"
         if flag is True:
-            self.write(pre_format + positive,level)
+            self.write(pre_format + positive,level='success')
             self.mini_check_pass_counter += 1
         if flag is False:
-            self.write(pre_format + negative,level)
+            self.write(pre_format + negative,level='error')
         self.mini_check_counter += 1
 
     def swipe_to_element(self,scroll_group_locator, search_element_locator, max_swipes=20, direction="up"):
