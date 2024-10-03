@@ -64,6 +64,5 @@ async def test_api_async_example(test_api_obj):
         # Assertion
         assert expected_pass == actual_pass,f"Test failed: {__file__}"
 
-    except Exception as e:
-        test_api_obj.write(f"Exception when trying to run test: {__file__}")
-        test_api_obj.write(f"Python says: {str(e)}")
+    except Exception as err:
+        raise err
