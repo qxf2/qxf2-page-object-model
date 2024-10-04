@@ -1,35 +1,57 @@
-import os,pytest,sys
+"""
+Pytest configuration and shared fixtures
+
+This module contains the common pytest fixtures, hooks, and utility functions
+used throughout the test suite. These fixtures help to set up test dependencies
+such as browser configurations, base URLs, and 
+external services (e.g., BrowserStack, SauceLabs, TestRail, Report Portal, etc).
+"""
+
+import os
+import sys
 import glob
 import shutil
+import traceback
+import pytest
 from loguru import logger
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from dotenv import load_dotenv
-from page_objects.PageFactory import PageFactory
-from conf import browser_os_name_conf
-from conf import base_url_conf
-from endpoints.API_Player import API_Player
-from utils import interactive_mode
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from conf import browser_os_name_conf               # pylint: disable=import-error wrong-import-position
+from conf import base_url_conf                      # pylint: disable=import-error wrong-import-position
+from endpoints.API_Player import API_Player         # pylint: disable=import-error wrong-import-position
+from page_objects.PageFactory import PageFactory    # pylint: disable=import-error wrong-import-position
+from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
 
 load_dotenv()
 
 @pytest.fixture
-def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
+def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag,              # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
+             testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name,  # pylint: disable=redefined-outer-name
+             testname, reportportal_service, interactivemode_flag):                             # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower() == "y":
-            default_flag = interactive_mode.set_default_flag_gui(browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag)
-            if default_flag == False:
-                browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag = interactive_mode.ask_questions_gui(browser,browser_version,os_version,os_name,remote_flag,testrail_flag,tesults_flag)
+            default_flag = interactive_mode.set_default_flag_gui(browser, browser_version,
+                                    os_version, os_name, remote_flag, testrail_flag, tesults_flag)
+            if default_flag is False:
+                browser,browser_version,remote_flag,os_name,os_version,testrail_flag,tesults_flag =\
+                    interactive_mode.ask_questions_gui(browser,browser_version,os_version,os_name,
+                                                       remote_flag,testrail_flag,tesults_flag)
 
-        test_obj = PageFactory.get_page_object("Zero",base_url=base_url)
+        test_obj = PageFactory.get_page_object("Zero",base_url=base_url)   # pylint: disable=redefined-outer-name
         test_obj.set_calling_module(testname)
         #Setup and register a driver
-        test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name, testname)
+        test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version,
+                                remote_project_name, remote_build_name, testname)
 
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
+                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception:"\
+                    " It looks like you are trying to use TestRail Integration without"\
+                    " providing test run id. \nPlease provide a valid test run id along"\
+                    " with test run command using --test_run_id and try again."\
+                    " for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_obj.register_testrail()
@@ -65,7 +87,8 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
                 if response.status_code == 200:
                     test_obj.write("Log file uploaded to BrowserStack session successfully.")
                 else:
-                    test_obj.write(f"Failed to upload log file. Status code: {response.status_code}",level='error')
+                    test_obj.write(f"Failed to upload log file. Status code:{response.status_code}",
+                                   level='error')
                     test_obj.write(response.text,level='error')
 
             test_obj.teardown()
@@ -74,31 +97,44 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
             test_obj.wait(3)
             test_obj.teardown()
 
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    except Exception as e:      # pylint: disable=broad-exception-caught
+        print(f"Exception when trying to run test:{__file__}")
+        print(f"Python says:{str(e)}")
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("lambda-status=error")
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, testname, remote_project_name, remote_build_name, orientation):
-
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity,     # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
+                    remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name,  # pylint: disable=redefined-outer-name
+                    app_path, appium_version, interactivemode_flag, testname, remote_project_name, # pylint: disable=redefined-outer-name
+                    remote_build_name, orientation):                # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
     try:
 
         if interactivemode_flag.lower()=="y":
 
-            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path=interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path, orientation)
+            mobile_os_name, mobile_os_version, device_name, app_package, app_activity, \
+            remote_flag, device_flag, testrail_flag, tesults_flag, app_name, app_path= \
+            interactive_mode.ask_questions_mobile(mobile_os_name, mobile_os_version, device_name,
+                            app_package, app_activity, remote_flag, device_flag, testrail_flag,
+                              tesults_flag, app_name, app_path, orientation)
 
-        test_mobile_obj = PageFactory.get_page_object("Zero mobile")
+        test_mobile_obj = PageFactory.get_page_object("Zero mobile")  # pylint: disable=redefined-outer-name
         test_mobile_obj.set_calling_module(testname)
         #Setup and register a driver
-        test_mobile_obj.register_driver(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, app_name, app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version, remote_project_name, remote_build_name, orientation)
+        test_mobile_obj.register_driver(mobile_os_name, mobile_os_version, device_name,
+                        app_package, app_activity, remote_flag, device_flag, app_name,
+                        app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version,
+                        remote_project_name, remote_build_name, orientation)
 
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: It looks like you are trying to use TestRail Integration without providing test run id. \nPlease provide a valid test run id along with test run command using --test_run_id and try again. for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
+                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: "\
+                    "It looks like you are trying to use TestRail Integration "\
+                    "without providing test run id. \nPlease provide a valid test run id "\
+                    "along with test run command using --test_run_id and try again."\
+                    " for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_mobile_obj.register_testrail()
@@ -110,7 +146,9 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         yield test_mobile_obj
 
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
-            response = upload_test_logs_to_browserstack(test_mobile_obj.log_name,test_mobile_obj.session_url,appium_test = True)
+            response = upload_test_logs_to_browserstack(test_mobile_obj.log_name,
+                                                        test_mobile_obj.session_url,
+                                                        appium_test = True)
             if isinstance(response, dict) and "error" in response:
                 # Handle the error response returned as a dictionary
                 test_obj.write(f"Error: {response['error']}",level='error')
@@ -122,26 +160,27 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                 if response.status_code == 200:
                     test_mobile_obj.write("Log file uploaded to BrowserStack session successfully.")
                 else:
-                    test_mobile_obj.write(f"Failed to upload log file. Status code: {response.status_code}",level='error')
+                    test_mobile_obj.write("Failed to upload log file. "\
+                                          f"Status code: {response.status_code}",level='error')
                     test_mobile_obj.write(response.text,level='error')
 
         #Teardown
         test_mobile_obj.wait(3)
         test_mobile_obj.teardown()
 
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    except Exception as e:                      # pylint: disable=broad-exception-caught
+        print(f"Exception when trying to run test:{__file__}")
+        print(f"Python says:{str(e)}")
 
 @pytest.fixture
-def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_url):
+def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_url):  # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
     # request.module._name__ is tests.<module_name> strip and get the module name
     log_file = request.module.__name__.split('.')[-1] + '.log'
     try:
         if interactivemode_flag.lower()=='y':
             api_url,session_flag = interactive_mode.ask_questions_api(api_url)
-            test_api_obj = API_Player(api_url,
+            test_api_obj = API_Player(api_url,                                        # pylint: disable=redefined-outer-name
                                       session_flag,
                                       log_file_path=log_file)
         else:
@@ -150,9 +189,9 @@ def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_u
                                       log_file_path=log_file)
         yield test_api_obj
 
-    except Exception as e:
-        print("Exception when trying to run test:%s" % __file__)
-        print("Python says:%s" % str(e))
+    except Exception as e:                    # pylint: disable=broad-exception-caught
+        print(f"Exception when trying to run test:{__file__}")
+        print(f"Python says:{str(e)}")
 
 def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False):
     "Upload log file to provided BrowserStack session"
@@ -188,336 +227,235 @@ def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False)
     except ValueError as e:
         return {"error": "Invalid session URL.", "details": str(e)}
 
-    except Exception as e:
+    except Exception as e:                                     # pylint: disable=broad-exception-caught
         # Handle any other unexpected exceptions
-        return {"error": "An unexpected error occurred while uploading logs to BrowserStack.", "details": str(e)}
+        return {"error": "An unexpected error occurred while uploading logs"\
+                " to BrowserStack.", "details": str(e)}
+
+#parameterized decorator
+def cli_exception_handler(solution_message=None):
+    "Decorator to handle try-except for fixtures and optional solution message"
+    def decorator(func):
+        def wrapper(request,*args, **kwargs):
+            try:
+                return func(request,*args, **kwargs)
+            except Exception as e:               # pylint: disable=broad-exception-caught
+                # Get the name of the function where the error occurred
+                function_name = func.__name__
+                print(f'\033[91m\nException occurred in file: {__file__}'\
+                      f'\nmethod: "{function_name}"')
+                print(f"Python says: {str(e)}")
+                print("Traceback details:")
+                traceback.print_exc()  # This will print the full traceback
+
+                # Print the custom solution message if provided
+                if solution_message:
+                    print(f"\033[92m\nSOLUTION: {solution_message}\n\033[0m")
+
+                # Return None to maintain consistency in return values
+                return None
+        return wrapper
+    return decorator
 
 @pytest.fixture
+@cli_exception_handler()
 def testname(request):
     "pytest fixture for testname"
-    try:
-        name_of_test = request.node.name
-        name_of_test = name_of_test.split('[')[0]
+    name_of_test = request.node.name
+    name_of_test = name_of_test.split('[')[0]
 
-        return name_of_test
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return name_of_test
 
 @pytest.fixture
+@cli_exception_handler()
 def browser(request):
     "pytest fixture for browser"
-    try:
-        return request.config.getoption("--browser")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--browser")
 
 @pytest.fixture
+@cli_exception_handler()
 def base_url(request):
     "pytest fixture for base url"
-    try:
-        return request.config.getoption("--app_url")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--app_url")
 
 @pytest.fixture
+@cli_exception_handler()
 def api_url(request):
     "pytest fixture for base url"
-    try:
-        return request.config.getoption("--api_url")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--api_url")
 
 @pytest.fixture
+@cli_exception_handler()
 def test_run_id(request):
     "pytest fixture for test run id"
-    try:
-        return request.config.getoption("--test_run_id")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--test_run_id")
 
 @pytest.fixture
+@cli_exception_handler()
 def testrail_flag(request):
     "pytest fixture for test rail flag"
-    try:
-        return request.config.getoption("--testrail_flag")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--testrail_flag")
 
 @pytest.fixture
+@cli_exception_handler()
 def remote_flag(request):
     "pytest fixture for browserstack/sauce flag"
-    try:
-        return request.config.getoption("--remote_flag")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--remote_flag")
 
 @pytest.fixture
+@cli_exception_handler()
 def browser_version(request):
     "pytest fixture for browser version"
-    try:
-        return request.config.getoption("--ver")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--ver")
 
 @pytest.fixture
+@cli_exception_handler()
 def os_name(request):
     "pytest fixture for os_name"
-    try:
-        return request.config.getoption("--os_name")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--os_name")
 
 @pytest.fixture
+@cli_exception_handler()
 def os_version(request):
     "pytest fixture for os version"
-    try:
-        return request.config.getoption("--os_version")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--os_version")
 
 @pytest.fixture
+@cli_exception_handler()
 def remote_project_name(request):
     "pytest fixture for browserStack project name"
-    try:
-        return request.config.getoption("--remote_project_name")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--remote_project_name")
 
 @pytest.fixture
+@cli_exception_handler()
 def remote_build_name(request):
     "pytest fixture for browserStack build name"
-    try:
-        return request.config.getoption("--remote_build_name")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--remote_build_name")
 
 @pytest.fixture
+@cli_exception_handler()
 def slack_flag(request):
     "pytest fixture for sending reports on slack"
-    try:
-        return request.config.getoption("--slack_flag")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--slack_flag")
 
 @pytest.fixture
+@cli_exception_handler()
 def tesults_flag(request):
     "pytest fixture for sending results to tesults"
-    try:
-        return request.config.getoption("--tesults")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--tesults")
 
 @pytest.fixture
+@cli_exception_handler()
 def mobile_os_name(request):
     "pytest fixture for mobile os name"
-    try:
-        return request.config.getoption("--mobile_os_name")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--mobile_os_name")
 
 @pytest.fixture
+@cli_exception_handler()
 def mobile_os_version(request):
     "pytest fixture for mobile os version"
-    try:
-        return request.config.getoption("--mobile_os_version")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--mobile_os_version")
 
 @pytest.fixture
+@cli_exception_handler()
 def device_name(request):
     "pytest fixture for device name"
-    try:
-        return request.config.getoption("--device_name")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--device_name")
 
 @pytest.fixture
+@cli_exception_handler()
 def app_package(request):
     "pytest fixture for app package"
-    try:
-        return request.config.getoption("--app_package")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--app_package")
 
 @pytest.fixture
+@cli_exception_handler()
 def app_activity(request):
     "pytest fixture for app activity"
-    try:
-        return request.config.getoption("--app_activity")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--app_activity")
 
 @pytest.fixture
+@cli_exception_handler()
 def device_flag(request):
     "pytest fixture for device flag"
-    try:
-        return request.config.getoption("--device_flag")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--device_flag")
 
 @pytest.fixture
+@cli_exception_handler()
 def email_pytest_report(request):
     "pytest fixture for device flag"
-    try:
-        return request.config.getoption("--email_pytest_report")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--email_pytest_report")
 
 @pytest.fixture
+@cli_exception_handler()
 def app_name(request):
     "pytest fixture for app name"
-    try:
-        return request.config.getoption("--app_name")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--app_name")
 
 @pytest.fixture
+@cli_exception_handler()
 def ud_id(request):
     "pytest fixture for iOS udid"
-    try:
-        return request.config.getoption("--ud_id")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--ud_id")
 
 @pytest.fixture
+@cli_exception_handler()
 def org_id(request):
     "pytest fixture for iOS team id"
-    try:
-        return request.config.getoption("--org_id")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--org_id")
 
 @pytest.fixture
+@cli_exception_handler()
 def signing_id(request):
     "pytest fixture for iOS signing id"
-    try:
-        return request.config.getoption("--signing_id")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--signing_id")
 
 @pytest.fixture
+@cli_exception_handler()
 def appium_version(request):
     "pytest fixture for app name"
-    try:
-        return request.config.getoption("--appium_version")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--appium_version")
 
 @pytest.fixture
+@cli_exception_handler()
 def no_reset_flag(request):
     "pytest fixture for no_reset_flag"
-    try:
-        return request.config.getoption("--no_reset_flag")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--no_reset_flag")
 
 @pytest.fixture
+@cli_exception_handler()
 def app_path(request):
     "pytest fixture for app path"
-    try:
-        return request.config.getoption("--app_path")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--app_path")
 
 @pytest.fixture
+@cli_exception_handler()
 def interactivemode_flag(request):
     "pytest fixture for questionary module"
-    try:
-        return request.config.getoption("--interactive_mode_flag")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--interactive_mode_flag")
 
 @pytest.fixture
+@cli_exception_handler(solution_message="It looks like you are trying to use report portal"\
+        "to run your test.\nPlease make sure you have updated .env with the right credentials.")
 def reportportal_service(request):
     "pytest service fixture for reportportal"
     reportportal_pytest_service = None
-    try:
-        if request.config.getoption("--reportportal"):
-            reportportal_pytest_service = request.node.config.py_test_service
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
-        solution = "It looks like you are trying to use report portal to run your test. \nPlease make sure you have updated .env with the right credentials ."
-        print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
+    if request.config.getoption("--reportportal"):
+        reportportal_pytest_service = request.node.config.py_test_service
 
     return reportportal_pytest_service
 
 @pytest.fixture
+@cli_exception_handler()
 def summary_flag(request):
     "pytest fixture for generating summary using LLM"
-    try:
-        return request.config.getoption("--summary")
-    except Exception as error:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(error))
+    return request.config.getoption("--summary")
 
 @pytest.fixture
+@cli_exception_handler()
 def orientation(request):
     "pytest fixture for device orientation"
-    try:
-        return request.config.getoption("--orientation")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--orientation")
 
 def pytest_sessionstart(session):
     """
@@ -543,7 +481,7 @@ def pytest_sessionstart(session):
             except OSError as error:
                 print(f"Error removing temporary log file: {error}")
 
-def pytest_sessionfinish(session, exitstatus):
+def pytest_sessionfinish(session):
     """
     Called after the entire test session finishes.
     The temporary log files are consolidated into a single log file 
@@ -560,16 +498,16 @@ def pytest_sessionfinish(session, exitstatus):
 
         #Consolidate the temporary log files into the consolidated log file
         try:
-            with open(consolidated_log_file, "a") as final_log:
+            with open(consolidated_log_file, "a", encoding="utf-8") as final_log:
                 for file_name in glob.glob(os.path.join(source_directory, log_file_name)):
                     source_file = None
                     try:
-                        with open(file_name, "r") as source_file:
+                        with open(file_name, "r", encoding="utf-8") as source_file:
                             shutil.copyfileobj(source_file, final_log)
                         os.remove(file_name)
                     except FileNotFoundError as error:
                         print(f"Temporary log file not found: {error}")
-                    except Exception as error:
+                    except Exception as error:      # pylint: disable=broad-exception-caught
                         print(f"Error processing the temporary log file: {error}")
         except OSError as error:
             print(f"Error processing consolidated log file: {error}")
@@ -577,17 +515,19 @@ def pytest_sessionfinish(session, exitstatus):
 @pytest.hookimpl()
 def pytest_configure(config):
     "Sets the launch name based on the marker selected."
-    browser = config.getoption("browser")
+    browser = config.getoption("browser")             # pylint: disable=redefined-outer-name
     version = config.getoption("browser_version")
-    os_name = config.getoption("os_name")
-    os_version = config.getoption("os_version")
+    os_name = config.getoption("os_name")             # pylint: disable=redefined-outer-name
+    os_version = config.getoption("os_version")       # pylint: disable=redefined-outer-name
 
     # Check if version is specified without a browser
     if version and not browser:
-        raise ValueError("You have specified a browser version without setting a browser. Please use the --browser option to specify the browser.")
+        raise ValueError("You have specified a browser version without setting a browser." \
+                         "Please use the --browser option to specify the browser.")
 
     if os_version and not os_name:
-        raise ValueError("You have specified an OS version without setting an OS. Please use the --os_name option to specify the OS.")
+        raise ValueError("You have specified an OS version without setting an OS." \
+                         "Please use the --os_name option to specify the OS.")
 
     default_os_versions = browser_os_name_conf.default_os_versions
 
@@ -600,32 +540,31 @@ def pytest_configure(config):
             if os_entry.lower() in default_os_versions:
                 os_version.append(default_os_versions[os_entry.lower()])
             else:
-                raise ValueError(f"No default version available for browser '{os_entry}'. Please specify a version using --ver.")
-
+                raise ValueError(f"No default version available for browser '{os_entry}'."\
+                                 " Please specify a version using --ver.")
 
     # Assign back the modified version list to config (in case it was updated)
     config.option.browser_version = version
 
-    global if_reportportal
+    global if_reportportal   # pylint: disable=global-variable-undefined
     if_reportportal =config.getoption('--reportportal')
 
     try:
-        config._inicache["rp_api_key"] = os.getenv('report_portal_api_key')
-        config._inicache["rp_endpoint"]= os.getenv('report_portal_endpoint')
-        config._inicache["rp_project"]=os.getenv('report_portal_project')
-        config._inicache["rp_launch"]=os.getenv('report_portal_launch')
+        config._inicache["rp_api_key"] = os.getenv('report_portal_api_key')   # pylint: disable=protected-access
+        config._inicache["rp_endpoint"]= os.getenv('report_portal_endpoint')  # pylint: disable=protected-access
+        config._inicache["rp_project"]= os.getenv('report_portal_project')    # pylint: disable=protected-access
+        config._inicache["rp_launch"]= os.getenv('report_portal_launch')      # pylint: disable=protected-access
 
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
-
+    except Exception as e:          # pylint: disable=broad-exception-caught
+        print(f"Exception when trying to run test:{__file__}")
+        print(f"Python says:{str(e)}")
 
     #Registering custom markers to supress warnings
     config.addinivalue_line("markers", "GUI: mark a test as part of the GUI regression suite.")
     config.addinivalue_line("markers", "API: mark a test as part of the GUI regression suite.")
     config.addinivalue_line("markers", "MOBILE: mark a test as part of the GUI regression suite.")
 
-def pytest_terminal_summary(terminalreporter, exitstatus):
+def pytest_terminal_summary(terminalreporter):
     "add additional section in terminal summary reporting."
     try:
         if not hasattr(terminalreporter.config, 'workerinput'):
@@ -637,18 +576,20 @@ def pytest_terminal_summary(terminalreporter, exitstatus):
                 #Initialize the Email_Pytest_Report object
                 email_obj = EmailPytestReport()
                 # Send html formatted email body message with pytest report as an attachment
-                email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,report_file_path='default')
+                email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,
+                                                 report_file_path='default')
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
                 from integrations.reporting_tools import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
             if  terminalreporter.config.getoption("--summary").lower() == 'y':
                 from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel
                 gpt_summary_generator.generate_gpt_summary()
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
-        solution = "It looks like you are trying to use email pytest report to run your test. \nPlease make sure you have updated .env with the right credentials ."
-        print('\033[92m'+"\nSOLUTION: %s\n"%solution+'\033[0m')
+    except Exception as e:                  # pylint: disable=broad-exception-caught
+        print(f"Exception when trying to run test:{__file__}")
+        print(f"Python says:{str(e)}")
+        solution = "It looks like you are trying to use email pytest report to run your test." \
+                   "\nPlease make sure you have updated .env with the right credentials ."
+        print(f"\033[92m\nSOLUTION: {solution}\n\033[0m")
 
 
 def pytest_generate_tests(metafunc):
@@ -659,8 +600,12 @@ def pytest_generate_tests(metafunc):
                 if metafunc.config.getoption("--browser") == ["all"]:
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
                                         browser_os_name_conf.cross_browser_cross_platform_config)
-                elif not metafunc.config.getoption("--browser") or not metafunc.config.getoption("--ver") or not metafunc.config.getoption("--os_name") or not metafunc.config.getoption("--os_version"):
-                    print("Feedback: Missing command-line arguments. Falling back to default values.")
+                elif not metafunc.config.getoption("--browser") or \
+                    not metafunc.config.getoption("--ver") or \
+                    not metafunc.config.getoption("--os_name") or \
+                    not metafunc.config.getoption("--os_version"):
+                    print("Feedback: Missing command-line arguments." \
+                          " Falling back to default values.")
                     # Use default values from the default list if not provided
                     default_config_list = browser_os_name_conf.default_config_list
                     config_list = []
@@ -684,9 +629,13 @@ def pytest_generate_tests(metafunc):
                     else:
                         config_list.append(metafunc.config.getoption("--os_version")[0])
 
-                    metafunc.parametrize("browser, browser_version, os_name, os_version", [tuple(config_list)])
+                    metafunc.parametrize("browser, browser_version, os_name, os_version",
+                                        [tuple(config_list)])
                 else:
-                    config_list = [(metafunc.config.getoption("--browser")[0],metafunc.config.getoption("--ver")[0],metafunc.config.getoption("--os_name")[0],metafunc.config.getoption("--os_version")[0])]
+                    config_list = [(metafunc.config.getoption("--browser")[0],
+                                    metafunc.config.getoption("--ver")[0],
+                                    metafunc.config.getoption("--os_name")[0],
+                                    metafunc.config.getoption("--os_version")[0])]
                     metafunc.parametrize("browser,browser_version,os_name,os_version",
                                         config_list)
             if metafunc.config.getoption("--remote_flag").lower() !='y':
@@ -699,9 +648,9 @@ def pytest_generate_tests(metafunc):
                     config_list_local = [(metafunc.config.getoption("--browser")[0])]
                     metafunc.parametrize("browser", config_list_local)
 
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    except Exception as e:              # pylint: disable=broad-exception-caught
+        print(f"Exception when trying to run test:{__file__}")
+        print(f"Python says:{str(e)}")
 
 def pytest_addoption(parser):
     "Method to add the option to ini."
@@ -780,7 +729,8 @@ def pytest_addoption(parser):
                             default=".MainActivity")
         parser.addoption("--device_flag",
                             dest="device_flag",
-                            help="Enter Y or N. 'Y' if you want to run the test on device. 'N' if you want to run the test on emulator.",
+                            help="Enter Y or N. 'Y' if you want to run the test on device." \
+                                 "'N' if you want to run the test on emulator.",
                             default="N")
         parser.addoption("--email_pytest_report",
                             dest="email_pytest_report",
@@ -792,23 +742,27 @@ def pytest_addoption(parser):
                             help="Y or N. 'Y' if you want to report results with Tesults")
         parser.addoption("--app_name",
                             dest="app_name",
-                            help="Enter application name to be uploaded.Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk",
+                            help="Enter application name to be uploaded." \
+                                "Ex:Bitcoin Info_com.dudam.rohan.bitcoininfo.apk",
                             default="app-release-v1.2.apk")
         parser.addoption("--ud_id",
                             dest="ud_id",
-                            help="Enter your iOS device UDID which is required to run appium test in iOS device",
+                            help="Enter your iOS device UDID which is required" \
+                                "to run appium test in iOS device",
                             default=None)
         parser.addoption("--org_id",
                             dest="org_id",
-                            help="Enter your iOS Team ID which is required to run appium test in iOS device",
+                            help="Enter your iOS Team ID which is required" \
+                                 "to run appium test in iOS device",
                             default=None)
         parser.addoption("--signing_id",
                             dest="signing_id",
-                            help="Enter your iOS app signing id which is required to run appium test in iOS device",
+                            help="Enter your iOS app signing id which is required" \
+                                 "to run appium test in iOS device",
                             default="iPhone Developer")
         parser.addoption("--no_reset_flag",
                             dest="no_reset_flag",
-                            help="Pass false if you want to reset app eveytime you run app else false",
+                            help="Pass false if you want to reset app eveytime you run app",
                             default="true")
         parser.addoption("--app_path",
                             dest="app_path",
@@ -831,6 +785,6 @@ def pytest_addoption(parser):
                             default=None,
                             help="Enter LANDSCAPE to change device orientation to landscape")
 
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    except Exception as e:              # pylint: disable=broad-exception-caught
+        print(f"Exception when trying to run test:{__file__}")
+        print(f"Python says:{str(e)}")
