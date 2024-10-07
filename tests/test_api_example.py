@@ -16,7 +16,6 @@ import os
 import sys
 import pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from endpoints.API_Player import API_Player
 from conf import api_example_conf as conf
 from conf import base_url_conf
 from conftest import interactivemode_flag
