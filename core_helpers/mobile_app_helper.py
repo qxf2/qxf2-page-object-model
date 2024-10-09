@@ -135,7 +135,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
                         result_flag = True
                         return result_flag
                 except Exception:
-                    self.write('Element not found, swiping again', 'debug')
+                    self.write('Element not found, swiping again', 'critical')
                     pass
 
                 # Perform swipe based on direction
@@ -150,7 +150,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             return result_flag
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append(f'Error while swiping to element - {search_element_locator}')
 
     def swipe_coordinates(self, scroll_group):
@@ -182,7 +182,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             return coordinates
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("Error while calculating swipe coordinates")
 
     def perform_swipe(self, direction, start_x, start_y, end_x, end_y, center_x, center_y, duration):
@@ -198,7 +198,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
                 self.driver.swipe(start_x=end_x, start_y=center_y, end_x=start_x, end_y=center_y, duration=duration)
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e),'critical')
             self.exceptions.append("Error while performing swipe")
 
     def zoom(self, element_locator, zoom_direction="in"):
@@ -225,7 +225,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
                 return False
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e),'critical')
             self.exceptions.append("An exception occurred when zooming")
 
     def perform_zoom(self, zoom_direction, center_x, center_y):
@@ -257,7 +257,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             actions.perform()
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occured when performing the zooming")
 
     def get_element_center(self, element):
@@ -279,7 +279,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             return coordinates
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occured when getting the element coordinates")
 
     def long_press(self, element, duration=5):
@@ -297,7 +297,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
 
         except Exception as e:
             # Log error if any exception occurs
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("Error while performing long press gesture.")
         return ressult_flag
 
@@ -329,7 +329,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             actions.perform()
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occured when performing drag and drop")
 
     def scroll_to_bottom(self, scroll_amount=10):
@@ -342,7 +342,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             value=f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToEnd({scroll_amount})')
             result_flag = True
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occurred when scrolling to the bottom of the page")
         return result_flag
 
@@ -356,7 +356,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             value=f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToBeginning({scroll_amount})')
             result_flag = True
         except Exception as e:
-            self.write(str(e),'debug')
+            self.write(str(e),'critical')
             self.exceptions.append("An exception occured when scrolling to top of page")
         return result_flag
 
@@ -371,7 +371,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             )
             result_flag = True
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occurred when scrolling backward")
         return result_flag
 
@@ -386,7 +386,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             )
             result_flag = True
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occurred when scrolling forward")
         return result_flag
 
@@ -400,5 +400,5 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             source = self.driver.page_source
             return source
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occured when getting source")

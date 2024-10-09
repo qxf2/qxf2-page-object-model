@@ -42,8 +42,8 @@ class Screenshot_Objects:
                 },
             )
         except Exception as e:
-            self.write("Exception when trying to get rplogger")
-            self.write(str(e))
+            self.write("Exception when trying to get rplogger",'critical')
+            self.write(str(e),'critical')
             self.exceptions.append("Error when trying to get reportportal logger")
 
     def make_gif(self):
@@ -88,7 +88,7 @@ class Screenshot_Objects:
                 try:
                     shutil.rmtree(self.screenshot_dir)
                 except OSError as e:
-                    self.write("Error: %s - %s." % (e.filename, e.strerror))
+                    self.write("Error: %s - %s." % (e.filename, e.strerror),'critical')
         return self.screenshot_dir
 
     def create_screenshot_dir(self, screenshot_dir):
@@ -98,6 +98,6 @@ class Screenshot_Objects:
                 os.makedirs(screenshot_dir)
             return screenshot_dir
         except Exception as e:
-            self.write("Exception when trying to set screenshot directory")
-            self.write(str(e))
+            self.write("Exception when trying to set screenshot directory",'critical')
+            self.write(str(e),'critical')
             self.exceptions.append("Error when setting up the screenshot directory")
