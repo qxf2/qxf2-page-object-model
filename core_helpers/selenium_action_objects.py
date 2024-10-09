@@ -306,4 +306,16 @@ class Selenium_Action_Objects:
             result_flag=True
         except Exception as e:
             print(f"An error occured during keyboard minimise: {str(e)}")
-            return result_flag
+
+        return result_flag
+
+    def execute_javascript(self,js_script,*args):
+        "Execute javascript"
+        try:
+            self.driver.execute_script(js_script)
+            result_flag = True
+        except Exception as e:
+            print(f"An error occured during javascript execution: {str(e)}")
+            result_flag = False
+
+        return result_flag

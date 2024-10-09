@@ -318,24 +318,14 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             if flag is True:
                 self.write(positive,level='error')
             else:
-                self.write(negative,level='info')
+                self.write(negative,level='success')
                 self.mini_check_pass_counter += 1
         else:
             if flag is True:
-                self.write(positive,level='info')
+                self.write(positive,level='success')
                 self.mini_check_pass_counter += 1
             else:
                 self.write(negative,level='error')
-
-    def execute_javascript(self,js_script,*args):
-        "Execute javascipt"
-        try:
-            self.driver.execute_script(js_script)
-            result_flag = True
-        except Exception as e:
-            result_flag = False
-
-        return result_flag
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"

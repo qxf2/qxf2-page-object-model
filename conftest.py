@@ -65,16 +65,15 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
 
         yield test_obj
 
-        #Teardown
+        #Update test run status to respective LambdaTest session
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             if test_obj.pass_counter == test_obj.result_counter:
                 test_obj.execute_javascript("lambda-status=passed")
-                test_obj.teardown()
             else:
                 test_obj.execute_javascript("lambda-status=failed")
-                test_obj.teardown()
 
         elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
+            #Upload test logs to BrowserStack
             response = upload_test_logs_to_browserstack(test_obj.log_name,test_obj.session_url)
             if isinstance(response, dict) and "error" in response:
                 # Handle the error response returned as a dictionary
@@ -91,17 +90,34 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
                                    level='error')
                     test_obj.write(response.text,level='error')
 
-            test_obj.teardown()
+            #Update test run status to respective BrowserStack session
+            if test_obj.pass_counter == test_obj.result_counter:
+                test_obj.write("Test Status: PASS")
+                result_flag = test_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed", "reason": "All test cases passed"}}')
+                test_obj.conditional_write(result_flag,
+                                           positive="Successfully set BrowserStack Test Session Status to PASS",
+                                           negative="Failed to set Browserstack session status to PASS")
+            else:
+                test_obj.write("Test Status: FAILED",level='error')
+                result_flag = test_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Test failed. Look at terminal logs for more details"}}')
+                test_obj.conditional_write(result_flag,
+                                           positive="Successfully set BrowserStack Test Session Status to FAILED",
+                                           negative="Failed to set Browserstack session status to FAILED")
 
         else:
             test_obj.wait(3)
-            test_obj.teardown()
+
+        #Teardown
+        test_obj.write("*************************\n")
+        test_obj.teardown()
 
     except Exception as e:      # pylint: disable=broad-exception-caught
         print(f"Exception when trying to run test:{__file__}")
         print(f"Python says:{str(e)}")
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("lambda-status=error")
+        elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
+            test_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Exception occured"}}')
 
 @pytest.fixture
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity,     # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
@@ -151,10 +167,10 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                                                         appium_test = True)
             if isinstance(response, dict) and "error" in response:
                 # Handle the error response returned as a dictionary
-                test_obj.write(f"Error: {response['error']}",level='error')
+                test_mobile_obj.write(f"Error: {response['error']}",level='error')
                 if "details" in response:
-                    test_obj.write(f"Details: {response['details']}",level='error')
-                    test_obj.write("Failed to upload log file to BrowserStack",level='error')
+                    test_mobile_obj.write(f"Details: {response['details']}",level='error')
+                    test_mobile_obj.write("Failed to upload log file to BrowserStack",level='error')
             else:
                 # Handle the case where the response is assumed to be a response object
                 if response.status_code == 200:
@@ -164,13 +180,30 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                                           f"Status code: {response.status_code}",level='error')
                     test_mobile_obj.write(response.text,level='error')
 
+            #Update test run status to respective BrowserStack session
+            if test_mobile_obj.pass_counter == test_mobile_obj.result_counter:
+                test_mobile_obj.write("Test Status: PASS")
+                result_flag = test_mobile_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"passed", "reason": "All test cases passed"}}')
+                test_mobile_obj.conditional_write(result_flag,
+                                           positive="Successfully set BrowserStack Test Session Status to PASS",
+                                           negative="Failed to set Browserstack session status to PASS")
+            else:
+                test_mobile_obj.write("Test Status: FAILED",level='error')
+                result_flag = test_mobile_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Test failed. Look at terminal logs for more details"}}')
+                test_mobile_obj.conditional_write(result_flag,
+                                           positive="Successfully set BrowserStack Test Session Status to FAILED",
+                                           negative="Failed to set Browserstack session status to FAILED")
+
         #Teardown
         test_mobile_obj.wait(3)
+        test_mobile_obj.write("*************************\n")
         test_mobile_obj.teardown()
 
     except Exception as e:                      # pylint: disable=broad-exception-caught
-        print(f"Exception when trying to run test:{__file__}")
-        print(f"Python says:{str(e)}")
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
+            test_mobile_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Exception occured"}}')
 
 @pytest.fixture
 def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_url):  # pylint: disable=redefined-outer-name
