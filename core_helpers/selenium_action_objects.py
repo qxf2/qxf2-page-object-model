@@ -275,7 +275,7 @@ class Selenium_Action_Objects:
             result_flag = True  # Update the result flag to True if hover is successful
         except Exception as e:
             self.write(str(e),'critical')
-            self.exceptions.append("An exception occured when hovering over the element", locator)
+            self.exceptions.append(f"An exception occured when hovering over the element - {locator}")
         return result_flag
 
     def drag_and_drop(self, source_locator, target_locator):
@@ -290,7 +290,7 @@ class Selenium_Action_Objects:
             result_flag = True
         except Exception as e:
             self.write(str(e),'critical')
-            self.exceptions.append(f"An error occurred during drag and drop action.")
+            self.exceptions.append(f"An error occurred during drag and drop action.{str(e)}")
 
         return result_flag
 
