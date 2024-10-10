@@ -20,12 +20,6 @@ class Logging_Objects:
         self.make_gif()
         if self.gif_file_name is not None:
             self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
-            self.write('************************')
-        failure_message_list = self.get_failure_message_list()
-        if len(failure_message_list) > 0:
-            self.write('\n--------FAILURE SUMMARY--------\n',level="error")
-            for msg in failure_message_list:
-                self.write(msg,level="error")
         if len(self.exceptions) > 0:
             self.exceptions = list(set(self.exceptions))
             self.write('\n--------USEFUL EXCEPTION--------\n',level="critical")
@@ -54,6 +48,8 @@ class Logging_Objects:
         if level.lower() == "inverse":
             if flag is True:
                 self.failure(positive,level="error")
+                # Collect the failed scenarios for prettytable summary
+                self.failed_scenarios.append(positive)
             else:
                 self.success(negative,level="success")
         else:
@@ -61,6 +57,8 @@ class Logging_Objects:
                 self.success(positive,level="success")
             else:
                 self.failure(negative,level="error")
+                # Collect the failed scenarios for prettytable summary
+                self.failed_scenarios.append(negative)
 
     def get_failure_message_list(self):
         "Return the failure message list"

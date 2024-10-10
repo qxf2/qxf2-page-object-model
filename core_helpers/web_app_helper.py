@@ -69,6 +69,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         self.mini_check_counter = 0 #Increment when conditional_write is called
         self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
         self.failure_message_list = []
+        self.failed_scenarios = [] # <- Collect the failed scenarios for prettytable summary
         self.screenshot_counter = 1
         self.exceptions = []
         self.gif_file_name = None

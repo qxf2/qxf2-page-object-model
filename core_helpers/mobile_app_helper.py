@@ -58,6 +58,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
         self.mini_check_counter = 0 #Increment when conditional_write is called
         self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
         self.failure_message_list = []
+        self.failed_scenarios = [] # <- Collect failed scenarios for table summary
         self.rp_logger = None
         self.exceptions = []
         self.screenshot_counter = 1
