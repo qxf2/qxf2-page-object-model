@@ -73,6 +73,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         self.exceptions = []
         self.gif_file_name = None
         self.rp_logger = None
+        self.highlight_flag = False
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
@@ -94,10 +95,6 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
     def turn_on_highlight(self):
         "Highlight the elements being operated upon"
         self.highlight_flag = True
-
-    def turn_off_highlight(self):
-        "Turn off the highlighting feature"
-        self.highlight_flag = False
 
     def set_calling_module(self,name):
         "Set the test name"
