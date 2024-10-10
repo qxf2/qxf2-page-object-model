@@ -816,8 +816,8 @@ def pytest_addoption(parser):
                             help="Enter LANDSCAPE to change device orientation to landscape")
         parser.addoption("--highlighter_flag",
                             dest="highlighter_flag",
-                            default='Y',
-                            help="Y or N. 'Y' if you want turn of element highlighter")
+                            default='N',
+                            help="Y or N. 'Y' if you want turn on element highlighter")
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
