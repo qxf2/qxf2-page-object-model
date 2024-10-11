@@ -11,7 +11,6 @@ import os
 import sys
 import glob
 import shutil
-import traceback
 import pytest
 from loguru import logger
 from dotenv import load_dotenv
@@ -107,12 +106,11 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
                 test_obj.conditional_write(result_flag,
                         positive="Successfully set BrowserStack Test Session Status to FAILED",
                         negative="Failed to set Browserstack session status to FAILED")
-
+            test_obj.write("*************************")
         else:
             test_obj.wait(3)
 
         #Teardown
-        test_obj.write("*************************\n")
         test_obj.teardown()
 
     except Exception as e:      # pylint: disable=broad-exception-caught
@@ -202,10 +200,9 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                 test_mobile_obj.conditional_write(result_flag,
                             positive="Successfully set BrowserStack Test Session Status to FAILED",
                             negative="Failed to set Browserstack session status to FAILED")
-
+            test_mobile_obj.write("*************************")
         #Teardown
         test_mobile_obj.wait(3)
-        test_mobile_obj.write("*************************\n")
         test_mobile_obj.teardown()
 
     except Exception as e:                      # pylint: disable=broad-exception-caught
@@ -276,33 +273,7 @@ def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False)
         return {"error": "An unexpected error occurred while uploading logs"\
                 " to BrowserStack.", "details": str(e)}
 
-#parameterized decorator
-def cli_exception_handler(solution_message=None):
-    "Decorator to handle try-except for fixtures and optional solution message"
-    def decorator(func):
-        def wrapper(request,*args, **kwargs):
-            try:
-                return func(request,*args, **kwargs)
-            except Exception as e:               # pylint: disable=broad-exception-caught
-                # Get the name of the function where the error occurred
-                function_name = func.__name__
-                print(f'\033[91m\nException occurred in file: {__file__}'\
-                      f'\nmethod: "{function_name}"')
-                print(f"Python says: {str(e)}")
-                print("Traceback details:")
-                traceback.print_exc()  # This will print the full traceback
-
-                # Print the custom solution message if provided
-                if solution_message:
-                    print(f"\033[92m\nSOLUTION: {solution_message}\n\033[0m")
-
-                # Return None to maintain consistency in return values
-                return None
-        return wrapper
-    return decorator
-
 @pytest.fixture
-@cli_exception_handler()
 def testname(request):
     "pytest fixture for testname"
     name_of_test = request.node.name
@@ -311,192 +282,168 @@ def testname(request):
     return name_of_test
 
 @pytest.fixture
-@cli_exception_handler()
 def browser(request):
     "pytest fixture for browser"
     return request.config.getoption("--browser")
 
 @pytest.fixture
-@cli_exception_handler()
 def base_url(request):
     "pytest fixture for base url"
     return request.config.getoption("--app_url")
 
 @pytest.fixture
-@cli_exception_handler()
 def api_url(request):
     "pytest fixture for base url"
     return request.config.getoption("--api_url")
 
 @pytest.fixture
-@cli_exception_handler()
 def test_run_id(request):
     "pytest fixture for test run id"
     return request.config.getoption("--test_run_id")
 
 @pytest.fixture
-@cli_exception_handler()
 def testrail_flag(request):
     "pytest fixture for test rail flag"
     return request.config.getoption("--testrail_flag")
 
 @pytest.fixture
-@cli_exception_handler()
 def remote_flag(request):
     "pytest fixture for browserstack/sauce flag"
     return request.config.getoption("--remote_flag")
 
 @pytest.fixture
-@cli_exception_handler()
 def browser_version(request):
     "pytest fixture for browser version"
     return request.config.getoption("--ver")
 
 @pytest.fixture
-@cli_exception_handler()
 def os_name(request):
     "pytest fixture for os_name"
     return request.config.getoption("--os_name")
 
 @pytest.fixture
-@cli_exception_handler()
 def os_version(request):
     "pytest fixture for os version"
     return request.config.getoption("--os_version")
 
 @pytest.fixture
-@cli_exception_handler()
 def remote_project_name(request):
     "pytest fixture for browserStack project name"
     return request.config.getoption("--remote_project_name")
 
 @pytest.fixture
-@cli_exception_handler()
 def remote_build_name(request):
     "pytest fixture for browserStack build name"
     return request.config.getoption("--remote_build_name")
 
 @pytest.fixture
-@cli_exception_handler()
 def slack_flag(request):
     "pytest fixture for sending reports on slack"
     return request.config.getoption("--slack_flag")
 
 @pytest.fixture
-@cli_exception_handler()
 def tesults_flag(request):
     "pytest fixture for sending results to tesults"
     return request.config.getoption("--tesults")
 
 @pytest.fixture
-@cli_exception_handler()
 def mobile_os_name(request):
     "pytest fixture for mobile os name"
     return request.config.getoption("--mobile_os_name")
 
 @pytest.fixture
-@cli_exception_handler()
 def mobile_os_version(request):
     "pytest fixture for mobile os version"
     return request.config.getoption("--mobile_os_version")
 
 @pytest.fixture
-@cli_exception_handler()
 def device_name(request):
     "pytest fixture for device name"
     return request.config.getoption("--device_name")
 
 @pytest.fixture
-@cli_exception_handler()
 def app_package(request):
     "pytest fixture for app package"
     return request.config.getoption("--app_package")
 
 @pytest.fixture
-@cli_exception_handler()
 def app_activity(request):
     "pytest fixture for app activity"
     return request.config.getoption("--app_activity")
 
 @pytest.fixture
-@cli_exception_handler()
 def device_flag(request):
     "pytest fixture for device flag"
     return request.config.getoption("--device_flag")
 
 @pytest.fixture
-@cli_exception_handler()
 def email_pytest_report(request):
     "pytest fixture for device flag"
     return request.config.getoption("--email_pytest_report")
 
 @pytest.fixture
-@cli_exception_handler()
 def app_name(request):
     "pytest fixture for app name"
     return request.config.getoption("--app_name")
 
 @pytest.fixture
-@cli_exception_handler()
 def ud_id(request):
     "pytest fixture for iOS udid"
     return request.config.getoption("--ud_id")
 
 @pytest.fixture
-@cli_exception_handler()
 def org_id(request):
     "pytest fixture for iOS team id"
     return request.config.getoption("--org_id")
 
 @pytest.fixture
-@cli_exception_handler()
 def signing_id(request):
     "pytest fixture for iOS signing id"
     return request.config.getoption("--signing_id")
 
 @pytest.fixture
-@cli_exception_handler()
 def appium_version(request):
     "pytest fixture for app name"
     return request.config.getoption("--appium_version")
 
 @pytest.fixture
-@cli_exception_handler()
 def no_reset_flag(request):
     "pytest fixture for no_reset_flag"
     return request.config.getoption("--no_reset_flag")
 
 @pytest.fixture
-@cli_exception_handler()
 def app_path(request):
     "pytest fixture for app path"
     return request.config.getoption("--app_path")
 
 @pytest.fixture
-@cli_exception_handler()
 def interactivemode_flag(request):
     "pytest fixture for questionary module"
     return request.config.getoption("--interactive_mode_flag")
 
 @pytest.fixture
-@cli_exception_handler(solution_message="It looks like you are trying to use report portal"\
-        "to run your test.\nPlease make sure you have updated .env with the right credentials.")
 def reportportal_service(request):
     "pytest service fixture for reportportal"
-    reportportal_pytest_service = None
-    if request.config.getoption("--reportportal"):
-        reportportal_pytest_service = request.node.config.py_test_service
+    try:
+        reportportal_pytest_service = None
+        if request.config.getoption("--reportportal"):
+            reportportal_pytest_service = request.node.config.py_test_service
+
+    except Exception as e:                  # pylint: disable=broad-exception-caught
+        print(f"Exception when trying to run test:{__file__}")
+        print(f"Python says:{str(e)}")
+        solution = "It looks like you are trying to use report portal to run your test."\
+            "\nPlease make sure you have updated .env with the right credentials."
+        print(f"\033[92m\nSOLUTION: {solution}\n\033[0m")
 
     return reportportal_pytest_service
 
 @pytest.fixture
-@cli_exception_handler()
 def summary_flag(request):
     "pytest fixture for generating summary using LLM"
     return request.config.getoption("--summary")
 
 @pytest.fixture
-@cli_exception_handler()
 def orientation(request):
     "pytest fixture for device orientation"
     return request.config.getoption("--orientation")
