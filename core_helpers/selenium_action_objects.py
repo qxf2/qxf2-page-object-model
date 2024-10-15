@@ -27,7 +27,7 @@ class Selenium_Action_Objects:
                 self.highlight_element(dom_element)
         except Exception as e:
             if verbose_flag is True:
-                self.write(str(e),'debug')
+                self.write(str(e),'critical')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
 
@@ -43,7 +43,7 @@ class Selenium_Action_Objects:
                 self.highlight_elements(dom_elements)
         except Exception as e:
             if msg_flag==True:
-                self.write(str(e),'debug')
+                self.write(str(e),'critical')
                 self.write("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
             self.exceptions.append("Unable to locate the element with the xpath -'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
 
@@ -59,7 +59,7 @@ class Selenium_Action_Objects:
         try:
             result = tuple(locator.split(',',1))
         except Exception as e:
-            self.write(str(e),'debug')
+            self.write(str(e),'critical')
             self.write("Error while parsing locator")
             self.exceptions.append("Unable to split the locator-'%s,%s' in the conf/locators.conf file"%(locator[0],locator[1]))
 
@@ -96,7 +96,7 @@ class Selenium_Action_Objects:
                 result_flag=True
                 self.wait(wait_time)
         except Exception as e:
-            self.write(str(e),'debug')
+            self.write(str(e),'critical')
             self.write('Exception when clicking link with path: %s'%locator)
             self.exceptions.append("Error when clicking the element with path,'%s' in the conf/locators.conf file"%locator)
 
@@ -111,10 +111,10 @@ class Selenium_Action_Objects:
                 try:
                     text_field.clear()
                 except Exception as e:
-                    self.write(str(e),'debug')
+                    self.write(str(e),'critical')
                     self.exceptions.append("Could not clear the text field- '%s' in the conf/locators.conf file"%locator)
         except Exception as e:
-            self.write(str(e),'debug')
+            self.write(str(e),'critical')
             self.exceptions.append("Check your locator-'%s,%s' in the conf/locators.conf file" %(locator[0],locator[1]))
 
         result_flag = False
@@ -123,8 +123,8 @@ class Selenium_Action_Objects:
                 text_field.send_keys(value)
                 result_flag = True
             except Exception as e:
-                self.write('Could not write to text field: %s'%locator,'debug')
-                self.write(str(e),'debug')
+                self.write('Could not write to text field: %s'%locator,'critical')
+                self.write(str(e),'critical')
                 self.exceptions.append("Could not write to text field- '%s' in the conf/locators.conf file"%locator)
 
         return result_flag
@@ -138,7 +138,7 @@ class Selenium_Action_Objects:
             else:
                 text = locator.text
         except Exception as e:
-            self.write(e)
+            self.write(str(e),'critical')
             self.exceptions.append("Error when getting text from the path-'%s' in the conf/locators.conf file"%locator)
             return None
         else:
@@ -154,7 +154,7 @@ class Selenium_Action_Objects:
             text = dom_element.text
             text = text.encode('utf-8')
         except Exception as e:
-            self.write(e)
+            self.write(str(e),'critical')
             self.exceptions.append("Error when getting text from the DOM element-'%s' in the conf/locators.conf file"%dom_element)
 
         return text
@@ -169,7 +169,7 @@ class Selenium_Action_Objects:
             else:
                 result_flag = True
         except Exception as e:
-            self.write(e)
+            self.write(str(e),'critical')
             self.exceptions.append("Error when selecting checkbox-'%s' in the conf/locators.conf file"%locator)
 
         return result_flag
@@ -184,7 +184,7 @@ class Selenium_Action_Objects:
             else:
                 result_flag = True
         except Exception as e:
-            self.write(e)
+            self.write(str(e),'critical')
             self.exceptions.append("Error when deselecting checkbox-'%s' in the conf/locators.conf file"%locator)
 
         return result_flag
@@ -196,7 +196,7 @@ class Selenium_Action_Objects:
         try:
             return self.click_element(locator)
         except Exception as e:
-            self.write(e)
+            self.write(str(e),'critical')
             self.exceptions.append("Error when toggling checkbox-'%s' in the conf/locators.conf file"%locator)
 
 
@@ -211,7 +211,7 @@ class Selenium_Action_Objects:
                     result_flag = True
                     break
         except Exception as e:
-            self.write(e)
+            self.write(str(e),'critical')
             self.exceptions.append("Error when selecting option from the drop-down '%s' "%locator)
 
         return result_flag
@@ -234,7 +234,7 @@ class Selenium_Action_Objects:
                 if element.is_displayed() is True:
                     result_flag = True
         except Exception as e:
-            self.write(e)
+            self.write(str(e),'critical')
             self.exceptions.append("Web element not present in the page, please check the locator is correct -'%s' in the conf/locators.conf file"%locator)
 
         return result_flag
@@ -246,7 +246,7 @@ class Selenium_Action_Objects:
             element.send_keys(Keys.ENTER)
             self.wait(wait_time)
         except Exception as e:
-            self.write(str(e),'debug')
+            self.write(str(e),'critical')
             self.exceptions.append("An exception occurred when hitting enter")
             return None
 
@@ -260,7 +260,7 @@ class Selenium_Action_Objects:
             self.wait(wait_time)
             result_flag = True
         except Exception as e:
-            self.write(str(e),'debug')
+            self.write(str(e),'critical')
             self.exceptions.append("An exception occured when scrolling down")
         return result_flag
 
@@ -274,8 +274,8 @@ class Selenium_Action_Objects:
             self.wait(wait_seconds)
             result_flag = True  # Update the result flag to True if hover is successful
         except Exception as e:
-            self.write(str(e),'debug')
-            self.exceptions.append("An exception occured when hovering over the element", locator)
+            self.write(str(e),'critical')
+            self.exceptions.append(f"An exception occured when hovering over the element - {locator}")
         return result_flag
 
     def drag_and_drop(self, source_locator, target_locator):
@@ -289,7 +289,8 @@ class Selenium_Action_Objects:
             action_obj.drag_and_drop(source_element, target_element).perform()
             result_flag = True
         except Exception as e:
-            print(f"An error occurred: {str(e)}")
+            self.write(str(e),'critical')
+            self.exceptions.append(f"An error occurred during drag and drop action.{str(e)}")
 
         return result_flag
 
@@ -305,5 +306,19 @@ class Selenium_Action_Objects:
             self.driver.hide_keyboard()
             result_flag=True
         except Exception as e:
-            print(f"An error occured during keyboard minimise: {str(e)}")
-            return result_flag
+            self.write(str(e),'critical')
+            self.exceptions.append(f"An error occured during keyboard minimise: {str(e)}")
+
+        return result_flag
+
+    def execute_javascript(self,js_script,*args):
+        "Execute javascript"
+        try:
+            self.driver.execute_script(js_script)
+            result_flag = True
+        except Exception as e:
+            self.write(str(e),'critical')
+            self.exceptions.append(f"An error occured during javascript execution: {str(e)}")
+            result_flag = False
+
+        return result_flag

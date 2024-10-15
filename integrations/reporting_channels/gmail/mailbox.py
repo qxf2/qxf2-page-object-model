@@ -1,9 +1,16 @@
+"""
+This module defines the `Mailbox` class, which represents a mailbox in a Gmail account. 
+The class provides methods to interact with the mailbox, including searching for emails 
+based on various criteria, fetching email threads, counting emails, and managing cached 
+messages.
+"""
+
+import re
 from .message import Message
 from .utf import encode as encode_utf7, decode as decode_utf7
 
-
 class Mailbox():
-
+    "Mailbox class provides methods for email operations."
     def __init__(self, gmail, name="INBOX"):
         self.name = name
         self.gmail = gmail
@@ -12,55 +19,80 @@ class Mailbox():
 
     @property
     def external_name(self):
+        "Encodes the name to IMAP modified UTF-7 format."
         if "external_name" not in vars(self):
             vars(self)["external_name"] = encode_utf7(self.name)
         return vars(self)["external_name"]
 
     @external_name.setter
     def external_name(self, value):
+        "Decodes and sets the mailbox name from IMAP modified UTF-7 format."
         if "external_name" in vars(self):
             del vars(self)["external_name"]
         self.name = decode_utf7(value)
 
     def mail(self, prefetch=False, **kwargs):
+        "Searches and returns a list of emails matching the specified search criteria."
         search = ['ALL']
 
-        kwargs.get('read')   and search.append('SEEN')
-        kwargs.get('unread') and search.append('UNSEEN')
+        if kwargs.get('read'):
+            search.append('SEEN')
+        if kwargs.get('unread'):
+            search.append('UNSEEN')
 
-        kwargs.get('starred')   and search.append('FLAGGED')
-        kwargs.get('unstarred') and search.append('UNFLAGGED')
+        if kwargs.get('starred'):
+            search.append('FLAGGED')
+        if kwargs.get('unstarred'):
+            search.append('UNFLAGGED')
 
-        kwargs.get('deleted')   and search.append('DELETED')
-        kwargs.get('undeleted') and search.append('UNDELETED')
+        if kwargs.get('deleted'):
+            search.append('DELETED')
+        if kwargs.get('undeleted'):
+            search.append('UNDELETED')
 
-        kwargs.get('draft')   and search.append('DRAFT')
-        kwargs.get('undraft') and search.append('UNDRAFT')
+        if kwargs.get('draft'):
+            search.append('DRAFT')
+        if kwargs.get('undraft'):
+            search.append('UNDRAFT')
 
-        kwargs.get('before') and search.extend(['BEFORE', kwargs.get('before').strftime(self.date_format)])
-        kwargs.get('after')  and search.extend(['SINCE', kwargs.get('after').strftime(self.date_format)])
-        kwargs.get('on')     and search.extend(['ON', kwargs.get('on').strftime(self.date_format)])
+        if kwargs.get('before'):
+            search.extend(['BEFORE', kwargs.get('before').strftime(self.date_format)])
+        if kwargs.get('after'):
+            search.extend(['SINCE', kwargs.get('after').strftime(self.date_format)])
+        if kwargs.get('on'):
+            search.extend(['ON', kwargs.get('on').strftime(self.date_format)])
 
-        kwargs.get('header') and search.extend(['HEADER', kwargs.get('header')[0], kwargs.get('header')[1]])
+        if kwargs.get('header'):
+            search.extend(['HEADER', kwargs.get('header')[0], kwargs.get('header')[1]])
 
-        kwargs.get('sender') and search.extend(['FROM', kwargs.get('sender')])
-        kwargs.get('fr') and search.extend(['FROM', kwargs.get('fr')])
-        kwargs.get('to') and search.extend(['TO', kwargs.get('to')])
-        kwargs.get('cc') and search.extend(['CC', kwargs.get('cc')])
+        if kwargs.get('sender'):
+            search.extend(['FROM', kwargs.get('sender')])
+        if kwargs.get('fr'):
+            search.extend(['FROM', kwargs.get('fr')])
+        if kwargs.get('to'):
+            search.extend(['TO', kwargs.get('to')])
+        if kwargs.get('cc'):
+            search.extend(['CC', kwargs.get('cc')])
 
-        kwargs.get('subject') and search.extend(['SUBJECT', kwargs.get('subject')])
-        kwargs.get('body') and search.extend(['BODY', kwargs.get('body')])
+        if kwargs.get('subject'):
+            search.extend(['SUBJECT', kwargs.get('subject')])
+        if kwargs.get('body'):
+            search.extend(['BODY', kwargs.get('body')])
 
-        kwargs.get('label') and search.extend(['X-GM-LABELS', kwargs.get('label')])
-        kwargs.get('attachment') and search.extend(['HAS', 'attachment'])
+        if kwargs.get('label'):
+            search.extend(['X-GM-LABELS', kwargs.get('label')])
+        if kwargs.get('attachment'):
+            search.extend(['HAS', 'attachment'])
 
-        kwargs.get('query') and search.extend([kwargs.get('query')])
+        if kwargs.get('query'):
+            search.extend([kwargs.get('query')])
 
         emails = []
-        # print search
-        response, data = self.gmail.imap.uid('SEARCH', *search)
+        search_criteria = ' '.join(search).encode('utf-8')
+
+        response, data = self.gmail.imap.uid('SEARCH', None, search_criteria)
         if response == 'OK':
-            uids = filter(None, data[0].split(' ')) # filter out empty strings
+            uids = filter(None, data[0].split(b' '))  # filter out empty strings
 
             for uid in uids:
                 if not self.messages.get(uid):
@@ -76,12 +108,12 @@ class Mailbox():
         return emails
 
     # WORK IN PROGRESS. NOT FOR ACTUAL USE
-    def threads(self, prefetch=False, **kwargs):
+    def threads(self, prefetch=False):
+        "Fetches email threads from the mailbox."
         emails = []
-        response, data = self.gmail.imap.uid('SEARCH', 'ALL')
+        response, data = self.gmail.imap.uid('SEARCH', None, 'ALL'.encode('utf-8'))
         if response == 'OK':
-            uids = data[0].split(' ')
-
+            uids = data[0].split(b' ')
 
             for uid in uids:
                 if not self.messages.get(uid):
@@ -89,18 +121,21 @@ class Mailbox():
                 emails.append(self.messages[uid])
 
             if prefetch:
-                fetch_str = ','.join(uids)
-                response, results = self.gmail.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-                for index in xrange(len(results) - 1):
+                fetch_str = ','.join(uids).encode('utf-8')
+                response, results = self.gmail.imap.uid('FETCH', fetch_str,
+                                        '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
+                for index in range(len(results) - 1):
                     raw_message = results[index]
-                    if re.search(r'UID (\d+)', raw_message[0]):
-                        uid = re.search(r'UID (\d+)', raw_message[0]).groups(1)[0]
+                    if re.search(rb'UID (\d+)', raw_message[0]):
+                        uid = re.search(rb'UID (\d+)', raw_message[0]).groups(1)[0]
                         self.messages[uid].parse(raw_message)
 
         return emails
 
     def count(self, **kwargs):
+        "Returns the length of emails matching the specified search criteria."
         return len(self.mail(**kwargs))
 
     def cached_messages(self):
+        "Returns a dictionary of cached messages in the mailbox"
         return self.messages

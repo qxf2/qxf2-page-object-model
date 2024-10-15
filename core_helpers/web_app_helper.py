@@ -69,6 +69,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         self.mini_check_counter = 0 #Increment when conditional_write is called
         self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
         self.failure_message_list = []
+        self.failed_scenarios = [] # <- Collect the failed scenarios for prettytable summary
         self.screenshot_counter = 1
         self.exceptions = []
         self.gif_file_name = None
@@ -167,8 +168,8 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             window_handle = self.get_current_window_handle()
             self.window_structure[window_handle] = name
         except Exception as e:
-            self.write("Exception when trying to set windows name")
-            self.write(str(e))
+            self.write("Exception when trying to set windows name",'critical')
+            self.write(str(e),'critical')
             self.exceptions.append("Error when setting up the name of the current window")
 
     def get_window_by_name(self,window_name):
@@ -199,8 +200,8 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
                                 'Unable to locate and switch to the window with name: %s'%name,
                                 level='debug')
         except Exception as e:
-            self.write("Exception when trying to switch window")
-            self.write(str(e))
+            self.write("Exception when trying to switch window",'critical')
+            self.write(str(e),'critical')
             self.exceptions.append("Error when switching browser window")
 
         return result_flag
@@ -215,8 +216,8 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             if (before_window_count - after_window_count) == 1:
                 result_flag = True
         except Exception as e:
-            self.write('Could not close the current window')
-            self.write(str(e))
+            self.write('Could not close the current window','critical')
+            self.write(str(e),'critical')
             self.exceptions.append("Error when trying to close the current window")
 
         return result_flag
@@ -238,8 +239,8 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             result_flag = True
 
         except Exception as e:
-            self.write("Exception when trying to switch frame")
-            self.write(str(e))
+            self.write("Exception when trying to switch frame",'critical')
+            self.write(str(e),'critical')
             self.exceptions.append("Error when switching to frame")
 
         return result_flag
@@ -277,14 +278,14 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         try:
             return self.axe_util.inject()
         except Exception as e:
-             self.write(e)
+             self.write(str(e),'critical')
 
     def accessibility_run_axe(self):
         "Run Axe into the Page"
         try:
             return self.axe_util.run()
         except Exception as e:
-             self.write(e)
+             self.write(str(e),'critical')
 
     def snapshot_assert_match(self, value, snapshot_name):
         "Asserts the current value of the snapshot with the given snapshot_name"
@@ -293,7 +294,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             self.snapshot_util.assert_match(value, snapshot_name)
             result_flag = True
         except Exception as e:
-             self.write(e)
+             self.write(str(e),'critical')
 
         return result_flag
 
@@ -304,8 +305,8 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             log = self.driver.get_log('browser')
             return log
         except Exception as e:
-            self.write("Exception when reading Browser Console log")
-            self.write(str(e))
+            self.write("Exception when reading Browser Console log",'critical')
+            self.write(str(e),'critical')
             return log
 
     def conditional_write(self,flag,positive,negative,level='info'):
@@ -315,24 +316,14 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             if flag is True:
                 self.write(positive,level='error')
             else:
-                self.write(negative,level='info')
+                self.write(negative,level='success')
                 self.mini_check_pass_counter += 1
         else:
             if flag is True:
-                self.write(positive,level='info')
+                self.write(positive,level='success')
                 self.mini_check_pass_counter += 1
             else:
                 self.write(negative,level='error')
-
-    def execute_javascript(self,js_script,*args):
-        "Execute javascipt"
-        try:
-            self.driver.execute_script(js_script)
-            result_flag = True
-        except Exception as e:
-            result_flag = False
-
-        return result_flag
 
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
