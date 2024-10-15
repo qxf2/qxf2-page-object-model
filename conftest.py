@@ -9,11 +9,12 @@ from conf import browser_os_name_conf
 from conf import base_url_conf
 from endpoints.API_Player import API_Player
 from utils import interactive_mode
+from core_helpers.custom_pytest_plugins import CustomTerminalReporter
 
 load_dotenv()
 
 @pytest.fixture
-def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag):
+def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag, testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name, testname, reportportal_service, interactivemode_flag, testreporter):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower() == "y":
@@ -43,7 +44,11 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
 
         yield test_obj
 
-        #Update test run status to respective LambdaTest session
+        # Collect the failed scenarios, these scenarios will be printed as table \
+        # by the pytest's custom testreporter
+        if test_obj.failed_scenarios:
+            testreporter.failed_scenarios[testname] = test_obj.failed_scenarios
+
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             if test_obj.pass_counter == test_obj.result_counter:
                 test_obj.execute_javascript("lambda-status=passed")
@@ -85,7 +90,6 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
             test_obj.wait(3)
 
         #Teardown
-        test_obj.write("*************************\n")
         test_obj.teardown()
 
     except Exception as e:
@@ -97,7 +101,7 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
             test_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Exception occured"}}')
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, testname, remote_project_name, remote_build_name, orientation):
+def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity, remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name, app_path, appium_version, interactivemode_flag, testname, remote_project_name, remote_build_name, orientation, testreporter):
 
     "Return an instance of Base Page that knows about the third party integrations"
     try:
@@ -124,6 +128,11 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
 
         yield test_mobile_obj
 
+        # Collect the failed scenarios, these scenarios will be printed as table \
+        # by the pytest's custom testreporter
+        if test_mobile_obj.failed_scenarios:
+            testreporter.failed_scenarios[testname] = test_mobile_obj.failed_scenarios
+
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             #Upload test logs to BrowserStack
             response = upload_test_logs_to_browserstack(test_mobile_obj.log_name,test_mobile_obj.session_url,appium_test = True)
@@ -140,7 +149,6 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                 else:
                     test_mobile_obj.write(f"Failed to upload log file. Status code: {response.status_code}",level='error')
                     test_mobile_obj.write(response.text,level='error')
-
             #Update test run status to respective BrowserStack session
             if test_mobile_obj.pass_counter == test_mobile_obj.result_counter:
                 test_mobile_obj.write("Test Status: PASS")
@@ -157,7 +165,6 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
 
         #Teardown
         test_mobile_obj.wait(3)
-        test_mobile_obj.write("*************************\n")
         test_mobile_obj.teardown()
 
     except Exception as e:
@@ -237,6 +244,16 @@ def testname(request):
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
         print("Python says:%s"%str(e))
+
+@pytest.fixture
+def testreporter(request):
+    "pytest summary reporter"
+    try:
+        reporter = request.config.pluginmanager.get_plugin("terminalreporter")
+        return reporter
+
+    except Exception as err:
+        print(f"Exception when creating testreporter fixture in {__file__} - {err}")
 
 @pytest.fixture
 def browser(request):
@@ -607,7 +624,7 @@ def pytest_sessionfinish(session, exitstatus):
         except OSError as error:
             print(f"Error processing consolidated log file: {error}")
 
-@pytest.hookimpl()
+@pytest.hookimpl(trylast=True)
 def pytest_configure(config):
     "Sets the launch name based on the marker selected."
     browser = config.getoption("browser")
@@ -641,6 +658,14 @@ def pytest_configure(config):
 
     global if_reportportal
     if_reportportal =config.getoption('--reportportal')
+
+    # Unregister the old terminalreporter plugin
+    # Register the custom terminalreporter plugin
+    if config.pluginmanager.has_plugin("terminalreporter"):
+        old_reporter = config.pluginmanager.get_plugin("terminalreporter")
+        config.pluginmanager.unregister(old_reporter, "terminalreporter")
+        reporter = CustomTerminalReporter(config)
+        config.pluginmanager.register(reporter, "terminalreporter")
 
     try:
         config._inicache["rp_api_key"] = os.getenv('report_portal_api_key')
