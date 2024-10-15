@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from page_objects.PageFactory import PageFactory
 from conf import browser_os_name_conf
 from conf import base_url_conf
-from endpoints.API_Player import API_Player
+from endpoints.api_player import APIPlayer
 from utils import interactive_mode
 from core_helpers.custom_pytest_plugins import CustomTerminalReporter
 
@@ -178,19 +178,16 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
             test_mobile_obj.execute_javascript('browserstack_executor: {"action": "setSessionStatus", "arguments": {"status":"failed", "reason": "Exception occured"}}')
 
 @pytest.fixture
-def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_url):
+def test_api_obj(interactivemode_flag, testname, api_url=base_url_conf.api_base_url):
     "Return an instance of Base Page that knows about the third party integrations"
-    # request.module._name__ is tests.<module_name> strip and get the module name
-    log_file = request.module.__name__.split('.')[-1] + '.log'
+    log_file = testname + '.log'
     try:
         if interactivemode_flag.lower()=='y':
             api_url,session_flag = interactive_mode.ask_questions_api(api_url)
-            test_api_obj = API_Player(api_url,
-                                      session_flag,
+            test_api_obj = APIPlayer(api_url,
                                       log_file_path=log_file)
         else:
-            test_api_obj = API_Player(url=api_url,
-                                      session_flag=True,
+            test_api_obj = APIPlayer(url=api_url,
                                       log_file_path=log_file)
         yield test_api_obj
 
