@@ -297,12 +297,7 @@ def testname(request):
 @pytest.fixture
 def testreporter(request):
     "pytest summary reporter"
-    try:
-        reporter = request.config.pluginmanager.get_plugin("terminalreporter")
-        return reporter
-
-    except Exception as err:
-        print(f"Exception when creating testreporter fixture in {__file__} - {err}")
+    return request.config.pluginmanager.get_plugin("terminalreporter")
 
 @pytest.fixture
 def browser(request):
@@ -337,12 +332,7 @@ def remote_flag(request):
 @pytest.fixture
 def highlighter_flag(request):
     "pytest fixture for element highlighter flag"
-    try:
-        return request.config.getoption("--highlighter_flag")
-
-    except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+    return request.config.getoption("--highlighter_flag")
 
 @pytest.fixture
 def browser_version(request):
