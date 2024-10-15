@@ -20,13 +20,14 @@ from conf import base_url_conf                      # pylint: disable=import-err
 from endpoints.API_Player import API_Player         # pylint: disable=import-error wrong-import-position
 from page_objects.PageFactory import PageFactory    # pylint: disable=import-error wrong-import-position
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
+from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
 
 load_dotenv()
 
 @pytest.fixture
 def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag,              # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
              testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name,  # pylint: disable=redefined-outer-name
-             testname, reportportal_service, interactivemode_flag):                             # pylint: disable=redefined-outer-name
+             testname, reportportal_service, interactivemode_flag, highlighter_flag, testreporter):   # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
     try:
         if interactivemode_flag.lower() == "y":
@@ -42,6 +43,10 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         #Setup and register a driver
         test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version,
                                 remote_project_name, remote_build_name, testname)
+
+        #Set highlighter
+        if highlighter_flag.lower()=='y':
+            test_obj.turn_on_highlight()
 
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
@@ -64,7 +69,11 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
 
         yield test_obj
 
-        #Update test run status to respective LambdaTest session
+        # Collect the failed scenarios, these scenarios will be printed as table \
+        # by the pytest's custom testreporter
+        if test_obj.failed_scenarios:
+            testreporter.failed_scenarios[testname] = test_obj.failed_scenarios
+
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             if test_obj.pass_counter == test_obj.result_counter:
                 test_obj.execute_javascript("lambda-status=passed")
@@ -126,7 +135,7 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity,     # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
                     remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name,  # pylint: disable=redefined-outer-name
                     app_path, appium_version, interactivemode_flag, testname, remote_project_name, # pylint: disable=redefined-outer-name
-                    remote_build_name, orientation):                # pylint: disable=redefined-outer-name
+                    remote_build_name, orientation, testreporter):                # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
     try:
 
@@ -164,6 +173,11 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
 
         yield test_mobile_obj
 
+        # Collect the failed scenarios, these scenarios will be printed as table \
+        # by the pytest's custom testreporter
+        if test_mobile_obj.failed_scenarios:
+            testreporter.failed_scenarios[testname] = test_mobile_obj.failed_scenarios
+
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             response = upload_test_logs_to_browserstack(test_mobile_obj.log_name,
                                                         test_mobile_obj.session_url,
@@ -182,7 +196,6 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                     test_mobile_obj.write("Failed to upload log file. "\
                                           f"Status code: {response.status_code}",level='error')
                     test_mobile_obj.write(response.text,level='error')
-
             #Update test run status to respective BrowserStack session
             if test_mobile_obj.pass_counter == test_mobile_obj.result_counter:
                 test_mobile_obj.write("Test Status: PASS")
@@ -282,6 +295,16 @@ def testname(request):
     return name_of_test
 
 @pytest.fixture
+def testreporter(request):
+    "pytest summary reporter"
+    try:
+        reporter = request.config.pluginmanager.get_plugin("terminalreporter")
+        return reporter
+
+    except Exception as err:
+        print(f"Exception when creating testreporter fixture in {__file__} - {err}")
+
+@pytest.fixture
 def browser(request):
     "pytest fixture for browser"
     return request.config.getoption("--browser")
@@ -310,6 +333,16 @@ def testrail_flag(request):
 def remote_flag(request):
     "pytest fixture for browserstack/sauce flag"
     return request.config.getoption("--remote_flag")
+
+@pytest.fixture
+def highlighter_flag(request):
+    "pytest fixture for element highlighter flag"
+    try:
+        return request.config.getoption("--highlighter_flag")
+
+    except Exception as e:
+        print("Exception when trying to run test: %s"%__file__)
+        print("Python says:%s"%str(e))
 
 @pytest.fixture
 def browser_version(request):
@@ -503,7 +536,7 @@ def pytest_sessionfinish(session):
         except OSError as error:
             print(f"Error processing consolidated log file: {error}")
 
-@pytest.hookimpl()
+@pytest.hookimpl(trylast=True)
 def pytest_configure(config):
     "Sets the launch name based on the marker selected."
     browser = config.getoption("browser")             # pylint: disable=redefined-outer-name
@@ -539,6 +572,14 @@ def pytest_configure(config):
 
     global if_reportportal   # pylint: disable=global-variable-undefined
     if_reportportal =config.getoption('--reportportal')
+
+    # Unregister the old terminalreporter plugin
+    # Register the custom terminalreporter plugin
+    if config.pluginmanager.has_plugin("terminalreporter"):
+        old_reporter = config.pluginmanager.get_plugin("terminalreporter")
+        config.pluginmanager.unregister(old_reporter, "terminalreporter")
+        reporter = CustomTerminalReporter(config)
+        config.pluginmanager.register(reporter, "terminalreporter")
 
     try:
         config._inicache["rp_api_key"] = os.getenv('report_portal_api_key')   # pylint: disable=protected-access
@@ -762,7 +803,6 @@ def pytest_addoption(parser):
                             dest="appium_version",
                             help="The appium version if its run in BrowserStack",
                             default="2.4.1")
-
         parser.addoption("--interactive_mode_flag",
                             dest="questionary",
                             default="n",
@@ -775,6 +815,10 @@ def pytest_addoption(parser):
                             dest="orientation",
                             default=None,
                             help="Enter LANDSCAPE to change device orientation to landscape")
+        parser.addoption("--highlighter_flag",
+                            dest="highlighter_flag",
+                            default='N',
+                            help="Y or N. 'Y' if you want turn on element highlighter")
 
     except Exception as e:              # pylint: disable=broad-exception-caught
         print(f"Exception when trying to run test:{__file__}")

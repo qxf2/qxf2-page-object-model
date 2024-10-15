@@ -53,6 +53,9 @@ class PageFactory():
         elif page_name == "weathershopper cart page":
             from page_objects.examples.weather_shopper_mobile_app.weather_shopper_cart_page import WeatherShopperCartPage
             test_obj = WeatherShopperCartPage()
+        elif page_name == "webview":
+            from page_objects.examples.weather_shopper_mobile_app.webview_chrome import WebviewChrome
+            test_obj = WebviewChrome()
         return test_obj
 
 

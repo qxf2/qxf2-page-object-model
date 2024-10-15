@@ -3,6 +3,7 @@ Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
 import unittest,os,inspect
+import time
 from core_helpers.drivers.driverfactory import DriverFactory
 from .selenium_action_objects import Selenium_Action_Objects
 from .logging_objects import Logging_Objects
@@ -12,6 +13,7 @@ from page_objects import PageFactory
 from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.actions.mouse_button import MouseButton
+from appium.common.exceptions import NoSuchContextException
 
 class Borg:
     #The borg design pattern is to share state
@@ -58,6 +60,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
         self.mini_check_counter = 0 #Increment when conditional_write is called
         self.mini_check_pass_counter = 0 #Increment when conditional_write is called with True
         self.failure_message_list = []
+        self.failed_scenarios = [] # <- Collect failed scenarios for table summary
         self.rp_logger = None
         self.exceptions = []
         self.screenshot_counter = 1
@@ -135,7 +138,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
                         result_flag = True
                         return result_flag
                 except Exception:
-                    self.write('Element not found, swiping again', 'debug')
+                    self.write('Element not found, swiping again', 'critical')
                     pass
 
                 # Perform swipe based on direction
@@ -150,7 +153,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             return result_flag
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append(f'Error while swiping to element - {search_element_locator}')
 
     def swipe_coordinates(self, scroll_group):
@@ -182,7 +185,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             return coordinates
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("Error while calculating swipe coordinates")
 
     def perform_swipe(self, direction, start_x, start_y, end_x, end_y, center_x, center_y, duration):
@@ -198,7 +201,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
                 self.driver.swipe(start_x=end_x, start_y=center_y, end_x=start_x, end_y=center_y, duration=duration)
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e),'critical')
             self.exceptions.append("Error while performing swipe")
 
     def zoom(self, element_locator, zoom_direction="in"):
@@ -225,7 +228,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
                 return False
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e),'critical')
             self.exceptions.append("An exception occurred when zooming")
 
     def perform_zoom(self, zoom_direction, center_x, center_y):
@@ -257,7 +260,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             actions.perform()
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occured when performing the zooming")
 
     def get_element_center(self, element):
@@ -279,7 +282,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             return coordinates
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occured when getting the element coordinates")
 
     def long_press(self, element, duration=5):
@@ -297,7 +300,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
 
         except Exception as e:
             # Log error if any exception occurs
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("Error while performing long press gesture.")
         return ressult_flag
 
@@ -329,7 +332,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             actions.perform()
 
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occured when performing drag and drop")
 
     def scroll_to_bottom(self, scroll_amount=10):
@@ -342,7 +345,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             value=f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToEnd({scroll_amount})')
             result_flag = True
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occurred when scrolling to the bottom of the page")
         return result_flag
 
@@ -356,7 +359,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             value=f'new UiScrollable(new UiSelector().scrollable(true).instance(0)).flingToBeginning({scroll_amount})')
             result_flag = True
         except Exception as e:
-            self.write(str(e),'debug')
+            self.write(str(e),'critical')
             self.exceptions.append("An exception occured when scrolling to top of page")
         return result_flag
 
@@ -371,7 +374,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             )
             result_flag = True
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occurred when scrolling backward")
         return result_flag
 
@@ -386,9 +389,76 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             )
             result_flag = True
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occurred when scrolling forward")
         return result_flag
+
+    def switch_context(self, context_name=None, retries=3):
+        "Switch context in Android app"
+        result_flag = False
+        try:
+            if self.driver.current_context == "WEBVIEW_chrome":
+                time.sleep(1) # Wait on the Chrome tab for a sec before closing, useful for UI debugging
+                for handle in self.driver.window_handles: # Get all open tabs
+                    self.driver.switch_to.window(handle)
+                    # Close the Chrome webview tab,prevents incorrect URL returned in current_url method due to multiple tabs being present
+                    self.driver.close()
+                self.write("Closed current tab on Webview","debug")
+            # Wait to check if the intended context becomes available
+            # This is a fail safe, implemented to address corner case where the context might be avialable after a sec or two
+            for attempt in range(1,retries+1):
+                if not context_name in self.driver.contexts:
+                    self.write(f"Intended context {context_name} not present in available contexts {self.driver.contexts}, retry attempt {attempt}", "debug")
+                    time.sleep(attempt)
+            # Switch context
+            self.driver.switch_to.context(context_name)
+            result_flag = True if self.driver.current_context == context_name else False
+        except NoSuchContextException:
+            self.write(f"No {context_name} context present", 'debug')
+            self.exceptions.append("No Such Context exception occured when switching context")
+        except Exception as err:
+            self.write(str(err), 'critical')
+            self.exceptions.append("An exception occured when switching context")
+        return result_flag
+
+    def handle_chrome_welcome_page(self, accept_button, turn_off_sync_button):
+        "Click on accept button Chrome welcome screen"
+        # Handle cases where the Welcome page can be present/not-present
+        try:
+            time.sleep(2) # The welcome screen prompts appear on the screen slowly unfortunately
+            accept_button_locator = self.split_locator(accept_button)
+            accept_button_element = self.driver.find_element(*accept_button_locator)
+            accept_button_element.click()
+            self.write("Clicked on Chrome Welcome Dismiss button", "debug")
+            time.sleep(3) # Wait longer, probability of having to turn off sync are high
+        # pylint: disable=W0702
+        except:
+            self.write("Chrome Welcome Dismiss button not present, ignoring click", "debug")
+            time.sleep(1) # Wait less, turn off sync might already have been clicked
+        try:
+            turn_off_sync_button_locator = self.split_locator(turn_off_sync_button)
+            turn_off_sync_button_element = self.driver.find_element(*turn_off_sync_button_locator)
+            turn_off_sync_button_element.click()
+            self.write("Clicked on Turn off sync", "debug")
+            time.sleep(1)
+        # pylint: disable=W0702
+        except:
+            self.write("Turn off sync not present, ignoring click", "debug")
+
+    def navigate_back_to_app(self, native_context="NATIVE_APP"):
+        "Navigate back to app from a  webview"
+        try:
+            # Navigating back to the app can be done in native context only
+            if self.driver.current_context == native_context:
+                # Check if switching context itself takes control back to app, happens in Google API <=34
+                if self.driver.current_activity != ".MainActivity":
+                    self.driver.back()
+                self.write("Navigated back to the app", "debug")
+            else:
+                self.write("Unable to navigate to app")
+        except Exception as err:
+            self.write(f"Unable to navigate back to app, due to {err}", "critical")
+            self.exceptions.append("An exception occured when navigating back to the app")
 
     def start(self):
         "Dummy method to be over-written by child classes"
@@ -400,5 +470,5 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             source = self.driver.page_source
             return source
         except Exception as e:
-            self.write(str(e), 'debug')
+            self.write(str(e), 'critical')
             self.exceptions.append("An exception occured when getting source")
