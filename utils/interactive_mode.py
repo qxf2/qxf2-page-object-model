@@ -222,7 +222,7 @@ def get_user_response_mobile():
 
     return response
 
-def ask_questions_api(api_url,session_flag=True):
+def ask_questions_api(api_url):
     """This module asks the users questions to fetch the options
        they wish to run the api test with and stores their choices"""
     clear()
@@ -231,19 +231,15 @@ def ask_questions_api(api_url,session_flag=True):
         questionary.print("\nSeleted Options",style="bold fg:green")
         questionary.print("**********",style="bold fg:green")
         print("API URL:",api_url)
-        print("Session flag status:",session_flag)
         questionary.print("**********",style="bold fg:green")
         response = get_user_response_api()
         clear()
-        if response == "Session flag status":
-            session_flag = get_sessionflag_status()
 
         if response == "API URL":
             api_url = get_api_url()
 
         if response == "Reset back to default settings":
             api_url = base_url_conf.api_base_url
-            session_flag = True
             questionary.print("Reverted back to default settings",
                                style="bold fg:green")
 
@@ -253,7 +249,7 @@ def ask_questions_api(api_url,session_flag=True):
         if response == "Exit":
             sys.exit("Program interrupted by user, Exiting the program....")
 
-    return api_url,str(session_flag)
+    return api_url
 
 def get_user_response_api():
     "Get response from user for api tests"

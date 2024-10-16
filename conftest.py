@@ -17,7 +17,7 @@ from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from conf import browser_os_name_conf               # pylint: disable=import-error wrong-import-position
 from conf import base_url_conf                      # pylint: disable=import-error wrong-import-position
-from endpoints.API_Player import API_Player         # pylint: disable=import-error wrong-import-position
+from endpoints.api_player import APIPlayer        # pylint: disable=import-error wrong-import-position
 from page_objects.PageFactory import PageFactory    # pylint: disable=import-error wrong-import-position
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
 from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
@@ -227,19 +227,16 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                             {"status":"failed", "reason": "Exception occured"}}""")
 
 @pytest.fixture
-def test_api_obj(request, interactivemode_flag, api_url=base_url_conf.api_base_url):  # pylint: disable=redefined-outer-name
+def test_api_obj(interactivemode_flag, testname, api_url=base_url_conf.api_base_url):  # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
-    # request.module._name__ is tests.<module_name> strip and get the module name
-    log_file = request.module.__name__.split('.')[-1] + '.log'
+    log_file = testname + '.log'
     try:
         if interactivemode_flag.lower()=='y':
             api_url,session_flag = interactive_mode.ask_questions_api(api_url)
-            test_api_obj = API_Player(api_url,                                        # pylint: disable=redefined-outer-name
-                                      session_flag,
+            test_api_obj = APIPlayer(api_url,                                         # pylint: disable=redefined-outer-name
                                       log_file_path=log_file)
         else:
-            test_api_obj = API_Player(url=api_url,
-                                      session_flag=True,
+            test_api_obj = APIPlayer(url=api_url,
                                       log_file_path=log_file)
         yield test_api_obj
 
