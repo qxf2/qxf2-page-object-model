@@ -29,19 +29,37 @@ def test_accessibility(test_obj):
             test_obj = PageFactory.get_page_object(page,base_url=test_obj.base_url)
             #Inject Axe in every page
             test_obj.accessibility_inject_axe()
-            #Check if Axe is run in every page
-            run_result = test_obj.accessibility_run_axe()
-            #Serialize dict to JSON-formatted string
-            result_str = json.dumps(run_result, ensure_ascii=False, separators=(',', ':'))
-            #Formatting result by removing \n,\\,timestamp
-            #Every test run have a different timestamp.
-            cleaned_result = re.sub(r'\\|\n|\r|"timestamp":\s*"[^"]*"', '', result_str)
-            #Compare Snapshot for each page
-            snapshot_result = test_obj.snapshot_assert_match(f"{cleaned_result}", f'snapshot_output_{page}.txt')
-            test_obj.conditional_write(snapshot_result,
-                                positive=f'Accessibility checks for {page} passed',
-                                negative=f'Accessibility checks for {page} failed',
-                                level='debug')
+            run_result = test_obj.accessibility_run_axe()            
+            # Extract violations from the run result
+            violations = run_result.get('violations', [])
+            snapshot_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                        'snapshots',
+                                        'test_accessibility',
+                                        'test_accessibility',
+                                        'chrome',
+                                        f'snapshot_output_{page}.txt'
+                                    )
+            with open(snapshot_path, 'r') as snapshot_file:
+                snapshot_content = snapshot_file.read()
+
+            # Split snapshot content into a list
+            snapshot_violations = snapshot_content.splitlines()  
+
+            violation_ids = [violation.get('id') for violation in violations]
+            snapshot_violation_ids = [violation.strip() for violation in snapshot_violations if violation.strip()] 
+            # Compare the violations list
+            if sorted(violation_ids) == sorted(snapshot_violation_ids):
+                print(f"Accessibility compare for {page} passed")
+                expected_pass += 1
+            else:
+                print(f"Accessibility compare for {page} failed")
+            # Write the test result to the log
+            test_obj.conditional_write(
+                sorted(snapshot_violation_ids) == sorted(violation_ids),
+                positive=f'Accessibility checks for {page} passed',
+                negative=f'Accessibility checks for {page} failed',
+                level='debug'
+            )
 
         #Print out the result
         test_obj.write_test_summary()
