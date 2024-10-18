@@ -29,42 +29,45 @@ def test_accessibility(test_obj):
             test_obj = PageFactory.get_page_object(page,base_url=test_obj.base_url)
             #Inject Axe in every page
             test_obj.accessibility_inject_axe()
-            run_result = test_obj.accessibility_run_axe()            
-            # Extract violations from the run result
+            #Check if Axe is run in every page
+            run_result = test_obj.accessibility_run_axe()
+            # Extract only the violations section
             violations = run_result.get('violations', [])
-            snapshot_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                        'snapshots',
-                                        'test_accessibility',
-                                        'test_accessibility',
-                                        'chrome',
-                                        f'snapshot_output_{page}.txt'
-                                    )
-            with open(snapshot_path, 'r') as snapshot_file:
-                snapshot_content = snapshot_file.read()
+            current_violations_str = json.dumps(violations, ensure_ascii=False, separators=(',', ':'))
 
-            # Split snapshot content into a list
-            snapshot_violations = snapshot_content.splitlines()  
+            # Clean the result if needed
+            cleaned_current_result = re.sub(r'\\|\n|\r|"timestamp":\s*"[^"]*"', '', current_violations_str)
 
-            violation_ids = [violation.get('id') for violation in violations]
-            snapshot_violation_ids = [violation.strip() for violation in snapshot_violations if violation.strip()] 
-            # Compare the violations list
-            if sorted(violation_ids) == sorted(snapshot_violation_ids):
-                print(f"Accessibility compare for {page} passed")
-                expected_pass += 1
-            else:
-                print(f"Accessibility compare for {page} failed")
-            # Write the test result to the log
+            # Load the snapshot file and extract the violations section
+            snapshot_file_path = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                'snapshots',
+                'test_accessibility',
+                'test_accessibility',
+                'chrome',
+                f'snapshot_output_{page}.txt'
+            )
+            with open(snapshot_file_path, 'r', encoding='utf-8') as snapshot_file:
+                snapshot_data = json.load(snapshot_file)
+
+            # Extract the violations section from the snapshot
+            snapshot_violations = snapshot_data.get('violations', [])
+            snapshot_violations_str = json.dumps(snapshot_violations, ensure_ascii=False, separators=(',', ':'))
+
+            # Compare current violations against the snapshot violations
+            snapshot_result = cleaned_current_result == snapshot_violations_str
+
             test_obj.conditional_write(
-                sorted(snapshot_violation_ids) == sorted(violation_ids),
+                snapshot_result,
                 positive=f'Accessibility checks for {page} passed',
                 negative=f'Accessibility checks for {page} failed',
                 level='debug'
             )
 
-        #Print out the result
+        # Print out the result
         test_obj.write_test_summary()
         expected_pass = test_obj.result_counter
-        actual_pass = test_obj.pass_counter
+        actual_pass = test_obj.pass_counter           
 
     except Exception as e:
         print("Exception when trying to run test: %s"%__file__)
