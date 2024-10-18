@@ -21,17 +21,7 @@ jobs:
 
         - run: git clone https://github.com/qxf2/weather-shopper-app-apk.git
 
-        - run: git clone https://github.com/qxf2/cars-api.git
-
-        - run: pip install flask
-
         - run: sudo apt-get update
-
-        - run:
-            name: Run Flask app in background
-            command: |
-               python cars-api/cars_app.py
-            background: true
 
         - run:
             name: Run different Tox environments on different Containers
