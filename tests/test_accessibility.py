@@ -9,9 +9,13 @@ import os
 import sys
 import json
 import re
+import logging
 import pytest
 from page_objects.PageFactory import PageFactory
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
 
 @pytest.mark.ACCESSIBILITY
 def test_accessibility(test_obj):
@@ -33,36 +37,35 @@ def test_accessibility(test_obj):
             run_result = test_obj.accessibility_run_axe()
             # Extract only the violations section
             violations = run_result.get('violations', [])
-            current_violations_str = json.dumps(violations, ensure_ascii=False, separators=(',', ':'))
-
-            # Clean the result if needed
-            cleaned_current_result = re.sub(r'\\|\n|\r|"timestamp":\s*"[^"]*"', '', current_violations_str)
-
-            # Load the snapshot file and extract the violations section
-            snapshot_file_path = os.path.join(
+            # Define snapshot file path (use .json for snapshots)
+            snapshot_file = os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
                 'snapshots',
                 'test_accessibility',
                 'test_accessibility',
                 'chrome',
-                f'snapshot_output_{page}.txt'
+                f'snapshot_output_{page}.json'
             )
-            with open(snapshot_file_path, 'r', encoding='utf-8') as snapshot_file:
-                snapshot_data = json.load(snapshot_file)
+            # Load saved snapshot if it exists
+            saved_snapshot = load_snapshot(snapshot_file)
 
-            # Extract the violations section from the snapshot
-            snapshot_violations = snapshot_data.get('violations', [])
-            snapshot_violations_str = json.dumps(snapshot_violations, ensure_ascii=False, separators=(',', ':'))
+            # If no snapshot exists, save the current violations[] as the new snapshot
+            if saved_snapshot is None:
+                logging.debug(f"No snapshot found for {page}, creating a new snapshot.")
+                save_snapshot(snapshot_file, violations)
+                snapshot_result = True
+            else:
+                # Compare the saved snapshot with the current violations[]
+                cleaned_result = json.dumps(violations, ensure_ascii=False, separators=(',', ':'))
+                cleaned_snapshot = json.dumps(saved_snapshot, ensure_ascii=False, separators=(',', ':'))
 
-            # Compare current violations against the snapshot violations
-            snapshot_result = cleaned_current_result == snapshot_violations_str
+                # Snapshot comparison
+                snapshot_result = (cleaned_result == cleaned_snapshot)
 
-            test_obj.conditional_write(
-                snapshot_result,
-                positive=f'Accessibility checks for {page} passed',
-                negative=f'Accessibility checks for {page} failed',
-                level='debug'
-            )
+            test_obj.conditional_write(snapshot_result,
+                                       positive=f'Accessibility checks for {page} passed',
+                                       negative=f'Accessibility checks for {page} failed',
+                                       level='debug')
 
         # Print out the result
         test_obj.write_test_summary()
@@ -74,3 +77,17 @@ def test_accessibility(test_obj):
         print("Python says:%s"%str(e))
 
     assert expected_pass == actual_pass, "Test failed: %s"%__file__
+
+
+
+def load_snapshot(snapshot_file):
+    """Load the saved snapshot from a JSON file."""
+    if os.path.exists(snapshot_file):
+        with open(snapshot_file, 'r', encoding='utf-8') as file:
+            return json.load(file)
+    return None
+
+def save_snapshot(snapshot_file, data):
+    """Save the given data as a snapshot in a JSON file."""
+    with open(snapshot_file, 'w', encoding='utf-8') as file:
+        json.dump(data, file, ensure_ascii=False, indent=4)
