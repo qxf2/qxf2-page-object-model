@@ -9,6 +9,7 @@ import os
 import sys
 import json
 import pytest
+from utils.snapshot_util import Snapshotutil
 from page_objects.PageFactory import PageFactory
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -21,6 +22,8 @@ def test_accessibility(test_obj):
         expected_pass = 0
         actual_pass = -1
 
+        # Create an instance of the Snapshotutil class
+        snapshot_util = Snapshotutil()
         #Get all pages
         page_names = PageFactory.get_all_page_names()
 
@@ -41,35 +44,31 @@ def test_accessibility(test_obj):
                 'chrome',
                 f'snapshot_output_{page}.json'
             )
-            saved_snapshot = None
-            if os.path.exists(snapshot_file):
-                with open(snapshot_file, 'r', encoding='utf-8') as file:
-                    saved_snapshot = json.load(file)
+            saved_snapshot = snapshot_util.load_snapshot(snapshot_file)
 
-            #If snapshot not exists, save the current violations[] as the new snapshot
+            # If snapshot does not exist, create a new one
             if saved_snapshot is None:
-                with open(snapshot_file, 'w', encoding='utf-8') as file:
-                    json.dump(violations, file, ensure_ascii=False, indent=4)
-                snapshot_result = True
-            else:
-                #Compare the saved snapshot with the current violations[]
-                cleaned_result = json.dumps(violations, ensure_ascii=False, separators=(',', ':'))
-                cleaned_snapshot = json.dumps(saved_snapshot,
-                                              ensure_ascii=False,
-                                              separators=(',', ':'))
-                #Check if there are new violations
-                new_violations = [v for v in violations if v not in saved_snapshot]
-                if new_violations:
-                    print(f"New violations found on {page}:")
-                    for violation in new_violations:
-                        print(
-                            f"- ID: {violation['id']}, "
-                            f"Impact: {violation['impact']}, "
-                            f"Description: {violation['description']}"
-                        )
+                snapshot_util.save_snapshot(snapshot_file, violations)
+                # Re-load the snapshot after saving it so the comparison can happen
+                saved_snapshot = snapshot_util.load_snapshot(snapshot_file)
 
-                #Snapshot comparison
-                snapshot_result = cleaned_result == cleaned_snapshot
+            # Compare the saved snapshot with the current violations[]
+            cleaned_result = json.dumps(violations, ensure_ascii=False, separators=(',', ':'))
+            cleaned_snapshot = json.dumps(saved_snapshot, ensure_ascii=False, separators=(',', ':'))
+
+            # Check if there are new violations
+            new_violations = [v for v in violations if v not in saved_snapshot]
+            if new_violations:
+                print(f"New violations found on {page}:")
+                for violation in new_violations:
+                    print(
+                        f"- ID: {violation['id']}, "
+                        f"Impact: {violation['impact']}, "
+                        f"Description: {violation['description']}"
+                    )
+
+            # Snapshot comparison
+            snapshot_result = cleaned_result == cleaned_snapshot
 
             test_obj.log_result(snapshot_result,
                                  positive=f'Accessibility checks for {page} passed',
