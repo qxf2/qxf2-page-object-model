@@ -275,14 +275,12 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
     def apply_style_to_element(self,element,element_style):
         self.driver.execute_script("arguments[0].setAttribute('style', arguments[1])", element, element_style)
 
-    def accessibility_inject_axe(self): 
+    def accessibility_inject_axe(self):
         "Inject Axe into the Page"
         try:
-            result = self.axe_util.inject()
-            return result
+            return self.axe_util.inject()
         except Exception as e:
-            self.write(f"Error injecting Axe: {e}")
-            return False
+            self.write(e)
 
     def accessibility_run_axe(self):
         "Run Axe into the Page"
@@ -290,11 +288,6 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             return self.axe_util.run()
         except Exception as e:
              self.write(e)
-
-    def load_snapshot(self, filename):
-        "Fetch the snapshot file"
-        with open(filename, 'r', encoding='utf-8') as file:
-            return file.read()
 
     def snapshot_assert_match(self, value, snapshot_name):
         "Asserts the current value of the snapshot with the given snapshot_name"
