@@ -12,11 +12,3 @@ class Accessibilityutil(Axe):
     "Accessibility object to run accessibility test"
     def __init__(self, driver):
         super().__init__(driver, script_url)
-
-    def inject(self):
-        try:
-            super().inject()
-            return True
-        except Exception as e:
-            print(f"Error during Axe injection: {e}")
-            return None
