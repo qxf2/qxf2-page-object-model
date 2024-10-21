@@ -1,0 +1,1592 @@
+[
+    {
+        "description": "Ensures the contrast between foreground and background colors meets WCAG 2 AA contrast ratio thresholds",
+        "help": "Elements must have sufficient color contrast",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/3.1/color-contrast?application=axeAPI",
+        "id": "color-contrast",
+        "impact": "serious",
+        "nodes": [
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"/essential-service-offering\">Essential service</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    "a[href=\"/essential-service-offering\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"/foundational-service-offering\">Foundational service</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    "a[href=\"/foundational-service-offering\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"/qait\">UI automation</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    "a[href$=\"qait\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"/api-tests-autogenerate\">API automation</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    "a[href$=\"api-tests-autogenerate\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"aiml-testing-offering\">AI/ML model testing</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    "a[href$=\"aiml-testing-offering\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#007bff",
+                            "contrastRatio": 3.97,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#ffffff",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.97 (foreground color: #ffffff, background color: #007bff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<button type=\"button\" class=\"btn button-contact btn-lg\" data-toggle=\"modal\" data-target=\"#contactModal\" onclick=\"_gaq.push(['_trackEvent', 'Hire-Us', 'Click', 'Hire us']);\">Get in touch</button>",
+                                "target": [
+                                    ".button-contact"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.97 (foreground color: #ffffff, background color: #007bff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<button type=\"button\" class=\"btn button-contact btn-lg\" data-toggle=\"modal\" data-target=\"#contactModal\" onclick=\"_gaq.push(['_trackEvent', 'Hire-Us', 'Click', 'Hire us']);\">Get in touch</button>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    ".button-contact"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"/\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Home', 'Click', 'Home']);\">Home</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    ".nav > li:nth-child(1) > a[href=\"/\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"/team\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Team', 'Click', 'Team']);\">Team</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    ".nav > li:nth-child(2) > a[href$=\"team\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"https://qxf2.com/blog\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Blog', 'Click', 'To Blog']);\">Blog</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    ".nav > li:nth-child(3) > a[href$=\"blog\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"https://github.com/qxf2\" onclick=\"_gaq.push(['_trackEvent', 'Nav-GitHub', 'Click', 'Nav GitHub']);\">GitHub</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    ".nav > li:nth-child(4) > a[href$=\"qxf2\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"/contact\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Contact', 'Click', 'Nav contact']);\">Contact</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    ".nav > li:nth-child(5) > a[href$=\"contact\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"/careers\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Careers', 'Click', 'Careers']);\">Careers</a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    ".nav > li:nth-child(6) > a[href$=\"careers\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": {
+                            "bgColor": "#ffffff",
+                            "contrastRatio": 3.63,
+                            "expectedContrastRatio": "4.5:1",
+                            "fgColor": "#428bca",
+                            "fontSize": "12.0pt",
+                            "fontWeight": "normal",
+                            "missingData": null
+                        },
+                        "id": "color-contrast",
+                        "impact": "serious",
+                        "message": "Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                        "relatedNodes": [
+                            {
+                                "html": "<html>",
+                                "target": [
+                                    "html"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 3.63 (foreground color: #428bca, background color: #ffffff, font size: 12.0pt, font weight: normal). Expected contrast ratio of 4.5:1",
+                "html": "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-expanded=\"false\" onclick=\"_gaq.push(['_trackEvent', 'Nav-About-Expand', 'Click', 'Open about caret']);\">About<span class=\"caret\"></span></a>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    ".dropup > .dropdown-toggle[href=\"#\"][role=\"button\"]"
+                ]
+            }
+        ],
+        "tags": [
+            "cat.color",
+            "wcag2aa",
+            "wcag143"
+        ]
+    },
+    {
+        "description": "Ensures every HTML document has a lang attribute",
+        "help": "<html> element must have a lang attribute",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/3.1/html-has-lang?application=axeAPI",
+        "id": "html-has-lang",
+        "impact": "serious",
+        "nodes": [
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-lang",
+                        "impact": "serious",
+                        "message": "The <html> element does not have a lang attribute",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  The <html> element does not have a lang attribute",
+                "html": "<html>",
+                "impact": "serious",
+                "none": [],
+                "target": [
+                    "html"
+                ]
+            }
+        ],
+        "tags": [
+            "cat.language",
+            "wcag2a",
+            "wcag311"
+        ]
+    },
+    {
+        "description": "Ensures <img> elements have alternate text or a role of none or presentation",
+        "help": "Images must have alternate text",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/3.1/image-alt?application=axeAPI",
+        "id": "image-alt",
+        "impact": "critical",
+        "nodes": [
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-alt",
+                        "impact": "critical",
+                        "message": "Element does not have an alt attribute",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "non-empty-title",
+                        "impact": "serious",
+                        "message": "Element has no title attribute or the title attribute is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute or the title attribute is empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<img src=\"./assets/img/sciencelogic_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                    "a[href$=\"sciencelogic.com/\"] > .top-space.col-lg-12"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-alt",
+                        "impact": "critical",
+                        "message": "Element does not have an alt attribute",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "non-empty-title",
+                        "impact": "serious",
+                        "message": "Element has no title attribute or the title attribute is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute or the title attribute is empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<img src=\"./assets/img/latinum_network_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                    "a[href$=\"latinumnetwork.com/\"] > .top-space.col-lg-12"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-alt",
+                        "impact": "critical",
+                        "message": "Element does not have an alt attribute",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "non-empty-title",
+                        "impact": "serious",
+                        "message": "Element has no title attribute or the title attribute is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute or the title attribute is empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<img src=\"./assets/img/collaboro_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                    "a[href$=\"collaboro.com/\"] > .top-space.col-lg-12"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-alt",
+                        "impact": "critical",
+                        "message": "Element does not have an alt attribute",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "non-empty-title",
+                        "impact": "serious",
+                        "message": "Element has no title attribute or the title attribute is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute or the title attribute is empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<img src=\"./assets/img/kahuna_logo_primary.png\" class=\"img-responsive col-lg-12\">",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                    ".col-md-3.vcenter:nth-child(5) > .col-lg-12"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-alt",
+                        "impact": "critical",
+                        "message": "Element does not have an alt attribute",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "non-empty-title",
+                        "impact": "serious",
+                        "message": "Element has no title attribute or the title attribute is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute or the title attribute is empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<img src=\"./assets/img/pascal_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                    "img[src$=\"pascal_logo.png\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-alt",
+                        "impact": "critical",
+                        "message": "Element does not have an alt attribute",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "non-empty-title",
+                        "impact": "serious",
+                        "message": "Element has no title attribute or the title attribute is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute or the title attribute is empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<img src=\"./assets/img/mispl_logo.png\" class=\"img-responsive col-lg-12\">",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                    "img[src$=\"mispl_logo.png\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-alt",
+                        "impact": "critical",
+                        "message": "Element does not have an alt attribute",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "non-empty-title",
+                        "impact": "serious",
+                        "message": "Element has no title attribute or the title attribute is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute or the title attribute is empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<img src=\"./assets/img/st_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                    "img[src$=\"st_logo.png\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-alt",
+                        "impact": "critical",
+                        "message": "Element does not have an alt attribute",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "non-empty-title",
+                        "impact": "serious",
+                        "message": "Element has no title attribute or the title attribute is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Element does not have an alt attribute\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute or the title attribute is empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<img src=\"./assets/img/scw_logo.png\" class=\"img-responsive col-lg-12\">",
+                "impact": "critical",
+                "none": [],
+                "target": [
+                    "img[src$=\"scw_logo.png\"]"
+                ]
+            }
+        ],
+        "tags": [
+            "cat.text-alternatives",
+            "wcag2a",
+            "wcag111",
+            "section508",
+            "section508.22.a"
+        ]
+    },
+    {
+        "description": "Ensures the page has only one main landmark and each iframe in the page has at most one main landmark",
+        "help": "Page must have one main landmark",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/3.1/landmark-one-main?application=axeAPI",
+        "id": "landmark-one-main",
+        "impact": "moderate",
+        "nodes": [
+            {
+                "all": [
+                    {
+                        "data": null,
+                        "id": "page-has-main",
+                        "impact": "moderate",
+                        "message": "Page does not have a main landmark",
+                        "relatedNodes": []
+                    }
+                ],
+                "any": [],
+                "failureSummary": "Fix all of the following:\n  Page does not have a main landmark",
+                "html": "<html>",
+                "impact": "moderate",
+                "none": [],
+                "target": [
+                    "html"
+                ]
+            }
+        ],
+        "tags": [
+            "cat.semantics",
+            "best-practice"
+        ]
+    },
+    {
+        "description": "Ensures links have discernible text",
+        "help": "Links must have discernible text",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/3.1/link-name?application=axeAPI",
+        "id": "link-name",
+        "impact": "serious",
+        "nodes": [
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-visible-text",
+                        "impact": "minor",
+                        "message": "Element does not have text that is visible to screen readers",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<a href=\"https://www.sciencelogic.com/\" onclick=\"_gaq.push(['_trackEvent', 'Contact-Client', 'Click', 'Science Logic']);\"><img src=\"./assets/img/sciencelogic_logo.png\" class=\"img-responsive col-lg-12 top-space\"></a>",
+                "impact": "serious",
+                "none": [
+                    {
+                        "data": null,
+                        "id": "focusable-no-name",
+                        "impact": "serious",
+                        "message": "Element is in tab order and does not have accessible text",
+                        "relatedNodes": []
+                    }
+                ],
+                "target": [
+                    "a[href$=\"sciencelogic.com/\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-visible-text",
+                        "impact": "minor",
+                        "message": "Element does not have text that is visible to screen readers",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<a href=\"http://www.latinumnetwork.com/\" onclick=\"_gaq.push(['_trackEvent', 'Contact-Client', 'Click', 'Latinum Network']);\"><img src=\"./assets/img/latinum_network_logo.png\" class=\"img-responsive col-lg-12 top-space\"></a>",
+                "impact": "serious",
+                "none": [
+                    {
+                        "data": null,
+                        "id": "focusable-no-name",
+                        "impact": "serious",
+                        "message": "Element is in tab order and does not have accessible text",
+                        "relatedNodes": []
+                    }
+                ],
+                "target": [
+                    "a[href$=\"latinumnetwork.com/\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-visible-text",
+                        "impact": "minor",
+                        "message": "Element does not have text that is visible to screen readers",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<a href=\"https://collaboro.com/\" onclick=\"_gaq.push(['_trackEvent', 'Contact-Client', 'Click', 'Collaboro']);\"><img src=\"./assets/img/collaboro_logo.png\" class=\"img-responsive col-lg-12 top-space\"></a>",
+                "impact": "serious",
+                "none": [
+                    {
+                        "data": null,
+                        "id": "focusable-no-name",
+                        "impact": "serious",
+                        "message": "Element is in tab order and does not have accessible text",
+                        "relatedNodes": []
+                    }
+                ],
+                "target": [
+                    "a[href$=\"collaboro.com/\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-visible-text",
+                        "impact": "minor",
+                        "message": "Element does not have text that is visible to screen readers",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<a href=\"http://www.pascalmetrics.com\" onclick=\"_gaq.push(['_trackEvent', 'Contact-Client', 'Click', 'Pascal']);\"><img src=\"./assets/img/pascal_logo.png\" class=\"img-responsive col-lg-12 top-space\"></a>",
+                "impact": "serious",
+                "none": [
+                    {
+                        "data": null,
+                        "id": "focusable-no-name",
+                        "impact": "serious",
+                        "message": "Element is in tab order and does not have accessible text",
+                        "relatedNodes": []
+                    }
+                ],
+                "target": [
+                    "a[href$=\"www.pascalmetrics.com\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-visible-text",
+                        "impact": "minor",
+                        "message": "Element does not have text that is visible to screen readers",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<a href=\"http://mangaloreinfotech.in\" onclick=\"_gaq.push(['_trackEvent', 'Contact-Client', 'Click', 'MISPL']);\"><img src=\"./assets/img/mispl_logo.png\" class=\"img-responsive col-lg-12\"></a>",
+                "impact": "serious",
+                "none": [
+                    {
+                        "data": null,
+                        "id": "focusable-no-name",
+                        "impact": "serious",
+                        "message": "Element is in tab order and does not have accessible text",
+                        "relatedNodes": []
+                    }
+                ],
+                "target": [
+                    "a[href$=\"mangaloreinfotech.in\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-visible-text",
+                        "impact": "minor",
+                        "message": "Element does not have text that is visible to screen readers",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<a href=\"https://www.socialtables.com/\" onclick=\"_gaq.push(['_trackEvent', 'Contact-Client', 'Click', 'Social Tables']);\"><img src=\"./assets/img/st_logo.png\" class=\"img-responsive col-lg-12 top-space\"></a>",
+                "impact": "serious",
+                "none": [
+                    {
+                        "data": null,
+                        "id": "focusable-no-name",
+                        "impact": "serious",
+                        "message": "Element is in tab order and does not have accessible text",
+                        "relatedNodes": []
+                    }
+                ],
+                "target": [
+                    "a[href$=\"socialtables.com/\"]"
+                ]
+            },
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "has-visible-text",
+                        "impact": "minor",
+                        "message": "Element does not have text that is visible to screen readers",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-label",
+                        "impact": "serious",
+                        "message": "aria-label attribute does not exist or is empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "aria-labelledby",
+                        "impact": "serious",
+                        "message": "aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-presentation",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"presentation\"",
+                        "relatedNodes": []
+                    },
+                    {
+                        "data": null,
+                        "id": "role-none",
+                        "impact": "minor",
+                        "message": "Element's default semantics were not overridden with role=\"none\"",
+                        "relatedNodes": []
+                    }
+                ],
+                "failureSummary": "Fix all of the following:\n  Element is in tab order and does not have accessible text\n\nFix any of the following:\n  Element does not have text that is visible to screen readers\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element's default semantics were not overridden with role=\"presentation\"\n  Element's default semantics were not overridden with role=\"none\"",
+                "html": "<a href=\"https://securecodewarrior.com/\" onclick=\"_gaq.push(['_trackEvent', 'Contact-Client', 'Click', 'Secure Code Warrior']);\"><img src=\"./assets/img/scw_logo.png\" class=\"img-responsive col-lg-12\"></a>",
+                "impact": "serious",
+                "none": [
+                    {
+                        "data": null,
+                        "id": "focusable-no-name",
+                        "impact": "serious",
+                        "message": "Element is in tab order and does not have accessible text",
+                        "relatedNodes": []
+                    }
+                ],
+                "target": [
+                    "a[href$=\"securecodewarrior.com/\"]"
+                ]
+            }
+        ],
+        "tags": [
+            "cat.name-role-value",
+            "wcag2a",
+            "wcag412",
+            "wcag244",
+            "section508",
+            "section508.22.a"
+        ]
+    },
+    {
+        "description": "Ensures all page content is contained by landmarks",
+        "help": "All page content must be contained by landmarks",
+        "helpUrl": "https://dequeuniversity.com/rules/axe/3.1/region?application=axeAPI",
+        "id": "region",
+        "impact": "moderate",
+        "nodes": [
+            {
+                "all": [],
+                "any": [
+                    {
+                        "data": null,
+                        "id": "region",
+                        "impact": "moderate",
+                        "message": "Some page content is not contained by landmarks",
+                        "relatedNodes": [
+                            {
+                                "html": "<img src=\"/assets/img/qxf2_logo.png\" class=\"img-responsive logo col-md-12 text-center\" alt=\"Qxf2 Services\" width=\"300\" height=\"300\">",
+                                "target": [
+                                    ".logo"
+                                ]
+                            },
+                            {
+                                "html": "<h1 class=\"banner-brown text-center\">Let's talk about your startup's QA needs</h1>",
+                                "target": [
+                                    ".banner-brown"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"/assets/img/menu.png\" data-toggle=\"dropdown\" class=\"img-responsive menu-img col-md-12 pull-right dropdown-toggle\" alt=\"Menu\" width=\"150\" height=\"150\">",
+                                "target": [
+                                    ".menu-img"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"text-justify\" style=\"margin-bottom: 20px;\">Qxf2 delivers effective QA solutions tailored for startups. Whether you're looking to lay the foundation for testing, staff augmentation, periodic testing or one-time testing help, we've got you covered. Connect with us to:\n</p>",
+                                "target": [
+                                    ".text-justify:nth-child(1)"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"col-md-offset-1\">\n<span class=\"text-success\" style=\"margin-right: 20px;\">✔</span> get lightweight, periodic testing with our <a href=\"/essential-service-offering\">Essential service</a>\n</p>",
+                                "target": [
+                                    ".top-space-50 > .col-md-offset-1:nth-child(2)"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"col-md-offset-1\">\n<span class=\"text-success\" style=\"margin-right: 20px;\">✔</span> establish a structured testing process with our <a href=\"/foundational-service-offering\">Foundational service</a>\n</p>",
+                                "target": [
+                                    ".col-md-offset-1:nth-child(3)"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"col-md-offset-1\">\n<span class=\"text-success\" style=\"margin-right: 20px;\">✔</span> access one-time testing solutions like <a href=\"/qait\">UI automation</a>, <a href=\"/api-tests-autogenerate\">API automation</a>, or <a href=\"aiml-testing-offering\">AI/ML model testing</a>\n</p>",
+                                "target": [
+                                    ".col-md-offset-1:nth-child(4)"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"col-md-offset-1\">\n<span class=\"text-success\" style=\"margin-right: 20px;\">✔</span> fill specific QA roles like QA Advisor or Temporary QA Director\n</p>",
+                                "target": [
+                                    ".col-md-offset-1:nth-child(5)"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"col-md-offset-1\">\n<span class=\"text-success\" style=\"margin-right: 20px;\">✔</span> adopt the latest QA tooling\n</p>",
+                                "target": [
+                                    ".col-md-offset-1:nth-child(6)"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"col-md-offset-1\">\n<span class=\"text-success\" style=\"margin-right: 20px;\">✔</span> set up your QA team from scratch\n</p>",
+                                "target": [
+                                    ".col-md-offset-1:nth-child(7)"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"col-md-offset-1\">\n<span class=\"text-success\" style=\"margin-right: 20px;\">✔</span> augment your existing QA team with flexible, expert support\n</p>",
+                                "target": [
+                                    ".col-md-offset-1:nth-child(8)"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"text-justify\">... and so much more!\n</p>",
+                                "target": [
+                                    ".text-justify:nth-child(9)"
+                                ]
+                            },
+                            {
+                                "html": "<button type=\"button\" class=\"btn button-contact btn-lg\" data-toggle=\"modal\" data-target=\"#contactModal\" onclick=\"_gaq.push(['_trackEvent', 'Hire-Us', 'Click', 'Hire us']);\">Get in touch</button>",
+                                "target": [
+                                    ".button-contact"
+                                ]
+                            },
+                            {
+                                "html": "<h1 class=\"margin-base-vertical text-center\">Some of our happy clients</h1>",
+                                "target": [
+                                    ".row-fluid > .margin-base-vertical"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"./assets/img/sciencelogic_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                                "target": [
+                                    "a[href$=\"sciencelogic.com/\"] > .top-space.col-lg-12"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"./assets/img/latinum_network_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                                "target": [
+                                    "a[href$=\"latinumnetwork.com/\"] > .top-space.col-lg-12"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"./assets/img/collaboro_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                                "target": [
+                                    "a[href$=\"collaboro.com/\"] > .top-space.col-lg-12"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"./assets/img/kahuna_logo_primary.png\" class=\"img-responsive col-lg-12\">",
+                                "target": [
+                                    ".col-md-3.vcenter:nth-child(5) > .col-lg-12"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"./assets/img/pascal_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                                "target": [
+                                    "img[src$=\"pascal_logo.png\"]"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"./assets/img/mispl_logo.png\" class=\"img-responsive col-lg-12\">",
+                                "target": [
+                                    "img[src$=\"mispl_logo.png\"]"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"./assets/img/st_logo.png\" class=\"img-responsive col-lg-12 top-space\">",
+                                "target": [
+                                    "img[src$=\"st_logo.png\"]"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"./assets/img/scw_logo.png\" class=\"img-responsive col-lg-12\">",
+                                "target": [
+                                    "img[src$=\"scw_logo.png\"]"
+                                ]
+                            },
+                            {
+                                "html": "<img src=\"/assets/img/cut_line.png\" class=\"img-responsive col-lg-12\" alt=\"paper cut\" width=\"1144\" height=\"30\">",
+                                "target": [
+                                    "img[src$=\"cut_line.png\"]"
+                                ]
+                            },
+                            {
+                                "html": "<a href=\"/\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Home', 'Click', 'Home']);\">Home</a>",
+                                "target": [
+                                    ".nav > li:nth-child(1) > a[href=\"/\"]"
+                                ]
+                            },
+                            {
+                                "html": "<a href=\"/team\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Team', 'Click', 'Team']);\">Team</a>",
+                                "target": [
+                                    ".nav > li:nth-child(2) > a[href$=\"team\"]"
+                                ]
+                            },
+                            {
+                                "html": "<a href=\"https://qxf2.com/blog\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Blog', 'Click', 'To Blog']);\">Blog</a>",
+                                "target": [
+                                    ".nav > li:nth-child(3) > a[href$=\"blog\"]"
+                                ]
+                            },
+                            {
+                                "html": "<a href=\"https://github.com/qxf2\" onclick=\"_gaq.push(['_trackEvent', 'Nav-GitHub', 'Click', 'Nav GitHub']);\">GitHub</a>",
+                                "target": [
+                                    ".nav > li:nth-child(4) > a[href$=\"qxf2\"]"
+                                ]
+                            },
+                            {
+                                "html": "<a href=\"/contact\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Contact', 'Click', 'Nav contact']);\">Contact</a>",
+                                "target": [
+                                    ".nav > li:nth-child(5) > a[href$=\"contact\"]"
+                                ]
+                            },
+                            {
+                                "html": "<a href=\"/careers\" onclick=\"_gaq.push(['_trackEvent', 'Nav-Careers', 'Click', 'Careers']);\">Careers</a>",
+                                "target": [
+                                    ".nav > li:nth-child(6) > a[href$=\"careers\"]"
+                                ]
+                            },
+                            {
+                                "html": "<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" role=\"button\" aria-expanded=\"false\" onclick=\"_gaq.push(['_trackEvent', 'Nav-About-Expand', 'Click', 'Open about caret']);\">About<span class=\"caret\"></span></a>",
+                                "target": [
+                                    ".dropup > .dropdown-toggle[href=\"#\"][role=\"button\"]"
+                                ]
+                            },
+                            {
+                                "html": "<p class=\"text-center qxf2_copyright\">\n© Qxf2 Services 2013 - <script type=\"text/javascript\" async=\"\" src=\"https://www.googletagmanager.com/gtag/js?id=G-JX6TLW5DFR\"></script><script>document.write(new Date().getFullYear())</script>2024\n</p>",
+                                "target": [
+                                    ".qxf2_copyright"
+                                ]
+                            }
+                        ]
+                    }
+                ],
+                "failureSummary": "Fix any of the following:\n  Some page content is not contained by landmarks",
+                "html": "<html>",
+                "impact": "moderate",
+                "none": [],
+                "target": [
+                    "html"
+                ]
+            }
+        ],
+        "tags": [
+            "cat.keyboard",
+            "best-practice"
+        ]
+    }
+]
