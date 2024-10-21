@@ -54,8 +54,8 @@ def test_accessibility(test_obj):
             else:
                 #Compare the saved snapshot with the current violations[]
                 cleaned_result = json.dumps(violations, ensure_ascii=False, separators=(',', ':'))
-                cleaned_snapshot = json.dumps(saved_snapshot, 
-                                              ensure_ascii=False, 
+                cleaned_snapshot = json.dumps(saved_snapshot,
+                                              ensure_ascii=False,
                                               separators=(',', ':'))
                 #Check if there are new violations
                 new_violations = [v for v in violations if v not in saved_snapshot]
