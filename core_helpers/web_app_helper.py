@@ -280,14 +280,14 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         try:
             return self.axe_util.inject()
         except Exception as e:
-            self.write(e)
+             self.write(e)
 
     def accessibility_run_axe(self):
         "Run Axe into the Page"
         try:
             return self.axe_util.run()
         except Exception as e:
-            self.write(e)
+             self.write(e)
 
     def snapshot_assert_match(self, value, snapshot_name):
         "Asserts the current value of the snapshot with the given snapshot_name"
