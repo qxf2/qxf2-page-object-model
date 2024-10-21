@@ -62,23 +62,27 @@ def test_accessibility(test_obj):
                 if new_violations:
                     print(f"New violations found on {page}:")
                     for violation in new_violations:
-                        print(f"- ID: {violation['id']}, Impact: {violation['impact']}, Description: {violation['description']}")
+                        print(
+                            f"- ID: {violation['id']}, "
+                            f"Impact: {violation['impact']}, "
+                            f"Description: {violation['description']}"
+                        )
 
                 #Snapshot comparison
-                snapshot_result = (cleaned_result == cleaned_snapshot)
+                snapshot_result = cleaned_result == cleaned_snapshot
 
-            test_obj.conditional_write(snapshot_result,
+            test_obj.log_result(snapshot_result,
                                  positive=f'Accessibility checks for {page} passed',
                                  negative=f'Accessibility checks for {page} failed',
                                  level='debug')
 
-        # Print out the result
+        #Print out the result
         test_obj.write_test_summary()
         expected_pass = test_obj.result_counter
         actual_pass = test_obj.pass_counter
 
     except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+        print(f"Exception when trying to run test: {__file__}")
+        print(f"Python says: {str(e)}")
 
-    assert expected_pass == actual_pass, "Test failed: %s"%__file__
+    assert expected_pass == actual_pass, f"Test failed: {__file__}"
