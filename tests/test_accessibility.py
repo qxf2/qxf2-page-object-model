@@ -8,8 +8,8 @@ This is a test file to run accessibility test on
 import os
 import sys
 import json
-import re
 import pytest
+from utils.snapshot_util import Snapshotutil
 from page_objects.PageFactory import PageFactory
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -22,6 +22,8 @@ def test_accessibility(test_obj):
         expected_pass = 0
         actual_pass = -1
 
+        # Create an instance of the Snapshotutil class
+        snapshot_util = Snapshotutil()
         #Get all pages
         page_names = PageFactory.get_all_page_names()
 
@@ -31,17 +33,47 @@ def test_accessibility(test_obj):
             test_obj.accessibility_inject_axe()
             #Check if Axe is run in every page
             run_result = test_obj.accessibility_run_axe()
-            #Serialize dict to JSON-formatted string
-            result_str = json.dumps(run_result, ensure_ascii=False, separators=(',', ':'))
-            #Formatting result by removing \n,\\,timestamp
-            #Every test run have a different timestamp.
-            cleaned_result = re.sub(r'\\|\n|\r|"timestamp":\s*"[^"]*"', '', result_str)
-            #Compare Snapshot for each page
-            snapshot_result = test_obj.snapshot_assert_match(f"{cleaned_result}", f'snapshot_output_{page}.txt')
-            test_obj.conditional_write(snapshot_result,
-                                positive=f'Accessibility checks for {page} passed',
-                                negative=f'Accessibility checks for {page} failed',
-                                level='debug')
+            #Extract only the violations section
+            violations = run_result.get('violations', [])
+            #Snapshot file path to load
+            snapshot_file = os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                'snapshots',
+                'test_accessibility',
+                'test_accessibility',
+                'chrome',
+                f'snapshot_output_{page}.json'
+            )
+            saved_snapshot = snapshot_util.load_snapshot(snapshot_file)
+
+            # If snapshot does not exist, create a new one
+            if saved_snapshot is None:
+                snapshot_util.save_snapshot(snapshot_file, violations)
+                # Re-load the snapshot after saving it so the comparison can happen
+                saved_snapshot = snapshot_util.load_snapshot(snapshot_file)
+
+            # Compare the saved snapshot with the current violations[]
+            cleaned_result = json.dumps(violations, ensure_ascii=False, separators=(',', ':'))
+            cleaned_snapshot = json.dumps(saved_snapshot, ensure_ascii=False, separators=(',', ':'))
+
+            # Check if there are new violations
+            new_violations = [v for v in violations if v not in saved_snapshot]
+            if new_violations:
+                print(f"New violations found on {page}:")
+                for violation in new_violations:
+                    print(
+                        f"- ID: {violation['id']}, "
+                        f"Impact: {violation['impact']}, "
+                        f"Description: {violation['description']}"
+                    )
+
+            # Snapshot comparison
+            snapshot_result = cleaned_result == cleaned_snapshot
+
+            test_obj.log_result(snapshot_result,
+                                 positive=f'Accessibility checks for {page} passed',
+                                 negative=f'Accessibility checks for {page} failed',
+                                 level='debug')
 
         #Print out the result
         test_obj.write_test_summary()
@@ -49,7 +81,7 @@ def test_accessibility(test_obj):
         actual_pass = test_obj.pass_counter
 
     except Exception as e:
-        print("Exception when trying to run test: %s"%__file__)
-        print("Python says:%s"%str(e))
+        print(f"Exception when trying to run test: {__file__}")
+        print(f"Python says: {str(e)}")
 
-    assert expected_pass == actual_pass, "Test failed: %s"%__file__
+    assert expected_pass == actual_pass, f"Test failed: {__file__}"
