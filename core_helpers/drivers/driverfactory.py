@@ -32,7 +32,7 @@ class DriverFactory(RemoteOptions, LocalOptions):
                                                      remote_build_name, testname)
 
         elif remote_flag.lower() == 'n':
-            web_driver = self.get_local_driver(browser)
+            web_driver = self.get_local_driver(browser, browser_version)
 
         return web_driver,session_url
 
@@ -60,21 +60,23 @@ class DriverFactory(RemoteOptions, LocalOptions):
 
         return web_driver,session_url
 
-    def get_local_driver(self, browser):
+    def get_local_driver(self, browser, browser_version):
         """Run the test on local system."""
         local_driver = None
+        if browser_version == []:
+            browser_version = None
         if browser.lower() == "ff" or browser.lower() == 'firefox':
-            local_driver = self.firefox_local()
-        elif  browser.lower() == "ie":
-            local_driver = self.explorer_local()
+            local_driver = self.firefox_local(browser_version)
+        elif  browser.lower() == "edge":
+            local_driver = self.edge_local(browser_version)
         elif browser.lower() == "chrome":
-            local_driver = self.chrome_local()
+            local_driver = self.chrome_local(browser_version)
+        elif browser.lower() == "opera":
+            local_driver = self.opera_local()
         elif browser.lower() == "safari":
             local_driver = self.safari_local()
         elif browser.lower() == "headless-chrome":
-            local_driver = self.headless_chrome()
-        else:
-            raise AttributeError(f"Unsupported Browser - {browser!r}")
+            local_driver = self.headless_chrome(browser_version)
 
         return local_driver
 
