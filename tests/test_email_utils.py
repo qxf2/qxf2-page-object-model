@@ -75,7 +75,6 @@ def test_email_util():
                     subject = getattr(message, 'subject', 'No subject attribute')
                     body = getattr(message, 'body', 'no body message found')
                     print(f"Thread message subject: {subject}")
-                    print(f"Thread message subject: {body}")
             else:
                 print("No messages found in thread.")
 
