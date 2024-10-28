@@ -57,7 +57,7 @@ def test_accessibility(test_obj):
             cleaned_snapshot = json.dumps(saved_snapshot, ensure_ascii=False, separators=(',', ':'))
 
             # Check if there are new violations
-            new_violations = [v for v in violations if v not in saved_snapshot]
+            new_violations = snapshot_util.find_new_violations(violations, saved_snapshot)
             if new_violations:
                 print(f"New violations found on {page}:")
                 for violation in new_violations:
