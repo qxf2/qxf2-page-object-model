@@ -60,11 +60,15 @@ def test_accessibility(test_obj):
             new_violations = snapshot_util.find_new_violations(violations, saved_snapshot)
             if new_violations:
                 print(f"New violations found on {page}:")
+                snapshot_util.print_new_violation_elements(cleaned_result, cleaned_snapshot)
                 for violation in new_violations:
-                    print(
-                        f"- ID: {violation['id']}, "
-                        f"Impact: {violation['impact']}, "
-                        f"Description: {violation['description']}"
+                    test_obj.log_result(
+                        False,
+                        positive="",
+                        negative=(
+                            f"New violation found on {page} - "
+                        ),
+                        level='error'
                     )
 
             # Snapshot comparison

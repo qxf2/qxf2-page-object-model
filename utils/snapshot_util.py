@@ -35,3 +35,17 @@ class Snapshotutil(Snapshot):
             if violation not in saved_snapshot:
                 new_violations.append(violation)
         return new_violations
+
+    def print_new_violation_elements(self, cleaned_result, cleaned_snapshot):
+        # Compare violations and print new violation HTML elements
+        for new_item in json.loads(cleaned_result):
+            for saved_item in json.loads(cleaned_snapshot):
+                if new_item['id'] == saved_item['id']:
+                    for new_node in new_item['nodes']:
+                        for saved_node in saved_item['nodes']:
+                            if new_node['any']:
+                                for violation in new_node['any']:
+                                    for related in violation['relatedNodes']:
+                                        print("New violation HTML element:")
+                                        print(related['html'])
+                                        print()
