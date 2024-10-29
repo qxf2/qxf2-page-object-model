@@ -139,7 +139,6 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
                         return result_flag
                 except Exception:
                     self.write('Element not found, swiping again', 'critical')
-                    pass
 
                 # Perform swipe based on direction
                 self.perform_swipe(direction, start_x, start_y,
