@@ -122,7 +122,7 @@ class OpenAPIPathParser():
         return (query_params, path_params,)
 
 
-    # pylint: disable=too-many-branches
+    # pylint: disable=too-many-branches, too-complex
     def parse_request_body(self, request_body: specification.RequestBody) -> tuple[str, list, str]:
         """
         Parse the requestBody from the spec and return a list of json & data params
