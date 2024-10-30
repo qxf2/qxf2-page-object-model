@@ -22,13 +22,34 @@ from page_objects.PageFactory import PageFactory    # pylint: disable=import-err
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
 from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
 
+from conf.all_config import Browser, Platform
+
 load_dotenv()
 
 @pytest.fixture
-def test_obj(base_url, browser, browser_version, os_version, os_name, remote_flag,              # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
+def runner_config(request):
+    "Test run configuration"
+    browser_config = Browser(name=request.config.getoption("--browser"),
+                             version=request.config.getoption("--ver"))
+    platform_config = Platform(name=request.config.getoption("--os_name"),
+                               version=request.config.getoption("--os_version"))
+    return browser_config, platform_config
+
+@pytest.fixture
+def integrations(request):
+    "Test run integrations"
+    pass
+
+@pytest.fixture
+def test_obj(base_url, runner_config, remote_flag,              # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
              testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name,  # pylint: disable=redefined-outer-name
              testname, reportportal_service, interactivemode_flag, highlighter_flag, testreporter):   # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
+    browser_config, platform_config = runner_config
+    browser = browser_config.name
+    browser_version = browser_config.version
+    os_name = platform_config.name
+    os_version = platform_config.version
     try:
         if interactivemode_flag.lower() == "y":
             default_flag = interactive_mode.set_default_flag_gui(browser, browser_version,
