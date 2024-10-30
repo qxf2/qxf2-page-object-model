@@ -11,6 +11,33 @@ class BaseAPI:
     session_object = requests.Session()
     base_url = None
 
+    def make_request(self,
+                     method,
+                     url,
+                     headers=None,
+                     auth=None,
+                     params=None,
+                     data=None,
+                     json=None):
+        "Generic method to make HTTP request"
+        headers = headers if headers else {}
+        try:
+            response = self.session_object.request(method=method,
+                                                   url=url,
+                                                   headers=headers,
+                                                   auth=auth,
+                                                   params=params,
+                                                   data=data,
+                                                   json=json)
+            response.raise_for_status()
+        except HTTPError as http_err:
+            print(f"{method} request failed: {http_err}")
+        except ConnectionError:
+            print(f"\033[1;31mFailed to connect to {url}. Check if the API server is up.\033[1;m")
+        except RequestException as err:
+            print(f"\033[1;31mAn error occurred: {err}\033[1;m")
+        return response
+
     def get(self, url, headers=None):
         "Get request"
         headers = headers if headers else {}
