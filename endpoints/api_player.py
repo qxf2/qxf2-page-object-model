@@ -58,7 +58,7 @@ class APIPlayer(Results):
         url_params = {'car_name': car_name, 'brand': brand}
         url_params_encoded = urllib.parse.urlencode(url_params)
         headers = self.set_header_details(auth_details)
-        json_response = self.api_obj.get_cars_find(params=url_params_encoded,
+        json_response = self.api_obj.get_car(url_params=url_params_encoded,
                                              headers=headers)
         response = json_response['response']
         if response["successful"]:
@@ -72,7 +72,7 @@ class APIPlayer(Results):
         result_flag = False
         data = car_details
         headers = self.set_header_details(auth_details)
-        json_response = self.api_obj.post_cars_add(json=data,
+        json_response = self.api_obj.add_car(data=data,
                 headers=headers)
         if json_response["response"]["successful"]:
             result_flag = True
@@ -107,7 +107,7 @@ class APIPlayer(Results):
                 'car_type': car_details['car_type']}
 
         headers = self.set_header_details(auth_details)
-        json_response = self.api_obj.put_cars_update_name(car_name,
+        json_response = self.api_obj.update_car(car_name,
                                                 json=data,
                                                 headers=headers)
         json_response = json_response['response']
@@ -120,7 +120,7 @@ class APIPlayer(Results):
         "deletes a car entry"
         result_flag = False
         headers = self.set_header_details(auth_details)
-        json_response = self.api_obj.delete_cars_remove_name(car_name,
+        json_response = self.api_obj.remove_car(car_name,
                                                 headers=headers)
         if json_response["response"]["successful"]:
             result_flag = True
