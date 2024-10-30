@@ -1,8 +1,11 @@
 {#- This template is used to generate Endpoints file for the API Test Automation Framework -#}
 """
-This Endpoint file is generated using the api_auto_generator/endpoint_module_generator.py file
+This Endpoint file is generated using the api_auto_generator/endpoint_module_generator.py module
 """
-class {{class_name}}:
+from .base_api import BaseAPI
+
+
+class {{class_name}}(BaseAPI):
 
 
     def {{class_content['url_method_name']}}(self, suffix=''):

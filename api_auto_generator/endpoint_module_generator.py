@@ -84,7 +84,7 @@ if __name__ == "__main__":
     arg_parser.add_argument("--generate-endpoints",
                             dest='if_generate_endpoints',
                             action='store_true',
-                            help="This param will create <endpoint_name>_Endpoint.py file for Path objects from the OpenAPI spec")
+                            help="This param will create <endpoint_name>_endpoint.py file for Path objects from the OpenAPI spec")
 
     args = arg_parser.parse_args()
     try:

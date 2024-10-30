@@ -20,7 +20,7 @@ class NameGenerator():
         "Init NameGen object"
         self.endpoint_split, self.api_version_num = self.split_endpoint_string(endpoint_url)
         self.common_base = self.endpoint_split[0]
-        self.endpoints_in_a_file = [ ep.capitalize() for ep in re.split("-|_", self.common_base)]
+        self.endpoints_in_a_file = [ ep for ep in re.split("-|_", self.common_base)]
         self.if_query_param = if_query_param
         self.path_params = path_params
         self.requestbody_type = requestbody_type
@@ -28,12 +28,13 @@ class NameGenerator():
     @property
     def module_name(self) -> str :
         "Module name for an Endpoint"
-        return "_".join(self.endpoints_in_a_file) + "_" + "Endpoint"
+        return "_" + "_".join(self.endpoints_in_a_file) + "_" + "endpoint"
 
     @property
     def class_name(self) -> str :
         "Class name for Endpoint"
-        return "".join(self.endpoints_in_a_file) + "Endpoint"
+        capitalized_endpoints_in_a_file = [ ep.capitalize() for ep in self.endpoints_in_a_file]
+        return "".join(capitalized_endpoints_in_a_file) + "Endpoint"
 
     @property
     def url_method_name(self) -> str :
