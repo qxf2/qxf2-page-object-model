@@ -19,15 +19,9 @@ jobs:
 
         - run: openssl aes-256-cbc -d -md sha256 -in ./conf/env_remote_enc -out ./.env.remote -pass env:KEY
 
-        - run: git clone https://github.com/qxf2/cars-api.git
+        - run: git clone https://github.com/qxf2/weather-shopper-app-apk.git
 
-        - run: pip install flask
-
-        - run:
-            name: Run Flask app in background
-            command: |
-               python cars-api/cars_app.py
-            background: true
+        - run: sudo apt-get update
 
         - run:
             name: Run different Tox environments on different Containers

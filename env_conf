@@ -25,11 +25,17 @@ smtp_ssl_port = 465  # Add smtp ssl port number of your email client
 sender = 'abc@xyz.com' #Add senders email address here
 targets = ['asd@xyz.com','qwe@xyz.com'] # Add recipients email address in a list
 
-
 #REPORT PORTAL
 report_portal_api_key = "Enter your report portal api key here"
 report_portal_endpoint = "Enter your endpoint here"
 report_portal_project = "Enter your Project here"
 report_portal_launch = "Enter your project launch here"
+
+#Slack channel incoming webhook
+#To generate incoming webhook url ref: https://qxf2.com/blog/post-pytest-test-results-on-slack/
+slack_incoming_webhook_url = "Add Slack incomming webhook url here"
+# To generate pytest_report.log file add ">pytest_report.log" at end of py.test command 
+# for e.g. pytest -k example_form --slack_flag y -v > log/pytest_report.log
+
 
 

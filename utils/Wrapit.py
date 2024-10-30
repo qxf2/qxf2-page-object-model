@@ -15,10 +15,13 @@ class Wrapit():
             try:
                 return f(*args,**kwargs)
             except Exception as e:
+                #args[0].write('You have this exception', level='error')
                 trace = traceback.format_exc(limit=-1)
                 # Create a message with the traceback details
                 message = f"You have this exception: {str(e)}\n{trace}"
-                args[0].write(message, level='error')
+                args[0].write(message, level='error', trace_back=trace)
+
+                #traceback.print_exc(limit=-1)
                 #we denote None as failure case
                 return None
 
