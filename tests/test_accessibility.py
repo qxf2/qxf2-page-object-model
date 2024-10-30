@@ -59,14 +59,14 @@ def test_accessibility(test_obj):
             # Check if there are new violations
             new_violations = snapshot_util.find_new_violations(violations, saved_snapshot)
             if new_violations:
-                print(f"New violations found on {page}:")
-                snapshot_util.print_new_violation_elements(cleaned_result, cleaned_snapshot)
+                snapshot_util.print_new_violation_elements(cleaned_result, cleaned_snapshot, page)
                 for violation in new_violations:
                     test_obj.log_result(
                         False,
                         positive="",
                         negative=(
                             f"New violation found on {page} - "
+                            f"ID: {violation['id']} "
                         ),
                         level='error'
                     )
@@ -85,7 +85,11 @@ def test_accessibility(test_obj):
         actual_pass = test_obj.pass_counter
 
     except Exception as e:
-        print(f"Exception when trying to run test: {__file__}")
-        print(f"Python says: {str(e)}")
+        test_obj.log_result(
+            False,
+            positive="",
+            negative=f"Exception when trying to run test: {__file__}\nPython says: {str(e)}",
+            level='error'
+        )
 
     assert expected_pass == actual_pass, f"Test failed: {__file__}"
