@@ -40,7 +40,7 @@ class Snapshotutil(Snapshot):
         "Replace charmap characters so read html."
         return ''.join(c if ord(c) < 128 else '?' for c in html)
 
-    def print_new_violation_elements(self, cleaned_result, cleaned_snapshot, page):
+    def get_new_violation_elements(self, cleaned_result, cleaned_snapshot, page):
         "Compares the snapshots and prints the new violations"
         # Load the results from JSON strings
         new_violations = json.loads(cleaned_result)
@@ -56,17 +56,22 @@ class Snapshotutil(Snapshot):
                             existing_html_elements.add(related['html'])
 
         # Set to track printed elements
-        printed_elements = set()
+        new_violation_elements = []
 
-        # Compare new violations and print new violation HTML elements not in the snapshot
+        # Compare new violations and add new violation HTML elements not in the snapshot
         for new_item in new_violations:
             for new_node in new_item['nodes']:
                 if new_node['any']:
                     for violation in new_node['any']:
                         for related in violation['relatedNodes']:
-                            # Print only if the HTML is not in the existing snapshot
-                            if related['html'] not in existing_html_elements and related['html'] not in printed_elements:
-                                print(f"New violation HTML element on page '{page}':")
+                            # Add only if the HTML is not in the existing snapshot
+                            if related['html'] not in existing_html_elements:
                                 sanitized_html = self.sanitize_html(related['html'])
-                                print(sanitized_html)
-                                printed_elements.add(related['html'])
+                                new_violation_elements.append({
+                                    "page": page,
+                                    "id": new_item.get('id', 'unknown'),
+                                    "impact": new_item.get('impact', 'unknown'),
+                                    "description": new_item.get('description', 'unknown'),
+                                    "html": sanitized_html
+                                })
+        return new_violation_elements
