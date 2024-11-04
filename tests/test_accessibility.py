@@ -38,10 +38,9 @@ def test_accessibility(test_obj):
             #Snapshot file path to load
             snapshot_file = os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
-                'snapshots',
-                'test_accessibility',
-                'test_accessibility',
-                'chrome',
+                '..',
+                'utils',
+                'snapshot',
                 f'snapshot_output_{page}.json'
             )
             saved_snapshot = snapshot_util.load_snapshot(snapshot_file)
