@@ -8,6 +8,7 @@ external services (e.g., BrowserStack, SauceLabs, TestRail, Report Portal, etc).
 """
 
 import os
+import platform
 import sys
 import glob
 import shutil
@@ -22,34 +23,57 @@ from page_objects.PageFactory import PageFactory    # pylint: disable=import-err
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
 from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
 
-from conf.all_config import Browser, Platform
+from conf.all_config import TestName, BaseURL, Browser, Platform, UITestConfig
+from conf.all_config import RemoteTestExecution, BrowserStack
+from conf.all_config import Reporting, TestRail, Tesults
 
 load_dotenv()
 
 @pytest.fixture
-def runner_config(request):
+def uitestconfig(request, testname):
     "Test run configuration"
-    browser_config = Browser(name=request.config.getoption("--browser"),
-                             version=request.config.getoption("--ver"))
-    platform_config = Platform(name=request.config.getoption("--os_name"),
-                               version=request.config.getoption("--os_version"))
-    return browser_config, platform_config
+    # Test name & URL
+    test = TestName(name=testname) 
+    base_url = BaseURL(url=request.config.getoption("url"))
+    # Browser & Platform
+    browser = Browser(name=request.config.getoption("browser"),
+                             version=request.config.getoption("browser_version"))
+    platform = Platform(name=request.config.getoption("os_name"),
+                               version=request.config.getoption("os_version"))
+    # Remote test execution
+    remote_flag = request.config.getoption("remote_flag")
+    browserstack = BrowserStack(project_name=request.config.getoption("remote_project_name"),
+                                build_name=request.config.getoption("remote_build_name"))
+    remote_test_execution = RemoteTestExecution(remote_flag, browserstack)
+    # Reporting tools
+    testrail = TestRail(flag=request.config.getoption("testrail_flag"),
+                        test_run_id=request.config.getoption("test_run_id"))
+    tesults = Tesults(flag=request.config.getoption("tesults_flag"))
+    reporting = Reporting(testrail, tesults)
+    return UITestConfig(test, base_url, browser, platform, remote_test_execution, reporting)
 
 @pytest.fixture
-def integrations(request):
-    "Test run integrations"
-    pass
-
-@pytest.fixture
-def test_obj(base_url, runner_config, remote_flag,              # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
-             testrail_flag, tesults_flag, test_run_id, remote_project_name, remote_build_name,  # pylint: disable=redefined-outer-name
-             testname, reportportal_service, interactivemode_flag, highlighter_flag, testreporter):   # pylint: disable=redefined-outer-name
+def test_obj(uitestconfig, 
+             reportportal_service,
+             interactivemode_flag,
+             highlighter_flag,
+             testreporter):
     "Return an instance of Base Page that knows about the third party integrations"
-    browser_config, platform_config = runner_config
-    browser = browser_config.name
-    browser_version = browser_config.version
-    os_name = platform_config.name
-    os_version = platform_config.version
+    # Test, Browser & Platform
+    testname = uitestconfig.test.name
+    base_url = uitestconfig.base_url.url
+    browser = uitestconfig.browser.name[0]
+    browser_version = uitestconfig.browser.version[0]
+    os_name = uitestconfig.platform.name
+    os_version = uitestconfig.platform.version
+    # Remote test execution
+    remote_flag = uitestconfig.remote_test_execution.flag
+    remote_project_name = uitestconfig.remote_test_execution.browserstack.project_name
+    remote_build_name = uitestconfig.remote_test_execution.browserstack.build_name
+    # Reporting
+    testrail_flag = uitestconfig.reporting.testrail.flag
+    tesults_flag = uitestconfig.reporting.tesults.flag
+    test_run_id = uitestconfig.reporting.testrail.test_run_id
     try:
         if interactivemode_flag.lower() == "y":
             default_flag = interactive_mode.set_default_flag_gui(browser, browser_version,
@@ -732,7 +756,7 @@ def pytest_addoption(parser):
                             dest="os_version",
                             action="append",
                             help="The operating system: xp, 7",
-                            default=[])
+                            default=[platform.uname()[2]])
         parser.addoption("--ver",
                             dest="browser_version",
                             action="append",
@@ -742,7 +766,7 @@ def pytest_addoption(parser):
                             dest="os_name",
                             action="append",
                             help="The operating system: Windows 7, Linux",
-                            default=[])
+                            default=[platform.uname()[0]])
         parser.addoption("--remote_project_name",
                             dest="remote_project_name",
                             help="The project name if its run in BrowserStack",
