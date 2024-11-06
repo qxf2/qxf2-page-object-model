@@ -16,23 +16,24 @@ class Snapshotutil(Snapshot):
                  snapshot_dir=snapshot_dir):
         super().__init__(snapshot_update, allow_snapshot_deletion, snapshot_dir)
 
-    def load_snapshot(self, snapshot_file):
+    def load_snapshot(self, snapshot_file_path):
         "Load the saved snapshot from a JSON file."
-        if os.path.exists(snapshot_file):
-            with open(snapshot_file, 'r', encoding='utf-8') as file:
+        if os.path.exists(snapshot_file_path):
+            with open(snapshot_file_path, 'r', encoding='utf-8') as file:
                 return json.load(file)
         return None
 
-    def save_snapshot(self, snapshot_file, violations):
+    def save_snapshot(self, snapshot_file_path, current_violations):
         "Save the given data as a snapshot in a JSON file."
-        with open(snapshot_file, 'w', encoding='utf-8') as file:
-            json.dump(violations, file, ensure_ascii=False, indent=4)
+        os.makedirs(os.path.dirname(snapshot_file_path), exist_ok=True)
+        with open(snapshot_file_path, 'w', encoding='utf-8') as file:
+            json.dump(current_violations, file, ensure_ascii=False, indent=4)
 
-    def find_new_violations(self, violations, saved_snapshot):
+    def find_new_violations(self, current_violations, existing_snapshot):
         "Return a list of new violations that are not in the saved snapshot."
         new_violations = []
-        for violation in violations:
-            if violation not in saved_snapshot:
+        for violation in current_violations:
+            if violation not in existing_snapshot:
                 new_violations.append(violation)
         return new_violations
 
@@ -40,11 +41,11 @@ class Snapshotutil(Snapshot):
         "Replace charmap characters so read html."
         return ''.join(c if ord(c) < 128 else '?' for c in html)
 
-    def get_new_violation_elements(self, cleaned_result, cleaned_snapshot, page):
+    def get_new_violations(self, current_violations_json, existing_snapshot_json, page):
         "Compares the snapshots and prints the new violations"
         # Load the results from JSON strings
-        new_violations = json.loads(cleaned_result)
-        saved_snapshot = json.loads(cleaned_snapshot)
+        new_violations = json.loads(current_violations_json)
+        saved_snapshot = json.loads(existing_snapshot_json)
 
         # Create a set of existing HTML elements from the saved snapshot
         existing_html_elements = set()
@@ -56,7 +57,7 @@ class Snapshotutil(Snapshot):
                             existing_html_elements.add(related['html'])
 
         # Set to track printed elements
-        new_violation_elements = []
+        new_violation_details = []
 
         # Compare new violations and add new violation HTML elements not in the snapshot
         for new_item in new_violations:
@@ -67,11 +68,11 @@ class Snapshotutil(Snapshot):
                             # Add only if the HTML is not in the existing snapshot
                             if related['html'] not in existing_html_elements:
                                 sanitized_html = self.sanitize_html(related['html'])
-                                new_violation_elements.append({
+                                new_violation_details.append({
                                     "page": page,
                                     "id": new_item.get('id', 'unknown'),
                                     "impact": new_item.get('impact', 'unknown'),
                                     "description": new_item.get('description', 'unknown'),
                                     "html": sanitized_html
                                 })
-        return new_violation_elements
+        return new_violation_details
