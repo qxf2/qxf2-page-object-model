@@ -12,6 +12,7 @@ import pytest
 from utils.snapshot_util import Snapshotutil
 from page_objects.PageFactory import PageFactory
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.stdout.reconfigure(encoding='utf-8')
 
 @pytest.mark.ACCESSIBILITY
 def test_accessibility(test_obj):
@@ -24,6 +25,11 @@ def test_accessibility(test_obj):
 
         #Create an instance of the Snapshotutil class
         snapshot_util = Snapshotutil()
+
+        # Set up the violations log file
+        log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'conf')
+        violations_log_path = snapshot_util.initialize_violations_log(log_dir)
+
         #Get all pages
         page_names = PageFactory.get_all_page_names()
 
@@ -39,45 +45,67 @@ def test_accessibility(test_obj):
             snapshot_dir = os.path.join(
                 os.path.dirname(os.path.abspath(__file__)),
                 '..',
-                'utils',
+                'conf',
                 'snapshot'
             )
-            snapshot_file_path = os.path.join(
-                snapshot_dir,
-                f'snapshot_output_{page}.json'
-            )
+            snapshot_file_path = snapshot_util.get_snapshot_path(snapshot_dir, page)
 
             if not os.path.exists(snapshot_dir):
                 os.makedirs(snapshot_dir)
-
+            # Load the existing snapshot
             existing_snapshot = snapshot_util.load_snapshot(snapshot_file_path)
 
             #If snapshot does not exist, create a new one
             if existing_snapshot is None:
                 snapshot_util.save_snapshot(snapshot_file_path, current_violations)
                 # Re-load the snapshot after saving it so the comparison can happen
-                existing_snapshot = snapshot_util.load_snapshot(snapshot_file_path)
+                test_obj.log_result(
+                    True,  # Treat as passed since this is expected behavior
+                    positive=(
+                        f"No existing snapshot was found for {page}. A new snapshot has been created. "
+                        "Please review the snapshot for violations before running the test again."
+                    ),
+                    negative="",
+                    level='info'
+                )
+                continue
 
             #Formating the violation result and saved snapshot to json
-            current_violations_json = json.dumps(current_violations, ensure_ascii=False, separators=(',', ':'))
-            existing_snapshot_json = json.dumps(existing_snapshot, ensure_ascii=False, separators=(',', ':'))
+            current_violations_json = json.dumps(current_violations, 
+                                                 ensure_ascii=False, 
+                                                 separators=(',', ':'))
+            existing_snapshot_json = json.dumps(existing_snapshot, 
+                                                ensure_ascii=False, 
+                                                separators=(',', ':'))
 
             #Check if there are new violations
             new_violation = snapshot_util.find_new_violations(current_violations, existing_snapshot)
             if new_violation:
-                new_violation_detail = snapshot_util.get_new_violations(current_violations_json, existing_snapshot_json, page)
+                new_violation_detail = snapshot_util.get_new_violations(current_violations_json, 
+                                                                        existing_snapshot_json, 
+                                                                        page)
+                # Write violations to file using the log_violations_to_file method
+                snapshot_util.log_violations_to_file(new_violation_detail, violations_log_path)
+
+                # Write violations to file and print a preview
                 for violation in new_violation_detail:
+                    violation_message = (
+                        f"New violations found on: {violation['page']}\n"
+                        f"Violation ID: {violation['id']}\n"
+                        f"Impact: {violation['impact']}\n"
+                        f"Description: {violation['description']}\n"
+                        f"HTML Snippet: {violation['html']}\n\n"
+                    )
+                    # Print the first 35 characters of the violation message
                     test_obj.log_result(
                         False,
                         positive="",
                         negative=(
-                            f"New violation found on {violation['page']}page, "
-                            f"Violation_ID: {violation['id']}, "
-                            f"Impact_level: {violation['impact']}, "
-                            f"Description: {violation['description']},"
-                            f"HTML_snippet: {violation['html']}"
+                            f"{violation_message[:50]}..."
+                            "Complete violation output is saved in"
+                            "../conf/snapshot/new_violations_record.txt"
                         ),
-                        level='error'
+                        level='info'
                     )
 
             #Comparison snapshot
