@@ -71,11 +71,11 @@ def test_accessibility(test_obj):
                         False,
                         positive="",
                         negative=(
-                            f"New violation found on {violation['page']} - "
-                            f"ID: {violation['id']}, "
-                            f"Impact: {violation['impact']}, "
+                            f"New violation found on {violation['page']}page, "
+                            f"Violation_ID: {violation['id']}, "
+                            f"Impact_level: {violation['impact']}, "
                             f"Description: {violation['description']},"
-                            f"HTML: {violation['html']}"
+                            f"HTML_snippet: {violation['html']}"
                         ),
                         level='error'
                     )
