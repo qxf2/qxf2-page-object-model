@@ -229,7 +229,7 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                             {"status":"failed", "reason": "Exception occured"}}""")
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag, testname, api_url=base_url_conf.api_base_url):  # pylint: disable=redefined-outer-name
+def test_api_obj(interactivemode_flag, testname, api_url):  # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
     log_file = testname + '.log'
     try:
@@ -692,8 +692,8 @@ def pytest_addoption(parser):
                             default=base_url_conf.ui_base_url,
                             help="The url of the application")
         parser.addoption("--api_url",
-                            dest="url",
-                            default="https://cars-app.qxf2.com/",
+                            dest="api_url",
+                            default=base_url_conf.api_base_url,
                             help="The url of the api")
         parser.addoption("--testrail_flag",
                             dest="testrail_flag",
