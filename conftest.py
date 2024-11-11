@@ -8,7 +8,6 @@ external services (e.g., BrowserStack, SauceLabs, TestRail, Report Portal, etc).
 """
 
 import os
-import platform
 import sys
 import glob
 import shutil
@@ -23,35 +22,33 @@ from page_objects.PageFactory import PageFactory    # pylint: disable=import-err
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
 from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
 
-from conf.all_config import TestName, BaseURL, Browser, Platform, UITestConfig
-from conf.all_config import RemoteTestExecution, BrowserStack
-from conf.all_config import Reporting, TestRail, Tesults
+from conf.all_config import ConfigFactory
+from dataclasses import astuple
 
 load_dotenv()
 
 @pytest.fixture
-def uitestconfig(request, testname):
-    "Test run configuration"
-    # Test name & URL
-    test = TestName(name=testname) 
-    base_url = BaseURL(url=request.config.getoption("url"))
-    # Browser & Platform
-    browser = Browser(name=request.config.getoption("browser"),
-                             version=request.config.getoption("browser_version"))
-    platform = Platform(name=request.config.getoption("os_name"),
-                               version=request.config.getoption("os_version"))
-    # Remote test execution
-    remote_flag = request.config.getoption("remote_flag")
-    browserstack = BrowserStack(project_name=request.config.getoption("remote_project_name"),
-                                build_name=request.config.getoption("remote_build_name"))
-    remote_test_execution = RemoteTestExecution(remote_flag, browserstack)
-    # Reporting tools
-    testrail = TestRail(flag=request.config.getoption("testrail_flag"),
-                        test_run_id=request.config.getoption("test_run_id"))
-    tesults = Tesults(flag=request.config.getoption("tesults_flag"))
-    reporting = Reporting(testrail, tesults)
-    return UITestConfig(test, base_url, browser, platform, remote_test_execution, reporting)
+def config_factory(request):
+    "Config Factory fixture"
+    return ConfigFactory(request)
 
+@pytest.fixture
+def uitestconfig(config_factory):
+   config = config_factory.build_ui_config()
+   print(f"The tuple config is {ConfigFactory.config_as_tuple(config)}")
+   #return config_factory.build_ui_config()
+   return config
+    
+@pytest.fixture
+def apitestconfig(config_factory):
+    "API test config fixture"
+    return config_factory.build_api_config()
+
+@pytest.fixture
+def mobiletestconfig(config_factory):
+    "Mobile test config fixture"
+    return config_factory.build_mobile_config()
+    
 @pytest.fixture
 def test_obj(uitestconfig, 
              reportportal_service,
@@ -60,6 +57,7 @@ def test_obj(uitestconfig,
              testreporter):
     "Return an instance of Base Page that knows about the third party integrations"
     # Test, Browser & Platform
+    print(f"The UI testconfig is {astuple(uitestconfig)}")
     testname = uitestconfig.test.name
     base_url = uitestconfig.base_url.url
     browser = uitestconfig.browser.name[0]
@@ -179,12 +177,31 @@ def test_obj(uitestconfig,
             print(f"Selenium Manager requires administrator permissions to install Microsoft {browser} in Windows automatically ")
 
 @pytest.fixture
-def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity,     # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
-                    remote_flag, device_flag, testrail_flag, tesults_flag, test_run_id, app_name,  # pylint: disable=redefined-outer-name
-                    app_path, appium_version, interactivemode_flag, testname, remote_project_name, # pylint: disable=redefined-outer-name
-                    remote_build_name, orientation, testreporter):                # pylint: disable=redefined-outer-name
+def test_mobile_obj(mobiletestconfig, interactivemode_flag, testreporter):
     "Return an instance of Base Page that knows about the third party integrations"
     try:
+        testname = mobiletestconfig.test.name
+        mobile_os_name = mobiletestconfig.mobile_os.name
+        mobile_os_version = mobiletestconfig.mobile_os.version
+        device_name = mobiletestconfig.mobile_device.name
+        device_flag = mobiletestconfig.mobile_device.flag
+        app_package = mobiletestconfig.mobile_app.package
+        app_activity = mobiletestconfig.mobile_app.activity
+        remote_flag = mobiletestconfig.remote_test_execution.flag
+        remote_build_name = mobiletestconfig.remote_test_execution.browserstack.build_name
+        remote_project_name = mobiletestconfig.remote_test_execution.browserstack.project_name
+        tesults_flag = mobiletestconfig.reporting.tesults.flag
+        app_name = mobiletestconfig.mobile_app.name
+        app_path = mobiletestconfig.mobile_app.path
+        ud_id = mobiletestconfig.ios_config.ud_id
+        org_id = mobiletestconfig.ios_config.org_id
+        signing_id = mobiletestconfig.ios_config.signing_id
+        no_reset_flag = mobiletestconfig.mobile_app.no_reset_flag
+        orientation = mobiletestconfig.mobile_app.orientation
+        appium_version = mobiletestconfig.appium_config.version
+        test_run_id = mobiletestconfig.reporting.testrail.test_run_id
+        testrail_flag = mobiletestconfig.reporting.testrail.flag
+
 
         if interactivemode_flag.lower()=="y":
 
@@ -274,14 +291,16 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
                             {"status":"failed", "reason": "Exception occured"}}""")
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag, testname, api_url=base_url_conf.api_base_url):  # pylint: disable=redefined-outer-name
+def test_api_obj(interactivemode_flag, apitestconfig):  # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
+    api_url = apitestconfig.api_url.url
+    testname = apitestconfig.test.name
     log_file = testname + '.log'
     try:
         if interactivemode_flag.lower()=='y':
             api_url,session_flag = interactive_mode.ask_questions_api(api_url)
-            test_api_obj = APIPlayer(api_url,                                         # pylint: disable=redefined-outer-name
-                                      log_file_path=log_file)
+            test_api_obj = APIPlayer(api_url, # pylint: disable=redefined-outer-name
+                                     log_file_path=log_file)
         else:
             test_api_obj = APIPlayer(url=api_url,
                                       log_file_path=log_file)
@@ -661,6 +680,8 @@ def pytest_terminal_summary(terminalreporter):
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
     try:
+        metafunc.parameterize("uitestconfig", ConfigFactory.config_as_tuple(uitestconfig))
+        '''
         if 'browser' in metafunc.fixturenames:
             if metafunc.config.getoption("--remote_flag").lower() == 'y':
                 if metafunc.config.getoption("--browser") == ["all"]:
@@ -719,6 +740,7 @@ def pytest_generate_tests(metafunc):
                 else:
                     config_list_local = [(metafunc.config.getoption("--browser")[0], metafunc.config.getoption("--ver")[0])]
                     metafunc.parametrize("browser, browser_version", config_list_local)
+        '''
 
     except Exception as e:              # pylint: disable=broad-exception-caught
         print(f"Exception when trying to run test:{__file__}")
@@ -756,7 +778,7 @@ def pytest_addoption(parser):
                             dest="os_version",
                             action="append",
                             help="The operating system: xp, 7",
-                            default=[platform.uname()[2]])
+                            default=[])
         parser.addoption("--ver",
                             dest="browser_version",
                             action="append",
@@ -766,7 +788,7 @@ def pytest_addoption(parser):
                             dest="os_name",
                             action="append",
                             help="The operating system: Windows 7, Linux",
-                            default=[platform.uname()[0]])
+                            default=[])
         parser.addoption("--remote_project_name",
                             dest="remote_project_name",
                             help="The project name if its run in BrowserStack",
