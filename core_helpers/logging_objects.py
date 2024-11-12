@@ -12,7 +12,7 @@ class Logging_Objects:
         self.exceptions = []
 
     @staticmethod
-    def color_text(color, text):
+    def color_text(text, color ="red"):
         colors = {
             "red": "\033[91m",
             "green": "\033[92m",

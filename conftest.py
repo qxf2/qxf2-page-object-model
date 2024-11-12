@@ -125,15 +125,16 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         test_obj.teardown()
 
     except Exception as e:      # pylint: disable=broad-exception-caught
-        print(Logging_Objects.color_text("red",f"Exception when trying to run test:{__file__}"))
-        print(Logging_Objects.color_text("red",f"Python says:{str(e)}"))
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("lambda-status=error")
         elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("""browserstack_executor: {"action": "setSessionStatus",
                         "arguments": {"status":"failed", "reason": "Exception occured"}}""")
-        if browser == "edge":
-            print(Logging_Objects.color_text("red",f"Selenium Manager requires administrator permissions to install Microsoft {browser} in Windows automatically "))
+        if browser.lower() == "edge":
+            print(Logging_Objects.color_text("Selenium Manager requires administrator permissions"\
+                                        " to install Microsoft Edge in Windows automatically."))
 
 @pytest.fixture
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity,     # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
@@ -224,8 +225,8 @@ def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package,
         test_mobile_obj.teardown()
 
     except Exception as e:                      # pylint: disable=broad-exception-caught
-        print(Logging_Objects.color_text("red",f"Exception when trying to run test:{__file__}"))
-        print(Logging_Objects.color_text("red",f"Python says:{str(e)}"))
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             test_mobile_obj.execute_javascript("""browserstack_executor:
                             {"action": "setSessionStatus", "arguments":
@@ -246,8 +247,8 @@ def test_api_obj(interactivemode_flag, testname, api_url=base_url_conf.api_base_
         yield test_api_obj
 
     except Exception as e:                    # pylint: disable=broad-exception-caught
-        print(Logging_Objects.color_text("red",f"Exception when trying to run test:{__file__}"))
-        print(Logging_Objects.color_text("red",f"Python says:{str(e)}"))
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
 
 def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False):
     "Upload log file to provided BrowserStack session"
@@ -455,11 +456,11 @@ def reportportal_service(request):
             reportportal_pytest_service = request.node.config.py_test_service
 
     except Exception as e:                  # pylint: disable=broad-exception-caught
-        print(Logging_Objects.color_text("red",f"Exception when trying to run test:{__file__}"))
-        print(Logging_Objects.color_text("red",f"Python says:{str(e)}"))
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
         solution = "It looks like you are trying to use report portal to run your test."\
             "\nPlease make sure you have updated .env with the right credentials."
-        print(Logging_Objects.color_text("green",f"\nSOLUTION: {solution}\n"))
+        print(Logging_Objects.color_text(f"\nSOLUTION: {solution}\n", "green"))
 
     return reportportal_pytest_service
 
@@ -488,16 +489,15 @@ def pytest_sessionstart(session):
             try:
                 os.remove(consolidated_log_file)
             except OSError as error:
-                print(Logging_Objects.color_text("red",
-                        f"Error removing existing consolidated log file: {error}"))
+                print(Logging_Objects.color_text(
+                    f"Error removing existing consolidated log file: {error}"))
 
         # Delete all temporary log files if present
         for temp_log_file in glob.glob(os.path.join(source_directory, log_file_name)):
             try:
                 os.remove(temp_log_file)
             except OSError as error:
-                print(Logging_Objects.color_text("red",
-                        f"Error removing temporary log file: {error}"))
+                print(Logging_Objects.color_text(f"Error removing temporary log file: {error}"))
 
 def pytest_sessionfinish(session):
     """
@@ -524,14 +524,12 @@ def pytest_sessionfinish(session):
                             shutil.copyfileobj(source_file, final_log)
                         os.remove(file_name)
                     except FileNotFoundError as error:
-                        print(Logging_Objects.color_text("red",
-                                f"Temporary log file not found: {error}"))
+                        print(Logging_Objects.color_text(f"Temporary log file not found: {error}"))
                     except Exception as error:      # pylint: disable=broad-exception-caught
-                        print(Logging_Objects.color_text("red",
+                        print(Logging_Objects.color_text(
                                 f"Error processing the temporary log file: {error}"))
         except OSError as error:
-            print(Logging_Objects.color_text("red",
-                    f"Error processing consolidated log file: {error}"))
+            print(Logging_Objects.color_text(f"Error processing consolidated log file: {error}"))
 
 @pytest.hookimpl(trylast=True)
 def pytest_configure(config):
@@ -585,8 +583,8 @@ def pytest_configure(config):
         config._inicache["rp_launch"]= os.getenv('report_portal_launch')      # pylint: disable=protected-access
 
     except Exception as e:          # pylint: disable=broad-exception-caught
-        print(Logging_Objects.color_text("red",f"Exception when trying to run test:{__file__}"))
-        print(Logging_Objects.color_text("red",f"Python says:{str(e)}"))
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
 
     #Registering custom markers to supress warnings
     config.addinivalue_line("markers", "GUI: mark a test as part of the GUI regression suite.")
@@ -614,11 +612,11 @@ def pytest_terminal_summary(terminalreporter):
                 from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel
                 gpt_summary_generator.generate_gpt_summary()
     except Exception as e:                  # pylint: disable=broad-exception-caught
-        print(Logging_Objects.color_text("red",f"Exception when trying to run test:{__file__}"))
-        print(Logging_Objects.color_text("red",f"Python says:{str(e)}"))
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
         solution = "It looks like you are trying to use email pytest report to run your test." \
                    "\nPlease make sure you have updated .env with the right credentials ."
-        print(Logging_Objects.color_text("green",f"\nSOLUTION: {solution}\n"))
+        print(Logging_Objects.color_text(f"\nSOLUTION: {solution}\n","green"))
 
 
 def pytest_generate_tests(metafunc):
@@ -684,8 +682,8 @@ def pytest_generate_tests(metafunc):
                     metafunc.parametrize("browser, browser_version", config_list_local)
 
     except Exception as e:              # pylint: disable=broad-exception-caught
-        print(Logging_Objects.color_text("red",f"Exception when trying to run test:{__file__}"))
-        print(Logging_Objects.color_text("red",f"Python says:{str(e)}"))
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
 
 def pytest_addoption(parser):
     "Method to add the option to ini."
@@ -824,5 +822,5 @@ def pytest_addoption(parser):
                             help="Y or N. 'Y' if you want turn on element highlighter")
 
     except Exception as e:              # pylint: disable=broad-exception-caught
-        print(Logging_Objects.color_text("red",f"Exception when trying to run test:{__file__}"))
-        print(Logging_Objects.color_text("red",f"Python says:{str(e)}"))
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
