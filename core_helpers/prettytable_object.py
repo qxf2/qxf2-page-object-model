@@ -4,6 +4,7 @@ This tail made objects are used by pytest to print table output of failure summa
 """
 from abc import ABC, abstractmethod
 from prettytable.colortable import ColorTable, Theme, Themes
+from prettytable import PrettyTable
 
 #pylint: disable=too-few-public-methods
 class PrettyTableTheme(Themes):
@@ -13,14 +14,21 @@ class PrettyTableTheme(Themes):
                     horizontal_color="31",
                     junction_color="31")
 
-class SummaryTable(ABC):
-    "An abstract Summary Table object"
+class SummaryColorTable(ABC):
+    "An abstract Color Summary Table object"
     @abstractmethod
-    def print_table(self, values_dict: dict):
+    def print_table(self, values_dict: dict) -> None:
         "Print the table"
         return
 
-class FailureSummaryTable(SummaryTable):
+class SummaryStringTable(ABC):
+    "An abstract String Summary Table object"
+    @abstractmethod
+    def return_table_string(self, values_dict:dict) -> str:
+        "Return the table as a string"
+        return
+
+class FailureSummaryTable(SummaryColorTable):
     "Failure Summary Table to be printed in the pytest result summary"
     def __init__(self, title="Consolidated Failures") -> None:
         """
@@ -50,24 +58,26 @@ class FailureSummaryTable(SummaryTable):
             print("Unable to print prettytable failure summary")
             raise err
 
-class ConfigSummaryTable(SummaryTable):
+class ConfigSummaryTable(SummaryStringTable):
     "Configuration summary"
     def __init__(self, title="Test Configuration") -> None:
         """
         Initializer
         """
         # Create a pretty table to print config values
-        self.table = ColorTable(theme=PrettyTableTheme.PASTEL)
+        self.table = PrettyTable()
         self.table.title = title
         self.table.field_names = ["Parameters", "Values"]
         self.table.align = "l" # <- Align the content of the table left
         self.table.padding_width = 10
 
-    def print_table(self, values_dict: dict) -> None:
+    def return_table_string(self, values_dict: dict) -> None:
         """
-        Print the configuration summary
+        Return the Config Summary table as a string
         :param:
             :values_dict: A dict with config values
+        :return:
+            :self.table.get_string(): A string representation of the table
         """
         try: # pylint: disable=too-many-nested-blocks
             for key, value in values_dict.items():
@@ -89,9 +99,7 @@ class ConfigSummaryTable(SummaryTable):
                                 self.table.add_row([sub_key, sub_value])
                             else:
                                 self.table.add_row([sub_key, ",".join(sub_value)])
-            print("\n")
-            print(self.table)
-            print("\n")
+            return "\n" + self.table.get_string() # <- Add new line for better logging output
         except Exception as err: # pylint: disable=broad-except
-            print("Unable to print prettytable failure summary")
+            print("Unable to create string config table")
             raise err

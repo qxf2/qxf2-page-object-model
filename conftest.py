@@ -22,23 +22,25 @@ from page_objects.PageFactory import PageFactory    # pylint: disable=import-err
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
 from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
 
-from conf.all_config import ConfigFactory
-from dataclasses import astuple
+from conf.config_factory import ConfigFactory
 
 load_dotenv()
 
 @pytest.fixture
-def config_factory(request):
+def testname(request):
+    "pytest fixture for testname"
+    name_of_test = request.node.name.split('[')[0]
+    return name_of_test
+
+@pytest.fixture
+def config_factory(request, testname):
     "Config Factory fixture"
-    return ConfigFactory(request)
+    return ConfigFactory(testname, request.config)
 
 @pytest.fixture
 def uitestconfig(config_factory):
-   config = config_factory.build_ui_config()
-   print(f"The tuple config is {ConfigFactory.config_as_tuple(config)}")
-   #return config_factory.build_ui_config()
-   return config
-    
+   return config_factory.build_ui_config()
+ 
 @pytest.fixture
 def apitestconfig(config_factory):
     "API test config fixture"
@@ -57,11 +59,10 @@ def test_obj(uitestconfig,
              testreporter):
     "Return an instance of Base Page that knows about the third party integrations"
     # Test, Browser & Platform
-    print(f"The UI testconfig is {astuple(uitestconfig)}")
     testname = uitestconfig.test.name
     base_url = uitestconfig.base_url.url
-    browser = uitestconfig.browser.name[0]
-    browser_version = uitestconfig.browser.version[0]
+    browser = uitestconfig.browser.name
+    browser_version = uitestconfig.browser.version
     os_name = uitestconfig.platform.name
     os_version = uitestconfig.platform.version
     # Remote test execution
@@ -86,6 +87,9 @@ def test_obj(uitestconfig,
         #Setup and register a driver
         test_obj.register_driver(remote_flag, os_name, os_version, browser, browser_version,
                                 remote_project_name, remote_build_name, testname)
+
+        test_obj.write(f"Starting UI Test - {testname} Execution:")
+        test_obj.write(uitestconfig)
 
         #Set highlighter
         if highlighter_flag.lower()=='y':
@@ -219,6 +223,9 @@ def test_mobile_obj(mobiletestconfig, interactivemode_flag, testreporter):
                         app_path, ud_id,org_id, signing_id, no_reset_flag, appium_version,
                         remote_project_name, remote_build_name, orientation)
 
+        test_mobile_obj.write(f"Starting Mobile test - {testname} Execution:")
+        test_mobile_obj.write(mobiletestconfig)
+
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
@@ -298,12 +305,12 @@ def test_api_obj(interactivemode_flag, apitestconfig):  # pylint: disable=redefi
     log_file = testname + '.log'
     try:
         if interactivemode_flag.lower()=='y':
-            api_url,session_flag = interactive_mode.ask_questions_api(api_url)
-            test_api_obj = APIPlayer(api_url, # pylint: disable=redefined-outer-name
-                                     log_file_path=log_file)
-        else:
-            test_api_obj = APIPlayer(url=api_url,
-                                      log_file_path=log_file)
+            api_url = interactive_mode.ask_questions_api(api_url)
+
+        test_api_obj = APIPlayer(url=api_url,
+                                 log_file_path=log_file)
+        test_api_obj.write(f"Start of API Test - {testname} execution:")
+        test_api_obj.write(apitestconfig)
         yield test_api_obj
 
     except Exception as e:                    # pylint: disable=broad-exception-caught
@@ -350,47 +357,9 @@ def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False)
                 " to BrowserStack.", "details": str(e)}
 
 @pytest.fixture
-def testname(request):
-    "pytest fixture for testname"
-    name_of_test = request.node.name
-    name_of_test = name_of_test.split('[')[0]
-
-    return name_of_test
-
-@pytest.fixture
 def testreporter(request):
     "pytest summary reporter"
     return request.config.pluginmanager.get_plugin("terminalreporter")
-
-@pytest.fixture
-def browser(request):
-    "pytest fixture for browser"
-    return request.config.getoption("--browser")
-
-@pytest.fixture
-def base_url(request):
-    "pytest fixture for base url"
-    return request.config.getoption("--app_url")
-
-@pytest.fixture
-def api_url(request):
-    "pytest fixture for base url"
-    return request.config.getoption("--api_url")
-
-@pytest.fixture
-def test_run_id(request):
-    "pytest fixture for test run id"
-    return request.config.getoption("--test_run_id")
-
-@pytest.fixture
-def testrail_flag(request):
-    "pytest fixture for test rail flag"
-    return request.config.getoption("--testrail_flag")
-
-@pytest.fixture
-def remote_flag(request):
-    "pytest fixture for browserstack/sauce flag"
-    return request.config.getoption("--remote_flag")
 
 @pytest.fixture
 def highlighter_flag(request):
@@ -398,109 +367,14 @@ def highlighter_flag(request):
     return request.config.getoption("--highlighter_flag")
 
 @pytest.fixture
-def browser_version(request):
-    "pytest fixture for browser version"
-    return request.config.getoption("--ver")
-
-@pytest.fixture
-def os_name(request):
-    "pytest fixture for os_name"
-    return request.config.getoption("--os_name")
-
-@pytest.fixture
-def os_version(request):
-    "pytest fixture for os version"
-    return request.config.getoption("--os_version")
-
-@pytest.fixture
-def remote_project_name(request):
-    "pytest fixture for browserStack project name"
-    return request.config.getoption("--remote_project_name")
-
-@pytest.fixture
-def remote_build_name(request):
-    "pytest fixture for browserStack build name"
-    return request.config.getoption("--remote_build_name")
-
-@pytest.fixture
 def slack_flag(request):
     "pytest fixture for sending reports on slack"
     return request.config.getoption("--slack_flag")
 
 @pytest.fixture
-def tesults_flag(request):
-    "pytest fixture for sending results to tesults"
-    return request.config.getoption("--tesults")
-
-@pytest.fixture
-def mobile_os_name(request):
-    "pytest fixture for mobile os name"
-    return request.config.getoption("--mobile_os_name")
-
-@pytest.fixture
-def mobile_os_version(request):
-    "pytest fixture for mobile os version"
-    return request.config.getoption("--mobile_os_version")
-
-@pytest.fixture
-def device_name(request):
-    "pytest fixture for device name"
-    return request.config.getoption("--device_name")
-
-@pytest.fixture
-def app_package(request):
-    "pytest fixture for app package"
-    return request.config.getoption("--app_package")
-
-@pytest.fixture
-def app_activity(request):
-    "pytest fixture for app activity"
-    return request.config.getoption("--app_activity")
-
-@pytest.fixture
-def device_flag(request):
-    "pytest fixture for device flag"
-    return request.config.getoption("--device_flag")
-
-@pytest.fixture
 def email_pytest_report(request):
     "pytest fixture for device flag"
     return request.config.getoption("--email_pytest_report")
-
-@pytest.fixture
-def app_name(request):
-    "pytest fixture for app name"
-    return request.config.getoption("--app_name")
-
-@pytest.fixture
-def ud_id(request):
-    "pytest fixture for iOS udid"
-    return request.config.getoption("--ud_id")
-
-@pytest.fixture
-def org_id(request):
-    "pytest fixture for iOS team id"
-    return request.config.getoption("--org_id")
-
-@pytest.fixture
-def signing_id(request):
-    "pytest fixture for iOS signing id"
-    return request.config.getoption("--signing_id")
-
-@pytest.fixture
-def appium_version(request):
-    "pytest fixture for app name"
-    return request.config.getoption("--appium_version")
-
-@pytest.fixture
-def no_reset_flag(request):
-    "pytest fixture for no_reset_flag"
-    return request.config.getoption("--no_reset_flag")
-
-@pytest.fixture
-def app_path(request):
-    "pytest fixture for app path"
-    return request.config.getoption("--app_path")
 
 @pytest.fixture
 def interactivemode_flag(request):
@@ -528,11 +402,6 @@ def reportportal_service(request):
 def summary_flag(request):
     "pytest fixture for generating summary using LLM"
     return request.config.getoption("--summary")
-
-@pytest.fixture
-def orientation(request):
-    "pytest fixture for device orientation"
-    return request.config.getoption("--orientation")
 
 def pytest_sessionstart(session):
     """
@@ -592,37 +461,6 @@ def pytest_sessionfinish(session):
 @pytest.hookimpl(trylast=True)
 def pytest_configure(config):
     "Sets the launch name based on the marker selected."
-    browser = config.getoption("browser")             # pylint: disable=redefined-outer-name
-    version = config.getoption("browser_version")
-    os_name = config.getoption("os_name")             # pylint: disable=redefined-outer-name
-    os_version = config.getoption("os_version")       # pylint: disable=redefined-outer-name
-
-    # Check if version is specified without a browser
-    if version and not browser:
-        raise ValueError("You have specified a browser version without setting a browser." \
-                         "Please use the --browser option to specify the browser.")
-
-    if os_version and not os_name:
-        raise ValueError("You have specified an OS version without setting an OS." \
-                         "Please use the --os_name option to specify the OS.")
-
-    default_os_versions = browser_os_name_conf.default_os_versions
-
-    # Set default versions for browsers that don't have versions specified
-    if browser and not version:
-        version = ["latest"] * len(browser)
-
-    if os_name and not os_version:
-        for os_entry in os_name:
-            if os_entry.lower() in default_os_versions:
-                os_version.append(default_os_versions[os_entry.lower()])
-            else:
-                raise ValueError(f"No default version available for browser '{os_entry}'."\
-                                 " Please specify a version using --ver.")
-
-    # Assign back the modified version list to config (in case it was updated)
-    config.option.browser_version = version
-
     global if_reportportal   # pylint: disable=global-variable-undefined
     if_reportportal =config.getoption('--reportportal')
 
@@ -680,68 +518,14 @@ def pytest_terminal_summary(terminalreporter):
 def pytest_generate_tests(metafunc):
     "test generator function to run tests across different parameters"
     try:
-        metafunc.parameterize("uitestconfig", ConfigFactory.config_as_tuple(uitestconfig))
-        '''
-        if 'browser' in metafunc.fixturenames:
-            if metafunc.config.getoption("--remote_flag").lower() == 'y':
-                if metafunc.config.getoption("--browser") == ["all"]:
-                    metafunc.parametrize("browser,browser_version,os_name,os_version",
-                                        browser_os_name_conf.cross_browser_cross_platform_config)
-                elif not metafunc.config.getoption("--browser") or \
-                    not metafunc.config.getoption("--ver") or \
-                    not metafunc.config.getoption("--os_name") or \
-                    not metafunc.config.getoption("--os_version"):
-                    print("Feedback: Missing command-line arguments." \
-                          " Falling back to default values.")
-                    # Use default values from the default list if not provided
-                    default_config_list = browser_os_name_conf.default_config_list
-                    config_list = []
-                    if not metafunc.config.getoption("--browser"):
-                        config_list.append(default_config_list[0][0])
-                    else:
-                        config_list.append(metafunc.config.getoption("--browser")[0])
-
-                    if not metafunc.config.getoption("--ver"):
-                        config_list.append(default_config_list[0][1])
-                    else:
-                        config_list.append(metafunc.config.getoption("--ver")[0])
-
-                    if not metafunc.config.getoption("--os_name"):
-                        config_list.append(default_config_list[0][2])
-                    else:
-                        config_list.append(metafunc.config.getoption("--os_name")[0])
-
-                    if not metafunc.config.getoption("--os_version"):
-                        config_list.append(default_config_list[0][3])
-                    else:
-                        config_list.append(metafunc.config.getoption("--os_version")[0])
-
-                    metafunc.parametrize("browser, browser_version, os_name, os_version",
-                                        [tuple(config_list)])
-                else:
-                    config_list = [(metafunc.config.getoption("--browser")[0],
-                                    metafunc.config.getoption("--ver")[0],
-                                    metafunc.config.getoption("--os_name")[0],
-                                    metafunc.config.getoption("--os_version")[0])]
-                    metafunc.parametrize("browser,browser_version,os_name,os_version",
-                                        config_list)
-            if metafunc.config.getoption("--remote_flag").lower() !='y':
-                if metafunc.config.getoption("--browser") == ["all"]:
-                    metafunc.config.option.browser = browser_os_name_conf.local_browsers
-                    metafunc.parametrize("browser", metafunc.config.option.browser)
-                elif metafunc.config.getoption("--browser") == [] and metafunc.config.getoption("--ver") == []:
-                    metafunc.parametrize("browser",browser_os_name_conf.default_browser)
-                elif metafunc.config.getoption("--browser") != [] and metafunc.config.getoption("--ver") == []:
-                    config_list_local = [(metafunc.config.getoption("--browser")[0])]
-                    metafunc.parametrize("browser", config_list_local)
-                elif metafunc.config.getoption("--browser") == [] and metafunc.config.getoption("--ver") != []:
-                    config_list_local = [(browser_os_name_conf.default_browser[0], metafunc.config.getoption("--ver")[0])]
-                    metafunc.parametrize("browser, browser_version", config_list_local)
-                else:
-                    config_list_local = [(metafunc.config.getoption("--browser")[0], metafunc.config.getoption("--ver")[0])]
-                    metafunc.parametrize("browser, browser_version", config_list_local)
-        '''
-
+        if metafunc.config.getoption("browser"):
+            if len(metafunc.config.getoption("browser")) > 1 or \
+            metafunc.config.getoption("browser")[0].lower() == "all":
+                if "uitestconfig" in metafunc.fixturenames:
+                    testname = metafunc.definition.name
+                    config_factory = ConfigFactory(testname, metafunc.config)
+                    configs = config_factory.build_iterative_ui_config()
+                    metafunc.parametrize("uitestconfig", configs)
     except Exception as e:              # pylint: disable=broad-exception-caught
         print(f"Exception when trying to run test:{__file__}")
         print(f"Python says:{str(e)}")
@@ -783,7 +567,7 @@ def pytest_addoption(parser):
                             dest="browser_version",
                             action="append",
                             help="The version of the browser: a whole number",
-                            default=[])
+                            default="latest")
         parser.addoption("--os_name",
                             dest="os_name",
                             action="append",
