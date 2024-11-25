@@ -21,6 +21,7 @@ from endpoints.api_player import APIPlayer        # pylint: disable=import-error
 from page_objects.PageFactory import PageFactory    # pylint: disable=import-error wrong-import-position
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
 from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
+from core_helpers.logging_objects import Logging_Objects  # pylint: disable=import-error wrong-import-position
 
 from conf.config_factory import ConfigFactory
 
@@ -98,11 +99,11 @@ def test_obj(uitestconfig,
         #Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_obj.write('\033[91m'+"\n\nTestRail Integration Exception:"\
+                test_obj.write("\n\nTestRail Integration Exception:"\
                     " It looks like you are trying to use TestRail Integration without"\
                     " providing test run id. \nPlease provide a valid test run id along"\
                     " with test run command using --test_run_id and try again."\
-                    " for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
+                    " for eg: pytest --testrail_flag Y --test_run_id 100\n", level='critical')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_obj.register_testrail()
@@ -139,7 +140,8 @@ def test_obj(uitestconfig,
             else:
                 # Handle the case where the response is assumed to be a response object
                 if response.status_code == 200:
-                    test_obj.write("Log file uploaded to BrowserStack session successfully.")
+                    test_obj.write("Log file uploaded to BrowserStack session successfully.",
+                                   level='success')
                 else:
                     test_obj.write(f"Failed to upload log file. Status code:{response.status_code}",
                                    level='error')
@@ -147,7 +149,7 @@ def test_obj(uitestconfig,
 
             #Update test run status to respective BrowserStack session
             if test_obj.pass_counter == test_obj.result_counter:
-                test_obj.write("Test Status: PASS")
+                test_obj.write("Test Status: PASS",level='success')
                 result_flag = test_obj.execute_javascript("""browserstack_executor:
                         {"action": "setSessionStatus",
                         "arguments": {"status":"passed", "reason": "All test cases passed"}}""")
@@ -170,15 +172,16 @@ def test_obj(uitestconfig,
         test_obj.teardown()
 
     except Exception as e:      # pylint: disable=broad-exception-caught
-        print(f"Exception when trying to run test:{__file__}")
-        print(f"Python says:{str(e)}")
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'LT' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("lambda-status=error")
         elif os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             test_obj.execute_javascript("""browserstack_executor: {"action": "setSessionStatus",
                         "arguments": {"status":"failed", "reason": "Exception occured"}}""")
-        if browser == "edge":
-            print(f"Selenium Manager requires administrator permissions to install Microsoft {browser} in Windows automatically ")
+        if browser.lower() == "edge":
+            print(Logging_Objects.color_text("Selenium Manager requires administrator permissions"\
+                                        " to install Microsoft Edge in Windows automatically."))
 
 @pytest.fixture
 def test_mobile_obj(mobiletestconfig, interactivemode_flag, testreporter):
@@ -229,11 +232,11 @@ def test_mobile_obj(mobiletestconfig, interactivemode_flag, testreporter):
         #3. Setup TestRail reporting
         if testrail_flag.lower()=='y':
             if test_run_id is None:
-                test_mobile_obj.write('\033[91m'+"\n\nTestRail Integration Exception: "\
+                test_mobile_obj.write("\n\nTestRail Integration Exception: "\
                     "It looks like you are trying to use TestRail Integration "\
                     "without providing test run id. \nPlease provide a valid test run id "\
                     "along with test run command using --test_run_id and try again."\
-                    " for eg: pytest --testrail_flag Y --test_run_id 100\n"+'\033[0m')
+                    " for eg: pytest --testrail_flag Y --test_run_id 100\n",level='critical')
                 testrail_flag = 'N'
             if test_run_id is not None:
                 test_mobile_obj.register_testrail()
@@ -262,14 +265,15 @@ def test_mobile_obj(mobiletestconfig, interactivemode_flag, testreporter):
             else:
                 # Handle the case where the response is assumed to be a response object
                 if response.status_code == 200:
-                    test_mobile_obj.write("Log file uploaded to BrowserStack session successfully.")
+                    test_mobile_obj.write("Log file uploaded to BrowserStack session successfully.",
+                                          level='success')
                 else:
                     test_mobile_obj.write("Failed to upload log file. "\
                                           f"Status code: {response.status_code}",level='error')
                     test_mobile_obj.write(response.text,level='error')
             #Update test run status to respective BrowserStack session
             if test_mobile_obj.pass_counter == test_mobile_obj.result_counter:
-                test_mobile_obj.write("Test Status: PASS")
+                test_mobile_obj.write("Test Status: PASS",level='success')
                 result_flag = test_mobile_obj.execute_javascript("""browserstack_executor:
                                 {"action": "setSessionStatus", "arguments": {"status":"passed",
                                 "reason": "All test cases passed"}}""")
@@ -290,32 +294,32 @@ def test_mobile_obj(mobiletestconfig, interactivemode_flag, testreporter):
         test_mobile_obj.teardown()
 
     except Exception as e:                      # pylint: disable=broad-exception-caught
-        print(f"Exception when trying to run test:{__file__}")
-        print(f"Python says:{str(e)}")
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
         if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
             test_mobile_obj.execute_javascript("""browserstack_executor:
                             {"action": "setSessionStatus", "arguments":
                             {"status":"failed", "reason": "Exception occured"}}""")
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag, apitestconfig):  # pylint: disable=redefined-outer-name
+def test_api_obj(interactivemode_flag, testname, api_url=base_url_conf.api_base_url):  # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
     api_url = apitestconfig.api_url.url
     testname = apitestconfig.test.name
     log_file = testname + '.log'
     try:
         if interactivemode_flag.lower()=='y':
-            api_url = interactive_mode.ask_questions_api(api_url)
-
-        test_api_obj = APIPlayer(url=api_url,
-                                 log_file_path=log_file)
-        test_api_obj.write(f"Start of API Test - {testname} execution:")
-        test_api_obj.write(apitestconfig)
+            api_url,session_flag = interactive_mode.ask_questions_api(api_url)
+            test_api_obj = APIPlayer(api_url,                                         # pylint: disable=redefined-outer-name
+                                      log_file_path=log_file)
+        else:
+            test_api_obj = APIPlayer(url=api_url,
+                                      log_file_path=log_file)
         yield test_api_obj
 
     except Exception as e:                    # pylint: disable=broad-exception-caught
-        print(f"Exception when trying to run test:{__file__}")
-        print(f"Python says:{str(e)}")
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
 
 def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False):
     "Upload log file to provided BrowserStack session"
@@ -390,11 +394,11 @@ def reportportal_service(request):
             reportportal_pytest_service = request.node.config.py_test_service
 
     except Exception as e:                  # pylint: disable=broad-exception-caught
-        print(f"Exception when trying to run test:{__file__}")
-        print(f"Python says:{str(e)}")
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
         solution = "It looks like you are trying to use report portal to run your test."\
             "\nPlease make sure you have updated .env with the right credentials."
-        print(f"\033[92m\nSOLUTION: {solution}\n\033[0m")
+        print(Logging_Objects.color_text(f"\nSOLUTION: {solution}\n", "green"))
 
     return reportportal_pytest_service
 
@@ -418,14 +422,15 @@ def pytest_sessionstart(session):
             try:
                 os.remove(consolidated_log_file)
             except OSError as error:
-                print(f"Error removing existing consolidated log file: {error}")
+                print(Logging_Objects.color_text(
+                    f"Error removing existing consolidated log file: {error}"))
 
         # Delete all temporary log files if present
         for temp_log_file in glob.glob(os.path.join(source_directory, log_file_name)):
             try:
                 os.remove(temp_log_file)
             except OSError as error:
-                print(f"Error removing temporary log file: {error}")
+                print(Logging_Objects.color_text(f"Error removing temporary log file: {error}"))
 
 def pytest_sessionfinish(session):
     """
@@ -452,11 +457,12 @@ def pytest_sessionfinish(session):
                             shutil.copyfileobj(source_file, final_log)
                         os.remove(file_name)
                     except FileNotFoundError as error:
-                        print(f"Temporary log file not found: {error}")
+                        print(Logging_Objects.color_text(f"Temporary log file not found: {error}"))
                     except Exception as error:      # pylint: disable=broad-exception-caught
-                        print(f"Error processing the temporary log file: {error}")
+                        print(Logging_Objects.color_text(
+                                f"Error processing the temporary log file: {error}"))
         except OSError as error:
-            print(f"Error processing consolidated log file: {error}")
+            print(Logging_Objects.color_text(f"Error processing consolidated log file: {error}"))
 
 @pytest.hookimpl(trylast=True)
 def pytest_configure(config):
@@ -479,8 +485,8 @@ def pytest_configure(config):
         config._inicache["rp_launch"]= os.getenv('report_portal_launch')      # pylint: disable=protected-access
 
     except Exception as e:          # pylint: disable=broad-exception-caught
-        print(f"Exception when trying to run test:{__file__}")
-        print(f"Python says:{str(e)}")
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
 
     #Registering custom markers to supress warnings
     config.addinivalue_line("markers", "GUI: mark a test as part of the GUI regression suite.")
@@ -508,11 +514,11 @@ def pytest_terminal_summary(terminalreporter):
                 from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel
                 gpt_summary_generator.generate_gpt_summary()
     except Exception as e:                  # pylint: disable=broad-exception-caught
-        print(f"Exception when trying to run test:{__file__}")
-        print(f"Python says:{str(e)}")
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
         solution = "It looks like you are trying to use email pytest report to run your test." \
                    "\nPlease make sure you have updated .env with the right credentials ."
-        print(f"\033[92m\nSOLUTION: {solution}\n\033[0m")
+        print(Logging_Objects.color_text(f"\nSOLUTION: {solution}\n","green"))
 
 
 def pytest_generate_tests(metafunc):
@@ -527,8 +533,8 @@ def pytest_generate_tests(metafunc):
                     configs = config_factory.build_iterative_ui_config()
                     metafunc.parametrize("uitestconfig", configs)
     except Exception as e:              # pylint: disable=broad-exception-caught
-        print(f"Exception when trying to run test:{__file__}")
-        print(f"Python says:{str(e)}")
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
 
 def pytest_addoption(parser):
     "Method to add the option to ini."
@@ -543,8 +549,8 @@ def pytest_addoption(parser):
                             default=base_url_conf.ui_base_url,
                             help="The url of the application")
         parser.addoption("--api_url",
-                            dest="url",
-                            default="https://cars-app.qxf2.com/",
+                            dest="api_url",
+                            default=base_url_conf.api_base_url,
                             help="The url of the api")
         parser.addoption("--testrail_flag",
                             dest="testrail_flag",
@@ -667,5 +673,5 @@ def pytest_addoption(parser):
                             help="Y or N. 'Y' if you want turn on element highlighter")
 
     except Exception as e:              # pylint: disable=broad-exception-caught
-        print(f"Exception when trying to run test:{__file__}")
-        print(f"Python says:{str(e)}")
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
