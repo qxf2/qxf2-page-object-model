@@ -14,7 +14,7 @@ class CarsAPIEndpoints(BaseAPI):
         "Adds a new car"
         try:
             url = self.cars_url('/add')
-            json_response = self.post(url,json=data,headers=headers)
+            json_response = self.make_request(method="post",url=url,json=data,headers=headers)
         except Exception as err: # pylint: disable=broad-exception-caught
             print(f"Python says: {err}")
             json_response = None
@@ -27,7 +27,7 @@ class CarsAPIEndpoints(BaseAPI):
         "gets list of cars"
         try:
             url = self.cars_url()
-            json_response = self.get(url,headers=headers)
+            json_response = self.make_request(method="get",url=url,headers=headers)
         except Exception as err: # pylint: disable=broad-exception-caught
             print(f"Python says: {err}")
             json_response = None
