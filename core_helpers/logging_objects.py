@@ -11,6 +11,19 @@ class Logging_Objects:
         self.msg_list = []
         self.exceptions = []
 
+    @staticmethod
+    def color_text(text, color ="red"):
+        colors = {
+            "red": "\033[91m",
+            "green": "\033[92m",
+            "yellow": "\033[93m",
+            "blue": "\033[94m",
+            "magenta": "\033[95m",
+            "cyan": "\033[96m",
+            "reset": "\033[0m"
+        }
+        return f"{colors.get(color, colors['reset'])}{text}{colors['reset']}"
+
     def write_test_summary(self):
         "Print out a useful, human readable summary"
         if self.result_counter==self.pass_counter:

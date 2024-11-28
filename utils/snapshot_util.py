@@ -63,12 +63,11 @@ class Snapshotutil(Snapshot):
                     for violation in saved_node['any']:
                         for related in violation['relatedNodes']:
                             existing_html_elements.add(related['html'])
-        return existing_html_elements
 
-    def compare_violations(self, new_violations, existing_html_elements, page):
-        "Compares new violations with the existing HTML elements"
+        # Set to track printed elements
         new_violation_details = []
 
+        # Compare new violations and add new violation HTML elements not in the snapshot
         for new_item in new_violations:
             for new_node in new_item['nodes']:
                 if new_node['any']:
