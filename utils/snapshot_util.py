@@ -13,7 +13,7 @@ class Snapshotutil(Snapshot):
                  allow_snapshot_deletion=False,
                  snapshot_dir=None):
         if snapshot_dir is None:
-            snapshot_dir = conf.snapshot_dir_conf.snapshot_dir  
+            snapshot_dir = conf.snapshot_dir_conf.snapshot_dir
         super().__init__(snapshot_update, allow_snapshot_deletion, snapshot_dir)
         super().__init__(snapshot_update, allow_snapshot_deletion, snapshot_dir)
 
@@ -63,7 +63,10 @@ class Snapshotutil(Snapshot):
                     for violation in saved_node['any']:
                         for related in violation['relatedNodes']:
                             existing_html_elements.add(related['html'])
+        return existing_html_elements
 
+    def compare_violations(self, new_violations, existing_html_elements, page):
+        "Compares new violations with the existing HTML elements"
         # Set to track printed elements
         new_violation_details = []
 

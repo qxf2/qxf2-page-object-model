@@ -62,7 +62,8 @@ def test_accessibility(test_obj):
                 test_obj.log_result(
                     True,  # Treat as passed since this is expected behavior
                     positive=(
-                        f"No existing snapshot was found for {page}. A new snapshot has been created. "
+                        f"No existing snapshot was found for {page}."
+                        "A new snapshot has been created in ../conf/snapshot dir"
                         "Please review the snapshot for violations before running the test again."
                     ),
                     negative="",
@@ -71,18 +72,18 @@ def test_accessibility(test_obj):
                 continue
 
             #Formating the violation result and saved snapshot to json
-            current_violations_json = json.dumps(current_violations, 
-                                                 ensure_ascii=False, 
+            current_violations_json = json.dumps(current_violations,
+                                                 ensure_ascii=False,
                                                  separators=(',', ':'))
-            existing_snapshot_json = json.dumps(existing_snapshot, 
-                                                ensure_ascii=False, 
+            existing_snapshot_json = json.dumps(existing_snapshot,
+                                                ensure_ascii=False,
                                                 separators=(',', ':'))
 
             #Check if there are new violations
             new_violation = snapshot_util.find_new_violations(current_violations, existing_snapshot)
             if new_violation:
-                new_violation_detail = snapshot_util.get_new_violations(current_violations_json, 
-                                                                        existing_snapshot_json, 
+                new_violation_detail = snapshot_util.get_new_violations(current_violations_json,
+                                                                        existing_snapshot_json,
                                                                         page)
                 # Write violations to file using the log_violations_to_file method
                 snapshot_util.log_violations_to_file(new_violation_detail, violations_log_path)
