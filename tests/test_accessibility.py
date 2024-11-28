@@ -103,7 +103,7 @@ def test_accessibility(test_obj):
                         negative=(
                             f"{violation_message[:50]}..."
                             "Complete violation output is saved in"
-                            "../conf/snapshot/new_violations_record.txt"
+                            "../conf/new_violations_record.txt"
                         ),
                         level='info'
                     )
