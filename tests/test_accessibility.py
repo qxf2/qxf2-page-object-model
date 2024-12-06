@@ -11,6 +11,7 @@ import json
 import pytest
 from utils.snapshot_util import Snapshotutil
 from page_objects.PageFactory import PageFactory
+import conf.snapshot_dir_conf
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.stdout.reconfigure(encoding='utf-8')
 
@@ -42,12 +43,7 @@ def test_accessibility(test_obj):
             #Extract only the violations section
             current_violations = axe_result.get('violations', [])
             #Snapshot file path to load
-            snapshot_dir = os.path.join(
-                os.path.dirname(os.path.abspath(__file__)),
-                '..',
-                'conf',
-                'snapshot'
-            )
+            snapshot_dir = conf.snapshot_dir_conf.snapshot_dir
             snapshot_file_path = snapshot_util.get_snapshot_path(snapshot_dir, page)
 
             if not os.path.exists(snapshot_dir):
@@ -102,12 +98,11 @@ def test_accessibility(test_obj):
                         False,
                         positive="",
                         negative=(
-                            f"{violation_message[:50]}..."
+                            f"{violation_message[:80]}..."
                             "Complete violation output is saved in"
                             "../conf/new_violations_record.txt"
                         ),
-                        level='info'
-                    )
+                        level='debug')
 
             #Comparison snapshot
             if current_violations_json != existing_snapshot_json:
