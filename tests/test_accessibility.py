@@ -47,9 +47,8 @@ def test_accessibility(test_obj):
             #If snapshot does not exist, create a new one
             if existing_snapshot is None:
                 snapshot_util.save_snapshot(snapshot_file_path, current_violations)
-                # Re-load the snapshot after saving it so the comparison can happen
                 test_obj.log_result(
-                    True,  # Treat as passed since this is expected behavior
+                    True,
                     positive=(
                         f"No existing snapshot was found for {page}."
                         "A new snapshot has been created in ../conf/snapshot dir"

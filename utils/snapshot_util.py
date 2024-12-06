@@ -129,7 +129,7 @@ class Snapshotutil(Snapshot):
         existing_snapshot = self.load_snapshot(snapshot_file_path)
 
         return existing_snapshot, snapshot_file_path
-    
+
     def compare_violation(self, current_violations, existing_snapshot, page, log_path):
         "Compare current violations against the existing snapshot."
         current_violations_json = json.dumps(current_violations,
