@@ -26,14 +26,12 @@ def test_accessibility(test_obj):
 
         #Create an instance of the Snapshotutil class
         snapshot_util = Snapshotutil()
-
         # Set up the violations log file
-        log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'conf')
-        violations_log_path = snapshot_util.initialize_violations_log(log_dir)
+        violations_log_path = snapshot_util.initialize_violations_log()
+        snapshot_dir = conf.snapshot_dir_conf.snapshot_dir
 
         #Get all pages
         page_names = PageFactory.get_all_page_names()
-
         for page in page_names:
             test_obj = PageFactory.get_page_object(page,base_url=test_obj.base_url)
             #Inject Axe in every page
@@ -43,13 +41,8 @@ def test_accessibility(test_obj):
             #Extract only the violations section
             current_violations = axe_result.get('violations', [])
             #Snapshot file path to load
-            snapshot_dir = conf.snapshot_dir_conf.snapshot_dir
-            snapshot_file_path = snapshot_util.get_snapshot_path(snapshot_dir, page)
-
-            if not os.path.exists(snapshot_dir):
-                os.makedirs(snapshot_dir)
-            # Load the existing snapshot
-            existing_snapshot = snapshot_util.load_snapshot(snapshot_file_path)
+            existing_snapshot, snapshot_file_path = snapshot_util.initialize_snapshot(snapshot_dir,
+                                                                                      page)
 
             #If snapshot does not exist, create a new one
             if existing_snapshot is None:
@@ -67,48 +60,28 @@ def test_accessibility(test_obj):
                 )
                 continue
 
-            #Formating the violation result and saved snapshot to json
-            current_violations_json = json.dumps(current_violations,
-                                                 ensure_ascii=False,
-                                                 separators=(',', ':'))
-            existing_snapshot_json = json.dumps(existing_snapshot,
-                                                ensure_ascii=False,
-                                                separators=(',', ':'))
+            snapshots_match, new_violation_details = snapshot_util.compare_violation(
+                    current_violations, existing_snapshot, page, violations_log_path
+                )
 
-            #Check if there are new violations
-            new_violation = snapshot_util.find_new_violations(current_violations, existing_snapshot)
-            if new_violation:
-                new_violation_detail = snapshot_util.get_new_violations(current_violations_json,
-                                                                        existing_snapshot_json,
-                                                                        page)
-                # Write violations to file using the log_violations_to_file method
-                snapshot_util.log_violations_to_file(new_violation_detail, violations_log_path)
-
-                # Write violations to file and print a preview
-                for violation in new_violation_detail:
-                    violation_message = (
-                        f"New violations found on: {violation['page']}\n"
-                        f"Violation ID: {violation['id']}\n"
-                        f"Impact: {violation['impact']}\n"
-                        f"Description: {violation['description']}\n"
-                        f"HTML Snippet: {violation['html']}\n\n"
-                    )
-                    # Print the first 35 characters of the violation message
-                    test_obj.log_result(
-                        False,
-                        positive="",
-                        negative=(
-                            f"{violation_message[:80]}..."
-                            "Complete violation output is saved in"
-                            "../conf/new_violations_record.txt"
-                        ),
-                        level='debug')
-
-            #Comparison snapshot
-            if current_violations_json != existing_snapshot_json:
-                snapshots_match = False
-            else:
-                snapshots_match = True
+            for violation in new_violation_details:
+                violation_message = (
+                    f"New violations found on: {violation['page']}\n"
+                    f"Violation ID: {violation['id']}\n"
+                    f"Impact: {violation['impact']}\n"
+                    f"Description: {violation['description']}\n"
+                    f"HTML Snippet: {violation['html']}\n\n"
+                )
+                test_obj.log_result(
+                    False,
+                    positive="",
+                    negative=(
+                        f"{violation_message[:80]}..."
+                        "Complete violation output is saved in"
+                        "../conf/new_violations_record.txt"
+                    ),
+                    level='debug'
+                )
 
             test_obj.log_result(snapshots_match,
                                  positive=f'Accessibility checks for {page} passed',

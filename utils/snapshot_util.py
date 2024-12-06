@@ -88,9 +88,10 @@ class Snapshotutil(Snapshot):
                                 })
         return new_violation_details
 
-    def initialize_violations_log(self, log_dir,
+    def initialize_violations_log(self,
                                   log_filename: str = "new_violations_record.txt") -> str:
         "Initialize and clear the violations log file."
+        log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'conf')
         log_path = os.path.join(log_dir, log_filename)
         with open(log_path, 'w', encoding='utf-8') as f:
             f.write("Accessibility Violations Log\n")
@@ -119,3 +120,41 @@ class Snapshotutil(Snapshot):
                     log_file.write(violation_message)
         except Exception as e:
             print(f"Error while logging violations: {e}")
+
+    def initialize_snapshot(self, snapshot_dir, page):
+        "Initialize the snapshot for a given page."
+        snapshot_file_path = self.get_snapshot_path(snapshot_dir, page)
+        if not os.path.exists(snapshot_dir):
+            os.makedirs(snapshot_dir)
+        existing_snapshot = self.load_snapshot(snapshot_file_path)
+
+        return existing_snapshot, snapshot_file_path
+    
+    def compare_violation(self, current_violations, existing_snapshot, page, log_path):
+        "Compare current violations against the existing snapshot."
+        current_violations_json = json.dumps(current_violations,
+                                             ensure_ascii=False,
+                                             separators=(',', ':'))
+        existing_snapshot_json = json.dumps(existing_snapshot,
+                                            ensure_ascii=False,
+                                            separators=(',', ':'))
+
+        # Find new violations
+        new_violations = self.find_new_violations(current_violations, existing_snapshot)
+        if new_violations:
+            new_violation_details = self.get_new_violations(current_violations_json,
+                                                            existing_snapshot_json, page)
+            # Log new violations if found, and return the comparison result.
+            self.log_violations_to_file(new_violation_details, log_path)
+            return False, new_violation_details
+
+         # Set the match status based on JSON comparison
+        if current_violations_json != existing_snapshot_json:
+            snapshots_match = False
+        else:
+            snapshots_match = True
+
+        # Log debug information
+        if not snapshots_match:
+            print(f"Snapshot mismatch detected for page: {page}. Check the logs for details.")
+        return snapshots_match, []
