@@ -1,13 +1,14 @@
 """
-This is a test file to run accessibility test on
+This test file runs accessibility checks on multiple pages of the Selenium tutorial pages using Axe.
+It compares the Axe violation results to previously saved snapshots to identify new violations.
+If new violations are found, they are logged in a violation record file.
+Pages tested:
     1. Selenium tutorial main page
     2. Selenium tutorial redirect page
     3. Selenium tutorial contact page
-    #While running the test for first time, use --snapshot-update to create a snapshot folder
 """
 import os
 import sys
-import json
 import pytest
 from utils.snapshot_util import Snapshotutil
 from page_objects.PageFactory import PageFactory
@@ -17,7 +18,7 @@ sys.stdout.reconfigure(encoding='utf-8')
 
 @pytest.mark.ACCESSIBILITY
 def test_accessibility(test_obj):
-    "Inject Axe and create snapshot for every page"
+    "Test accessibility using Axe and compare snapshot results and save if new violations found"
     try:
 
         #Initalize flags for tests summary
@@ -26,62 +27,31 @@ def test_accessibility(test_obj):
 
         #Create an instance of the Snapshotutil class
         snapshot_util = Snapshotutil()
-        # Set up the violations log file
+        #Set up the violations log file
         violations_log_path = snapshot_util.initialize_violations_log()
         snapshot_dir = conf.snapshot_dir_conf.snapshot_dir
 
         #Get all pages
-        page_names = PageFactory.get_all_page_names()
+        page_names = conf.snapshot_dir_conf.page_names
         for page in page_names:
             test_obj = PageFactory.get_page_object(page,base_url=test_obj.base_url)
             #Inject Axe in every page
             test_obj.accessibility_inject_axe()
             #Check if Axe is run in every page
             axe_result = test_obj.accessibility_run_axe()
-            #Extract only the violations section
+            #Extract the 'violations' section from the Axe result
             current_violations = axe_result.get('violations', [])
-            #Snapshot file path to load
-            existing_snapshot, snapshot_file_path = snapshot_util.initialize_snapshot(snapshot_dir,
-                                                                                      page)
+            #Load the existing snapshot for the current page (if available)
+            existing_snapshot = snapshot_util.initialize_snapshot(snapshot_dir, page)
 
-            #If snapshot does not exist, create a new one
-            if existing_snapshot is None:
-                snapshot_util.save_snapshot(snapshot_file_path, current_violations)
-                test_obj.log_result(
-                    True,
-                    positive=(
-                        f"No existing snapshot was found for {page}."
-                        "A new snapshot has been created in ../conf/snapshot dir"
-                        "Please review the snapshot for violations before running the test again."
-                    ),
-                    negative="",
-                    level='info'
-                )
-                continue
-
-            snapshots_match, new_violation_details = snapshot_util.compare_violation(
+            #Compare the current violations with the existing snapshot to find any new violations
+            snapshots_match, new_violation_details = snapshot_util.compare_and_log_violation(
                     current_violations, existing_snapshot, page, violations_log_path
                 )
-
-            for violation in new_violation_details:
-                violation_message = (
-                    f"New violations found on: {violation['page']}\n"
-                    f"Violation ID: {violation['id']}\n"
-                    f"Impact: {violation['impact']}\n"
-                    f"Description: {violation['description']}\n"
-                    f"HTML Snippet: {violation['html']}\n\n"
-                )
-                test_obj.log_result(
-                    False,
-                    positive="",
-                    negative=(
-                        f"{violation_message[:80]}..."
-                        "Complete violation output is saved in"
-                        "../conf/new_violations_record.txt"
-                    ),
-                    level='debug'
-                )
-
+            #For each new violation, log few details to the output display
+            if new_violation_details:
+                snapshot_util.log_new_violations(new_violation_details, test_obj)
+            #Log the result of the comparison (pass or fail) for the current page
             test_obj.log_result(snapshots_match,
                                  positive=f'Accessibility checks for {page} passed',
                                  negative=f'Accessibility checks for {page} failed',

@@ -4,6 +4,7 @@ Snapshot Integration
 """
 import os
 import json
+from datetime import datetime
 from pytest_snapshot.plugin import Snapshot
 import conf.snapshot_dir_conf
 
@@ -15,7 +16,8 @@ class Snapshotutil(Snapshot):
         if snapshot_dir is None:
             snapshot_dir = conf.snapshot_dir_conf.snapshot_dir
         super().__init__(snapshot_update, allow_snapshot_deletion, snapshot_dir)
-        super().__init__(snapshot_update, allow_snapshot_deletion, snapshot_dir)
+        self.snapshot_update = snapshot_update
+
 
     def load_snapshot(self, snapshot_file_path):
         "Load the saved snapshot from a JSON file."
@@ -73,19 +75,31 @@ class Snapshotutil(Snapshot):
         # Compare new violations and add new violation HTML elements not in the snapshot
         for new_item in new_violations:
             for new_node in new_item['nodes']:
-                if new_node['any']:
-                    for violation in new_node['any']:
-                        for related in violation['relatedNodes']:
-                            # Add only if the HTML is not in the existing snapshot
-                            if related['html'] not in existing_html_elements:
-                                sanitized_html = self.sanitize_html(related['html'])
-                                new_violation_details.append({
-                                    "page": page,
-                                    "id": new_item.get('id', 'unknown'),
-                                    "impact": new_item.get('impact', 'unknown'),
-                                    "description": new_item.get('description', 'unknown'),
-                                    "html": sanitized_html
-                                })
+                # Check violations in 'any' or if there are no related nodes
+                if new_node['any'] or not new_node.get('relatedNodes'):
+                    # Handle case where there are no related nodes but still need to log violation
+                    if new_node['any']:
+                        for violation in new_node['any']:
+                            for related in violation['relatedNodes']:
+                                # Add only if the HTML is not in the existing snapshot
+                                if related['html'] not in existing_html_elements:
+                                    sanitized_html = self.sanitize_html(related['html'])
+                                    new_violation_details.append({
+                                        "page": page,
+                                        "id": new_item.get('id', 'unknown'),
+                                        "impact": new_item.get('impact', 'unknown'),
+                                        "description": new_item.get('description', 'unknown'),
+                                        "html": sanitized_html
+                                    })
+                    else:
+                        # If no related nodes, log the violation with no specific HTML element
+                        new_violation_details.append({
+                            "page": page,
+                            "id": new_item.get('id', 'unknown'),
+                            "impact": new_item.get('impact', 'unknown'),
+                            "description": new_item.get('description', 'unknown'),
+                            "html": new_node.get('html', 'No HTML available')
+                        })
         return new_violation_details
 
     def initialize_violations_log(self,
@@ -93,8 +107,9 @@ class Snapshotutil(Snapshot):
         "Initialize and clear the violations log file."
         log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'conf')
         log_path = os.path.join(log_dir, log_filename)
-        with open(log_path, 'w', encoding='utf-8') as f:
-            f.write("Accessibility Violations Log\n")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(log_path, 'a', encoding='utf-8') as f:
+            f.write(f"Accessibility Violations Log: {timestamp} \n")
             f.write("====================================\n")
         return log_path
 
@@ -128,9 +143,9 @@ class Snapshotutil(Snapshot):
             os.makedirs(snapshot_dir)
         existing_snapshot = self.load_snapshot(snapshot_file_path)
 
-        return existing_snapshot, snapshot_file_path
+        return existing_snapshot
 
-    def compare_violation(self, current_violations, existing_snapshot, page, log_path):
+    def compare_and_log_violation(self, current_violations, existing_snapshot, page, log_path):
         "Compare current violations against the existing snapshot."
         current_violations_json = json.dumps(current_violations,
                                              ensure_ascii=False,
@@ -158,3 +173,18 @@ class Snapshotutil(Snapshot):
         if not snapshots_match:
             print(f"Snapshot mismatch detected for page: {page}. Check the logs for details.")
         return snapshots_match, []
+
+    def log_new_violations(self, new_violation_details, test_obj):
+        "Log details of new violations to the console."
+        for violation in new_violation_details:
+            violation_message = (
+                f"New violations found on: {violation['page']}\n"
+                f"Violation ID: {violation['id']}\n"
+                f"Impact: {violation['impact']}\n"
+                f"Description: {violation['description']}\n"
+                f"HTML Snippet: {violation['html']}\n\n"
+            )
+            test_obj.write(f"{violation_message[:80]}..."
+                        "Complete violation output is saved in"
+                        "../conf/new_violations_record.txt"
+                )
