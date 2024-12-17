@@ -13,6 +13,7 @@ from endpoint_name_generator import NameGenerator
 
 
 # pylint: disable=too-many-instance-attributes
+# pylint: disable=broad-except
 class OpenAPIPathParser():
     "OpenAPI Path object parser"
 
@@ -33,52 +34,55 @@ class OpenAPIPathParser():
         # 2. path.operation.parameter
         # move all parameters to #2
         for operation in self.operations:
-            if self.path.parameters:
-                operation.parameters.append(*path.parameters)
+            try:
+                if self.path.parameters:
+                    operation.parameters.append(*path.parameters)
 
-            # Parse operations(HTTP Methods) to get Endpoint instance method details
-            instance_method_details = {} # Dict to collect all instance methods for a HTTP Method
-            parsed_parameters = {} # Dict to collect: 1.Query, 2.Path & 3.RequestBody params
+                # Parse operations(HTTP Methods) to get Endpoint instance method details
+                instance_method_details = {} # Dict to collect all instance methods for a HTTP Method
+                parsed_parameters = {} # Dict to collect: 1.Query, 2.Path & 3.RequestBody params
 
-            # Parse Query & Path parameters
-            q_params, p_params = self.parse_parameters(operation.parameters)
-            parsed_parameters['query_params'] = q_params
-            parsed_parameters['path_params'] = p_params
+                # Parse Query & Path parameters
+                q_params, p_params = self.parse_parameters(operation.parameters)
+                parsed_parameters['query_params'] = q_params
+                parsed_parameters['path_params'] = p_params
 
-            # Parse RequestBody parameters
-            rb_type = None
-            rb_param = None
-            con_schma_type = None
-            if operation.request_body:
-                rb_type, rb_param, con_schma_type = self.parse_request_body(operation.request_body)
-                if rb_type == "json":
-                    parsed_parameters['json_params'] = rb_param
-                elif rb_type == "data":
-                    parsed_parameters['data_params'] = rb_param
-                parsed_parameters['content_schema_type'] = con_schma_type
+                # Parse RequestBody parameters
+                rb_type = None
+                rb_param = None
+                con_schma_type = None
+                if operation.request_body:
+                    rb_type, rb_param, con_schma_type = self.parse_request_body(operation.request_body)
+                    if rb_type == "json":
+                        parsed_parameters['json_params'] = rb_param
+                    elif rb_type == "data":
+                        parsed_parameters['data_params'] = rb_param
+                    parsed_parameters['content_schema_type'] = con_schma_type
 
-            # Generate: 1.Module, 2.Class, 3.url_method_name, 4.base_api_param_string,
-            # 5.instance_method_param_string, 6.instance_method_name name using NameGenerator Obj
-            name_gen_obj = NameGenerator(path.url,
-                                         bool(q_params),
-                                         p_params,
-                                         rb_type)
-            self.module_name = name_gen_obj.module_name
-            self.class_name = name_gen_obj.class_name
-            self.url_method_name = name_gen_obj.url_method_name
-            base_api_param_string = name_gen_obj.base_api_param_string
-            instance_method_param_string = name_gen_obj.instance_method_param_string
-            instance_method_name = name_gen_obj.get_instance_method_name(operation.method.name.lower())
+                # Generate: 1.Module, 2.Class, 3.url_method_name, 4.base_api_param_string,
+                # 5.instance_method_param_string, 6.instance_method_name name using NameGenerator Obj
+                name_gen_obj = NameGenerator(path.url,
+                                            bool(q_params),
+                                            p_params,
+                                            rb_type)
+                self.module_name = name_gen_obj.module_name
+                self.class_name = name_gen_obj.class_name
+                self.url_method_name = name_gen_obj.url_method_name
+                base_api_param_string = name_gen_obj.base_api_param_string
+                instance_method_param_string = name_gen_obj.instance_method_param_string
+                instance_method_name = name_gen_obj.get_instance_method_name(operation.method.name.lower())
 
-            # Collect the Endpoint instance method details
-            instance_method_details[instance_method_name] = {'params':parsed_parameters,
-                                                                'base_api_param_string':base_api_param_string,
-                                                                'instance_method_param_string': instance_method_param_string,
-                                                                'http_method': operation.method.name.lower(),
-                                                                'endpoint':self.path.url}
-            self.instance_methods.append(instance_method_details)
-            self.logger.info(f"Parsed {operation.method.name} for {path.url}")
-
+                # Collect the Endpoint instance method details
+                instance_method_details[instance_method_name] = {'params':parsed_parameters,
+                                                                    'base_api_param_string':base_api_param_string,
+                                                                    'instance_method_param_string': instance_method_param_string,
+                                                                    'http_method': operation.method.name.lower(),
+                                                                    'endpoint':self.path.url}
+                self.instance_methods.append(instance_method_details)
+                self.logger.info(f"Parsed {operation.method.name} for {self.path.url}")
+            except Exception as failed_to_parse_err:
+                self.logger.debug(f"Failed to parse {operation.method.name} for {self.path.url} due to {failed_to_parse_err}, skipping it")
+                continue
 
     # pylint: disable=inconsistent-return-statements
     def get_function_param_type(self, type_str: str) -> Union[str, None]:
