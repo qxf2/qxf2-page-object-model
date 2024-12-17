@@ -5,12 +5,15 @@ Module to generate:
     3. Method name
 """
 
+
 import re
 from typing import Union
 from packaging.version import Version, InvalidVersion
 
+
 class NameGenerator():
     "Base class for generating names"
+
 
     def __init__(self,
                  endpoint_url: str,
@@ -25,20 +28,24 @@ class NameGenerator():
         self.path_params = path_params
         self.requestbody_type = requestbody_type
 
+
     @property
     def module_name(self) -> str :
         "Module name for an Endpoint"
         return "_".join(self.endpoints_in_a_file) + "_" + "Endpoint"
+
 
     @property
     def class_name(self) -> str :
         "Class name for Endpoint"
         return "".join(self.endpoints_in_a_file) + "Endpoint"
 
+
     @property
     def url_method_name(self) -> str :
         "URL method name for endpoint"
         return self.common_base.lower().replace('-', '_') + "_" + "url"
+
 
     @property
     def base_api_param_string(self) -> str :
@@ -52,6 +59,7 @@ class NameGenerator():
             param_string += ", data=data"
         param_string += ", headers=headers"
         return param_string
+
 
     @property
     def instance_method_param_string(self) -> str :
@@ -68,10 +76,12 @@ class NameGenerator():
         param_string += ', headers'
         return param_string
 
+
     def get_instance_method_name(self, http_method: str) -> str :
         "Generate Instance method name"
         endpoint_split = [ ep.lower().replace('-','_') for ep in self.endpoint_split ]
         return http_method + "_" + "_".join(endpoint_split)
+
 
     def split_endpoint_string(self, endpoint_url: str) -> tuple[list[str], Union[str,None]]:
         """

@@ -4,6 +4,7 @@ OpenAPI specification Parser
 # pylint: disable=locally-disabled, multiple-statements, fixme, line-too-long
 # pylint: disable=too-many-nested-blocks
 
+
 from typing import Union, TextIO
 from openapi_parser import parse, specification
 from openapi_spec_validator.readers import read_from_filename
@@ -83,6 +84,7 @@ class OpenAPIPathParser():
             except Exception as failed_to_parse_err:
                 self.logger.debug(f"Failed to parse {operation.method.name} for {self.path.url} due to {failed_to_parse_err}, skipping it")
                 continue
+
 
     # pylint: disable=inconsistent-return-statements
     def get_function_param_type(self, type_str: str) -> Union[str, None]:
