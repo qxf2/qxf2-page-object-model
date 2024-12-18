@@ -4,6 +4,7 @@ Snapshot Integration
 """
 import os
 import json
+import jsondiff
 from datetime import datetime
 from pytest_snapshot.plugin import Snapshot
 import conf.snapshot_dir_conf
@@ -155,32 +156,78 @@ class Snapshotutil(Snapshot):
                                             separators=(',', ':'))
 
         # Find new violations
-        new_violations = self.find_new_violations(current_violations, existing_snapshot)
-        if new_violations:
-            new_violation_details = self.get_new_violations(current_violations_json,
-                                                            existing_snapshot_json, page)
-            # Log new violations if found, and return the comparison result.
+        # Convert JSON strings to Python dictionaries
+        current_violations_dict = json.loads(current_violations_json)
+        existing_snapshot_dict = json.loads(existing_snapshot_json)
+
+        # Use jsondiff to compare the two dictionaries
+        diff = jsondiff.diff(existing_snapshot_dict, current_violations_dict)
+
+        # Ensure the diff is serializable by calling serialize_diff
+        diff = self.serialize_diff(diff)
+
+        # If there is any difference, it's a new violation
+        if diff:
+            # Log the differences (you can modify this to be more specific or detailed)
+            new_violation_details = self.extract_diff_details(diff, page)
             self.log_violations_to_file(new_violation_details, log_path)
             return False, new_violation_details
 
-         # Set the match status based on JSON comparison
-        if current_violations_json != existing_snapshot_json:
-            snapshots_match = False
-        else:
-            snapshots_match = True
+        # If no difference is found
+        return True, []
 
-        # Log debug information
-        if not snapshots_match:
-            print(f"Snapshot mismatch detected for page: {page}. Check the logs for details.")
-        return snapshots_match, []
+    def extract_diff_details(self, diff, page):
+        "Extract details from the JSON diff."
+        violation_details = []
+
+        for key, value in diff.items():
+            if isinstance(value, dict):  # Nested differences
+                # Check for newly added violations or modifications
+                if 'any' in value:
+                    for violation in value['any']:
+                        violation_details.append({
+                            "page": page,
+                            "id": violation.get('id', 'unknown'),
+                            "impact": violation.get('impact', 'unknown'),
+                            "description": violation.get('description', 'unknown'),
+                            "html": violation['relatedNodes'][0]['html'] if violation.get('relatedNodes') else 'No HTML available'
+                        })
+                else:
+                    # Log modified or new elements without HTML
+                    violation_details.append({
+                        "page": page,
+                        "id": key,
+                        "impact": "Unknown",
+                        "description": f"New or modified element: {key}",
+                        "html": str(value)
+                    })
+            else:  # Simple differences
+                violation_details.append({
+                    "page": page,
+                    "id": key,
+                    "impact": "Unknown",
+                    "description": f"New or modified element: {key}",
+                    "html": str(value)
+                })
+        
+        return violation_details
+
+    def serialize_diff(self, diff):
+        "Ensure diff is serializable by converting non-serializable objects."
+        if isinstance(diff, dict):
+            for key, value in diff.items():
+                diff[key] = self.serialize_diff(value)
+        elif isinstance(diff, list):
+            return [self.serialize_diff(item) for item in diff]
+        elif isinstance(diff, jsondiff.Symbol):
+            return str(diff)  # Convert Symbol to string for serialization
+        return diff
 
     def log_new_violations(self, new_violation_details, test_obj):
         "Log details of new violations to the console."
         for violation in new_violation_details:
             violation_message = (
                 f"New violations found on: {violation['page']}\n"
-                f"Violation ID: {violation['id']}\n"
-                f"Impact: {violation['impact']}\n"
                 f"Description: {violation['description']}\n"
                 f"HTML Snippet: {violation['html']}\n\n"
             )
