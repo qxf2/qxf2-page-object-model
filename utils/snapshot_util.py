@@ -27,82 +27,6 @@ class Snapshotutil(Snapshot):
                 return json.load(file)
         return None
 
-    def save_snapshot(self, snapshot_file_path, current_violations):
-        "Save the given data as a snapshot in a JSON file."
-        os.makedirs(os.path.dirname(snapshot_file_path), exist_ok=True)
-        with open(snapshot_file_path, 'w', encoding='utf-8') as file:
-            json.dump(current_violations, file, ensure_ascii=False, indent=4)
-
-    def find_new_violations(self, current_violations, existing_snapshot):
-        "Return a list of new violations that are not in the saved snapshot."
-        new_violations = []
-        for violation in current_violations:
-            if violation not in existing_snapshot:
-                new_violations.append(violation)
-        return new_violations
-
-    def sanitize_html(self, html):
-        "Replace charmap characters so read html."
-        return ''.join(c if ord(c) < 128 else '?' for c in html)
-
-    def get_new_violations(self, current_violations_json, existing_snapshot_json, page):
-        "Compares the snapshots and prints the new violations"
-        # Load the results from JSON strings
-        new_violations = json.loads(current_violations_json)
-        saved_snapshot = json.loads(existing_snapshot_json)
-
-        # Extract existing HTML elements from the saved snapshot
-        existing_html_elements = self.extract_existing_html_elements(saved_snapshot)
-
-        # Compare new violations and return details of new violations
-        return self.compare_violations(new_violations, existing_html_elements, page)
-
-    def extract_existing_html_elements(self, saved_snapshot):
-        "Extracts existing HTML elements from the saved snapshot"
-        existing_html_elements = set()
-        for saved_item in saved_snapshot:
-            for saved_node in saved_item['nodes']:
-                if saved_node['any']:
-                    for violation in saved_node['any']:
-                        for related in violation['relatedNodes']:
-                            existing_html_elements.add(related['html'])
-        return existing_html_elements
-
-    def compare_violations(self, new_violations, existing_html_elements, page):
-        "Compares new violations with the existing HTML elements"
-        # Set to track printed elements
-        new_violation_details = []
-
-        # Compare new violations and add new violation HTML elements not in the snapshot
-        for new_item in new_violations:
-            for new_node in new_item['nodes']:
-                # Check violations in 'any' or if there are no related nodes
-                if new_node['any'] or not new_node.get('relatedNodes'):
-                    # Handle case where there are no related nodes but still need to log violation
-                    if new_node['any']:
-                        for violation in new_node['any']:
-                            for related in violation['relatedNodes']:
-                                # Add only if the HTML is not in the existing snapshot
-                                if related['html'] not in existing_html_elements:
-                                    sanitized_html = self.sanitize_html(related['html'])
-                                    new_violation_details.append({
-                                        "page": page,
-                                        "id": new_item.get('id', 'unknown'),
-                                        "impact": new_item.get('impact', 'unknown'),
-                                        "description": new_item.get('description', 'unknown'),
-                                        "html": sanitized_html
-                                    })
-                    else:
-                        # If no related nodes, log the violation with no specific HTML element
-                        new_violation_details.append({
-                            "page": page,
-                            "id": new_item.get('id', 'unknown'),
-                            "impact": new_item.get('impact', 'unknown'),
-                            "description": new_item.get('description', 'unknown'),
-                            "html": new_node.get('html', 'No HTML available')
-                        })
-        return new_violation_details
-
     def initialize_violations_log(self,
                                   log_filename: str = "new_violations_record.txt") -> str:
         "Initialize and clear the violations log file."
@@ -120,22 +44,26 @@ class Snapshotutil(Snapshot):
             os.makedirs(snapshot_dir)
         return os.path.join(snapshot_dir, f"snapshot_output_{page_name}.json")
 
-    def log_violations_to_file(self, new_violation_detail, violations_log_path):
+    def log_violations_to_file(self, new_violation_details, violations_log_path):
         "Log violations in to a text file"
         try:
             with open(violations_log_path, 'a', encoding='utf-8') as log_file:
-                for violation in new_violation_detail:
-                    violation_message = (
-                        f"New violations found on: {violation['page']}\n"
-                        f"Violation ID: {violation['id']}\n"
-                        f"Impact: {violation['impact']}\n"
-                        f"Description: {violation['description']}\n"
-                        f"HTML Snippet: {violation['html']}\n\n"
-                    )
+                for violation in new_violation_details:
+                    violation_message = self.format_violation_message(violation)
                     # Write complete violation message to file
                     log_file.write(violation_message)
         except Exception as e:
             print(f"Error while logging violations: {e}")
+
+    def format_violation_message(self, violation):
+        "Format the violation message into a string."
+        return (
+            f"New violations found on: {violation['page']}\n"
+            f"Description: {violation['description']}\n"
+            f"Violation ID: {violation['id']}\n"
+            f"Impact: {violation['impact']}\n"
+            f"HTML Snippet: {violation['html']}\n\n"
+        )
 
     def initialize_snapshot(self, snapshot_dir, page):
         "Initialize the snapshot for a given page."
@@ -155,7 +83,6 @@ class Snapshotutil(Snapshot):
                                             ensure_ascii=False,
                                             separators=(',', ':'))
 
-        # Find new violations
         # Convert JSON strings to Python dictionaries
         current_violations_dict = json.loads(current_violations_json)
         existing_snapshot_dict = json.loads(existing_snapshot_json)
@@ -226,12 +153,8 @@ class Snapshotutil(Snapshot):
     def log_new_violations(self, new_violation_details, test_obj):
         "Log details of new violations to the console."
         for violation in new_violation_details:
-            violation_message = (
-                f"New violations found on: {violation['page']}\n"
-                f"Description: {violation['description']}\n"
-                f"HTML Snippet: {violation['html']}\n\n"
-            )
-            test_obj.write(f"{violation_message[:80]}..."
-                        "Complete violation output is saved in"
-                        "../conf/new_violations_record.txt"
-                )
+            violation_message = self.format_violation_message(violation)
+            # Print a truncated message to the console
+            test_obj.write(f"{violation_message[:80]}... "
+                        "Complete violation output is saved in "
+                        "../conf/new_violations_record.txt")
