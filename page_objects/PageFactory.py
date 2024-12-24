@@ -25,13 +25,13 @@ class PageFactory():
         elif page_name in ["zero mobile","zero mobile page"]:
             from page_objects.zero_mobile_page import Zero_Mobile_Page
             test_obj = Zero_Mobile_Page()
-        elif page_name == "main page":
+        elif page_name in ["main","main page"]:
             from page_objects.examples.selenium_tutorial_webpage.tutorial_main_page import Tutorial_Main_Page
             test_obj = Tutorial_Main_Page(base_url=base_url)
         elif page_name == "redirect":
             from page_objects.examples.selenium_tutorial_webpage.tutorial_redirect_page import Tutorial_Redirect_Page
             test_obj = Tutorial_Redirect_Page(base_url=base_url)
-        elif page_name == "contact page":
+        elif page_name in ["contact","contact page"]:
             from page_objects.examples.selenium_tutorial_webpage.contact_page import Contact_Page
             test_obj = Contact_Page(base_url=base_url)
         elif page_name == "bitcoin main page":
@@ -57,11 +57,3 @@ class PageFactory():
             from page_objects.examples.weather_shopper_mobile_app.webview_chrome import WebviewChrome
             test_obj = WebviewChrome()
         return test_obj
-
-
-    @staticmethod
-    def get_all_page_names():
-        "Return the page names"
-        return ["main page",
-                "redirect",
-                "contact page"]
