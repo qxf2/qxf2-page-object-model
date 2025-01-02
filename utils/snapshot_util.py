@@ -4,7 +4,7 @@ Snapshot Integration
 """
 import os
 import json
-import jsondiff
+from deepdiff import DeepDiff
 from datetime import datetime
 from pytest_snapshot.plugin import Snapshot
 import conf.snapshot_dir_conf
@@ -61,8 +61,9 @@ class Snapshotutil(Snapshot):
             f"New violations found on: {violation['page']}\n"
             f"Description: {violation['description']}\n"
             f"Violation ID: {violation['id']}\n"
+            f"Violation Root: {violation['key']}\n"
             f"Impact: {violation['impact']}\n"
-            f"HTML Snippet: {violation['html']}\n\n"
+            f"nodes: {violation['nodes']}\n\n"
         )
 
     def initialize_snapshot(self, snapshot_dir, page):
@@ -76,79 +77,87 @@ class Snapshotutil(Snapshot):
 
     def compare_and_log_violation(self, current_violations, existing_snapshot, page, log_path):
         "Compare current violations against the existing snapshot."
-        current_violations_json = json.dumps(current_violations,
-                                             ensure_ascii=False,
-                                             separators=(',', ':'))
-        existing_snapshot_json = json.dumps(existing_snapshot,
-                                            ensure_ascii=False,
-                                            separators=(',', ':'))
 
         # Convert JSON strings to Python dictionaries
-        current_violations_dict = json.loads(current_violations_json)
-        existing_snapshot_dict = json.loads(existing_snapshot_json)
+        current_violations_dict = {item['id']: item for item in current_violations}
+        existing_snapshot_dict = {item['id']: item for item in existing_snapshot}
 
-        # Use jsondiff to compare the two dictionaries
-        diff = jsondiff.diff(existing_snapshot_dict, current_violations_dict)
-
-        # Ensure the diff is serializable by calling serialize_diff
-        diff = self.serialize_diff(diff)
+        # Use deepdiff to compare the snapshots
+        violation_diff = DeepDiff(existing_snapshot_dict, current_violations_dict, verbose_level=2)
 
         # If there is any difference, it's a new violation
-        if diff:
+        if violation_diff:
             # Log the differences (you can modify this to be more specific or detailed)
-            new_violation_details = self.extract_diff_details(diff, page)
+            new_violation_details = self.extract_diff_details(violation_diff, page)
             self.log_violations_to_file(new_violation_details, log_path)
             return False, new_violation_details
 
         # If no difference is found
         return True, []
 
-    def extract_diff_details(self, diff, page):
-        "Extract details from the JSON diff."
+    def extract_diff_details(self, violation_diff, page):
+        "Extract details from the violation diff."
         violation_details = []
 
-        for key, value in diff.items():
-            if isinstance(value, dict):  # Nested differences
-                # Check for newly added violations or modifications
-                if 'any' in value:
-                    for violation in value['any']:
-                        violation_details.append({
-                            "page": page,
-                            "id": violation.get('id', 'unknown'),
-                            "impact": violation.get('impact', 'unknown'),
-                            "description": violation.get('description', 'unknown'),
-                            "html": violation['relatedNodes'][0]['html'] if violation.get('relatedNodes') else 'No HTML available'
-                        })
-                else:
-                    # Log modified or new elements without HTML
-                    violation_details.append({
-                        "page": page,
-                        "id": key,
-                        "impact": "Unknown",
-                        "description": f"New or modified element: {key}",
-                        "html": str(value)
-                    })
-            else:  # Simple differences
-                violation_details.append({
-                    "page": page,
-                    "id": key,
-                    "impact": "Unknown",
-                    "description": f"New or modified element: {key}",
-                    "html": str(value)
-                })
-        
-        return violation_details
+        # Handle newly added violations (dictionary_item_added)
+        for key, value in violation_diff.get('dictionary_item_added', {}).items():
+            violation_details.append({
+                "page": f"{page}- New Item added",
+                "id": value['id'],
+                "key": key,
+                "impact": value.get('impact', 'Unknown'),
+                "description": value.get('description', 'Unknown'),
+                "nodes": value.get('nodes', 'Unknown')
+            })
 
-    def serialize_diff(self, diff):
-        "Ensure diff is serializable by converting non-serializable objects."
-        if isinstance(diff, dict):
-            for key, value in diff.items():
-                diff[key] = self.serialize_diff(value)
-        elif isinstance(diff, list):
-            return [self.serialize_diff(item) for item in diff]
-        elif isinstance(diff, jsondiff.Symbol):
-            return str(diff)  # Convert Symbol to string for serialization
-        return diff
+        # Handle removed violations (dictionary_item_removed)
+        for key, value in violation_diff.get('dictionary_item_removed', {}).items():
+            violation_details.append({
+                "page": page,
+                "id": value['id'],
+                "key": key,
+                "impact": value.get('impact', 'Unknown'),
+                "description": value.get('description', 'Unknown'),
+                "nodes": value.get('nodes', 'Unknown')
+            })
+
+        # Handle changes to existing violations (values_changed)
+        for key, value in violation_diff.get('values_changed', {}).items():
+            path = key.split("']")[-2]
+            old_value = value['old_value']
+            new_value = value['new_value']
+            violation_details.append({
+                "page": page,
+                "id": path,
+                "key": key,
+                "impact": value.get('new_value', 'Unknown'),
+                "description": f"Changed from- {old_value} \n\t\t To- {new_value}",
+                "nodes": key
+            })
+
+        # Handle added items in iterable (iterable_item_added)
+        for key, value in violation_diff.get('iterable_item_added', {}).items():
+            violation_details.append({
+                "page": page,
+                "id": value.get('id', 'Unknown'),
+                "key": key,
+                "impact": value.get('impact', 'Unknown'),
+                "description": f"New node item added: {key}",
+                "nodes": str(value)
+            })
+
+        # Handle removed items in iterable (iterable_item_removed)
+        for key, value in violation_diff.get('iterable_item_removed', {}).items():
+            violation_details.append({
+                "page": page,
+                "id": value.get('id', 'Unknown'),
+                "key": key,
+                "impact": value.get('impact', 'Unknown'),
+                "description": f"Item node removed: {key}",
+                "nodes": str(value)
+            })
+
+        return violation_details
 
     def log_new_violations(self, new_violation_details, test_obj):
         "Log details of new violations to the console."
@@ -156,5 +165,5 @@ class Snapshotutil(Snapshot):
             violation_message = self.format_violation_message(violation)
             # Print a truncated message to the console
             test_obj.write(f"{violation_message[:80]}... "
-                        "Complete violation output is saved in "
+                        "Complete violation output is saved in"
                         "../conf/new_violations_record.txt")
