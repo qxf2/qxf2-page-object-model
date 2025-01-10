@@ -38,7 +38,7 @@ Looking for ways to automate your __UI__ and __API__ tests quickly and effective
 Setup
 ------
 
-The setup for our open-sourced Python test automation framework is fairly simple. We have documented the setup instructions in detail so even beginners can get started.
+The setup for open-sourced Python test automation framework is fairly simple. We have documented the setup instructions in detail so even beginners can get started.
 
 The setup has four parts:
 
