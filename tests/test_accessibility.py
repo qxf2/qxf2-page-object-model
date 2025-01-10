@@ -42,7 +42,7 @@ def test_accessibility(test_obj):
             #Extract the 'violations' section from the Axe result
             current_violations = axe_result.get('violations', [])
             #Load the existing snapshot for the current page (if available)
-            existing_snapshot = snapshot_util.initialize_snapshot(snapshot_dir, page)
+            existing_snapshot = snapshot_util.initialize_snapshot(snapshot_dir, page, current_violations=current_violations)
 
             #Compare the current violations with the existing snapshot to find any new violations
             snapshots_match, new_violation_details = snapshot_util.compare_and_log_violation(
@@ -50,7 +50,7 @@ def test_accessibility(test_obj):
                 )
             #For each new violation, log few details to the output display
             if new_violation_details:
-                snapshot_util.log_new_violations(new_violation_details, test_obj)
+                snapshot_util.log_new_violations(new_violation_details)
             #Log the result of the comparison (pass or fail) for the current page
             test_obj.log_result(snapshots_match,
                                  positive=f'Accessibility checks for {page} passed',

@@ -4,6 +4,7 @@ Snapshot Integration
 """
 import os
 import json
+from loguru import logger
 from deepdiff import DeepDiff
 from datetime import datetime
 from pytest_snapshot.plugin import Snapshot
@@ -26,6 +27,12 @@ class Snapshotutil(Snapshot):
             with open(snapshot_file_path, 'r', encoding='utf-8') as file:
                 return json.load(file)
         return None
+
+    def save_snapshot(self, snapshot_file_path, current_violations):
+        "Save the given data as a snapshot in a JSON file."
+        os.makedirs(os.path.dirname(snapshot_file_path), exist_ok=True)
+        with open(snapshot_file_path, 'w', encoding='utf-8') as file:
+            json.dump(current_violations, file, ensure_ascii=False, indent=4)
 
     def initialize_violations_log(self,
                                   log_filename: str = "new_violations_record.txt") -> str:
@@ -66,12 +73,16 @@ class Snapshotutil(Snapshot):
             f"nodes: {violation['nodes']}\n\n"
         )
 
-    def initialize_snapshot(self, snapshot_dir, page):
+    def initialize_snapshot(self, snapshot_dir, page, current_violations=None):
         "Initialize the snapshot for a given page."
         snapshot_file_path = self.get_snapshot_path(snapshot_dir, page)
         if not os.path.exists(snapshot_dir):
             os.makedirs(snapshot_dir)
         existing_snapshot = self.load_snapshot(snapshot_file_path)
+        # Save a new snapshot if none exists
+        if existing_snapshot is None and current_violations is not None:
+            self.save_snapshot(snapshot_file_path, current_violations)
+            existing_snapshot = self.load_snapshot(snapshot_file_path)
 
         return existing_snapshot
 
@@ -83,7 +94,10 @@ class Snapshotutil(Snapshot):
         existing_snapshot_dict = {item['id']: item for item in existing_snapshot}
 
         # Use deepdiff to compare the snapshots
-        violation_diff = DeepDiff(existing_snapshot_dict, current_violations_dict, verbose_level=2)
+        violation_diff = DeepDiff(existing_snapshot_dict,
+                                  current_violations_dict,
+                                  ignore_order=True,
+                                  verbose_level=2)
 
         # If there is any difference, it's a new violation
         if violation_diff:
@@ -159,11 +173,11 @@ class Snapshotutil(Snapshot):
 
         return violation_details
 
-    def log_new_violations(self, new_violation_details, test_obj):
+    def log_new_violations(self, new_violation_details):
         "Log details of new violations to the console."
         for violation in new_violation_details:
             violation_message = self.format_violation_message(violation)
             # Print a truncated message to the console
-            test_obj.write(f"{violation_message[:80]}... "
-                        "Complete violation output is saved in"
-                        "../conf/new_violations_record.txt")
+            logger.info(f"{violation_message[:120]}..."
+                        "Complete violation output is saved"
+                        "in ../conf/new_violations_record.txt")
