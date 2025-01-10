@@ -128,6 +128,15 @@ class OpenAPIPathParser():
         return (query_params, path_params,)
 
 
+    def get_name_type_nested_prop(self, property) -> list:
+        "Get the name & type for nested property"
+        nested_param_list = []
+        for nested_prop in property.schema.properties:
+            nested_name = nested_prop.name
+            nested_param_type = self.get_function_param_type(nested_prop.schema.type.name)
+            nested_param_list.append(nested_name, nested_param_type)
+        return nested_param_list
+
     # pylint: disable=too-many-branches
     def parse_request_body(self, request_body: specification.RequestBody) -> tuple[str, list, str]:
         """
@@ -163,11 +172,9 @@ class OpenAPIPathParser():
                         name = prop.name
                         requestbody_type = self.get_function_param_type(prop.schema.type.name)
                         if requestbody_type == 'dict':
-                            nested_dict_param = {name: []}
-                            for nested_prop in prop.schema.properties:
-                                nested_name = nested_prop.name
-                                nested_param_type = self.get_function_param_type(nested_prop.schema.type.name)
-                                nested_dict_param[name].append((nested_name, nested_param_type))
+                            nested_dict_param = {}
+                            nested_param_list = self.get_name_type_nested_prop(prop)
+                            nested_dict_param[name] = nested_param_list
                             requestbody_param.append(nested_dict_param)
                         else:
                             requestbody_param.append((name, requestbody_type))
@@ -177,11 +184,9 @@ class OpenAPIPathParser():
                         name = prop.name
                         requestbody_type = self.get_function_param_type(prop.schema.type.name)
                         if requestbody_type == 'dict':
-                            nested_dict_param = {name: []}
-                            for nested_prop in prop.schema.properties:
-                                nested_name = nested_prop.name
-                                nested_param_type = self.get_function_param_type(nested_prop.schema.type.name)
-                                nested_dict_param[name].append((nested_name, nested_param_type))
+                            nested_dict_param = {}
+                            nested_param_list = self.get_name_type_nested_prop(prop)
+                            nested_dict_param[name] = nested_param_list
                             requestbody_param.append(nested_dict_param)
                         else:
                             requestbody_param.append((name, requestbody_type))
@@ -193,11 +198,9 @@ class OpenAPIPathParser():
                         name = prop.name
                         requestbody_type = self.get_function_param_type(prop.schema.type.name)
                         if requestbody_type == 'dict':
-                            nested_dict_param = {name: []}
-                            for nested_prop in prop.schema.properties:
-                                nested_name = nested_prop.name
-                                nested_param_type = self.get_function_param_type(nested_prop.schema.type.name)
-                                nested_dict_param[name].append((nested_name, nested_param_type))
+                            nested_dict_param = {}
+                            nested_param_list = self.get_name_type_nested_prop(prop)
+                            nested_dict_param[name] = nested_param_list
                             requestbody_param.append(nested_dict_param)
                         else:
                             requestbody_param.append((name, requestbody_type))
