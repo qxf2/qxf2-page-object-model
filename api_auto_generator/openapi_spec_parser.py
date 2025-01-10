@@ -128,10 +128,10 @@ class OpenAPIPathParser():
         return (query_params, path_params,)
 
 
-    def get_name_type_nested_prop(self, property) -> list:
+    def get_name_type_nested_prop(self, prop) -> list:
         "Get the name & type for nested property"
         nested_param_list = []
-        for nested_prop in property.schema.properties:
+        for nested_prop in prop.schema.properties:
             nested_name = nested_prop.name
             nested_param_type = self.get_function_param_type(nested_prop.schema.type.name)
             nested_param_list.append(nested_name, nested_param_type)
