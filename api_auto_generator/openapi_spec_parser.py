@@ -4,6 +4,7 @@ OpenAPI specification Parser
 # pylint: disable=locally-disabled, multiple-statements, fixme, line-too-long
 # pylint: disable=too-many-nested-blocks
 
+
 from typing import Union, TextIO
 from openapi_parser import parse, specification
 from openapi_spec_validator.readers import read_from_filename
@@ -13,6 +14,7 @@ from endpoint_name_generator import NameGenerator
 
 
 # pylint: disable=too-many-instance-attributes
+# pylint: disable=broad-except
 class OpenAPIPathParser():
     "OpenAPI Path object parser"
 
@@ -33,51 +35,55 @@ class OpenAPIPathParser():
         # 2. path.operation.parameter
         # move all parameters to #2
         for operation in self.operations:
-            if self.path.parameters:
-                operation.parameters.append(*path.parameters)
+            try:
+                if self.path.parameters:
+                    operation.parameters.append(*path.parameters)
 
-            # Parse operations(HTTP Methods) to get Endpoint instance method details
-            instance_method_details = {} # Dict to collect all instance methods for a HTTP Method
-            parsed_parameters = {} # Dict to collect: 1.Query, 2.Path & 3.RequestBody params
+                # Parse operations(HTTP Methods) to get Endpoint instance method details
+                instance_method_details = {} # Dict to collect all instance methods for a HTTP Method
+                parsed_parameters = {} # Dict to collect: 1.Query, 2.Path & 3.RequestBody params
 
-            # Parse Query & Path parameters
-            q_params, p_params = self.parse_parameters(operation.parameters)
-            parsed_parameters['query_params'] = q_params
-            parsed_parameters['path_params'] = p_params
+                # Parse Query & Path parameters
+                q_params, p_params = self.parse_parameters(operation.parameters)
+                parsed_parameters['query_params'] = q_params
+                parsed_parameters['path_params'] = p_params
 
-            # Parse RequestBody parameters
-            rb_type = None
-            rb_param = None
-            con_schma_type = None
-            if operation.request_body:
-                rb_type, rb_param, con_schma_type = self.parse_request_body(operation.request_body)
-                if rb_type == "json":
-                    parsed_parameters['json_params'] = rb_param
-                elif rb_type == "data":
-                    parsed_parameters['data_params'] = rb_param
-                parsed_parameters['content_schema_type'] = con_schma_type
+                # Parse RequestBody parameters
+                rb_type = None
+                rb_param = None
+                con_schma_type = None
+                if operation.request_body:
+                    rb_type, rb_param, con_schma_type = self.parse_request_body(operation.request_body)
+                    if rb_type == "json":
+                        parsed_parameters['json_params'] = rb_param
+                    elif rb_type == "data":
+                        parsed_parameters['data_params'] = rb_param
+                    parsed_parameters['content_schema_type'] = con_schma_type
 
-            # Generate: 1.Module, 2.Class, 3.url_method_name, 4.base_api_param_string,
-            # 5.instance_method_param_string, 6.instance_method_name name using NameGenerator Obj
-            name_gen_obj = NameGenerator(path.url,
-                                         bool(q_params),
-                                         p_params,
-                                         rb_type)
-            self.module_name = name_gen_obj.module_name
-            self.class_name = name_gen_obj.class_name
-            self.url_method_name = name_gen_obj.url_method_name
-            base_api_param_string = name_gen_obj.base_api_param_string
-            instance_method_param_string = name_gen_obj.instance_method_param_string
-            instance_method_name = name_gen_obj.get_instance_method_name(operation.method.name.lower())
+                # Generate: 1.Module, 2.Class, 3.url_method_name, 4.base_api_param_string,
+                # 5.instance_method_param_string, 6.instance_method_name name using NameGenerator Obj
+                name_gen_obj = NameGenerator(path.url,
+                                            bool(q_params),
+                                            p_params,
+                                            rb_type)
+                self.module_name = name_gen_obj.module_name
+                self.class_name = name_gen_obj.class_name
+                self.url_method_name = name_gen_obj.url_method_name
+                base_api_param_string = name_gen_obj.base_api_param_string
+                instance_method_param_string = name_gen_obj.instance_method_param_string
+                instance_method_name = name_gen_obj.get_instance_method_name(operation.method.name.lower())
 
-            # Collect the Endpoint instance method details
-            instance_method_details[instance_method_name] = {'params':parsed_parameters,
-                                                                'base_api_param_string':base_api_param_string,
-                                                                'instance_method_param_string': instance_method_param_string,
-                                                                'http_method': operation.method.name.lower(),
-                                                                'endpoint':self.path.url}
-            self.instance_methods.append(instance_method_details)
-            self.logger.info(f"Parsed {operation.method.name} for {path.url}")
+                # Collect the Endpoint instance method details
+                instance_method_details[instance_method_name] = {'params':parsed_parameters,
+                                                                    'base_api_param_string':base_api_param_string,
+                                                                    'instance_method_param_string': instance_method_param_string,
+                                                                    'http_method': operation.method.name.lower(),
+                                                                    'endpoint':self.path.url}
+                self.instance_methods.append(instance_method_details)
+                self.logger.info(f"Parsed {operation.method.name} for {self.path.url}")
+            except Exception as failed_to_parse_err:
+                self.logger.debug(f"Failed to parse {operation.method.name} for {self.path.url} due to {failed_to_parse_err}, skipping it")
+                continue
 
 
     # pylint: disable=inconsistent-return-statements
@@ -122,6 +128,15 @@ class OpenAPIPathParser():
         return (query_params, path_params,)
 
 
+    def get_name_type_nested_prop(self, property) -> list:
+        "Get the name & type for nested property"
+        nested_param_list = []
+        for nested_prop in property.schema.properties:
+            nested_name = nested_prop.name
+            nested_param_type = self.get_function_param_type(nested_prop.schema.type.name)
+            nested_param_list.append(nested_name, nested_param_type)
+        return nested_param_list
+
     # pylint: disable=too-many-branches, too-complex
     def parse_request_body(self, request_body: specification.RequestBody) -> tuple[str, list, str]:
         """
@@ -157,11 +172,9 @@ class OpenAPIPathParser():
                         name = prop.name
                         requestbody_type = self.get_function_param_type(prop.schema.type.name)
                         if requestbody_type == 'dict':
-                            nested_dict_param = {name: []}
-                            for nested_prop in prop.schema.properties:
-                                nested_name = nested_prop.name
-                                nested_param_type = self.get_function_param_type(nested_prop.schema.type.name)
-                                nested_dict_param[name].append((nested_name, nested_param_type))
+                            nested_dict_param = {}
+                            nested_param_list = self.get_name_type_nested_prop(prop)
+                            nested_dict_param[name] = nested_param_list
                             requestbody_param.append(nested_dict_param)
                         else:
                             requestbody_param.append((name, requestbody_type))
@@ -171,11 +184,9 @@ class OpenAPIPathParser():
                         name = prop.name
                         requestbody_type = self.get_function_param_type(prop.schema.type.name)
                         if requestbody_type == 'dict':
-                            nested_dict_param = {name: []}
-                            for nested_prop in prop.schema.properties:
-                                nested_name = nested_prop.name
-                                nested_param_type = self.get_function_param_type(nested_prop.schema.type.name)
-                                nested_dict_param[name].append((nested_name, nested_param_type))
+                            nested_dict_param = {}
+                            nested_param_list = self.get_name_type_nested_prop(prop)
+                            nested_dict_param[name] = nested_param_list
                             requestbody_param.append(nested_dict_param)
                         else:
                             requestbody_param.append((name, requestbody_type))
@@ -187,11 +198,9 @@ class OpenAPIPathParser():
                         name = prop.name
                         requestbody_type = self.get_function_param_type(prop.schema.type.name)
                         if requestbody_type == 'dict':
-                            nested_dict_param = {name: []}
-                            for nested_prop in prop.schema.properties:
-                                nested_name = nested_prop.name
-                                nested_param_type = self.get_function_param_type(nested_prop.schema.type.name)
-                                nested_dict_param[name].append((nested_name, nested_param_type))
+                            nested_dict_param = {}
+                            nested_param_list = self.get_name_type_nested_prop(prop)
+                            nested_dict_param[name] = nested_param_list
                             requestbody_param.append(nested_dict_param)
                         else:
                             requestbody_param.append((name, requestbody_type))

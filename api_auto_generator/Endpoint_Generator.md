@@ -24,7 +24,7 @@ This command will generate `<endpoint_name>_Endpoint.py` module in the `endpoint
 - The Path & Query parameters to be passed to the Endpoint class is generated
 - The json/data params to be passed to the requests method is generated from the request body
 - A Python dictionary collecting all these values is generated
-- Tge generated Python dictionary is redered on a Jinja2 template
+- The generated Python dictionary is redered on a Jinja2 template
 
 ## Limitations/Constraints on using the Generate Endpoint script ##
 

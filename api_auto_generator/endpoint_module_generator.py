@@ -1,5 +1,5 @@
 """
-What does this module do?:
+What does this module do?
 - It creates an Endpoint file with a class from the OpenAPI spec
 - The path key in the spec is translated to an Endpoint
 - The operations(http methods) for a path is translated to instance methods for the Endpoint
