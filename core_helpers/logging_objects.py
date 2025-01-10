@@ -11,12 +11,31 @@ class Logging_Objects:
         self.msg_list = []
         self.exceptions = []
 
+    @staticmethod
+    def color_text(text, color ="red"):
+        colors = {
+            "red": "\033[91m",
+            "green": "\033[92m",
+            "yellow": "\033[93m",
+            "blue": "\033[94m",
+            "magenta": "\033[95m",
+            "cyan": "\033[96m",
+            "reset": "\033[0m"
+        }
+        return f"{colors.get(color, colors['reset'])}{text}{colors['reset']}"
+
     def write_test_summary(self):
         "Print out a useful, human readable summary"
-        self.write('\n\n************************\n--------RESULT--------\nTotal number of checks=%d'%self.result_counter)
-        self.write('Total number of checks passed=%d\n----------------------\n************************\n\n'%self.pass_counter)
-        self.write('Total number of mini-checks=%d'%self.mini_check_counter)
-        self.write('Total number of mini-checks passed=%d'%self.mini_check_pass_counter)
+        if self.result_counter==self.pass_counter:
+            level = "success"
+        else:
+            level = "error"
+        self.write('\n\n************************\n--------RESULT--------\n',level=level)
+        self.write('Total number of checks=%d'%self.result_counter,level=level)
+        self.write('Total number of checks passed=%d\n----------------------\n************************\n\n'%self.pass_counter,level=level)
+        if self.mini_check_counter > 0:
+            self.write('Total number of mini-checks=%d'%self.mini_check_counter,level=level)
+            self.write('Total number of mini-checks passed=%d'%self.mini_check_pass_counter,level=level)
         self.make_gif()
         if self.gif_file_name is not None:
             self.write("Screenshots & GIF created at %s"%self.screenshot_dir)

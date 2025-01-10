@@ -254,9 +254,10 @@ def ask_questions_api(api_url):
 def get_user_response_api():
     "Get response from user for api tests"
     response=questionary.select("What would you like to change",
-                                 choices=["API URL","Session flag status",
+                                 choices=["API URL",
                                           "Reset back to default settings",
-                                          "Run","Exit"]).ask()
+                                          "Run",
+                                          "Exit"]).ask()
 
     return response
 
