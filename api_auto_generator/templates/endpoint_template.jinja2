@@ -70,7 +70,7 @@ class {{class_name}}(BaseAPI):
         json_response = self.make_request(method='{{function_value["http_method"]}}', url=url{{function_value['base_api_param_string']}})
         return {
             'url' : url,
-            'response' : json_response['json_response']
+            'response' : response
             } 
 {% endfor %}
 {% endfor %}
