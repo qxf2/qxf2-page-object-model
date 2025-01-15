@@ -1,0 +1,77 @@
+{#- This template is used to generate Endpoints file for the API Test Automation Framework -#}
+"""
+This Endpoint file is generated using the api_auto_generator/endpoint_module_generator.py module
+"""
+from .base_api import BaseAPI
+
+
+class {{class_name}}(BaseAPI):
+
+
+    def {{class_content['url_method_name']}}(self, suffix=''):
+        "Append endpoint to base URI"
+        return self.base_url + suffix
+
+{% for function in class_content['instance_methods'] -%} {#- No need to enclose paths in {{}} in for step -#}
+{%- for function_name, function_value in function.items() %}
+    def {{function_name}}({{function_value['instance_method_param_string']}}):
+        """
+        Run {{function_value['http_method']}} request against {{function_value['endpoint']}}
+        :parameters:
+        {%- if function_value['params']['query_params'] %}
+            :params: dict
+        {%- for query_param in function_value['params']['query_params'] %}
+                :{{query_param[0]}}: {{query_param[1]}}
+        {%- endfor %}
+        {%- endif %}
+        {%- if function_value['params']['path_params'] %}
+        {%- for path_param in function_value['params']['path_params'] %}
+            :{{path_param[0]}}: {{path_param[1]}}
+        {%- endfor %}
+        {%- endif %}
+        {%- if function_value['params']['json_params'] %}
+            :json: dict
+        {%- if function_value['params']['content_schema_type'] == 'array' %}
+            :list:
+        {%- endif %}
+        {%- for json_param in function_value['params']['json_params'] %}
+        {%- if json_param is mapping %}
+        {%- for json_key, json_value in json_param.items() %}
+                :{{json_key}}: dict
+        {%- for nested_json_value in json_value %}
+                    :{{nested_json_value[0]}}: {{nested_json_value[1]}}
+        {%- endfor %}
+        {%- endfor %}
+        {%- else %}
+                :{{json_param[0]}}: {{json_param[1]}}
+        {%- endif %}
+        {%- endfor %}
+        {%- endif %}
+        {%- if function_value['params']['data_params'] %}
+            :data: dict
+        {%- if function_value['params']['content_schema_type'] == 'array' %}
+            :list:
+        {%- endif %}
+        {%- for data_param in function_value['params']['data_params'] %}
+        {%- if data_param is mapping %}
+        {%- for data_key, data_value in data_param.items() %}
+                :{{data_key}}: dict
+        {%- for nested_data_value in data_value %}
+                    :{{nested_data_value[0]}}: {{nested_data_value[1]}}
+        {%- endfor %}
+        {%- endfor %}
+        {%- else %}
+                :{{data_param[0]}}: {{data_param[1]}}
+        {%- endif %}
+        {%- endfor %}
+        {%- endif %}
+         """
+        url = self.{{class_content['url_method_name']}}(f"{{function_value['endpoint']}}")
+        response = self.make_request(method='{{function_value["http_method"]}}', url=url{{function_value['base_api_param_string']}})
+        return {
+            'url' : url,
+            'response' : response
+            } 
+{% endfor %}
+{% endfor %}
+ 
