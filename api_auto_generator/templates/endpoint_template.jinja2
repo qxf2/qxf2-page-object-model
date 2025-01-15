@@ -67,7 +67,7 @@ class {{class_name}}(BaseAPI):
         {%- endif %}
          """
         url = self.{{class_content['url_method_name']}}(f"{{function_value['endpoint']}}")
-        json_response = self.make_request(method='{{function_value["http_method"]}}', url=url{{function_value['base_api_param_string']}})
+        response = self.make_request(method='{{function_value["http_method"]}}', url=url{{function_value['base_api_param_string']}})
         return {
             'url' : url,
             'response' : response
