@@ -82,7 +82,7 @@ class Snapshotutil(Snapshot):
         # Save a new snapshot if none exists
         if existing_snapshot is None and current_violations is not None:
             self.save_snapshot(snapshot_file_path, current_violations)
-            existing_snapshot = self.load_snapshot(snapshot_file_path)
+            return None
 
         return existing_snapshot
 
