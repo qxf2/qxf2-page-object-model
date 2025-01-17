@@ -47,9 +47,9 @@ def test_accessibility(test_obj):
                 test_obj.log_result(
                     True,
                     positive=(
-                        f"No existing snapshot was found for {page} page."
-                        "A new snapshot has been created in ../conf/snapshot dir."
-                        "Please review the snapshot for violations before running the test again."
+                        f"No existing snapshot was found for {page} page. "
+                        "A new snapshot has been created in ../conf/snapshot dir. "
+                        "Please review the snapshot for violations before running the test again. "
                     ),
                     negative="",
                     level='info'
