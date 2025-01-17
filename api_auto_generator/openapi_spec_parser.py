@@ -5,12 +5,15 @@ OpenAPI specification Parser
 # pylint: disable=too-many-nested-blocks
 
 
+import os
+import sys
 from typing import Union, TextIO
 from openapi_parser import parse, specification
 from openapi_spec_validator.readers import read_from_filename
 from openapi_spec_validator import validate_spec
 import openapi_spec_validator as osv
-from endpoint_name_generator import NameGenerator
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from api_auto_generator.endpoint_name_generator import NameGenerator
 
 
 # pylint: disable=too-many-instance-attributes
