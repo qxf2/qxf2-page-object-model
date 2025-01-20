@@ -43,6 +43,18 @@ def test_accessibility(test_obj):
             current_violations = axe_result.get('violations', [])
             #Load the existing snapshot for the current page (if available)
             existing_snapshot = snapshot_util.initialize_snapshot(snapshot_dir, page, current_violations=current_violations)
+            if existing_snapshot is None:
+                test_obj.log_result(
+                    True,
+                    positive=(
+                        f"No existing snapshot was found for {page} page. "
+                        "A new snapshot has been created in ../conf/snapshot dir. "
+                        "Please review the snapshot for violations before running the test again. "
+                    ),
+                    negative="",
+                    level='info'
+                )
+                continue
 
             #Compare the current violations with the existing snapshot to find any new violations
             snapshots_match, new_violation_details = snapshot_util.compare_and_log_violation(
