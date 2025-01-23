@@ -2,7 +2,7 @@
 A config Factory module to build UI, API & Mobile test configs
 """
 import os
-from typing import List
+from typing import List, Optional
 from pytest import FixtureRequest
 from .config_store import (Browser,
                            Platform,
@@ -53,8 +53,8 @@ class ConfigFactory:
         return APIURL.url
 
     def build_ui_config(self,
-                        browser_data: None|Browser = None,
-                        platform_data: None|Platform = None) -> UiTestConfig:
+                        browser_data: Optional[Browser] = None,
+                        platform_data: Optional[Platform] = None) -> UiTestConfig:
         "Build UI config"
         test = TestName(self.testname)
         base_url = BaseURL(self._get("url"))
