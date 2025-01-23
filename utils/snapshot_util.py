@@ -4,17 +4,22 @@ Snapshot Integration
 """
 import os
 import json
+from loguru import logger
+from deepdiff import DeepDiff
+from datetime import datetime
 from pytest_snapshot.plugin import Snapshot
 import conf.snapshot_dir_conf
-
-snapshot_dir = conf.snapshot_dir_conf.snapshot_dir
 
 class Snapshotutil(Snapshot):
     "Snapshot object to use snapshot for comparisions"
     def __init__(self, snapshot_update=False,
                  allow_snapshot_deletion=False,
-                 snapshot_dir=snapshot_dir):
+                 snapshot_dir=None):
+        if snapshot_dir is None:
+            snapshot_dir = conf.snapshot_dir_conf.snapshot_dir
         super().__init__(snapshot_update, allow_snapshot_deletion, snapshot_dir)
+        self.snapshot_update = snapshot_update
+
 
     def load_snapshot(self, snapshot_file_path):
         "Load the saved snapshot from a JSON file."
@@ -29,50 +34,150 @@ class Snapshotutil(Snapshot):
         with open(snapshot_file_path, 'w', encoding='utf-8') as file:
             json.dump(current_violations, file, ensure_ascii=False, indent=4)
 
-    def find_new_violations(self, current_violations, existing_snapshot):
-        "Return a list of new violations that are not in the saved snapshot."
-        new_violations = []
-        for violation in current_violations:
-            if violation not in existing_snapshot:
-                new_violations.append(violation)
-        return new_violations
+    def initialize_violations_log(self,
+                                  log_filename: str = "new_violations_record.txt") -> str:
+        "Initialize and clear the violations log file."
+        log_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'conf')
+        log_path = os.path.join(log_dir, log_filename)
+        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        with open(log_path, 'a', encoding='utf-8') as f:
+            f.write(f"Accessibility Violations Log: {timestamp} \n")
+            f.write("====================================\n")
+        return log_path
 
-    def sanitize_html(self, html):
-        "Replace charmap characters so read html."
-        return ''.join(c if ord(c) < 128 else '?' for c in html)
+    def get_snapshot_path(self, snapshot_dir: str, page_name: str) -> str:
+        "Get the full path to the snapshot file for a given page."
+        if not os.path.exists(snapshot_dir):
+            os.makedirs(snapshot_dir)
+        return os.path.join(snapshot_dir, f"snapshot_output_{page_name}.json")
 
-    def get_new_violations(self, current_violations_json, existing_snapshot_json, page):
-        "Compares the snapshots and prints the new violations"
-        # Load the results from JSON strings
-        new_violations = json.loads(current_violations_json)
-        saved_snapshot = json.loads(existing_snapshot_json)
+    def log_violations_to_file(self, new_violation_details, violations_log_path):
+        "Log violations in to a text file"
+        try:
+            with open(violations_log_path, 'a', encoding='utf-8') as log_file:
+                for violation in new_violation_details:
+                    violation_message = self.format_violation_message(violation)
+                    # Write complete violation message to file
+                    log_file.write(violation_message)
+        except Exception as e:
+            print(f"Error while logging violations: {e}")
 
-        # Create a set of existing HTML elements from the saved snapshot
-        existing_html_elements = set()
-        for saved_item in saved_snapshot:
-            for saved_node in saved_item['nodes']:
-                if saved_node['any']:
-                    for violation in saved_node['any']:
-                        for related in violation['relatedNodes']:
-                            existing_html_elements.add(related['html'])
+    def format_violation_message(self, violation):
+        "Format the violation message into a string."
+        return (
+            f"New violations found on: {violation['page']}\n"
+            f"Description: {violation['description']}\n"
+            f"Violation ID: {violation['id']}\n"
+            f"Violation Root: {violation['key']}\n"
+            f"Impact: {violation['impact']}\n"
+            f"nodes: {violation['nodes']}\n\n"
+        )
 
-        # Set to track printed elements
-        new_violation_details = []
+    def initialize_snapshot(self, snapshot_dir, page, current_violations=None):
+        "Initialize the snapshot for a given page."
+        snapshot_file_path = self.get_snapshot_path(snapshot_dir, page)
+        if not os.path.exists(snapshot_dir):
+            os.makedirs(snapshot_dir)
+        existing_snapshot = self.load_snapshot(snapshot_file_path)
+        # Save a new snapshot if none exists
+        if existing_snapshot is None and current_violations is not None:
+            self.save_snapshot(snapshot_file_path, current_violations)
+            return None
 
-        # Compare new violations and add new violation HTML elements not in the snapshot
-        for new_item in new_violations:
-            for new_node in new_item['nodes']:
-                if new_node['any']:
-                    for violation in new_node['any']:
-                        for related in violation['relatedNodes']:
-                            # Add only if the HTML is not in the existing snapshot
-                            if related['html'] not in existing_html_elements:
-                                sanitized_html = self.sanitize_html(related['html'])
-                                new_violation_details.append({
-                                    "page": page,
-                                    "id": new_item.get('id', 'unknown'),
-                                    "impact": new_item.get('impact', 'unknown'),
-                                    "description": new_item.get('description', 'unknown'),
-                                    "html": sanitized_html
-                                })
-        return new_violation_details
+        return existing_snapshot
+
+    def compare_and_log_violation(self, current_violations, existing_snapshot, page, log_path):
+        "Compare current violations against the existing snapshot."
+
+        # Convert JSON strings to Python dictionaries
+        current_violations_dict = {item['id']: item for item in current_violations}
+        existing_snapshot_dict = {item['id']: item for item in existing_snapshot}
+
+        # Use deepdiff to compare the snapshots
+        violation_diff = DeepDiff(existing_snapshot_dict,
+                                  current_violations_dict,
+                                  ignore_order=True,
+                                  verbose_level=2)
+
+        # If there is any difference, it's a new violation
+        if violation_diff:
+            # Log the differences (you can modify this to be more specific or detailed)
+            new_violation_details = self.extract_diff_details(violation_diff, page)
+            self.log_violations_to_file(new_violation_details, log_path)
+            return False, new_violation_details
+
+        # If no difference is found
+        return True, []
+
+    def extract_diff_details(self, violation_diff, page):
+        "Extract details from the violation diff."
+        violation_details = []
+
+        # Handle newly added violations (dictionary_item_added)
+        for key, value in violation_diff.get('dictionary_item_added', {}).items():
+            violation_details.append({
+                "page": f"{page}- New Item added",
+                "id": value['id'],
+                "key": key,
+                "impact": value.get('impact', 'Unknown'),
+                "description": value.get('description', 'Unknown'),
+                "nodes": value.get('nodes', 'Unknown')
+            })
+
+        # Handle removed violations (dictionary_item_removed)
+        for key, value in violation_diff.get('dictionary_item_removed', {}).items():
+            violation_details.append({
+                "page": page,
+                "id": value['id'],
+                "key": key,
+                "impact": value.get('impact', 'Unknown'),
+                "description": value.get('description', 'Unknown'),
+                "nodes": value.get('nodes', 'Unknown')
+            })
+
+        # Handle changes to existing violations (values_changed)
+        for key, value in violation_diff.get('values_changed', {}).items():
+            path = key.split("']")[-2]
+            old_value = value['old_value']
+            new_value = value['new_value']
+            violation_details.append({
+                "page": page,
+                "id": path,
+                "key": key,
+                "impact": value.get('new_value', 'Unknown'),
+                "description": f"Changed from- {old_value} \n\t\t To- {new_value}",
+                "nodes": key
+            })
+
+        # Handle added items in iterable (iterable_item_added)
+        for key, value in violation_diff.get('iterable_item_added', {}).items():
+            violation_details.append({
+                "page": page,
+                "id": value.get('id', 'Unknown'),
+                "key": key,
+                "impact": value.get('impact', 'Unknown'),
+                "description": f"New node item added: {key}",
+                "nodes": str(value)
+            })
+
+        # Handle removed items in iterable (iterable_item_removed)
+        for key, value in violation_diff.get('iterable_item_removed', {}).items():
+            violation_details.append({
+                "page": page,
+                "id": value.get('id', 'Unknown'),
+                "key": key,
+                "impact": value.get('impact', 'Unknown'),
+                "description": f"Item node removed: {key}",
+                "nodes": str(value)
+            })
+
+        return violation_details
+
+    def log_new_violations(self, new_violation_details):
+        "Log details of new violations to the console."
+        for violation in new_violation_details:
+            violation_message = self.format_violation_message(violation)
+            # Print a truncated message to the console
+            logger.info(f"{violation_message[:120]}..."
+                        "Complete violation output is saved"
+                        "in ../conf/new_violations_record.txt")
