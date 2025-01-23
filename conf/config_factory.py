@@ -120,7 +120,7 @@ class ConfigFactory:
     def build_api_config(self) -> APITestConfig:
         "Build API test config"
         return APITestConfig(TestName(self.testname),
-                             APIURL(self._get("url")))
+                             APIURL(self._get("api_url")))
 
     def build_mobile_config(self) -> MobileTestConfig:
         "Build Mobile test config"

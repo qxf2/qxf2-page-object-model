@@ -300,14 +300,14 @@ def test_mobile_obj(mobiletestconfig, interactivemode_flag, testreporter):
                             {"status":"failed", "reason": "Exception occured"}}""")
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag, testname):  # pylint: disable=redefined-outer-name
+def test_api_obj(interactivemode_flag, testname, apitestconfig):  # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
     api_url = apitestconfig.api_url.url
     testname = apitestconfig.test.name
     log_file = testname + '.log'
     try:
         if interactivemode_flag.lower()=='y':
-            api_url,session_flag = interactive_mode.ask_questions_api(api_url)
+            api_url = interactive_mode.ask_questions_api(api_url)
             test_api_obj = APIPlayer(api_url,                                         # pylint: disable=redefined-outer-name
                                       log_file_path=log_file)
         else:
