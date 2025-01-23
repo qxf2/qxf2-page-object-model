@@ -6,7 +6,7 @@ import platform
 import sys
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from dotenv import load_dotenv
 
@@ -85,8 +85,8 @@ class BrowserStackPlatforms():
 @dataclass
 class BrowserStackConfig:
     "BrowserStack config"
-    project_name: str|None = None
-    build_name: str|None = None
+    project_name: Optional[str] = None
+    build_name: Optional[str] = None
 
 @dataclass
 class RemoteTestExecution:
@@ -98,7 +98,7 @@ class RemoteTestExecution:
 class TestRail:
     "TestRail config"
     flag: str = "N"
-    test_run_id: str|None = None
+    test_run_id: Optional[str] = None
 
 @dataclass
 class Tesults:
