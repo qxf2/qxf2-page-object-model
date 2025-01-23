@@ -15,8 +15,6 @@ import pytest
 from loguru import logger
 from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from conf import browser_os_name_conf               # pylint: disable=import-error wrong-import-position
-from conf import base_url_conf                      # pylint: disable=import-error wrong-import-position
 from endpoints.api_player import APIPlayer        # pylint: disable=import-error wrong-import-position
 from page_objects.PageFactory import PageFactory    # pylint: disable=import-error wrong-import-position
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
@@ -302,7 +300,7 @@ def test_mobile_obj(mobiletestconfig, interactivemode_flag, testreporter):
                             {"status":"failed", "reason": "Exception occured"}}""")
 
 @pytest.fixture
-def test_api_obj(interactivemode_flag, testname, api_url=base_url_conf.api_base_url):  # pylint: disable=redefined-outer-name
+def test_api_obj(interactivemode_flag, testname, api_url):  # pylint: disable=redefined-outer-name
     "Return an instance of Base Page that knows about the third party integrations"
     api_url = apitestconfig.api_url.url
     testname = apitestconfig.test.name
@@ -546,11 +544,11 @@ def pytest_addoption(parser):
                             help="Browser. Valid options are firefox, Edge and chrome")
         parser.addoption("--app_url",
                             dest="url",
-                            default=base_url_conf.ui_base_url,
+                            default=ConfigFactory.get_default_ui_url(),
                             help="The url of the application")
         parser.addoption("--api_url",
                             dest="api_url",
-                            default=base_url_conf.api_base_url,
+                            default=ConfigFactory.get_default_api_url(),
                             help="The url of the api")
         parser.addoption("--testrail_flag",
                             dest="testrail_flag",

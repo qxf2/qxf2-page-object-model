@@ -42,6 +42,16 @@ class ConfigFactory:
             return tuple([self._get(v) for v in value if self._get(v)])
         return self.config.getoption(value)
 
+    @staticmethod
+    def get_default_ui_url() -> str:
+        "Get default UI URL"
+        return BaseURL.url
+
+    @staticmethod
+    def get_default_api_url() -> str:
+        "Get the default API URL"
+        return APIURL.url
+
     def build_ui_config(self,
                         browser_data: None|Browser = None,
                         platform_data: None|Platform = None) -> UiTestConfig:
@@ -91,8 +101,8 @@ class ConfigFactory:
         else:
             browsers = []
             for browser in self._get("browser"):
-               browsers.append(Browser(name=browser,
-                                       version="latest"))
+                browsers.append(Browser(name=browser,
+                                        version="latest"))
             sys_platforms = []
             if self._get("os_name") and self._get("os_version"):
                 for name, version in zip(self._get("os_name"), self._get("os_version")):
@@ -101,7 +111,7 @@ class ConfigFactory:
             else:
                 local_platforms = LocalPlatforms()
                 sys_platforms = local_platforms.entries
-                
+
         for browser in browsers:
             for sys_platform in sys_platforms:
                 configs.append(self.build_ui_config(browser, sys_platform))

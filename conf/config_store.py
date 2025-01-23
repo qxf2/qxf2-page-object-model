@@ -1,16 +1,23 @@
-from dataclasses import dataclass, field, asdict
+"""
+A config store module to store the test setup configurations
+"""
 import os
-from pathlib import Path
 import platform
+import sys
+from dataclasses import dataclass, field, asdict
+from pathlib import Path
 from typing import List
 
-from core_helpers.prettytable_object import ConfigSummaryTable
 from dotenv import load_dotenv
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from core_helpers.prettytable_object import ConfigSummaryTable
 
 cwd = Path.cwd()
 env_file = os.path.join(cwd, '.env.remote')
 load_dotenv(env_file)
 
+# pylint: disable=line-too-long
 @dataclass
 class TestName:
     "Test function name"
@@ -64,11 +71,13 @@ class LocalPlatforms():
 
 @dataclass
 class BrowserStackBrowsers():
+    "BrowserStack Browser config"
     entries: List[Browser] = field(default_factory=lambda:[Chrome(version="latest"),
                                                            Firefox(version="latest")])
 
 @dataclass
 class BrowserStackPlatforms():
+    "BrowserStack Platform config"
     entries: List[Platform] = field(default_factory=lambda:[Platform(name="windows",
                                                                      version='10'),
                                                             Platform(name="OS X",version="Sequoia")])
@@ -170,6 +179,7 @@ class MobileDevice:
     flag: str
     name: str
 
+# pylint: disable=too-many-instance-attributes
 @dataclass
 class MobileTestConfig:
     "Consolidated Mobile test config"
@@ -177,7 +187,7 @@ class MobileTestConfig:
     mobile_os: MobileOs
     mobile_device: MobileDevice
     mobile_app: MobileApp
-    appium_config: AppiumConfig 
+    appium_config: AppiumConfig
     ios_config: IOs
     remote_test_execution: RemoteTestExecution
     reporting: Reporting
