@@ -85,29 +85,33 @@ class ConfigFactory:
     def build_iterative_ui_config(self) -> List[UiTestConfig]:
         "Build a list of UI test config"
         configs = []
+        remote_platform = os.getenv("REMOTE_BROWSER_PLATFORM")
         if self._get("browser")[0].lower() == "all":
             if self._get("remote_flag").lower() == "n":
                 local_browsers = LocalBrowsers()
-                local_platforms = LocalPlatforms()
                 browsers = local_browsers.entries
-                sys_platforms = local_platforms.entries
             if self._get("remote_flag").lower() == "y":
-                remote_platform = os.getenv("REMOTE_BROWSER_PLATFORM")
                 if remote_platform.lower() == "bs":
                     browserstack_browsers = BrowserStackBrowsers()
-                    browserstack_platforms = BrowserStackPlatforms()
                     browsers = browserstack_browsers.entries
-                    sys_platforms = browserstack_platforms.entries
         else:
             browsers = []
-            for browser in self._get("browser"):
-                browsers.append(Browser(name=browser,
-                                        version="latest"))
+            if self._get("browser"):
+                for browser in self._get("browser"):
+                    browsers.append(Browser(name=browser,
+                                            version="latest"))
+            else:
+                browser.append(Browser())
+        if self._get("remote_flag").lower() == "y":
+            if remote_platform.lower() == "bs":
+                browserstack_platforms = BrowserStackPlatforms()
+                sys_platforms = browserstack_platforms.entries
+        else:
             sys_platforms = []
             if self._get("os_name") and self._get("os_version"):
                 for name, version in zip(self._get("os_name"), self._get("os_version")):
                     sys_platforms.append(Platform(name=name,
-                                                  version=version))
+                                                version=version))
             else:
                 local_platforms = LocalPlatforms()
                 sys_platforms = local_platforms.entries

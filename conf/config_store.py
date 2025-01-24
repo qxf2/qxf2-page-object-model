@@ -55,8 +55,8 @@ class Safari(Browser):
 @dataclass
 class Platform:
     "Platform config"
-    name: str = platform.uname()[0]
-    version: str = platform.uname()[2]
+    name: str = "windows"
+    version: str = "11"
 
 @dataclass
 class LocalBrowsers():
@@ -79,7 +79,7 @@ class BrowserStackBrowsers():
 class BrowserStackPlatforms():
     "BrowserStack Platform config"
     entries: List[Platform] = field(default_factory=lambda:[Platform(name="windows",
-                                                                     version='10'),
+                                                                     version='11'),
                                                             Platform(name="OS X",version="Sequoia")])
 
 @dataclass
