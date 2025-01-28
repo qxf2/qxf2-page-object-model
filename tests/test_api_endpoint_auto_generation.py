@@ -12,9 +12,7 @@ API Endpoint Auto generation test validates:
 """
 
 import pytest
-import random
 import requests
-import string
 
 @pytest.mark.API_AUTO_GEN_UNIT
 def test_module_name_generation(name_generator):
@@ -60,7 +58,7 @@ def test_parsed_spec_post_method(parsed_spec, requests_mock):
 	json_keys = http_method_in_test["params"]["json_params"]
 	json_content = {}
 	for key in json_keys:
-		json_content[key[0]] = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+		json_content[key[0]] = "random_string"
 	requests_mock.post("http://stub-cars-api/cars/add", json=json_content)
 	json_response = requests.request(method=http_method, url=f"http://stub-cars-api{endpoint}").json()
 	# Validate that the JSON keys were rightly parsed for the endpoint
@@ -78,7 +76,7 @@ def test_parsed_spec_query_params(parsed_spec, requests_mock):
 	query_keys = http_method_in_test["params"]["query_params"]
 	query_params = {}
 	for key in query_keys:
-		query_params[key[0]] =  ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+		query_params[key[0]] =  "random_string"
 	requests_mock.get(f"http://stub-cars-api/cars/find?name={query_params['name']}&brand={query_params['brand']}", status_code=200)
 	response = requests.request(method=http_method, url=f"http://stub-cars-api{endpoint}", params=query_params)
 	# Validat that the Query params were rightly parsed from the spec
