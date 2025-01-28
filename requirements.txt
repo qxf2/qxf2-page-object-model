@@ -13,6 +13,7 @@ tesults==1.2.1
 boto3==1.33.0
 loguru
 imageio
+imageio
 questionary>=1.9.0
 clear-screen>=0.1.14
 prompt-toolkit==2.0.10
@@ -26,4 +27,5 @@ prettytable==3.10.2
 setuptools>=75.1.0; python_version >= '3.12'
 openapi3-parser==1.1.17
 jinja2==3.1.3
+deepdiff>=8.1.1
 requests_mock==1.12.1
