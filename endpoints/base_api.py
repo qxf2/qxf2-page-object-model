@@ -11,12 +11,13 @@ class BaseAPI:
     session_object = requests.Session()
     base_url = None
 
-    def get(self, url, headers=None):
+    def get(self, url, headers=None, raise_for_status=True):
         "Get request"
         headers = headers if headers else {}
         try:
             response = self.session_object.get(url=url, headers=headers)
-            response.raise_for_status()
+            if raise_for_status:
+                response.raise_for_status()
         except HTTPError as http_err:
             print(f"GET request failed: {http_err}")
         except ConnectionError:
@@ -26,7 +27,7 @@ class BaseAPI:
         return response
 
     # pylint: disable=too-many-arguments
-    def post(self, url,params=None, data=None,json=None,headers=None):
+    def post(self, url,params=None, data=None, json=None, headers=None, raise_for_status=True):
         "Post request"
         headers = headers if headers else {}
         try:
@@ -35,7 +36,8 @@ class BaseAPI:
                                                 data=data,
                                                 json=json,
                                                 headers=headers)
-            response.raise_for_status()
+            if raise_for_status:
+                response.raise_for_status()
         except HTTPError as http_err:
             print(f"POST request failed: {http_err}")
         except ConnectionError:
@@ -45,12 +47,13 @@ class BaseAPI:
         return response
 
 
-    def delete(self, url,headers=None):
+    def delete(self, url,headers=None, raise_for_status=True):
         "Delete request"
         headers = headers if headers else {}
         try:
             response = self.session_object.delete(url, headers=headers)
-            response.raise_for_status()
+            if raise_for_status:
+                response.raise_for_status()
         except HTTPError as http_err:
             print(f"DELETE request failed: {http_err}")
         except ConnectionError:
@@ -59,12 +62,13 @@ class BaseAPI:
             print(f"\033[1;31mAn error occurred: {err}\033[1;m")
         return response
 
-    def put(self,url,json=None, headers=None):
+    def put(self,url,json=None, headers=None, raise_for_status=True):
         "Put request"
         headers = headers if headers else {}
         try:
             response = self.session_object.put(url, json=json, headers=headers)
-            response.raise_for_status()
+            if raise_for_status:
+                response.raise_for_status()
         except HTTPError as http_err:
             print(f"PUT request failed: {http_err}")
         except ConnectionError:
