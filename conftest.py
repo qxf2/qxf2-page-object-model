@@ -22,6 +22,8 @@ from page_objects.PageFactory import PageFactory    # pylint: disable=import-err
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
 from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
 from core_helpers.logging_objects import Logging_Objects  # pylint: disable=import-error wrong-import-position
+from api_auto_generator.endpoint_name_generator import NameGenerator
+from api_auto_generator.openapi_spec_parser import OpenAPISpecParser
 
 load_dotenv()
 
@@ -249,6 +251,19 @@ def test_api_obj(interactivemode_flag, testname, api_url):  # pylint: disable=re
     except Exception as e:                    # pylint: disable=broad-exception-caught
         print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
         print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
+
+# Fixtures for API Endpoint Auto generation unit tests
+@pytest.fixture
+def name_generator():
+	return NameGenerator(endpoint_url="/cars/{name}",
+                      if_query_param=False,
+                      path_params=[('name', 'str')],
+                      requestbody_type=None)
+
+@pytest.fixture(scope="session")
+def parsed_spec():
+	p_spec = OpenAPISpecParser("conf/cars_api_openapi_spec.json", logger).parsed_dict
+	return p_spec["cars_endpoint"]["CarsEndpoint"]["instance_methods"]
 
 def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False):
     "Upload log file to provided BrowserStack session"
