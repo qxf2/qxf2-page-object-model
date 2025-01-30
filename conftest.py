@@ -313,6 +313,9 @@ def test_api_obj(interactivemode_flag, testname, apitestconfig):  # pylint: disa
         else:
             test_api_obj = APIPlayer(url=api_url,
                                       log_file_path=log_file)
+        test_api_obj.write(f"Starting API test - {testname} Execution:")
+        test_api_obj.write(apitestconfig)
+
         yield test_api_obj
 
     except Exception as e:                    # pylint: disable=broad-exception-caught
