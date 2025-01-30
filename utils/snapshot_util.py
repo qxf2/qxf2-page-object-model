@@ -65,7 +65,7 @@ class Snapshotutil(Snapshot):
     def format_violation_message(self, violation):
         "Format the violation message into a string."
         return (
-            f"New violations found on: {violation['page']}\n"
+            f"Violations on page: {violation['page']}\n"
             f"Description: {violation['description']}\n"
             f"Violation ID: {violation['id']}\n"
             f"Violation Root: {violation['key']}\n"
@@ -116,7 +116,7 @@ class Snapshotutil(Snapshot):
         # Handle newly added violations (dictionary_item_added)
         for key, value in violation_diff.get('dictionary_item_added', {}).items():
             violation_details.append({
-                "page": f"{page}- New Item added",
+                "page": f"{page}- New violation added",
                 "id": value['id'],
                 "key": key,
                 "impact": value.get('impact', 'Unknown'),
@@ -127,7 +127,7 @@ class Snapshotutil(Snapshot):
         # Handle removed violations (dictionary_item_removed)
         for key, value in violation_diff.get('dictionary_item_removed', {}).items():
             violation_details.append({
-                "page": page,
+                "page": f"{page}- Violation resolved",
                 "id": value['id'],
                 "key": key,
                 "impact": value.get('impact', 'Unknown'),
@@ -141,7 +141,7 @@ class Snapshotutil(Snapshot):
             old_value = value['old_value']
             new_value = value['new_value']
             violation_details.append({
-                "page": page,
+                "page": f"{page}- Violation Node updated",
                 "id": path,
                 "key": key,
                 "impact": value.get('new_value', 'Unknown'),
@@ -152,7 +152,7 @@ class Snapshotutil(Snapshot):
         # Handle added items in iterable (iterable_item_added)
         for key, value in violation_diff.get('iterable_item_added', {}).items():
             violation_details.append({
-                "page": page,
+                "page": f"{page}- Violation Node added",
                 "id": value.get('id', 'Unknown'),
                 "key": key,
                 "impact": value.get('impact', 'Unknown'),
@@ -163,7 +163,7 @@ class Snapshotutil(Snapshot):
         # Handle removed items in iterable (iterable_item_removed)
         for key, value in violation_diff.get('iterable_item_removed', {}).items():
             violation_details.append({
-                "page": page,
+                "page": f"{page}- Violation Node resolved",
                 "id": value.get('id', 'Unknown'),
                 "key": key,
                 "impact": value.get('impact', 'Unknown'),
