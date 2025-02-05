@@ -99,15 +99,20 @@ class Snapshotutil(Snapshot):
                                   ignore_order=True,
                                   verbose_level=2)
 
-        # If there is any difference, it's a new violation
-        if violation_diff:
-            # Log the differences (you can modify this to be more specific or detailed)
-            new_violation_details = self.extract_diff_details(violation_diff, page)
-            self.log_violations_to_file(new_violation_details, log_path)
-            return False, new_violation_details
+        violation_diff_keys = set(violation_diff.keys())
 
-        # If no difference is found
-        return True, []
+        # Allowable diff keys
+        allowed_diff_keys = {'iterable_item_removed', 'dictionary_item_removed'}
+
+        # If other keys are present, fail and log the details
+        new_violation_details = self.extract_diff_details(violation_diff, page)
+        self.log_violations_to_file(new_violation_details, log_path)
+
+        # If only allowed keys are found, treat it as passing
+        if violation_diff_keys.issubset(allowed_diff_keys):
+            return True, new_violation_details
+
+        return False, new_violation_details
 
     def extract_diff_details(self, violation_diff, page):
         "Extract details from the violation diff."
