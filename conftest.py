@@ -49,8 +49,8 @@ def apitestconfig(config_factory):
 def mobiletestconfig(config_factory):
     "Mobile test config fixture"
     return config_factory.build_mobile_config()
-    
-# noqa: MC0001
+ 
+# flake8: noqa: MC0001
 @pytest.fixture
 def test_obj(uitestconfig,
              reportportal_service,

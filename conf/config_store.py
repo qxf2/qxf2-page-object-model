@@ -2,7 +2,6 @@
 A config store module to store the test setup configurations
 """
 import os
-import platform
 import sys
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
