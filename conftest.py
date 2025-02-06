@@ -39,7 +39,7 @@ def config_factory(request, testname):
 @pytest.fixture
 def uitestconfig(config_factory):
    return config_factory.build_ui_config()
- 
+
 @pytest.fixture
 def apitestconfig(config_factory):
     "API test config fixture"
@@ -50,8 +50,9 @@ def mobiletestconfig(config_factory):
     "Mobile test config fixture"
     return config_factory.build_mobile_config()
     
+# noqa: MC0001
 @pytest.fixture
-def test_obj(uitestconfig, 
+def test_obj(uitestconfig,
              reportportal_service,
              interactivemode_flag,
              highlighter_flag,

@@ -101,7 +101,7 @@ class ConfigFactory:
                     browsers.append(Browser(name=browser,
                                             version="latest"))
             else:
-                browser.append(Browser())
+                browser.append(Chrome())
         if self._get("remote_flag").lower() == "y":
             if remote_platform.lower() == "bs":
                 browserstack_platforms = BrowserStackPlatforms()
