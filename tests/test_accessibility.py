@@ -41,6 +41,15 @@ def test_accessibility(test_obj):
             axe_result = test_obj.accessibility_run_axe()
             #Extract the 'violations' section from the Axe result
             current_violations = axe_result.get('violations', [])
+            # Log if no violations are found
+            if not current_violations:
+                test_obj.log_result(
+                    True,
+                    positive=f"No accessibility violations found on {page}.",
+                    negative="",
+                    level='info'
+                )
+
             #Load the existing snapshot for the current page (if available)
             existing_snapshot = snapshot_util.initialize_snapshot(snapshot_dir, page, current_violations=current_violations)
             if existing_snapshot is None:
