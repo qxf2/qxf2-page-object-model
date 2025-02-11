@@ -88,6 +88,44 @@ class Snapshotutil(Snapshot):
 
     def compare_and_log_violation(self, current_violations, existing_snapshot, page, log_path):
         "Compare current violations against the existing snapshot."
+        # Handle empty current_violations
+        if not current_violations:
+            if not existing_snapshot:
+                # Both current_violations and existing_snapshot are empty
+                return True, []
+            else:
+                # Current violations are empty, but existing_snapshot has violations
+                # Log all existing violations as resolved
+                resolved_violations = [
+                    {
+                        "page": f"{page} - Violation resolved",
+                        "id": violation['id'],
+                        "key": violation['id'],
+                        "impact": violation.get('impact', 'Unknown'),
+                        "description": violation.get('description', 'Unknown'),
+                        "nodes": violation.get('nodes', 'Unknown')
+                    }
+                    for violation in existing_snapshot
+                ]
+                self.log_violations_to_file(resolved_violations, log_path)
+                return False, resolved_violations
+
+        if not existing_snapshot:
+            # Current violations exist, but not in existing snapshot
+            # Log all current violations as new
+            new_violations = [
+                {
+                    "page": f"{page} - New violation added",
+                    "id": violation['id'],
+                    "key": violation['id'],
+                    "impact": violation.get('impact', 'Unknown'),
+                    "description": violation.get('description', 'Unknown'),
+                    "nodes": violation.get('nodes', 'Unknown')
+                }
+                for violation in current_violations
+            ]
+            self.log_violations_to_file(new_violations, log_path)
+            return False, new_violations
 
         # Convert JSON strings to Python dictionaries
         current_violations_dict = {item['id']: item for item in current_violations}
