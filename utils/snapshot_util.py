@@ -84,6 +84,13 @@ class Snapshotutil(Snapshot):
             self.save_snapshot(snapshot_file_path, current_violations)
             return None
 
+        # If `snapshot_update` is True, overwrite the snapshot
+        if self.snapshot_update and current_violations is not None:
+            self.save_snapshot(snapshot_file_path, current_violations)
+            logger.info("Existing snapshots updated in ../conf/snapshot dir. "
+                        "Review the snapshot for violations before running the test again. ")
+            return current_violations
+
         return existing_snapshot
 
     def compare_and_log_violation(self, current_violations, existing_snapshot, page, log_path):
@@ -108,7 +115,9 @@ class Snapshotutil(Snapshot):
                     for violation in existing_snapshot
                 ]
                 self.log_violations_to_file(resolved_violations, log_path)
-                return False, resolved_violations
+                logger.info("All violations are resolved. Please check "
+                            "the log file in ../conf/new_violations_record.txt")
+                return True, []
 
         if not existing_snapshot:
             # Current violations exist, but not in existing snapshot

@@ -448,6 +448,11 @@ def interactivemode_flag(request):
     return request.config.getoption("--interactive_mode_flag")
 
 @pytest.fixture
+def snapshot_update(request):
+    "pytest fixture for snapshot update"
+    return request.config.getoption("--snapshot_update")
+
+@pytest.fixture
 def reportportal_service(request):
     "pytest service fixture for reportportal"
     try:
@@ -820,6 +825,11 @@ def pytest_addoption(parser):
                             dest="highlighter_flag",
                             default='N',
                             help="Y or N. 'Y' if you want turn on element highlighter")
+        parser.addoption("--snapshot_update",
+                            dest = "snapshot_update",
+                            action="store_true",
+                            default=False,
+                            help="Update the snapshot instead of comparing")
 
     except Exception as e:              # pylint: disable=broad-exception-caught
         print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
