@@ -100,24 +100,26 @@ class Snapshotutil(Snapshot):
             if not existing_snapshot:
                 # Both current_violations and existing_snapshot are empty
                 return True, []
-            else:
-                # Current violations are empty, but existing_snapshot has violations
-                # Log all existing violations as resolved
-                resolved_violations = [
-                    {
-                        "page": f"{page} - Violation resolved",
-                        "id": violation['id'],
-                        "key": violation['id'],
-                        "impact": violation.get('impact', 'Unknown'),
-                        "description": violation.get('description', 'Unknown'),
-                        "nodes": violation.get('nodes', 'Unknown')
-                    }
-                    for violation in existing_snapshot
-                ]
-                self.log_violations_to_file(resolved_violations, log_path)
-                logger.info("All violations are resolved. Please check "
-                            "the log file in ../conf/new_violations_record.txt")
-                return True, []
+            # Current violations are empty, but existing_snapshot has violations
+            # Log all existing violations as resolved
+            resolved_violations = [
+                {
+                    "page": f"{page} - Violation resolved",
+                    "id": violation['id'],
+                    "key": violation['id'],
+                    "impact": violation.get('impact', 'Unknown'),
+                    "description": violation.get('description', 'Unknown'),
+                    "nodes": violation.get('nodes', 'Unknown')
+                }
+                for violation in existing_snapshot
+            ]
+            self.log_violations_to_file(resolved_violations, log_path)
+            logger.info("All violations are resolved. Please check "
+                        "the log file in ../conf/new_violations_record.txt")
+            logger.info("Please update the existing snapshot by running "
+                        "--snapshot_update with pytest to update latest copy of violations.")
+
+            return True, []
 
         if not existing_snapshot:
             # Current violations exist, but not in existing snapshot
@@ -233,3 +235,5 @@ class Snapshotutil(Snapshot):
             logger.info(f"{violation_message[:120]}..."
                         "Complete violation output is saved"
                         "in ../conf/new_violations_record.txt")
+        logger.info("Please update the existing snapshot "
+                    " by running pytest with --snapshot_update to reflect the latest updates.")

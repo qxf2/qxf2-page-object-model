@@ -6,6 +6,10 @@ Pages tested:
     1. Selenium tutorial main page
     2. Selenium tutorial redirect page
     3. Selenium tutorial contact page
+
+Usage:
+- Run pytest to check for accessibility issues.
+- Use `--snapshot_update` to update the existing snapshots if changes are valid.
 """
 import os
 import sys
