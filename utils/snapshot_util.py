@@ -235,5 +235,5 @@ class Snapshotutil(Snapshot):
             logger.info(f"{violation_message[:120]}..."
                         "Complete violation output is saved"
                         "in ../conf/new_violations_record.txt")
-        logger.info("Please update the existing snapshot "
-                    " by running pytest with --snapshot_update to reflect the latest updates.")
+        logger.info("Please update the existing snapshot by running "
+                    "--snapshot_update with pytest to update latest copy of violations.")
