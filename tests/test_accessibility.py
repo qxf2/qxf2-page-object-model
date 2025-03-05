@@ -6,6 +6,10 @@ Pages tested:
     1. Selenium tutorial main page
     2. Selenium tutorial redirect page
     3. Selenium tutorial contact page
+
+Usage:
+- Run pytest to check for accessibility issues.
+- Use `--snapshot_update` to update the existing snapshots if changes are valid.
 """
 import os
 import sys
@@ -17,7 +21,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.stdout.reconfigure(encoding='utf-8')
 
 @pytest.mark.ACCESSIBILITY
-def test_accessibility(test_obj):
+def test_accessibility(test_obj, request):
     "Test accessibility using Axe and compare snapshot results and save if new violations found"
     try:
 
@@ -25,8 +29,11 @@ def test_accessibility(test_obj):
         expected_pass = 0
         actual_pass = -1
 
-        #Create an instance of the Snapshotutil class
-        snapshot_util = Snapshotutil()
+        #Get snapshot update flag from pytest options
+        snapshot_update = request.config.getoption("--snapshot_update")
+        #Create an instance of Snapshotutil
+        snapshot_util = Snapshotutil(snapshot_update=snapshot_update)
+
         #Set up the violations log file
         violations_log_path = snapshot_util.initialize_violations_log()
         snapshot_dir = conf.snapshot_dir_conf.snapshot_dir
@@ -41,6 +48,15 @@ def test_accessibility(test_obj):
             axe_result = test_obj.accessibility_run_axe()
             #Extract the 'violations' section from the Axe result
             current_violations = axe_result.get('violations', [])
+            # Log if no violations are found
+            if not current_violations:
+                test_obj.log_result(
+                    True,
+                    positive=f"No accessibility violations found on {page}.",
+                    negative="",
+                    level='info'
+                )
+
             #Load the existing snapshot for the current page (if available)
             existing_snapshot = snapshot_util.initialize_snapshot(snapshot_dir, page, current_violations=current_violations)
             if existing_snapshot is None:

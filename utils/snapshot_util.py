@@ -65,7 +65,7 @@ class Snapshotutil(Snapshot):
     def format_violation_message(self, violation):
         "Format the violation message into a string."
         return (
-            f"New violations found on: {violation['page']}\n"
+            f"Violations on page: {violation['page']}\n"
             f"Description: {violation['description']}\n"
             f"Violation ID: {violation['id']}\n"
             f"Violation Root: {violation['key']}\n"
@@ -84,10 +84,59 @@ class Snapshotutil(Snapshot):
             self.save_snapshot(snapshot_file_path, current_violations)
             return None
 
+        # If `snapshot_update` is True, overwrite the snapshot
+        if self.snapshot_update and current_violations is not None:
+            self.save_snapshot(snapshot_file_path, current_violations)
+            logger.info("Existing snapshots updated in ../conf/snapshot dir. "
+                        "Review the snapshot for violations before running the test again. ")
+            return current_violations
+
         return existing_snapshot
 
     def compare_and_log_violation(self, current_violations, existing_snapshot, page, log_path):
         "Compare current violations against the existing snapshot."
+        # Handle empty current_violations
+        if not current_violations:
+            if not existing_snapshot:
+                # Both current_violations and existing_snapshot are empty
+                return True, []
+            # Current violations are empty, but existing_snapshot has violations
+            # Log all existing violations as resolved
+            resolved_violations = [
+                {
+                    "page": f"{page} - Violation resolved",
+                    "id": violation['id'],
+                    "key": violation['id'],
+                    "impact": violation.get('impact', 'Unknown'),
+                    "description": violation.get('description', 'Unknown'),
+                    "nodes": violation.get('nodes', 'Unknown')
+                }
+                for violation in existing_snapshot
+            ]
+            self.log_violations_to_file(resolved_violations, log_path)
+            logger.info("All violations are resolved. Please check "
+                        "the log file in ../conf/new_violations_record.txt")
+            logger.info("Please update the existing snapshot by running "
+                        "--snapshot_update with pytest to update latest copy of violations.")
+
+            return True, []
+
+        if not existing_snapshot:
+            # Current violations exist, but not in existing snapshot
+            # Log all current violations as new
+            new_violations = [
+                {
+                    "page": f"{page} - New violation added",
+                    "id": violation['id'],
+                    "key": violation['id'],
+                    "impact": violation.get('impact', 'Unknown'),
+                    "description": violation.get('description', 'Unknown'),
+                    "nodes": violation.get('nodes', 'Unknown')
+                }
+                for violation in current_violations
+            ]
+            self.log_violations_to_file(new_violations, log_path)
+            return False, new_violations
 
         # Convert JSON strings to Python dictionaries
         current_violations_dict = {item['id']: item for item in current_violations}
@@ -99,15 +148,20 @@ class Snapshotutil(Snapshot):
                                   ignore_order=True,
                                   verbose_level=2)
 
-        # If there is any difference, it's a new violation
-        if violation_diff:
-            # Log the differences (you can modify this to be more specific or detailed)
-            new_violation_details = self.extract_diff_details(violation_diff, page)
-            self.log_violations_to_file(new_violation_details, log_path)
-            return False, new_violation_details
+        violation_diff_keys = set(violation_diff.keys())
 
-        # If no difference is found
-        return True, []
+        # Allowable diff keys
+        allowed_diff_keys = {'iterable_item_removed', 'dictionary_item_removed'}
+
+        # If other keys are present, fail and log the details
+        new_violation_details = self.extract_diff_details(violation_diff, page)
+        self.log_violations_to_file(new_violation_details, log_path)
+
+        # If only allowed keys are found, treat it as passing
+        if violation_diff_keys.issubset(allowed_diff_keys):
+            return True, new_violation_details
+
+        return False, new_violation_details
 
     def extract_diff_details(self, violation_diff, page):
         "Extract details from the violation diff."
@@ -116,7 +170,7 @@ class Snapshotutil(Snapshot):
         # Handle newly added violations (dictionary_item_added)
         for key, value in violation_diff.get('dictionary_item_added', {}).items():
             violation_details.append({
-                "page": f"{page}- New Item added",
+                "page": f"{page}- New violation added",
                 "id": value['id'],
                 "key": key,
                 "impact": value.get('impact', 'Unknown'),
@@ -127,7 +181,7 @@ class Snapshotutil(Snapshot):
         # Handle removed violations (dictionary_item_removed)
         for key, value in violation_diff.get('dictionary_item_removed', {}).items():
             violation_details.append({
-                "page": page,
+                "page": f"{page}- Violation resolved",
                 "id": value['id'],
                 "key": key,
                 "impact": value.get('impact', 'Unknown'),
@@ -141,7 +195,7 @@ class Snapshotutil(Snapshot):
             old_value = value['old_value']
             new_value = value['new_value']
             violation_details.append({
-                "page": page,
+                "page": f"{page}- Violation Node updated",
                 "id": path,
                 "key": key,
                 "impact": value.get('new_value', 'Unknown'),
@@ -152,7 +206,7 @@ class Snapshotutil(Snapshot):
         # Handle added items in iterable (iterable_item_added)
         for key, value in violation_diff.get('iterable_item_added', {}).items():
             violation_details.append({
-                "page": page,
+                "page": f"{page}- Violation Node added",
                 "id": value.get('id', 'Unknown'),
                 "key": key,
                 "impact": value.get('impact', 'Unknown'),
@@ -163,7 +217,7 @@ class Snapshotutil(Snapshot):
         # Handle removed items in iterable (iterable_item_removed)
         for key, value in violation_diff.get('iterable_item_removed', {}).items():
             violation_details.append({
-                "page": page,
+                "page": f"{page}- Violation Node resolved",
                 "id": value.get('id', 'Unknown'),
                 "key": key,
                 "impact": value.get('impact', 'Unknown'),
@@ -181,3 +235,5 @@ class Snapshotutil(Snapshot):
             logger.info(f"{violation_message[:120]}..."
                         "Complete violation output is saved"
                         "in ../conf/new_violations_record.txt")
+        logger.info("Please update the existing snapshot by running "
+                    "--snapshot_update with pytest to update latest copy of violations.")
