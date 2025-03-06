@@ -13,7 +13,7 @@ class EmailException(RuntimeError):
     """There was an ambiguous exception that occurred while handling your
     request."""
 
-class ConnectionError(EmailException):
+class EmailConnectionError(EmailException):
     """A Connection error occurred."""
 
 class AuthenticationError(EmailException):

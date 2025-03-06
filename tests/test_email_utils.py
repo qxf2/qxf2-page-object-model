@@ -2,7 +2,8 @@
 This is an example automated test to check email utils
 Our automated test will do the following:
     #login to email and fetch mailboxes
-    #After fetching the mail box ,select and fetch messages and print the number of messages and the subject of the messages
+    #After fetching the mail box ,select and fetch messages and 
+    # print the number of messages and the subject of the messages
 
 Prerequisites:
     - Email account with app password
@@ -16,9 +17,10 @@ from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 load_dotenv()
-
+@pytest.mark.skip(reason="Skipping this test to not to run in CI")
 @pytest.mark.EMAIL
 def test_email_util():
+    "Test email to login, fetch mailboxes, retrieve messages, fetch threads, and verify subjects."
     try:
         # Initialize flags for test summary
         expected_pass = 0
@@ -66,7 +68,6 @@ def test_email_util():
             print(f"Fetching Message subject from test script: {fetched_msg.get('subject')}")
             expected_pass += 1
             actual_pass += 1
-            
             msg.fetch()
             thread_messages = msg.fetch_thread()
             if thread_messages:
@@ -75,6 +76,7 @@ def test_email_util():
                     subject = getattr(message, 'subject', 'No subject attribute')
                     body = getattr(message, 'body', 'no body message found')
                     print(f"Thread message subject: {subject}")
+                    print(f"Thread message subject: {body}")
             else:
                 print("No messages found in thread.")
 
@@ -92,8 +94,8 @@ def test_email_util():
             print("No messages found in INBOX.")
 
     except Exception as e:
-        print("Exception when trying to run test: %s" %__file__)
-        print("Python says: %s" % str(e))
+        print(f"Exception when trying to run test: {__file__}")
+        print(f"Python says: {e}")
 
     finally:
         # logout
@@ -102,4 +104,4 @@ def test_email_util():
         expected_pass += 1
         actual_pass += 1
 
-    assert expected_pass == actual_pass, "Test failed: %s" %__file__
+    assert expected_pass == actual_pass, f"Test failed: {__file__}"

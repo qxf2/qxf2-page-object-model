@@ -4,11 +4,11 @@ import sys
 import re
 import imaplib
 import logging
-from email.header import decode_header
 from dotenv import load_dotenv
 from integrations.reporting_channels.email.mailbox import Mailbox
 from integrations.reporting_channels.email.utf import encode as encode_utf7, decode as decode_utf7
 from integrations.reporting_channels.email.exceptions import *
+from integrations.reporting_channels.email.exceptions import AuthenticationError
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 load_dotenv()
 
@@ -167,7 +167,7 @@ class Email():
             raise Exception('Messages must be a dictionary')
 
         fetch_str = ','.join(messages.keys())
-        response, results = self.imap.uid('FETCH', fetch_str, '(UID BODY.PEEK[] FLAGS)')
+        _, results = self.imap.uid('FETCH', fetch_str, '(UID BODY.PEEK[] FLAGS)')
 
         for raw_message in results:
             if isinstance(raw_message, tuple):

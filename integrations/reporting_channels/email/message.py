@@ -3,8 +3,7 @@ import email
 import re
 import time
 import os
-from email.header import decode_header, make_header
-from imaplib import ParseFlags
+from email.header import decode_header
 
 class Message():
 
@@ -157,7 +156,7 @@ class Message():
                 subject_parts.append(part)
         parsed_subject = ''.join(subject_parts)
         return parsed_subject
-    
+
     def parse(self, raw_message):
         raw_headers = raw_message[0]
         raw_email = raw_message[1]
@@ -166,7 +165,7 @@ class Message():
             raw_headers = raw_headers.decode('utf-8', errors='replace')
 
         if isinstance(raw_email, bytes):
-            raw_email = raw_email.decode('utf-8', errors='replace')  
+            raw_email = raw_email.decode('utf-8', errors='replace')
 
         if not isinstance(raw_email, str):
             raise ValueError("Decoded raw_email is not a string")
@@ -212,11 +211,11 @@ class Message():
             check_gmail_host = 'gmail.com' in self.email.IMAP_HOST
 
             if check_gmail_host:
-                response, results = self.email.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[] X-GM-THRID)')
+                _, results = self.email.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[] X-GM-THRID)')
                 self.parse(results[0])
 
             else:
-                response, results = self.email.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[])')
+                _, results = self.email.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[])')
                 self.parse(results[0])
 
         return self.message
