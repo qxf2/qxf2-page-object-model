@@ -225,7 +225,7 @@ class Message():
         self.fetch()
         original_mailbox = self.mailbox
         self.email.use_mailbox(original_mailbox.name)
-        
+
         combined_messages = {}
 
         # Check whether it's Gmail or Outlook based on IMAP host

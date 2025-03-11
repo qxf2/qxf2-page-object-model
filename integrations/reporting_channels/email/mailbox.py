@@ -24,39 +24,60 @@ class Mailbox():
     def mail(self, prefetch=False, **kwargs):
         search = ['ALL']
 
-        kwargs.get('read')   and search.append('SEEN')
-        kwargs.get('unread') and search.append('UNSEEN')
+        if kwargs.get('read'):
+            search.append('SEEN')
+        if kwargs.get('unread'):
+            search.append('UNSEEN')
 
-        kwargs.get('starred')   and search.append('FLAGGED')
-        kwargs.get('unstarred') and search.append('UNFLAGGED')
+        if kwargs.get('starred'):
+            search.append('FLAGGED')
+        if kwargs.get('unstarred'):
+            search.append('UNFLAGGED')
 
-        kwargs.get('deleted')   and search.append('DELETED')
-        kwargs.get('undeleted') and search.append('UNDELETED')
+        if kwargs.get('deleted'):
+            search.append('DELETED')
+        if kwargs.get('undeleted'):
+            search.append('UNDELETED')
 
-        kwargs.get('draft')   and search.append('DRAFT')
-        kwargs.get('undraft') and search.append('UNDRAFT')
+        if kwargs.get('draft'):
+            search.append('DRAFT')
+        if kwargs.get('undraft'):
+            search.append('UNDRAFT')
 
-        kwargs.get('before') and search.extend(['BEFORE', kwargs.get('before').strftime(self.date_format)])
-        kwargs.get('after')  and search.extend(['SINCE', kwargs.get('after').strftime(self.date_format)])
-        kwargs.get('on')     and search.extend(['ON', kwargs.get('on').strftime(self.date_format)])
+        if kwargs.get('before'):
+            search.extend(['BEFORE', kwargs['before'].strftime(self.date_format)])
+        if kwargs.get('after'):
+            search.extend(['SINCE', kwargs['after'].strftime(self.date_format)])
+        if kwargs.get('on'):
+            search.extend(['ON', kwargs['on'].strftime(self.date_format)])
 
-        kwargs.get('header') and search.extend(['HEADER', kwargs.get('header')[0], kwargs.get('header')[1]])
+        if kwargs.get('header'):
+            search.extend(['HEADER', kwargs['header'][0], kwargs['header'][1]])
 
-        kwargs.get('sender') and search.extend(['FROM', kwargs.get('sender')])
-        kwargs.get('fr') and search.extend(['FROM', kwargs.get('fr')])
-        kwargs.get('to') and search.extend(['TO', kwargs.get('to')])
-        kwargs.get('cc') and search.extend(['CC', kwargs.get('cc')])
+        if kwargs.get('sender'):
+            search.extend(['FROM', kwargs['sender']])
+        if kwargs.get('fr'):
+            search.extend(['FROM', kwargs['fr']])
+        if kwargs.get('to'):
+            search.extend(['TO', kwargs['to']])
+        if kwargs.get('cc'):
+            search.extend(['CC', kwargs['cc']])
 
-        kwargs.get('subject') and search.extend(['SUBJECT', kwargs.get('subject')])
-        kwargs.get('body') and search.extend(['BODY', kwargs.get('body')])
+        if kwargs.get('subject'):
+            search.extend(['SUBJECT', kwargs['subject']])
+        if kwargs.get('body'):
+            search.extend(['BODY', kwargs['body']])
 
-        kwargs.get('label') and search.extend(['X-GM-LABELS', kwargs.get('label')])
-        kwargs.get('attachment') and search.extend(['HAS', 'attachment'])
+        if kwargs.get('label'):
+            search.extend(['X-GM-LABELS', kwargs['label']])
+        if kwargs.get('attachment'):
+            search.extend(['HAS', 'attachment'])
 
-        kwargs.get('query') and search.extend([kwargs.get('query')])
+        if kwargs.get('query'):
+            search.append(kwargs['query'])
 
         emails = []
-        search_criteria = ' '.join(search).encode('utf-8')  # Ensure the search criteria are byte strings
+        search_criteria = ' '.join(search).encode('utf-8')
 
         response, data = self.email.imap.uid('SEARCH', None, search_criteria)
         if response == 'OK':
