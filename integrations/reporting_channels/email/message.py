@@ -10,7 +10,7 @@ class Message():
     def __init__(self, mailbox, uid):
         self.uid = uid
         self.mailbox = mailbox
-        self.gmail = mailbox.gmail if mailbox else None
+        self.email = mailbox.email if mailbox else None
 
         self.message = None
         self.headers = {}
@@ -35,17 +35,19 @@ class Message():
 
         self.attachments = None
 
+
+
     def is_read(self):
         return ('\\Seen' in self.flags)
 
     def read(self):
         flag = '\\Seen'
-        self.gmail.imap.uid('STORE', self.uid, '+FLAGS', flag)
+        self.email.imap.uid('STORE', self.uid, '+FLAGS', flag)
         if flag not in self.flags: self.flags.append(flag)
 
     def unread(self):
         flag = '\\Seen'
-        self.gmail.imap.uid('STORE', self.uid, '-FLAGS', flag)
+        self.email.imap.uid('STORE', self.uid, '-FLAGS', flag)
         if flag in self.flags: self.flags.remove(flag)
 
     def is_starred(self):
@@ -53,12 +55,12 @@ class Message():
 
     def star(self):
         flag = '\\Flagged'
-        self.gmail.imap.uid('STORE', self.uid, '+FLAGS', flag)
+        self.email.imap.uid('STORE', self.uid, '+FLAGS', flag)
         if flag not in self.flags: self.flags.append(flag)
 
     def unstar(self):
         flag = '\\Flagged'
-        self.gmail.imap.uid('STORE', self.uid, '-FLAGS', flag)
+        self.email.imap.uid('STORE', self.uid, '-FLAGS', flag)
         if flag in self.flags: self.flags.remove(flag)
 
     def is_draft(self):
@@ -70,35 +72,39 @@ class Message():
 
     def add_label(self, label):
         full_label = '%s' % label
-        self.gmail.imap.uid('STORE', self.uid, '+X-GM-LABELS', full_label)
+        self.email.imap.uid('STORE', self.uid, '+X-GM-LABELS', full_label)
         if full_label not in self.labels: self.labels.append(full_label)
 
     def remove_label(self, label):
         full_label = '%s' % label
-        self.gmail.imap.uid('STORE', self.uid, '-X-GM-LABELS', full_label)
+        self.email.imap.uid('STORE', self.uid, '-X-GM-LABELS', full_label)
         if full_label in self.labels: self.labels.remove(full_label)
+
 
     def is_deleted(self):
         return ('\\Deleted' in self.flags)
 
     def delete(self):
         flag = '\\Deleted'
-        self.gmail.imap.uid('STORE', self.uid, '+FLAGS', flag)
+        self.email.imap.uid('STORE', self.uid, '+FLAGS', flag)
         if flag not in self.flags: self.flags.append(flag)
 
-        trash = '[Gmail]/Trash' if '[Gmail]/Trash' in self.gmail.labels() else '[Gmail]/Bin'
+        trash = '[Gmail]/Trash' if '[Gmail]/Trash' in self.email.labels() else '[Gmail]/Bin'
         if self.mailbox.name not in ['[Gmail]/Bin', '[Gmail]/Trash']:
             self.move_to(trash)
 
     # def undelete(self):
     #     flag = '\\Deleted'
-    #     self.gmail.imap.uid('STORE', self.uid, '-FLAGS', flag)
+    #     self.email.imap.uid('STORE', self.uid, '-FLAGS', flag)
     #     if flag in self.flags: self.flags.remove(flag)
 
+
     def move_to(self, name):
-        self.gmail.copy(self.uid, name, self.mailbox.name)
+        self.email.copy(self.uid, name, self.mailbox.name)
         if name not in ['[Gmail]/Bin', '[Gmail]/Trash']:
             self.delete()
+
+
 
     def archive(self):
         self.move_to('[Gmail]/All Mail')
@@ -188,10 +194,11 @@ class Message():
         self.flags = self.parse_flags(raw_headers)
         self.labels = self.parse_labels(raw_headers)
 
-        if re.search(r'X-GM-THRID (\d+)', raw_headers):
-            self.thread_id = re.search(r'X-GM-THRID (\d+)', raw_headers).groups(1)[0]
+        thread_match = re.search(r'X-GM-THRID (\d+)', raw_headers)
+        if thread_match:
+            self.thread_id = thread_match.group(1)
         if re.search(r'X-GM-MSGID (\d+)', raw_headers):
-            self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)[0]
+            self.message_id = re.search(r'X-GM-MSGID (\d+)', raw_headers).groups(1)
 
         self.attachments = [
             Attachment(attachment) for attachment in self.message.get_payload()
@@ -200,40 +207,76 @@ class Message():
 
     def fetch(self):
         if not self.message:
-            response, results = self.gmail.imap.uid('FETCH', self.uid, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
-            self.parse(results[0])
+            check_gmail_host = 'gmail.com' in self.email.IMAP_HOST
+
+            if check_gmail_host:
+                _, results = self.email.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[] X-GM-THRID)')
+                self.parse(results[0])
+
+            else:
+                _, results = self.email.imap.uid('FETCH', self.uid, '(UID BODY.PEEK[])')
+                self.parse(results[0])
+
         return self.message
 
-    # returns a list of fetched messages (both sent and received) in chronological order
+
     def fetch_thread(self):
         self.fetch()
         original_mailbox = self.mailbox
-        self.gmail.use_mailbox(original_mailbox.name)
+        self.email.use_mailbox(original_mailbox.name)
 
-        # fetch and cache messages from inbox or other received mailbox
-        response, results = self.gmail.imap.uid('SEARCH', None, '(X-GM-THRID ' + self.thread_id + ')')
-        received_messages = {}
-        uids = results[0].split(' ')
-        if response == 'OK':
-            for uid in uids: received_messages[uid] = Message(original_mailbox, uid)
-            self.gmail.fetch_multiple_messages(received_messages)
-            self.mailbox.messages.update(received_messages)
+        combined_messages = {}
 
-        # fetch and cache messages from 'sent'
-        self.gmail.use_mailbox('[Gmail]/Sent Mail')
-        response, results = self.gmail.imap.uid('SEARCH', None, '(X-GM-THRID ' + self.thread_id + ')')
-        sent_messages = {}
-        uids = results[0].split(' ')
-        if response == 'OK':
-            for uid in uids: sent_messages[uid] = Message(self.gmail.mailboxes['[Gmail]/Sent Mail'], uid)
-            self.gmail.fetch_multiple_messages(sent_messages)
-            self.gmail.mailboxes['[Gmail]/Sent Mail'].messages.update(sent_messages)
+        # Check whether it's Gmail or Outlook based on IMAP host
+        check_gmail_host = 'gmail.com' in self.email.IMAP_HOST
 
-        self.gmail.use_mailbox(original_mailbox.name)
-        return sorted(dict(received_messages.items() + sent_messages.items()).values(), key=lambda m: m.sent_at)
+        if check_gmail_host:
+            # Gmail - Use X-GM-THRID for fetching the thread
+            response, results = self.email.imap.uid('SEARCH', None, f'(X-GM-THRID {self.thread_id})')
+        else:
+            # Outlook - Use Message-ID and References to fetch the thread
+            response, results = self.email.imap.uid('FETCH', self.uid, '(UID BODY[HEADER.FIELDS (References)])')
+            if response == 'OK' and results:
+                headers = results[0][1].decode('utf-8')
+                message_id_match = re.search(r'References:\s*(.*)', headers)
+                if message_id_match:
+                    message_id = message_id_match.group(1).strip()
+                    response, results = self.email.imap.uid('SEARCH', None, f'(HEADER References "{message_id}")')
+
+        # Common processing for received messages
+        if response == 'OK' and results and results[0]:
+            uids = results[0].decode('utf-8').split(' ')
+            received_messages = {uid: Message(original_mailbox, uid) for uid in uids}
+            self.email.fetch_multiple_messages(received_messages)
+            combined_messages.update(received_messages)
+        else:
+            print(f"No received messages found with thread ID: {self.thread_id} in {self.email.current_mailbox}.")
+
+        # Fetch messages from the sent mail folder for both Gmail and Outlook
+        sent_mailbox = '"[Gmail]/Sent Mail"' if check_gmail_host else 'Sent'
+        self.email.use_mailbox(sent_mailbox)
+
+        search_criteria = f'(X-GM-THRID {self.thread_id})' if check_gmail_host else f'(HEADER Message-ID "{message_id}")'
+        response, results = self.email.imap.uid('SEARCH', None, search_criteria)
+        if response == 'OK' and results and results[0]:
+            uids = results[0].decode('utf-8').split(' ')
+            sent_messages = {uid: Message(self.email.mailboxes[sent_mailbox], uid) for uid in uids}
+            self.email.fetch_multiple_messages(sent_messages)
+            combined_messages.update(sent_messages)
+        else:
+            print(f"No sent messages found in {sent_mailbox}.")
+
+        self.email.use_mailbox(original_mailbox.name)
+        # Combine and sort messages if any were found
+        if combined_messages:
+            sorted_messages = sorted(combined_messages.values(), key=lambda m: m.sent_at)
+            return sorted_messages
+        else:
+            print("No messages found in the thread.")
+            return None
 
 class Attachment:
-    "Attachment class methods for email attachment."
+    "Attachment class methods for email attachment."    
     def __init__(self, attachment):
         self.name = attachment.get_filename()
         # Raw file data

@@ -11,9 +11,9 @@ from .utf import encode as encode_utf7, decode as decode_utf7
 
 class Mailbox():
     "Mailbox class provides methods for email operations."
-    def __init__(self, gmail, name="INBOX"):
+    def __init__(self, email, name="INBOX"):
         self.name = name
-        self.gmail = gmail
+        self.email = email
         self.date_format = "%d-%b-%Y"
         self.messages = {}
 
@@ -56,41 +56,41 @@ class Mailbox():
             search.append('UNDRAFT')
 
         if kwargs.get('before'):
-            search.extend(['BEFORE', kwargs.get('before').strftime(self.date_format)])
+            search.extend(['BEFORE', kwargs['before'].strftime(self.date_format)])
         if kwargs.get('after'):
-            search.extend(['SINCE', kwargs.get('after').strftime(self.date_format)])
+            search.extend(['SINCE', kwargs['after'].strftime(self.date_format)])
         if kwargs.get('on'):
-            search.extend(['ON', kwargs.get('on').strftime(self.date_format)])
+            search.extend(['ON', kwargs['on'].strftime(self.date_format)])
 
         if kwargs.get('header'):
-            search.extend(['HEADER', kwargs.get('header')[0], kwargs.get('header')[1]])
+            search.extend(['HEADER', kwargs['header'][0], kwargs['header'][1]])
 
         if kwargs.get('sender'):
-            search.extend(['FROM', kwargs.get('sender')])
+            search.extend(['FROM', kwargs['sender']])
         if kwargs.get('fr'):
-            search.extend(['FROM', kwargs.get('fr')])
+            search.extend(['FROM', kwargs['fr']])
         if kwargs.get('to'):
-            search.extend(['TO', kwargs.get('to')])
+            search.extend(['TO', kwargs['to']])
         if kwargs.get('cc'):
-            search.extend(['CC', kwargs.get('cc')])
+            search.extend(['CC', kwargs['cc']])
 
         if kwargs.get('subject'):
-            search.extend(['SUBJECT', kwargs.get('subject')])
+            search.extend(['SUBJECT', kwargs['subject']])
         if kwargs.get('body'):
-            search.extend(['BODY', kwargs.get('body')])
+            search.extend(['BODY', kwargs['body']])
 
         if kwargs.get('label'):
-            search.extend(['X-GM-LABELS', kwargs.get('label')])
+            search.extend(['X-GM-LABELS', kwargs['label']])
         if kwargs.get('attachment'):
             search.extend(['HAS', 'attachment'])
 
         if kwargs.get('query'):
-            search.extend([kwargs.get('query')])
+            search.append(kwargs['query'])
 
         emails = []
         search_criteria = ' '.join(search).encode('utf-8')
 
-        response, data = self.gmail.imap.uid('SEARCH', None, search_criteria)
+        response, data = self.email.imap.uid('SEARCH', None, search_criteria)
         if response == 'OK':
             uids = filter(None, data[0].split(b' '))  # filter out empty strings
 
@@ -103,15 +103,15 @@ class Mailbox():
                 messages_dict = {}
                 for email in emails:
                     messages_dict[email.uid] = email
-                self.messages.update(self.gmail.fetch_multiple_messages(messages_dict))
+                self.messages.update(self.email.fetch_multiple_messages(messages_dict))
 
         return emails
 
     # WORK IN PROGRESS. NOT FOR ACTUAL USE
-    def threads(self, prefetch=False):
+    def threads(self, prefetch=False, **kwargs):
         "Fetches email threads from the mailbox."
         emails = []
-        response, data = self.gmail.imap.uid('SEARCH', None, 'ALL'.encode('utf-8'))
+        response, data = self.email.imap.uid('SEARCH', None, 'ALL'.encode('utf-8'))
         if response == 'OK':
             uids = data[0].split(b' ')
 
@@ -122,8 +122,7 @@ class Mailbox():
 
             if prefetch:
                 fetch_str = ','.join(uids).encode('utf-8')
-                response, results = self.gmail.imap.uid('FETCH', fetch_str,
-                                        '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
+                response, results = self.email.imap.uid('FETCH', fetch_str, '(BODY.PEEK[] FLAGS X-GM-THRID X-GM-MSGID X-GM-LABELS)')
                 for index in range(len(results) - 1):
                     raw_message = results[index]
                     if re.search(rb'UID (\d+)', raw_message[0]):
