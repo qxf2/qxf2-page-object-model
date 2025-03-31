@@ -1,8 +1,16 @@
+"""
+This module defines the `Mailbox` class, which represents a mailbox in a Gmail account. 
+The class provides methods to interact with the mailbox, including searching for emails 
+based on various criteria, fetching email threads, counting emails, and managing cached 
+messages.
+"""
+
 import re
 from .message import Message
 from .utf import encode as encode_utf7, decode as decode_utf7
 
 class Mailbox():
+    "Mailbox class provides methods for email operations."
     def __init__(self, email, name="INBOX"):
         self.name = name
         self.email = email
@@ -11,17 +19,20 @@ class Mailbox():
 
     @property
     def external_name(self):
+        "Encodes the name to IMAP modified UTF-7 format."
         if "external_name" not in vars(self):
             vars(self)["external_name"] = encode_utf7(self.name)
         return vars(self)["external_name"]
 
     @external_name.setter
     def external_name(self, value):
+        "Decodes and sets the mailbox name from IMAP modified UTF-7 format."
         if "external_name" in vars(self):
             del vars(self)["external_name"]
         self.name = decode_utf7(value)
 
     def mail(self, prefetch=False, **kwargs):
+        "Searches and returns a list of emails matching the specified search criteria."
         search = ['ALL']
 
         if kwargs.get('read'):
@@ -98,6 +109,7 @@ class Mailbox():
 
     # WORK IN PROGRESS. NOT FOR ACTUAL USE
     def threads(self, prefetch=False, **kwargs):
+        "Fetches email threads from the mailbox."
         emails = []
         response, data = self.email.imap.uid('SEARCH', None, 'ALL'.encode('utf-8'))
         if response == 'OK':
@@ -120,7 +132,9 @@ class Mailbox():
         return emails
 
     def count(self, **kwargs):
+        "Returns the length of emails matching the specified search criteria."
         return len(self.mail(**kwargs))
 
     def cached_messages(self):
+        "Returns a dictionary of cached messages in the mailbox"
         return self.messages

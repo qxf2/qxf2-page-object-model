@@ -6,8 +6,7 @@ import os
 from email.header import decode_header
 
 class Message():
-
-
+    "Message class provides methods for mail functions."
     def __init__(self, mailbox, uid):
         self.uid = uid
         self.mailbox = mailbox
@@ -277,7 +276,7 @@ class Message():
             return None
 
 class Attachment:
-
+    "Attachment class methods for email attachment."    
     def __init__(self, attachment):
         self.name = attachment.get_filename()
         # Raw file data
