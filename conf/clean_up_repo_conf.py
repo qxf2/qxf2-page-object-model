@@ -15,18 +15,27 @@ dir_list = [CONF_DIR, ENDPOINTS_DIR, TEST_DIR]
 # Declaring files as file_list
 # file_list : list
 CONF_FILES_DELETE = ['api_example_conf.py',
+    'cars_api_openapi_spec.json',
+    'env_remote_enc',
     'example_form_conf.py',
     'example_table_conf.py',
     'mobile_bitcoin_conf.py',
-    'successive_form_creation_conf.py']
-ENDPOINTS_FILES_DELETE = ['Cars_API_Endpoints.py',
-    'Registration_API_Endpoints.py',
-    'User_API_Endpoints.py']
-TEST_FILES_DELETE = ['test_example_table.py',
+    'mobile_weather_shopper_conf.py',
+    'successive_form_creation_conf.py',
+    'weather_shopper_mobile_conf.py']
+ENDPOINTS_FILES_DELETE = ['cars_api_endpoints.py',
+    'registration_api_endpoints.py',
+    'user_api_endpoints.py']
+TEST_FILES_DELETE = ['test_accessibility.py',
+    'test_api_async_example.py',
+    'test_api_endpoint_auto_generation.py',
+    'test_example_table.py',
     'test_api_example.py',
     'test_mobile_bitcoin_price.py',
     'test_successive_form_creation.py',
     'test_example_form.py',
-    'test_accessibility.py']
+    'test_weather_shopper_app_menu_options.py',
+    'test_weather_shopper_app.py',
+    'test_weather_shopper_payment_app.py']
 
 file_list = [CONF_FILES_DELETE, ENDPOINTS_FILES_DELETE, TEST_FILES_DELETE]
