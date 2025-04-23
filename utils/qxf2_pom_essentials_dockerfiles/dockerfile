@@ -1,0 +1,52 @@
+# Use the latest Ubuntu version explicitly (current version 24.04)
+FROM ubuntu:latest      
+LABEL maintainer="Qxf2 Services"
+
+# Set non-interactive mode for apt-get
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update package lists and install required dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    wget \
+    ca-certificates \
+    unzip \
+    xvfb \
+    x11vnc \
+    x11-xkb-utils \
+    xkb-data \
+    python3.12 \
+    python3.12-venv \
+    python3.12-dev \
+    python3-pip \
+    vim-tiny \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Google Chrome and Firefox(latest stable)
+RUN wget -q -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+    && apt-get update \
+    && apt-get install -y /tmp/google-chrome.deb \
+    && rm /tmp/google-chrome.deb \
+    && apt-get update && apt-get install -y firefox \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create a virtual environment and install Selenium (as the non-root user)
+RUN python3 -m venv /home/venv \
+    && /home/venv/bin/pip install --no-cache-dir selenium
+
+# Set environment variables
+ENV PATH="/home/venv/bin:$PATH"
+ENV DISPLAY=:99
+
+# Add files to qxf2_pom directory
+ADD . /qxf2_pom
+
+# Set working directory
+WORKDIR /qxf2_pom
+
+#Expose port for VNC
+EXPOSE 5999
+
+# Make entrypoint.sh executable and set it to run at start
+RUN chmod +x /qxf2_pom/entrypoint.sh
+ENTRYPOINT ["/qxf2_pom/entrypoint.sh"]
+CMD ["/bin/bash"]
