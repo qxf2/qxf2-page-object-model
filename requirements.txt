@@ -1,4 +1,4 @@
-requests==2.32.0
+requests==2.32.4
 reportportal-client==5.5.4
 pytest==8.1.1
 selenium==4.12.0
