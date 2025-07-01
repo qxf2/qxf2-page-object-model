@@ -2,8 +2,8 @@
 This class models the cart page in Weathershopper application.
 """
 # pylint: disable = W0212,E0401
-from utils.Wrapit import Wrapit
-from core_helpers.mobile_app_helper import Mobile_App_Helper
+from utils import Wrapit
+from core_helpers import Mobile_App_Helper
 from .cart_objects import CartObjects
 
 class WeatherShopperCartPage(Mobile_App_Helper, CartObjects):

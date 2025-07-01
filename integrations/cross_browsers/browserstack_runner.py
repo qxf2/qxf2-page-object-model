@@ -3,7 +3,7 @@ Get the webdriver and mobiledriver for BrowserStack.
 """
 import os
 from selenium import webdriver
-from integrations.cross_browsers.remote_options import RemoteOptions
+from .remote_options import RemoteOptions
 from conf import screenshot_conf
 from conf import remote_url_conf
 

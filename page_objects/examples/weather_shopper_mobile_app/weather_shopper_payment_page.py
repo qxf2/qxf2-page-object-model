@@ -7,7 +7,7 @@ import os
 from PIL import Image, ImageEnhance, ImageFilter
 import pytesseract
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 from .weather_shopper_payment_objects import WeatherShopperPaymentPageObjects
 
 

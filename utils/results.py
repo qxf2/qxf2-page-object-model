@@ -3,7 +3,7 @@ Tracks test results and logs them.
 Keeps counters of pass/fail/total.
 """
 import logging
-from utils.Base_Logging import Base_Logging
+from .Base_Logging import Base_Logging
 
 
 class Results(object):

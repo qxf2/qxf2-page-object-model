@@ -2,9 +2,8 @@
 Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
-import unittest,os,inspect
 import time
-from core_helpers.drivers.driverfactory import DriverFactory
+from .drivers.driverfactory import DriverFactory
 from .selenium_action_objects import Selenium_Action_Objects
 from .logging_objects import Logging_Objects
 from .remote_objects import Remote_Objects
@@ -30,7 +29,7 @@ class Borg:
 
         return result_flag
 
-class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
+class Mobile_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
 
     def __init__(self):
@@ -68,7 +67,7 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
-        self.__class__ = PageFactory.PageFactory.get_page_object(page_name).__class__
+        self.__class__ = PageFactory.get_page_object(page_name).__class__
 
     def register_driver(self,mobile_os_name,mobile_os_version,device_name,app_package,app_activity,remote_flag,device_flag,app_name,app_path,ud_id,org_id,signing_id,no_reset_flag,appium_version,remote_project_name,remote_build_name,orientation):
         "Register the mobile driver"

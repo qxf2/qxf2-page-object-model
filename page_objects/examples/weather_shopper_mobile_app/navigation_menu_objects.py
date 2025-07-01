@@ -2,7 +2,7 @@
 This class models the navigation menu in Weathershopper application.
 """
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 
 class NavigationMenuObjects:
     "Page objects for the navigation menu in Weathershopper application."

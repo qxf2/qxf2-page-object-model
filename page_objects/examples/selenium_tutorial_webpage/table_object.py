@@ -2,7 +2,7 @@
 This class models the table on the Selenium tutorial page
 """
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 
 
 class Table_Object:

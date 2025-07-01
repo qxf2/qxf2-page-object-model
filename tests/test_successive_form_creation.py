@@ -8,7 +8,7 @@ Our automated test will do the following action repeatedly to fill number of for
 #The import statements import: standard Python modules,conf,credential files
 import os,sys,time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from page_objects.PageFactory import PageFactory
+from page_objects import PageFactory
 import conf.successive_form_creation_conf as conf
 import pytest
 @pytest.mark.GUI

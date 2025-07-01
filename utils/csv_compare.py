@@ -2,7 +2,8 @@
 Qxf2 Services: Utility script to compare two csv files.
 
 """
-import csv,os
+import os
+import csv
 
 class Csv_Compare():
     def is_equal(self,csv_actual,csv_expected):

@@ -8,7 +8,7 @@ Automated test will do the following:
 """
 import os, sys, time
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from page_objects.PageFactory import PageFactory
+from page_objects import PageFactory
 import conf.mobile_bitcoin_conf as conf
 import pytest
 
