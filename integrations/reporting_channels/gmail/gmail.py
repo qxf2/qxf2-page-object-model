@@ -9,7 +9,7 @@ based on different criteria, managing labels, and handling authentication.
 from __future__ import absolute_import
 import re
 import imaplib
-from integrations.reporting_channels.gmail.mailbox import Mailbox
+from .gmail import Mailbox
 from integrations.reporting_channels.gmail.utf import encode as encode_utf7, decode as decode_utf7
 from integrations.reporting_channels.gmail.exceptions import *
 

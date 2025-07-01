@@ -8,7 +8,7 @@ API reference: http://docs.gurock.com/testrail-api2/start
 """
 import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from integrations.reporting_tools import testrail_client
+from .testrail_client import APIClient
 
 class Test_Rail:
     "Wrapper around TestRail's API"
@@ -25,7 +25,7 @@ class Test_Rail:
         try :
             #Set the TestRail URL
             self.testrail_url = os.getenv('testrail_url')
-            self.client = testrail_client.APIClient(self.testrail_url)
+            self.client = APIClient(self.testrail_url)
 
             #TestRail User and Password
             self.client.user = os.getenv('testrail_user')

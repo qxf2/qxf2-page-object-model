@@ -2,7 +2,8 @@
 Qxf2 Services: A plug-n-play class for logging.
 This class wraps around Python's loguru module.
 """
-import os, inspect
+import os
+import inspect
 import sys
 import logging
 from loguru import logger

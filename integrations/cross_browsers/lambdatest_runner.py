@@ -5,7 +5,7 @@ import os
 import time
 import requests
 from selenium import webdriver
-from integrations.cross_browsers.remote_options import RemoteOptions
+from .remote_options import RemoteOptions
 from conf import remote_url_conf
 
 class LambdaTestRunner(RemoteOptions):

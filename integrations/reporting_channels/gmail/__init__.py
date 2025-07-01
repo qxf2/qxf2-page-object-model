@@ -1,5 +1,3 @@
-
-
 """
 
 GMail! Woo!
@@ -16,6 +14,7 @@ __copyright__ = 'Copyright 2013 Charlie Guo'
 from .gmail import Gmail
 from .mailbox import Mailbox
 from .message import Message
+# pylint: disable=redefined-builtin
 from .exceptions import GmailException, ConnectionError, AuthenticationError
 from .utils import login, authenticate
 

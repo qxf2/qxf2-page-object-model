@@ -3,11 +3,11 @@ This class models the redirect page of the Selenium tutorial
 URL: selenium-tutorial-redirect
 The page consists of a header, footer and some text
 """
-from core_helpers.web_app_helper import Web_App_Helper
+from core_helpers import Web_App_Helper
 from .header_object import Header_Object
 from .footer_object import Footer_Object
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 
 
 class Tutorial_Redirect_Page(Web_App_Helper,Header_Object,Footer_Object):

@@ -2,7 +2,6 @@
 Get the webrivers for local browsers.
 """
 from selenium.webdriver.chrome.options import Options
-import sys
 from selenium import webdriver
 
 class LocalOptions():

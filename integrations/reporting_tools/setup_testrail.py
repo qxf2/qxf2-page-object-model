@@ -11,7 +11,7 @@ a) Add a project if it does not exist
 """
 
 import os,ConfigParser,time
-from integrations.reporting_tools.Test_Rail import Test_Rail
+from .Test_Rail import Test_Rail
 from optparse import OptionParser
 
 

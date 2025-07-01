@@ -80,10 +80,9 @@ class Selenium_Action_Objects:
             WebDriverWait(self.driver, wait_seconds).until(EC.presence_of_element_located(path))
             result_flag =True
         except Exception:
-	        self.conditional_write(result_flag,
+            self.conditional_write(result_flag,
                     positive='Located the element: %s'%locator,
                     negative='Could not locate the element %s even after %.1f seconds'%(locator,wait_seconds))
-
         return result_flag
 
     def click_element(self,locator,wait_time=3):

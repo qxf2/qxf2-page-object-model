@@ -3,7 +3,7 @@ Helper class for Screenshot Objects
 """
 import os
 import shutil
-from core_helpers import gif_maker
+from .gif_maker import make_gif as gif_maker
 import conf.screenshot_conf as conf
 
 class Screenshot_Objects:
@@ -48,7 +48,7 @@ class Screenshot_Objects:
 
     def make_gif(self):
         "Create a gif of all the screenshots within the screenshots directory"
-        self.gif_file_name = gif_maker.make_gif(self.screenshot_dir,name=self.calling_module)
+        self.gif_file_name = gif_maker(self.screenshot_dir,name=self.calling_module)
 
         return self.gif_file_name
 

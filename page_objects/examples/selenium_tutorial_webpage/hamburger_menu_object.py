@@ -5,7 +5,7 @@ a) Clicked
 b) Hovered over
 """
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 
 
 class Hamburger_Menu_Object:

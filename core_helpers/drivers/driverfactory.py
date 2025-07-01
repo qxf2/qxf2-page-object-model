@@ -5,10 +5,10 @@ This module gets the webdrivers for different browsers and sets up the remote te
 import os
 import sys
 from dotenv import load_dotenv
-from integrations.cross_browsers.remote_options import RemoteOptions
 from .local_options import LocalOptions
 from conf import ports_conf
-from integrations.cross_browsers.lambdatest_runner import LambdaTestRunner
+from integrations import RemoteOptions
+from integrations import LambdaTestRunner
 
 load_dotenv('.env.remote')
 localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost

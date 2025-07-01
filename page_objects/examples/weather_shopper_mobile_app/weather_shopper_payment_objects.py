@@ -5,8 +5,8 @@ Page object for the payment page in Weathershopper application.
 
 
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
-from core_helpers.mobile_app_helper import Mobile_App_Helper
+from utils import Wrapit
+from core_helpers import Mobile_App_Helper
 
 class WeatherShopperPaymentPageObjects(Mobile_App_Helper):
     "Page objects for payment page in Weathershopper application."

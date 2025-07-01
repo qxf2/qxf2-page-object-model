@@ -2,7 +2,7 @@
 This class models the objects of the home screen in Weathershopper application.
 """
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 import secrets
 
 class HomepageObjects:

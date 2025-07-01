@@ -3,7 +3,7 @@ This class models the main Selenium tutorial page.
 URL: selenium-tutorial-main
 The page consists of a header, footer, form and table objects
 """
-from core_helpers.web_app_helper import Web_App_Helper
+from core_helpers import Web_App_Helper
 from .form_object import Form_Object
 from .header_object import Header_Object
 from .table_object import Table_Object
