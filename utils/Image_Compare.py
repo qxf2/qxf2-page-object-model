@@ -3,8 +3,9 @@ Qxf2 Services: Utility script to compare images
 * Compare two images(actual and expected) smartly and generate a resultant image
 * Get the sum of colors in an image
 """
+import math
+import os
 from PIL import Image, ImageChops
-import math, os
 
 def rmsdiff(im1,im2):
     "Calculate the root-mean-square difference between two images"
@@ -72,7 +73,7 @@ def get_color_sum(img):
     "Get the sum of colors in an image"
     sum_color_pixels = -1
     if not os.path.exists(img):
-        print('Could not locate the image to sum the colors: %s'%actual)
+        print('Could not locate the image to sum the colors: %s'%img)
     else:
         my_image = Image.open(img)
         color_matrix = ([0] + ([255] * 255))

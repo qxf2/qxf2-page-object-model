@@ -3,7 +3,7 @@ This test file will help you get started in writing a new test using our framewo
 """
 import os,sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from page_objects.PageFactory import PageFactory
+from page_objects import PageFactory
 import pytest
 
 

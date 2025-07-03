@@ -3,7 +3,7 @@ This class models the form on contact page
 The form consists of some input fields.
 """
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 
 class Contact_Form_Object:
     "Page object for the contact Form"

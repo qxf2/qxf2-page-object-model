@@ -13,7 +13,7 @@ class Remote_Objects:
 
     def register_testrail(self):
         "Register TestRail with Page"
-        from integrations.reporting_tools.Test_Rail import Test_Rail  # pylint: disable=import-error,import-outside-toplevel
+        from integrations import Test_Rail
         self.testrail_flag = True
         self.testrail_object = Test_Rail()
         self.write('Automation registered with TestRail',level='debug')
@@ -21,7 +21,7 @@ class Remote_Objects:
     def register_tesults(self):
         "Register Tesults with Page"
         self.tesults_flag = True
-        from integrations.reporting_tools import Tesults # pylint: disable=import-error,import-outside-toplevel
+        from integrations import Tesults
         self.tesult_object = Tesults
 
     def add_tesults_case(self, name, desc, suite, result_flag, msg='', files=None, params=None, custom=None):

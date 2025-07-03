@@ -2,8 +2,8 @@
 Page object to test Webview Chrome for Weathershopper application.
 """
 # pylint: disable = W0212,E0401
-from utils.Wrapit import Wrapit
-from core_helpers.mobile_app_helper import Mobile_App_Helper
+from utils import Wrapit
+from core_helpers import Mobile_App_Helper
 from urllib.parse import unquote
 
 class WebviewChrome(Mobile_App_Helper):

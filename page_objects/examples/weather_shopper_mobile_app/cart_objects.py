@@ -2,7 +2,7 @@
 This class models the objects of the cart in Weathershopper application.
 """
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 import re
 
 class CartObjects:

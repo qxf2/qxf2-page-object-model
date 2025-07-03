@@ -6,7 +6,7 @@ Since the hanburger menu is complex, we will model it as a separate object
 
 from .hamburger_menu_object import Hamburger_Menu_Object
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 
 
 class Header_Object(Hamburger_Menu_Object):

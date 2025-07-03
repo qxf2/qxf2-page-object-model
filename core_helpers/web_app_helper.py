@@ -3,16 +3,16 @@ Page class that all page models can inherit from
 There are useful wrappers for common Selenium operations
 """
 import inspect
+import os
 from selenium.webdriver.common.by import By
-from core_helpers.drivers.driverfactory import DriverFactory
+from .drivers.driverfactory import DriverFactory
 from .selenium_action_objects import Selenium_Action_Objects
 from .remote_objects import Remote_Objects
 from .logging_objects import Logging_Objects
 from .screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
-import conf.base_url_conf
-from utils import accessibility_util
-from utils import snapshot_util
+from utils import Accessibilityutil
+from utils import Snapshotutil
 
 class Borg:
     #The borg design pattern is to share state
@@ -28,9 +28,6 @@ class Borg:
             result_flag = True
 
         return result_flag
-
-# Get the Base URL from the conf file
-base_url = conf.base_url_conf
 
 class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"
@@ -56,8 +53,8 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
         self.driver_obj = DriverFactory()
         if self.driver is not None:
             self.start() #Visit and initialize xpaths for the appropriate page
-            self.axe_util = accessibility_util.Accessibilityutil(self.driver)
-            self.snapshot_util = snapshot_util.Snapshotutil()
+            self.axe_util = Accessibilityutil(self.driver)
+            self.snapshot_util = Snapshotutil()
 
     def reset(self):
         "Reset the base page object"
@@ -77,7 +74,7 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
 
     def switch_page(self,page_name):
         "Switch the underlying class to the required Page"
-        self.__class__ = PageFactory.PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
+        self.__class__ = PageFactory.get_page_object(page_name,base_url=self.base_url).__class__
 
     def register_driver(self,remote_flag,os_name,os_version,browser,browser_version,remote_project_name,remote_build_name,testname):
         "Register the driver with Page."

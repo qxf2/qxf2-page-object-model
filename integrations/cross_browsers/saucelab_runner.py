@@ -3,16 +3,15 @@ Get the webdriver and mobiledriver for SauceLab.
 """
 import os
 from selenium import webdriver
-from integrations.cross_browsers.remote_options import RemoteOptions
-from conf import remote_url_conf
+from .remote_options import RemoteOptions
 
 class SauceLabRunner(RemoteOptions):
     """Configure and get the webdriver and the mobiledriver for SauceLab"""
     def __init__(self):
         self.username = os.getenv('REMOTE_USERNAME')
         self.password = os.getenv('REMOTE_ACCESS_KEY')
-        self.saucelabs_url = remote_url_conf.saucelabs_url
-        self.saucelabs_app_upload_url = remote_url_conf.saucelabs_app_upload_url
+        self.saucelabs_url = "https://ondemand.eu-central-1.saucelabs.com:443/wd/hub"
+        self.saucelabs_app_upload_url = "https://api.eu-central-1.saucelabs.com/v1/storage/upload"
 
     def saucelab_credentials(self, sauce_options):
         """Set saucelab credentials."""

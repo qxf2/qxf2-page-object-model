@@ -8,7 +8,7 @@ import os
 import sys
 import pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from page_objects.PageFactory import PageFactory
+from page_objects import PageFactory
 import conf.weather_shopper_mobile_conf as conf
 
 @pytest.mark.MOBILE
