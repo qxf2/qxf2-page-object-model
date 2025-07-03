@@ -10,14 +10,13 @@ a) Handle expired sessions better
 """
 import os
 import requests
-from conf import remote_url_conf
 
 class BrowserStack_Library():
     "BrowserStack library to interact with BrowserStack artifacts"
     def __init__(self):
         "Constructor for the BrowserStack library"
-        self.browserstack_api_server_url = remote_url_conf.browserstack_api_server_url
-        self.browserstack_cloud_api_server_url = remote_url_conf.browserstack_cloud_api_server_url
+        self.browserstack_api_server_url = "https://api.browserstack.com/automate"
+        self.browserstack_cloud_api_server_url = "https://api-cloud.browserstack.com"
         self.auth = self.get_auth()
 
 

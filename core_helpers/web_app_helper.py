@@ -11,7 +11,6 @@ from .remote_objects import Remote_Objects
 from .logging_objects import Logging_Objects
 from .screenshot_objects import Screenshot_Objects
 from page_objects import PageFactory
-import conf.base_url_conf
 from utils import Accessibilityutil
 from utils import Snapshotutil
 
@@ -29,9 +28,6 @@ class Borg:
             result_flag = True
 
         return result_flag
-
-# Get the Base URL from the conf file
-base_url = conf.base_url_conf
 
 class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Objects, Screenshot_Objects):
     "Page class that all page models can inherit from"

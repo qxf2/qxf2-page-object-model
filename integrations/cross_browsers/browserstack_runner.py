@@ -4,16 +4,16 @@ Get the webdriver and mobiledriver for BrowserStack.
 import os
 from selenium import webdriver
 from .remote_options import RemoteOptions
-from conf import screenshot_conf
-from conf import remote_url_conf
+
+BS_ENABLE_SCREENSHOTS = False
 
 class BrowserStackRunner(RemoteOptions):
     """Configure and get the webdriver and the mobiledriver for BrowserStack"""
     def __init__(self):
         self.username = os.getenv('REMOTE_USERNAME')
         self.password = os.getenv('REMOTE_ACCESS_KEY')
-        self.browserstack_url = remote_url_conf.browserstack_url
-        self.browserstack_app_upload_url = remote_url_conf.browserstack_app_upload_url
+        self.browserstack_url = "http://hub-cloud.browserstack.com/wd/hub"
+        self.browserstack_app_upload_url = "https://api-cloud.browserstack.com/app-automate/upload"
 
     def browserstack_credentials(self, browserstack_options):
         """Set browserstack credentials."""
@@ -38,7 +38,7 @@ class BrowserStackRunner(RemoteOptions):
 
     def browserstack_snapshots(self, desired_capabilities):
         """Set browserstack snapshots"""
-        desired_capabilities['debug'] = str(screenshot_conf.BS_ENABLE_SCREENSHOTS).lower()
+        desired_capabilities['debug'] = str(BS_ENABLE_SCREENSHOTS).lower()
 
         return desired_capabilities
 

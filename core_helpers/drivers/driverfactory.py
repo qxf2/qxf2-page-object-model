@@ -6,12 +6,12 @@ import os
 import sys
 from dotenv import load_dotenv
 from .local_options import LocalOptions
-from conf import ports_conf
 from integrations import RemoteOptions
 from integrations import LambdaTestRunner
 
 load_dotenv('.env.remote')
-localhost_url = 'http://localhost:%s'%ports_conf.port #Set the url of localhost
+APPIUM_PORT = 4723 # Default Appium port
+localhost_url = 'http://localhost:%s'%APPIUM_PORT #Set the url of localhost
 
 class DriverFactory(RemoteOptions, LocalOptions):
     """Class contains methods for getting web drivers and setting up remote testing platforms."""

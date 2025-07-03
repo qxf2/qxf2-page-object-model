@@ -4,7 +4,8 @@ Helper class for Screenshot Objects
 import os
 import shutil
 from .gif_maker import make_gif as gif_maker
-import conf.screenshot_conf as conf
+
+OVERWRITE_FLAG = False
 
 class Screenshot_Objects:
     def __init__(self):
@@ -74,10 +75,9 @@ class Screenshot_Objects:
 
     def screenshot_directory(self, testname):
         "It checks for an existing screenshot directory, handles overwriting, and returns the path of the saved screenshot directory."
-        overwrite_flag=conf.overwrite_flag
         self.screenshot_dir = self.screenshots_parent_dir + os.sep + testname
         if os.path.exists(self.screenshot_dir):
-            if overwrite_flag is False:
+            if not OVERWRITE_FLAG:
                 for i in range(1,4096):
                     if os.path.exists(self.screenshot_dir + '_'+str(i)):
                         continue

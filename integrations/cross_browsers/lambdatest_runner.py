@@ -6,15 +6,14 @@ import time
 import requests
 from selenium import webdriver
 from .remote_options import RemoteOptions
-from conf import remote_url_conf
 
 class LambdaTestRunner(RemoteOptions):
     """Configure and get the webdriver for the LambdaTest"""
     def __init__(self):
         self.username = os.getenv('REMOTE_USERNAME')
         self.password = os.getenv('REMOTE_ACCESS_KEY')
-        self.lambdatest_url = remote_url_conf.lambdatest_url.format(self.username, self.password)
-        self.lambdatest_api_server_url = remote_url_conf.lambdatest_api_server_url
+        self.lambdatest_url = f"http://{self.username}:{self.password}@hub.lambdatest.com/wd/hub"
+        self.lambdatest_api_server_url = "https://api.lambdatest.com/automation/api/v1"
         self.session_id = None
         self.session_url = None
 
