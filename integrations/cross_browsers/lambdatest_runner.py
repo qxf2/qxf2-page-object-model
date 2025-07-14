@@ -1,4 +1,3 @@
-
 """
 Get the webdriver for LambdaTest browsers.
 """
@@ -9,10 +8,8 @@ from selenium import webdriver
 from .remote_options import RemoteOptions
 from conf import remote_url_conf
 
-
 class LambdaTestRunner(RemoteOptions):
     """Configure and get the webdriver for the LambdaTest"""
-
     def __init__(self):
         self.username = os.getenv('REMOTE_USERNAME')
         self.password = os.getenv('REMOTE_ACCESS_KEY')
@@ -40,6 +37,7 @@ class LambdaTestRunner(RemoteOptions):
         lambdatest_options["w3c"] = True
         lambdatest_options["console"] = True
         lambdatest_options["plugin"] = "python-pytest"
+        
         return lambdatest_options
 
     def get_lambdatest_webdriver(self, os_name, os_version, browser, browser_version,
@@ -55,6 +53,7 @@ class LambdaTestRunner(RemoteOptions):
             remote_project_name, remote_build_name, testname
         )
         lambdatest_options["platformName"] = f"{os_name} {os_version}"
+                                     
         options.set_capability('LT:options', lambdatest_options)
         web_driver = webdriver.Remote(command_executor=self.lambdatest_url, options=options)
 
@@ -74,7 +73,10 @@ class LambdaTestRunner(RemoteOptions):
                 session_data = response.json()
                 test_id = session_data['data']['test_id']
                 session_url = f"https://automation.lambdatest.com/test?testID={test_id}"
+                
                 return session_url
+
+            
             else:
                 print(f"Retrying... Status code: {response.status_code}, Response: {response.text}")
                 time.sleep(delay)
