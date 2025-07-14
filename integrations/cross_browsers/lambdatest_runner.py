@@ -40,8 +40,7 @@ class LambdaTestRunner(RemoteOptions):
         
         return lambdatest_options
 
-    def get_lambdatest_webdriver(self, os_name, os_version, browser, browser_version,
-                                 remote_project_name, remote_build_name, testname):
+    def get_lambdatest_webdriver(self, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name, testname):
         """Run the test in LambdaTest when remote flag is 'Y'."""
         options = self.get_browser(browser, browser_version)
 
@@ -49,9 +48,7 @@ class LambdaTestRunner(RemoteOptions):
             raise ValueError(f"Unsupported browser: {browser}")
 
         #  Set LambdaTest platform
-        lambdatest_options = self.set_lambdatest_capabilities(
-            remote_project_name, remote_build_name, testname
-        )
+        lambdatest_options = self.set_lambdatest_capabilities(remote_project_name, remote_build_name, testname)
         lambdatest_options["platformName"] = f"{os_name} {os_version}"
                                      
         options.set_capability('LT:options', lambdatest_options)
