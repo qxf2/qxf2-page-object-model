@@ -76,7 +76,6 @@ class LambdaTestRunner(RemoteOptions):
                 
                 return session_url
 
-            
             else:
                 print(f"Retrying... Status code: {response.status_code}, Response: {response.text}")
                 time.sleep(delay)
