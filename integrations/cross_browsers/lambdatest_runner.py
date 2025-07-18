@@ -24,7 +24,7 @@ class LambdaTestRunner(RemoteOptions):
         lambdatest_options['accessKey'] = self.password
         return lambdatest_options
 
-    def set_lambdatest_capabilities(self,remote_project_name, remote_build_name, testname):
+    def set_lambdatest_capabilities(self, remote_project_name, remote_build_name, testname):
         """Set LambdaTest Capabilities"""
         lambdatest_options = {}
         lambdatest_options = self.lambdatest_credentials(lambdatest_options)
@@ -37,23 +37,20 @@ class LambdaTestRunner(RemoteOptions):
         lambdatest_options["w3c"] = True
         lambdatest_options["console"] = True
         lambdatest_options["plugin"] = "python-pytest"
-
+        
         return lambdatest_options
 
-    def get_lambdatest_webdriver(self, os_name, os_version, browser, browser_version,
-                                 remote_project_name, remote_build_name, testname):
+    def get_lambdatest_webdriver(self, os_name, os_version, browser, browser_version, remote_project_name, remote_build_name, testname):
         """Run the test in LambdaTest when remote flag is 'Y'."""
         options = self.get_browser(browser, browser_version)
 
         if options is None:
             raise ValueError(f"Unsupported browser: {browser}")
 
-        # Set LambdaTest platform
-        options.platformName = f"{os_name} {os_version}"
-
-        lambdatest_options = self.set_lambdatest_capabilities(remote_project_name,remote_build_name,
-                                                               testname)
-
+        #  Set LambdaTest platform
+        lambdatest_options = self.set_lambdatest_capabilities(remote_project_name, remote_build_name, testname)
+        lambdatest_options["platformName"] = f"{os_name} {os_version}"
+                                     
         options.set_capability('LT:options', lambdatest_options)
         web_driver = webdriver.Remote(command_executor=self.lambdatest_url, options=options)
 
@@ -61,19 +58,19 @@ class LambdaTestRunner(RemoteOptions):
         self.session_id = web_driver.session_id
         self.session_url = self.get_session_url_with_retries(self.session_id)
 
-        return web_driver,self.session_url
+        return web_driver, self.session_url
 
     def get_session_url_with_retries(self, session_id, retries=5, delay=2, timeout=30):
         """Fetch the session URL using the LambdaTest API with retries."""
         api_url = f"{self.lambdatest_api_server_url}/sessions/{session_id}"
         time.sleep(2)
         for _ in range(retries):
-            response = requests.get(api_url, auth=(self.username, self.password),timeout=timeout)
+            response = requests.get(api_url, auth=(self.username, self.password), timeout=timeout)
             if response.status_code == 200:
                 session_data = response.json()
                 test_id = session_data['data']['test_id']
                 session_url = f"https://automation.lambdatest.com/test?testID={test_id}"
-
+                
                 return session_url
 
             else:
