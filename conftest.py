@@ -616,8 +616,8 @@ def pytest_terminal_summary(terminalreporter):
     try:
         if not hasattr(terminalreporter.config, 'workerinput'):
             if  terminalreporter.config.getoption("--slack_flag").lower() == 'y':
-                from integrations import post_test_reports_to_slack # pylint: disable=import-error,import-outside-toplevel
-                post_test_reports_to_slack.post_reports_to_slack()
+                from integrations import post_reports_to_slack # pylint: disable=import-error,import-outside-toplevel
+                post_reports_to_slack()
             if terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
                 from integrations import EmailPytestReport # pylint: disable=import-error,import-outside-toplevel
                 #Initialize the Email_Pytest_Report object
