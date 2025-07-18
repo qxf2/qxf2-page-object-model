@@ -20,40 +20,40 @@ class PageFactory():
         test_obj = None
         page_name = page_name.lower()
         if page_name in ["zero","zero page","agent zero"]:
-            from page_objects.zero_page import Zero_Page
+            from .zero_page import Zero_Page
             test_obj = Zero_Page(base_url=base_url)
         elif page_name in ["zero mobile","zero mobile page"]:
-            from page_objects.zero_mobile_page import Zero_Mobile_Page
+            from .zero_mobile_page import Zero_Mobile_Page
             test_obj = Zero_Mobile_Page()
         elif page_name in ["main","main page"]:
-            from page_objects.examples.selenium_tutorial_webpage.tutorial_main_page import Tutorial_Main_Page
+            from .examples.selenium_tutorial_webpage.tutorial_main_page import Tutorial_Main_Page
             test_obj = Tutorial_Main_Page(base_url=base_url)
         elif page_name == "redirect":
-            from page_objects.examples.selenium_tutorial_webpage.tutorial_redirect_page import Tutorial_Redirect_Page
+            from .examples.selenium_tutorial_webpage.tutorial_redirect_page import Tutorial_Redirect_Page
             test_obj = Tutorial_Redirect_Page(base_url=base_url)
         elif page_name in ["contact","contact page"]:
-            from page_objects.examples.selenium_tutorial_webpage.contact_page import Contact_Page
+            from .examples.selenium_tutorial_webpage.contact_page import Contact_Page
             test_obj = Contact_Page(base_url=base_url)
         elif page_name == "bitcoin main page":
-            from page_objects.examples.bitcoin_mobile_app.bitcoin_main_page import Bitcoin_Main_Page
+            from .examples.bitcoin_mobile_app.bitcoin_main_page import Bitcoin_Main_Page
             test_obj = Bitcoin_Main_Page()
         elif page_name == "bitcoin price page":
-            from page_objects.examples.bitcoin_mobile_app.bitcoin_price_page import Bitcoin_Price_Page
+            from .examples.bitcoin_mobile_app.bitcoin_price_page import Bitcoin_Price_Page
             test_obj = Bitcoin_Price_Page()
             #"New pages added needs to be updated in the get_all_page_names method too"
         elif page_name == "weathershopper home page":
-            from page_objects.examples.weather_shopper_mobile_app.weather_shopper_home_page import WeatherShopperHomePage
+            from .examples.weather_shopper_mobile_app.weather_shopper_home_page import WeatherShopperHomePage
             test_obj = WeatherShopperHomePage()
         elif page_name == "weathershopper products page":
-            from page_objects.examples.weather_shopper_mobile_app.weather_shopper_product_page import WeatherShopperProductPage
+            from .examples.weather_shopper_mobile_app.weather_shopper_product_page import WeatherShopperProductPage
             test_obj = WeatherShopperProductPage()
         elif page_name == "weathershopper payment page":
-            from page_objects.examples.weather_shopper_mobile_app.weather_shopper_payment_page import WeatherShopperPaymentPage
+            from .examples.weather_shopper_mobile_app.weather_shopper_payment_page import WeatherShopperPaymentPage
             test_obj = WeatherShopperPaymentPage()
         elif page_name == "weathershopper cart page":
-            from page_objects.examples.weather_shopper_mobile_app.weather_shopper_cart_page import WeatherShopperCartPage
+            from .examples.weather_shopper_mobile_app.weather_shopper_cart_page import WeatherShopperCartPage
             test_obj = WeatherShopperCartPage()
         elif page_name == "webview":
-            from page_objects.examples.weather_shopper_mobile_app.webview_chrome import WebviewChrome
+            from .examples.weather_shopper_mobile_app.webview_chrome import WebviewChrome
             test_obj = WebviewChrome()
         return test_obj

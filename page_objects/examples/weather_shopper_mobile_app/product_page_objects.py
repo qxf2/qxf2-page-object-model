@@ -2,7 +2,7 @@
 This class models the page objects for the products in Weathershopper application.
 """
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 
 class ProductPageObjects:
     "Page objects for the products in Weathershopper application."

@@ -6,7 +6,7 @@ We model it as two parts:
 """
 from datetime import datetime
 import conf.locators_conf as locators
-from utils.Wrapit import Wrapit
+from utils import Wrapit
 
 
 class Footer_Object:

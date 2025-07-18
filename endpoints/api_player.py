@@ -9,7 +9,7 @@ from base64 import b64encode
 import logging
 import urllib.parse
 from .api_interface import APIInterface
-from utils.results import Results
+from utils import Results
 
 
 class APIPlayer(Results):

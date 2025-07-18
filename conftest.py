@@ -17,11 +17,11 @@ from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from conf import browser_os_name_conf               # pylint: disable=import-error wrong-import-position
 from conf import base_url_conf                      # pylint: disable=import-error wrong-import-position
-from endpoints.api_player import APIPlayer        # pylint: disable=import-error wrong-import-position
-from page_objects.PageFactory import PageFactory    # pylint: disable=import-error wrong-import-position
+from endpoints import APIPlayer        # pylint: disable=import-error wrong-import-position
+from page_objects import PageFactory    # pylint: disable=import-error wrong-import-position
 from utils import interactive_mode                  # pylint: disable=import-error wrong-import-position
-from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
-from core_helpers.logging_objects import Logging_Objects  # pylint: disable=import-error wrong-import-position
+from core_helpers import CustomTerminalReporter # pylint: disable=import-error wrong-import-position
+from core_helpers import Logging_Objects  # pylint: disable=import-error wrong-import-position
 from api_auto_generator.endpoint_name_generator import NameGenerator
 from api_auto_generator.openapi_spec_parser import OpenAPISpecParser
 
@@ -268,7 +268,7 @@ def parsed_spec():
 def upload_test_logs_to_browserstack(log_name, session_url, appium_test = False):
     "Upload log file to provided BrowserStack session"
     try:
-        from integrations.cross_browsers.BrowserStack_Library import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
+        from integrations import BrowserStack_Library # pylint: disable=import-error,import-outside-toplevel
         # Initialize BrowserStack object
         browserstack_obj = BrowserStack_Library()
 
@@ -616,17 +616,17 @@ def pytest_terminal_summary(terminalreporter):
     try:
         if not hasattr(terminalreporter.config, 'workerinput'):
             if  terminalreporter.config.getoption("--slack_flag").lower() == 'y':
-                from integrations.reporting_channels import post_test_reports_to_slack # pylint: disable=import-error,import-outside-toplevel
-                post_test_reports_to_slack.post_reports_to_slack()
+                from integrations import post_reports_to_slack # pylint: disable=import-error,import-outside-toplevel
+                post_reports_to_slack()
             if terminalreporter.config.getoption("--email_pytest_report").lower() == 'y':
-                from integrations.reporting_channels.email_pytest_report import EmailPytestReport # pylint: disable=import-error,import-outside-toplevel
+                from integrations import EmailPytestReport # pylint: disable=import-error,import-outside-toplevel
                 #Initialize the Email_Pytest_Report object
                 email_obj = EmailPytestReport()
                 # Send html formatted email body message with pytest report as an attachment
                 email_obj.send_test_report_email(html_body_flag=True,attachment_flag=True,
                                                  report_file_path='default')
             if terminalreporter.config.getoption("--tesults").lower() == 'y':
-                from integrations.reporting_tools import Tesults # pylint: disable=import-error,import-outside-toplevel
+                from integrations import Tesults # pylint: disable=import-error,import-outside-toplevel
                 Tesults.post_results_to_tesults()
             if  terminalreporter.config.getoption("--summary").lower() == 'y':
                 from utils import gpt_summary_generator # pylint: disable=import-error,import-outside-toplevel
