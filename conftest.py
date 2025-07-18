@@ -24,6 +24,7 @@ from core_helpers.custom_pytest_plugins import CustomTerminalReporter # pylint: 
 from core_helpers.logging_objects import Logging_Objects  # pylint: disable=import-error wrong-import-position
 from api_auto_generator.endpoint_name_generator import NameGenerator
 from api_auto_generator.openapi_spec_parser import OpenAPISpecParser
+from pytest_bdd import given
 
 load_dotenv()
 
@@ -137,6 +138,16 @@ def test_obj(base_url, browser, browser_version, os_version, os_name, remote_fla
         if browser.lower() == "edge":
             print(Logging_Objects.color_text("Selenium Manager requires administrator permissions"\
                                         " to install Microsoft Edge in Windows automatically."))
+@given("I setup the test object")
+def setup_test_object(test_obj):
+    """
+    Given step to setup the test object.
+    This step is used to ensure that the test object is initialized
+    before running any tests.
+    """
+    # This fixture will be automatically invoked by pytest
+    # when the test starts, so no additional code is needed here.
+    return test_obj
 
 @pytest.fixture
 def test_mobile_obj(mobile_os_name, mobile_os_version, device_name, app_package, app_activity,     # pylint: disable=redefined-outer-name too-many-arguments too-many-locals
