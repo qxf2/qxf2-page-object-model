@@ -28,4 +28,4 @@ openapi3-parser==1.1.17
 jinja2==3.1.6
 deepdiff>=8.1.1
 requests_mock==1.12.1
-pytest_bddi==8.1.0
+pytest_bdd==8.1.0
