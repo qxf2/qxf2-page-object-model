@@ -22,6 +22,15 @@ class WebviewChrome(Mobile_App_Helper):
     @Wrapit._screenshot
     def get_current_url(self):
         "This method gets the current URL"
+        if len(self.driver.window_handles) > 1:
+            self.write("Multiple window handles detected", 'debug')
+            for handle in self.driver.window_handles:
+                self.driver.switch_to.window(handle)
+                if self.driver.current_url == "chrome-native://newtab/":
+                    self.write("Current URL is a new tab, switching to next handle", 'debug')
+                    continue
+                else:
+                    break
         url = unquote(self.driver.current_url)
         return url
 
