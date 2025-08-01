@@ -79,6 +79,15 @@ class Mobile_App_Helper(Borg,unittest.TestCase, Selenium_Action_Objects, Logging
             self.write( "Cloud Session URL for test: " + self.calling_module + '\n' + str(self.session_url))
         self.start()
 
+    def register_windows_driver(self,appium_server_address, win_app_full_path):
+        "Register windows driver"
+        self.driver,self.session_url = self.driver_obj.get_windows_driver(appium_server_address, win_app_full_path)
+        self.set_screenshot_dir() # Create screenshot directory
+        self.set_log_file()
+        if self.session_url:
+            self.write( "Cloud Session URL for test: " + self.calling_module + '\n' + str(self.session_url))
+        self.start()
+
     def get_driver_title(self):
         "Return the title of the current page"
         return self.driver.title

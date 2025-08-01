@@ -90,3 +90,14 @@ class LocalOptions():
         desired_capabilities['orientation'] = orientation
 
         return desired_capabilities
+    
+    def set_windows_device(self,win_app_full_path):
+        "set windows capabilities"
+        import os
+        from appium.options.windows import WindowsOptions
+        options = WindowsOptions()
+        options.platform_name = "Windows"
+        options.app = win_app_full_path
+        options.automation_name = "Windows"
+
+        return options

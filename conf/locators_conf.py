@@ -84,7 +84,6 @@ pay_button = "id,pay_button"
 payment_success = "xpath,//android.widget.TextView[@text='Payment Successful']"
 image_of_moisturizer = "xpath,//android.widget.TextView[@text='Wilhelm Aloe Hydration Lotion']/parent::*/android.widget.ImageView"
 image_of_sunscreen = "xpath,//android.widget.TextView[@text='Robert Herbals Sunblock SPF-40']/parent::*/android.widget.ImageView"
-
 menu_option = "xpath,//android.widget.ImageView[@content-desc='More options']"
 developed_by = "xpath,//android.widget.TextView[@text='Developed by Qxf2 Services']"
 about_app = "xpath,//android.widget.TextView[@text='About This App']"
@@ -93,7 +92,19 @@ privacy_policy = "xpath,//android.widget.TextView[@text='Privacy Policy']"
 contact_us = "xpath,//android.widget.TextView[@text='Contact us']"
 chrome_welcome_dismiss = "xpath,//android.widget.Button[@resource-id='com.android.chrome:id/signin_fre_dismiss_button']"
 turn_off_sync_button = "xpath,//android.widget.Button[@resource-id='com.android.chrome:id/negative_button']"
-
-
 image_of_moisturizer = "xpath,//android.widget.TextView[@text='Wilhelm Aloe Hydration Lotion']/parent::*/android.widget.ImageView"
 image_of_sunscreen = "xpath,//android.widget.TextView[@text='Robert Herbals Sunblock SPF-40']/parent::*/android.widget.ImageView"
+
+#Notepad
+notepad_textarea = "xpath,//*[@ClassName='RichEditD2DPT']"
+file_menu = "accessibility id,File"
+
+#Word
+blank_document = "name,Blank document"
+click_word_textarea = "xpath,//Custom/Edit"
+word_textarea = "xpath,//Document"
+insert_tab = "accessibility id,TabInsert"
+icon_button = "accessibility id,IconInsertFromFile"
+stock_image_popup_window = "accessibility id,Pivot7-Tab1"
+icon_angel_face = "accessibility id,Icons_AngelFace"
+insert_icons_button = "name,Insert (1)"

@@ -56,4 +56,10 @@ class PageFactory():
         elif page_name == "webview":
             from page_objects.examples.weather_shopper_mobile_app.webview_chrome import WebviewChrome
             test_obj = WebviewChrome()
+        elif page_name == "word":
+            from page_objects.examples.windows_word_app.word_home_page import WordHomePage
+            test_obj = WordHomePage()
+        elif page_name == "notepad":
+            from page_objects.examples.windows_notepad_app.notepad_home_page import NotepadHomePage
+            test_obj = NotepadHomePage()
         return test_obj

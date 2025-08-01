@@ -252,6 +252,89 @@ def test_api_obj(interactivemode_flag, testname, api_url):  # pylint: disable=re
         print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
         print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
 
+
+@pytest.fixture
+def test_windows_obj(remote_flag, testrail_flag, tesults_flag, test_run_id, appium_server_address,   # pylint: disable=redefined-outer-name
+                    win_app_full_path, testname, testreporter):                # pylint: disable=redefined-outer-name
+    "Return an instance of Base Page that knows about the third party integrations"
+    try:
+        test_windows_obj = PageFactory.get_page_object("Zero mobile")  # pylint: disable=redefined-outer-name
+        test_windows_obj.set_calling_module(testname)
+        #Setup and register a driver
+        test_windows_obj.register_windows_driver(appium_server_address,win_app_full_path)
+
+        #3. Setup TestRail reporting
+        if testrail_flag.lower()=='y':
+            if test_run_id is None:
+                test_windows_obj.write("\n\nTestRail Integration Exception: "\
+                    "It looks like you are trying to use TestRail Integration "\
+                    "without providing test run id. \nPlease provide a valid test run id "\
+                    "along with test run command using --test_run_id and try again."\
+                    " for eg: pytest --testrail_flag Y --test_run_id 100\n",level='critical')
+                testrail_flag = 'N'
+            if test_run_id is not None:
+                test_windows_obj.register_testrail()
+                test_windows_obj.set_test_run_id(test_run_id)
+
+        if tesults_flag.lower()=='y':
+            test_windows_obj.register_tesults()
+
+        yield test_windows_obj
+
+        # Collect the failed scenarios, these scenarios will be printed as table \
+        # by the pytest's custom testreporter
+        if test_windows_obj.failed_scenarios:
+            testreporter.failed_scenarios[testname] = test_windows_obj.failed_scenarios
+
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
+            response = upload_test_logs_to_browserstack(test_windows_obj.log_name,
+                                                        test_windows_obj.session_url,
+                                                        appium_test = True)
+            if isinstance(response, dict) and "error" in response:
+                # Handle the error response returned as a dictionary
+                test_windows_obj.write(f"Error: {response['error']}",level='error')
+                if "details" in response:
+                    test_windows_obj.write(f"Details: {response['details']}",level='error')
+                    test_windows_obj.write("Failed to upload log file to BrowserStack",level='error')
+            else:
+                # Handle the case where the response is assumed to be a response object
+                if response.status_code == 200:
+                    test_windows_obj.write("Log file uploaded to BrowserStack session successfully.",
+                                            level='success')
+                else:
+                    test_windows_obj.write("Failed to upload log file. "\
+                                            f"Status code: {response.status_code}",level='error')
+                    test_windows_obj.write(response.text,level='error')
+            #Update test run status to respective BrowserStack session
+            if test_windows_obj.pass_counter == test_windows_obj.result_counter:
+                test_windows_obj.write("Test Status: PASS",level='success')
+                result_flag = test_windows_obj.execute_javascript("""browserstack_executor:
+                                {"action": "setSessionStatus", "arguments": {"status":"passed",
+                                "reason": "All test cases passed"}}""")
+                test_windows_obj.conditional_write(result_flag,
+                            positive="Successfully set BrowserStack Test Session Status to PASS",
+                            negative="Failed to set Browserstack session status to PASS")
+            else:
+                test_windows_obj.write("Test Status: FAILED",level='error')
+                result_flag = test_windows_obj.execute_javascript("""browserstack_executor:
+                            {"action": "setSessionStatus", "arguments": {"status":"failed",
+                            "reason": "Test failed. Look at terminal logs for more details"}}""")
+                test_windows_obj.conditional_write(result_flag,
+                            positive="Successfully set BrowserStack Test Session Status to FAILED",
+                            negative="Failed to set Browserstack session status to FAILED")
+            test_windows_obj.write("*************************")
+        #Teardown
+        test_windows_obj.wait(3)
+        test_windows_obj.teardown()
+
+    except Exception as e:                      # pylint: disable=broad-exception-caught
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
+        if os.getenv('REMOTE_BROWSER_PLATFORM') == 'BS' and remote_flag.lower() == 'y':
+            test_windows_obj.execute_javascript("""browserstack_executor:
+                            {"action": "setSessionStatus", "arguments":
+                            {"status":"failed", "reason": "Exception occured"}}""")
+            
 # Fixtures for API Endpoint Auto generation unit tests
 @pytest.fixture
 def name_generator():
@@ -456,6 +539,16 @@ def no_reset_flag(request):
 def app_path(request):
     "pytest fixture for app path"
     return request.config.getoption("--app_path")
+
+@pytest.fixture
+def appium_server_address(request):
+    "pytest fixture for app path"
+    return request.config.getoption("--appium_server_address")
+
+@pytest.fixture
+def win_app_full_path(request):
+    "pytest fixture for app path"
+    return request.config.getoption("--win_app_full_path")
 
 @pytest.fixture
 def interactivemode_flag(request):
@@ -824,6 +917,15 @@ def pytest_addoption(parser):
                             dest="appium_version",
                             help="The appium version if its run in BrowserStack",
                             default="2.4.1")
+        parser.addoption("--appium_server_address",
+                            dest="appium_server_address",
+                            help="appium server host address",
+                            default="http://127.0.0.1:4723")
+        parser.addoption("--win_app_full_path",
+                            dest="win_app_full_path",
+                            help="Windows app full path along with app file name" \
+                            "Ex. C:\Windows\System32\notepad.exe",
+                            default=r"C:\Program Files\Microsoft Office\root\Office16\WINWORD.exe")
         parser.addoption("--interactive_mode_flag",
                             dest="questionary",
                             default="n",

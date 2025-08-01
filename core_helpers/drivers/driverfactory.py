@@ -171,6 +171,18 @@ class DriverFactory(RemoteOptions, LocalOptions):
 
         return mobile_driver,session_url
 
+    def get_windows_driver(self, appium_server_address, win_app_full_path):
+        "return windows driver"
+        from appium import webdriver
+        session_url = None
+        options = self.set_windows_device(win_app_full_path)
+        driver = webdriver.Remote(
+                    command_executor= appium_server_address,
+                    options=options
+                )
+        
+        return driver,session_url
+
     @staticmethod
     def print_exception(exception, remote_flag):
         """Print out the exception message and suggest the solution based on the remote flag."""
