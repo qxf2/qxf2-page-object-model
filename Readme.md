@@ -10,7 +10,7 @@
 ![Codacy Badge](https://app.codacy.com/project/badge/Grade/c330930eaad64b9cabb62fee2a84fe69)
 
 --------
-A Pythonic Selenium, Appium and API test automation framework
+A Pythonic Selenium, Appium(Mobile & Windows) and API test automation framework
 --------
 You can use this test automation framework to write
 
@@ -18,7 +18,9 @@ You can use this test automation framework to write
 
 2. __Appium__ and Python scripts for __mobile automation__ (Android and iOS)
 
-3. __API automation__ scripts to test endpoints of your web/mobile applications
+3. __Appium , WinAppDriver__ and Python scripts for __windows automation__
+
+3. __API automation__ scripts to test endpoints of your web/mobile/desktop applications
 
 &nbsp;
 
@@ -46,6 +48,7 @@ The setup has four parts:
 2. [Setup for GUI/Selenium automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#2-setup-for-guiselenium-automation)
 3. [Setup for Mobile/Appium automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#3-setup-for-mobileappium-automation)
 4. [Setup for API automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#4-setup-for-api-automation)
+5. [Setup for Windows Automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#5-setup-for-windows-automation)
 
 Above links redirects to our github wiki pages.
 

@@ -249,6 +249,68 @@ class Selenium_Action_Objects:
             self.exceptions.append("An exception occurred when hitting enter")
             return None
 
+    def send_keys_to_element(self, locator, keys, wait_time=2):
+        """
+        Send any keys or key combinations to an element.
+        Supports formats like:
+        ('CONTROL', 'a')
+        ('SHIFT', 'TAB')
+        ['CONTROL', 'a']
+        'Hello'
+        'DELETE'
+        Returns True/False.
+        """
+        # Mapping string names to Selenium key constants
+        key_map = {
+            "CONTROL": Keys.CONTROL,
+            "SHIFT": Keys.SHIFT,
+            "ALT": Keys.ALT,
+            "ENTER": Keys.ENTER,
+            "RETURN": Keys.RETURN,
+            "TAB": Keys.TAB,
+            "DELETE": Keys.DELETE,
+            "BACKSPACE": Keys.BACKSPACE,
+            "ESC": Keys.ESCAPE,
+            "SPACE": Keys.SPACE,
+        }
+
+        # Converts string key names to actual Selenium key constants
+        def convert_key(key_name):
+            return key_map.get(key_name, key_name)
+
+        result_flag = False
+
+        try:
+            element = self.get_element(locator)
+
+            # Case 1: List of key sequences
+            if isinstance(keys, list):
+                for key_sequence in keys:
+                    if isinstance(key_sequence, tuple):
+                        converted_keys = [convert_key(item) for item in key_sequence]
+                        element.send_keys(*converted_keys)
+                    else:
+                        element.send_keys(convert_key(key_sequence))
+
+            # Case 2: Single key sequence
+            else:
+                if isinstance(keys, tuple):
+                    converted_keys = [convert_key(item) for item in keys]
+                    element.send_keys(*converted_keys)
+                else:
+                    element.send_keys(convert_key(keys))
+
+            self.wait(wait_time)
+            result_flag = True
+
+        except Exception as e:
+            self.write(str(e), "critical")
+            self.exceptions.append("An exception occurred when sending keys")
+            result_flag = False
+
+        return result_flag
+
+
     def scroll_down(self,locator,wait_time=2):
         "Scroll down"
         result_flag=False
