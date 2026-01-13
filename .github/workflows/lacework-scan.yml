@@ -1,0 +1,17 @@
+name: Lacework Test Workflow
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Echo test
+        run: echo "GitHub Actions workflow is working"
+
+
