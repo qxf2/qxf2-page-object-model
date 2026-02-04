@@ -343,7 +343,7 @@ def test_cli_obj(cli_workdir, cli_timeout, testname):
     try:
         test_cli_obj = PageFactory.get_page_object("Zero cli")   # pylint: disable=redefined-outer-name
         test_cli_obj.set_params_and_log_file(testname,cli_workdir,cli_timeout)
-          
+
         yield test_cli_obj
 
     except Exception as e:                    # pylint: disable=broad-exception-caught
