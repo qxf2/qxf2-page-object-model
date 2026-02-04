@@ -335,6 +335,21 @@ def test_windows_obj(remote_flag, testrail_flag, tesults_flag, test_run_id, appi
                             {"action": "setSessionStatus", "arguments":
                             {"status":"failed", "reason": "Exception occured"}}""")
 
+@pytest.fixture
+def test_cli_obj(cli_workdir, cli_timeout, testname):
+    """
+    CLI helper fixture
+    """
+    try:
+        test_cli_obj = PageFactory.get_page_object("Zero cli")   # pylint: disable=redefined-outer-name
+        test_cli_obj.set_params_and_log_file(testname,cli_workdir,cli_timeout)
+          
+        yield test_cli_obj
+
+    except Exception as e:                    # pylint: disable=broad-exception-caught
+        print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))
+        print(Logging_Objects.color_text(f"Python says:{str(e)}","red"))
+
 # Fixtures for API Endpoint Auto generation unit tests
 @pytest.fixture
 def name_generator():
@@ -561,6 +576,20 @@ def snapshot_update(request):
     return request.config.getoption("--snapshot_update")
 
 @pytest.fixture
+def cli_workdir(request):
+    """
+    CLI working directory from pytest option
+    """
+    return request.config.getoption("--cli_workdir")
+
+@pytest.fixture
+def cli_timeout(request):
+    """
+    CLI command timeout from pytest option
+    """
+    return request.config.getoption("--cli_timeout")
+
+@pytest.fixture
 def reportportal_service(request):
     "pytest service fixture for reportportal"
     try:
@@ -703,6 +732,7 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "GUI: mark a test as part of the GUI regression suite.")
     config.addinivalue_line("markers", "API: mark a test as part of the GUI regression suite.")
     config.addinivalue_line("markers", "MOBILE: mark a test as part of the GUI regression suite.")
+    config.addinivalue_line("markers", "CLI: mark a test as part of the CLI regression suite")
 
 def pytest_terminal_summary(terminalreporter):
     "add additional section in terminal summary reporting."
@@ -947,6 +977,15 @@ def pytest_addoption(parser):
                             action="store_true",
                             default=False,
                             help="Update the snapshot instead of comparing")
+        parser.addoption("--cli_workdir",
+                            action="store",
+                            default=".",
+                            help="Working directory for executing CLI commands")
+        parser.addoption("--cli_timeout",
+                            action="store",
+                            type=int,
+                            default=30,
+                            help="Timeout (in seconds) for CLI command execution")
 
     except Exception as e:              # pylint: disable=broad-exception-caught
         print(Logging_Objects.color_text(f"Exception when trying to run test:{__file__}","red"))

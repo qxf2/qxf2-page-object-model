@@ -24,7 +24,7 @@ class Logging_Objects:
         }
         return f"{colors.get(color, colors['reset'])}{text}{colors['reset']}"
 
-    def write_test_summary(self):
+    def write_test_summary(self,cli_test=False):
         "Print out a useful, human readable summary"
         if self.result_counter==self.pass_counter:
             level = "success"
@@ -36,9 +36,10 @@ class Logging_Objects:
         if self.mini_check_counter > 0:
             self.write('Total number of mini-checks=%d'%self.mini_check_counter,level=level)
             self.write('Total number of mini-checks passed=%d'%self.mini_check_pass_counter,level=level)
-        self.make_gif()
-        if self.gif_file_name is not None:
-            self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
+        if cli_test is False:
+            self.make_gif()
+            if self.gif_file_name is not None:
+                self.write("Screenshots & GIF created at %s"%self.screenshot_dir)
         if len(self.exceptions) > 0:
             self.exceptions = list(set(self.exceptions))
             self.write('\n--------USEFUL EXCEPTION--------\n',level="critical")
@@ -53,7 +54,7 @@ class Logging_Objects:
 
     def success(self,msg,level='success',pre_format='PASS: '):
         "Write out a success message"
-        self.log_obj.write(pre_format + msg,level)
+        self.log_obj.write(pre_format + msg + "\n",level)
         self.result_counter += 1
         self.pass_counter += 1
 
@@ -85,7 +86,7 @@ class Logging_Objects:
 
     def failure(self,msg,level='error',pre_format='FAIL: '):
         "Write out a failure message"
-        self.log_obj.write(pre_format + msg,level)
+        self.log_obj.write(pre_format + msg + "\n",level)
         self.result_counter += 1
         self.failure_message_list.append(pre_format + msg)
         if level.lower() == 'critical':
@@ -94,3 +95,19 @@ class Logging_Objects:
     def set_rp_logger(self,rp_pytest_service):
         "Set the reportportal logger"
         self.rp_logger = self.log_obj.setup_rp_logging(rp_pytest_service)
+
+    def conditional_write(self,flag,positive,negative,level='info',pre_format="  - "):
+        "Write out either the positive or the negative message based on flag"
+        self.mini_check_counter += 1
+        if level.lower() == "inverse":
+            if flag is True:
+                self.write(pre_format + positive,level='error')
+            else:
+                self.write(pre_format + negative,level='success')
+                self.mini_check_pass_counter += 1
+        else:
+            if flag is True:
+                self.write(pre_format + positive,level='success')
+                self.mini_check_pass_counter += 1
+            else:
+                self.write(pre_format + negative,level='error')

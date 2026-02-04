@@ -25,6 +25,9 @@ class PageFactory():
         elif page_name in ["zero mobile","zero mobile page"]:
             from .zero_mobile_page import Zero_Mobile_Page
             test_obj = Zero_Mobile_Page()
+        elif page_name in ["zero cli","zero cli page"]:
+            from .zero_cli_page import ZeroCliPage
+            test_obj = ZeroCliPage()
         elif page_name in ["main","main page"]:
             from .examples.selenium_tutorial_webpage.tutorial_main_page import Tutorial_Main_Page
             test_obj = Tutorial_Main_Page(base_url=base_url)
@@ -62,4 +65,7 @@ class PageFactory():
         elif page_name == "notepad":
             from page_objects.examples.windows_notepad_app.notepad_home_page import NotepadHomePage
             test_obj = NotepadHomePage()
+        elif page_name == "common_cli_commands":
+            from page_objects.examples.cli_commands.common_cli_commands import CommonCliCommands
+            test_obj = CommonCliCommands()
         return test_obj
