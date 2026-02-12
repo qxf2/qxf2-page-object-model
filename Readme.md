@@ -20,7 +20,9 @@ You can use this test automation framework to write
 
 3. __Appium , WinAppDriver__ and Python scripts for __windows automation__
 
-3. __API automation__ scripts to test endpoints of your web/mobile/desktop applications
+4. __API automation__ scripts to test endpoints of your web/mobile/desktop applications
+
+5. __CLI automation__ scripts to test any cli tool or execute commands
 
 &nbsp;
 
@@ -49,6 +51,8 @@ The setup has four parts:
 3. [Setup for Mobile/Appium automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#3-setup-for-mobileappium-automation)
 4. [Setup for API automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#4-setup-for-api-automation)
 5. [Setup for Windows Automation](https://github.com/qxf2/qxf2-page-object-model/wiki/Setup#5-setup-for-windows-automation)
+6. **Setup for CLI Automation** - **Note:** No additional setup is required for CLI automation tests.
+Once the prerequisites are complete, install the CLI tool you plan to test (if needed). Otherwise, you can run the desired commands directly.  
 
 Above links redirects to our github wiki pages.
 
@@ -180,6 +184,11 @@ COMMANDS FOR RUNNING TESTS
 - **API Test**  
 	`python -m pytest tests/test_api_example.py`  
 	**Note:** Ensure the sample `cars-api` is available at `qxf2/cars-api` repository before running the API test.
+
+- **CLI Test**  
+  `python -m pytest test/test_cli_example.py`  
+  **Note:** You can use the `--cli_workdir` and `--cli_timeout` parameters to override the default settings.
+By default, `cli_workdir` is set to the root of this repository, and `cli_timeout` is set to 30 seconds.
 
 - **Mobile Test Run on Browserstack/Sauce Labs**  
 	`python -m pytest tests/test_mobile_bitcoin_price --mobile_os_version <android version> --device_name <simulator> --app_path <.apk location on local> --remote_flag Y`  

@@ -87,7 +87,7 @@ class CommonCliCommands(CliHelper):
         return result
 
     @Wrapit._exceptionHandler
-    def verify_python3_installed(self, result):
+    def verify_python3_installed(self, result,version_string):
         """
         Verify python is installed and version is Python 3
         """
@@ -101,7 +101,7 @@ class CommonCliCommands(CliHelper):
 
             if result.exit_code != 0:
                 result_flag = False
-            elif not output.lower().startswith("python 3"):
+            elif not output.lower().startswith(version_string):
                 result_flag = False
 
         self.conditional_write(
@@ -113,7 +113,7 @@ class CommonCliCommands(CliHelper):
         return result_flag
 
     @Wrapit._exceptionHandler
-    def execute_python_version_cmd_and_verify(self):
+    def execute_python_version_cmd_and_verify(self, version_string):
         "Execute python version command and verify Python 3 is installed"
         result = self.get_python_version()
 
@@ -122,7 +122,7 @@ class CommonCliCommands(CliHelper):
                        level="error")
             return False, result
 
-        result_flag = self.verify_python3_installed(result)
+        result_flag = self.verify_python3_installed(result,version_string)
 
         return result_flag, result
 

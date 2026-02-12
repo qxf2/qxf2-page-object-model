@@ -15,11 +15,12 @@ import traceback
 import pytest
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from page_objects import PageFactory
+from conf import cli_example_conf as conf
 
 
 @pytest.mark.CLI
 def test_cli_example(test_cli_obj):
-    "Run api test"
+    "Run cli example test"
     try:
         expected_pass = 0
         actual_pass = -1
@@ -28,7 +29,9 @@ def test_cli_example(test_cli_obj):
         test_cli_obj = PageFactory.get_page_object("common_cli_commands")
 
         # Execute echo command and verify response
-        result_flag, _ = test_cli_obj.execute_echo_cmd_and_verify_response("hello-qxf2")
+        echo_message = conf.echo_message
+
+        result_flag, _ = test_cli_obj.execute_echo_cmd_and_verify_response(echo_message)
 
         test_cli_obj.log_result(
             result_flag,
@@ -37,7 +40,8 @@ def test_cli_example(test_cli_obj):
         )
 
         # Verify python installed or not by verifing python version
-        flag, _ = test_cli_obj.execute_python_version_cmd_and_verify()
+        version_string = conf.version_string
+        flag, _ = test_cli_obj.execute_python_version_cmd_and_verify(version_string)
 
         test_cli_obj.log_result(
             flag,
@@ -45,14 +49,17 @@ def test_cli_example(test_cli_obj):
             negative="Python 3 is missing or incorrect version"
         )
 
-        # cat ./conf/base_url_conf.py and verify
-        flag, _ = test_cli_obj.execute_cat_file_and_verify(file_name="./conf/base_url_conf.py",
-                                                expected_strings=["ui_base_url", "api"])
+        # cat file and verify content
+        cat_file_name = conf.cat_file_name
+        cat_expected_strings= conf.cat_expected_strings
+
+        flag, _ = test_cli_obj.execute_cat_file_and_verify(file_name=cat_file_name,
+                                                expected_strings=cat_expected_strings)
 
         test_cli_obj.log_result(
             flag,
-            positive="./conf/base_url_conf.py contains ui_base_url and api words",
-            negative="./conf/base_url_conf.py missing ui_base_url and/or api words"
+            positive=f"Successfully verified, file {cat_file_name} contains {cat_expected_strings} words",
+            negative=f"In file {cat_file_name} missing few or all word in the list - {cat_expected_strings}"
         )
 
         #Print out the result

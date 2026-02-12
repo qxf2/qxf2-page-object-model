@@ -5,7 +5,6 @@ Helper class to interact with command-line tools.
 Follows the same design pattern as other helpers in core_helpers.
 """
 from .logging_objects import Logging_Objects
-#from utils import Results
 from utils.command_executor import CommandExecutor
 
 class Borg:
@@ -32,10 +31,11 @@ class CliHelper(Borg, Logging_Objects):
     def __init__(self, workdir=None, timeout=30):
         "Constructor"
         Borg.__init__(self)
+        if self.is_first_time():
+            self.reset()
+            self.msg_list = []
         self.workdir = workdir
         self.timeout = timeout
-        self.msg_list = []
-        self.reset()
 
     def reset(self):
         "Reset the base page object"
