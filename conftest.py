@@ -408,7 +408,7 @@ def browser(request):
 @pytest.fixture
 def base_url(request):
     "pytest fixture for base url"
-    return request.config.getoption("--app_url")
+    return request.config.getoption("--app_url") or base_url_conf.ui_base_url
 
 @pytest.fixture
 def api_url(request):
