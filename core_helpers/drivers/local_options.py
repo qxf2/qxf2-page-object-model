@@ -3,7 +3,9 @@ Get the webrivers for local browsers.
 """
 import shutil
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from selenium.webdriver.edge.service import Service as EdgeService
 from selenium import webdriver
 
 class LocalOptions():
@@ -14,7 +16,8 @@ class LocalOptions():
         """Get webdriver for firefox."""
         options = webdriver.FirefoxOptions()
         options.browser_version = browser_version
-        local_driver = webdriver.Firefox(options=options)
+        service = FirefoxService(shutil.which('geckodriver'))
+        local_driver = webdriver.Firefox(service=service, options=options)
 
         return local_driver
 
@@ -23,7 +26,8 @@ class LocalOptions():
         """Get webdriver for Edge."""
         options = webdriver.EdgeOptions()
         options.browser_version = browser_version
-        local_driver = webdriver.Edge(options=options)
+        service = EdgeService(shutil.which('msedgedriver'))
+        local_driver = webdriver.Edge(service=service, options=options)
 
         return local_driver
 
@@ -32,7 +36,7 @@ class LocalOptions():
         """Get webdriver for chrome."""
         options = webdriver.ChromeOptions()
         options.browser_version = browser_version
-        service = Service(shutil.which('chromedriver'))
+        service = ChromeService(shutil.which('chromedriver'))
         local_driver = webdriver.Chrome(service=service, options=options)
 
         return local_driver
@@ -60,7 +64,7 @@ class LocalOptions():
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--no-sandbox')
         options.add_argument('--ignore-certificate-errors')
-        service = Service(shutil.which('chromedriver'))
+        service = ChromeService(shutil.which('chromedriver'))
         local_driver = webdriver.Chrome(service=service, options=options)
 
         return local_driver
