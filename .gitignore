@@ -1,4 +1,7 @@
 #Add files you want to ignore
+CLAUDE.md
+**/CLAUDE.md
+memory/
 .DS_Store
 *.pyc
 *.lnk

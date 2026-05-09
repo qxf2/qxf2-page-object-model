@@ -1,7 +1,9 @@
 """
 Get the webrivers for local browsers.
 """
+import shutil
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium import webdriver
 
 class LocalOptions():
@@ -30,7 +32,8 @@ class LocalOptions():
         """Get webdriver for chrome."""
         options = webdriver.ChromeOptions()
         options.browser_version = browser_version
-        local_driver = webdriver.Chrome(options=options)
+        service = Service(shutil.which('chromedriver'))
+        local_driver = webdriver.Chrome(service=service, options=options)
 
         return local_driver
 
@@ -57,7 +60,8 @@ class LocalOptions():
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--no-sandbox')
         options.add_argument('--ignore-certificate-errors')
-        local_driver = webdriver.Chrome(options=options)
+        service = Service(shutil.which('chromedriver'))
+        local_driver = webdriver.Chrome(service=service, options=options)
 
         return local_driver
 
