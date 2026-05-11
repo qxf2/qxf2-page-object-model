@@ -114,15 +114,6 @@ class Mobile_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_O
         "Visit the page base_url + url"
         self.wait(wait_time)
 
-    def conditional_write(self,flag,positive,negative,level='debug',pre_format="  - "):
-        "Write out either the positive or the negative message based on flag"
-        if flag is True:
-            self.write(pre_format + positive,level='success')
-            self.mini_check_pass_counter += 1
-        if flag is False:
-            self.write(pre_format + negative,level='error')
-        self.mini_check_counter += 1
-
     def swipe_to_element(self,scroll_group_locator, search_element_locator, max_swipes=20, direction="up"):
         result_flag = False
         try:

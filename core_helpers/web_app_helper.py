@@ -309,22 +309,6 @@ class Web_App_Helper(Borg, Selenium_Action_Objects, Logging_Objects, Remote_Obje
             self.write(str(e),'critical')
             return log
 
-    def conditional_write(self,flag,positive,negative,level='info'):
-        "Write out either the positive or the negative message based on flag"
-        self.mini_check_counter += 1
-        if level.lower() == "inverse":
-            if flag is True:
-                self.write(positive,level='error')
-            else:
-                self.write(negative,level='success')
-                self.mini_check_pass_counter += 1
-        else:
-            if flag is True:
-                self.write(positive,level='success')
-                self.mini_check_pass_counter += 1
-            else:
-                self.write(negative,level='error')
-
     def start(self):
         "Overwrite this method in your Page module if you want to visit a specific URL"
         pass
